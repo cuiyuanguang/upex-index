@@ -32,9 +32,9 @@ $http.interceptors.response.use(
     const locale = localStorage.getItem('locale') || 'zh';
     const result = response.data;
     if (result) {
-      if (result.code !== 0) {
+      if (result.code != 0) {
         // 接口错误码判断
-        if (response.config.url !== 'api/adverts' && result.code === 2048) {
+        if (response.config.url !== 'api/adverts' && result.code == 2048) {
           console.log(result);
           // location.href = 'http://localhost:8080/exchange-web/login.html?ref=http://localhost:9090/otc-web/';
         }

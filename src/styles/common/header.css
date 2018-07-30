@@ -27,7 +27,8 @@
 }
 
 .my-login .ivu-input {
-    height: 40px
+    height: 40px;
+    background: #fafafa;
 }
 
 .my-login .iview-input {
@@ -58,10 +59,12 @@
     cursor: pointer;
     color: #bbbec4;
 }
-.my-login .ivu-modal-body{
+
+.my-login .ivu-modal-body {
     position: relative;
     z-index: 2;
 }
+
 .my-login .ivu-modal-footer {
     display: block;
     width: 400px;
@@ -108,12 +111,12 @@
     color: #879FC2;
 }
 
-.my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item-active, .my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item:hover, .my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu-active,.my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu:hover {
+.my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item-active, .my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item:hover, .my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu-active, .my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu:hover {
     color: #5C95EA;
     border-bottom-color: #5C95EA;
 }
 
-.my-login .ivu-input-group-with-append .ivu-input,.my-login .ivu-input-group-with-append.ivu-input-group-small .ivu-input, .my-login .ivu-input-group-append,.my-login .ivu-input-group > .ivu-input:last-child {
+.my-login .ivu-input-group-with-append .ivu-input, .my-login .ivu-input-group-with-append.ivu-input-group-small .ivu-input, .my-login .ivu-input-group-append, .my-login .ivu-input-group > .ivu-input:last-child {
     border-radius: 4px !important;
 }
 
@@ -172,4 +175,169 @@
     text-align: left;
     left: -1px !important;
     width: 400px !important;
+}
+
+.my-loginGoogle .ivu-modal-body {
+    padding: 0 50px;
+}
+
+.loginGoogle-title {
+    overflow: hidden;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.loginGoogle-title-icon {
+    display: block;
+    float: left;
+    width: 80px;
+    height: 80px;
+    background-image: url("../img/Google authenticator.png");
+}
+
+.loginGoogle-title-right-wrap {
+    float: left;
+    padding: 10px 0 0 20px;
+}
+
+.loginGoogle-title-right-wrap h1 {
+    color: #333;
+    font-size: 22px;
+    line-height: 30px;
+}
+
+.loginGoogle-title-right-wrap h2 {
+    font-size: 16px;
+    color: #333;
+    line-height: 30px;
+}
+
+.loginGoogle-ul li {
+    margin-bottom: 60px;
+    position: relative;
+}
+
+.loginGoogle-ul li .li-title {
+
+}
+
+.loginGoogle-ul li .li-title .list-num {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    vertical-align: top;
+    background: #333;
+    color: #fff;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 10px;
+}
+
+.loginGoogle-ul li .li-title .qr {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: #333;
+    right: 296px;
+    top: 0;
+}
+
+.loginGoogle-ul li .li-title .tip-img {
+    position: absolute;
+    width: 234px;
+    height: 160px;
+    right: 0;
+    top: -20px;
+}
+
+.loginGoogle-ul li .li-title .tip-img1 {
+    background-image: url("../img/tip-img1.png");
+}
+
+.loginGoogle-ul li .li-title .tip-img2 {
+    background-image: url("../img/tip-img2.png");
+}
+
+.loginGoogle-ul li .li-title p {
+    color: #333;
+    font-size: 14px;
+    display: inline-block;
+    margin-left: 28px;
+}
+
+.loginGoogle-ul-download-wrap {
+    margin-left: 50px;
+    margin-top: 22px;
+}
+
+.my-loginGoogle .ivu-modal-footer {
+    width: 288px;
+    margin-left: 100px;
+    padding: 0 0 40px;
+}
+
+.loginGoogle-ul-download-wrap div {
+    width: 140px;
+    height: 40px;
+    margin-right: 10px;
+    float: left;
+    cursor: pointer;
+}
+
+.loginGoogle-ul-download-wrap .loginGoogle-ul-download-ios {
+    background-image: url("../img/download-ios.png");
+}
+
+.loginGoogle-ul-download-wrap .loginGoogle-ul-download-google {
+    background-image: url("../img/download-google.png");
+}
+
+.bindGoogle-input {
+    width: 288px;
+    margin: 20px 50px 0;
+}
+
+.my-login .ivu-modal-body {
+    position: static;
+}
+
+.my-loginNext .loginNext-title {
+    padding-top: 27px;
+    padding-bottom: 27px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.loginNext-input {
+    text-align: center;
+    margin: 50px 0 78px;
+}
+.loginNext-sms-input{
+    margin: 20px 0 60px;
+    position: relative;
+}
+.loginNext-input .ivu-input {
+    width: 400px;
+    float: inherit;
+}
+.loginNext-input .ivu-input-group-append{
+    position: absolute;
+    right: 51px;
+    width: 147px;
+    color:#3461A7;
+    text-align: right;
+}
+.loginNext-input .my-slot-append-gary{
+    color:#999;
+    cursor: auto;
+}
+.loginNextSmsText{
+    text-align: left;
+    padding-left: 50px;
+    margin-top: 40px;
+    color: #999;
+}
+.loginNextSmsText span{
+    color:#333;
+    margin-left: 4px;
 }

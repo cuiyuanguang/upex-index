@@ -560,6 +560,7 @@ var g_auth = {
   },
 };
 
+
 var o_my_login = {
   template: `
     <Modal
@@ -660,7 +661,6 @@ var o_my_login = {
       modal_loading: false,
       loading: true,
       login1: this.login,
-      loginGoogle: true,
       login: false,
       loginWrap: '',
       error: {
@@ -743,10 +743,19 @@ var o_my_login = {
               loginPword: that.loginPhonePassword,
             };
             post('api/user/login_in', JSON.stringify(data)).then(function(res) {
+              console.log(res);
               if (res.success) {
-                that.modal_loading = false;
+                if (res.data.data.type === '2') {
+                  that.$parent.$emit(
+                    'isLoginNextPhone',
+                    that.selectCountry + ' ' + that.loginPhoneVal
+                  );
+                }
+                that.$parent.$emit('isLoginNext', true);
+                that.$parent.$emit('isLoginNextType', res.data.data.type);
+                that.$parent.$emit('isLoginNextCookie', res.data.data.token);
                 that.$parent.$emit('islogin', false);
-                that.$parent.$emit('isloginGoogle', true);
+                that.modal_loading = false;
               } else {
                 that.modal_loading = false;
               }
@@ -787,7 +796,7 @@ var o_my_login = {
     },
     getCountry() {
       var that = this;
-      get('api/country').then(function(res) {
+      get('api/country', {}, this.token).then(function(res) {
         if (res.success) {
           that.countryArr = res.data.data;
         } else {
@@ -796,7 +805,6 @@ var o_my_login = {
     },
     loginEmailChange(name) {
       this.loginWrap = name;
-      console.log(this.loginWrap);
     },
   },
   mounted: function() {
@@ -808,26 +816,223 @@ var o_my_login = {
     },
   },
 };
-var o_my_loginGoogle = {
+var o_my_loginNext = {
   template: `
     <Modal
-        v-model="loginGoogle"
-        title="Common Modal dialog box title"
-        @on-ok="ok"
-        @on-cancel="asyncCancel"
-      >
-      <p>{{loginGoogle}}</p>
-      <p>Content of dialog</p>
-      <p>Content of dialog</p>
+      v-model="loginNext"
+      @on-ok="ok"
+      class-name="vertical-center-modal"
+      @on-cancel="asyncCancel" class="my-login my-loginNext"
+      width="500"
+    >
+      <div class="loginNext-title" v-if="isLoginNextTypeNum === '1'">Google verification code</div>
+      <div class="loginNext-title" v-if="isLoginNextTypeNum === '2'">SMS verification</div>
+      <div class="loginNext-title" v-if="isLoginNextTypeNum === '3'">E-mail verification</div>
+      <div v-if="isLoginNextTypeNum === '1'">
+      <Input
+        v-model="loginNextGoogleCode"
+        type="text"
+        placeholder="please enter Google verification code"
+        class="loginNext-input">
+      </Input>
+      </div>
+      <div v-if="isLoginNextTypeNum === '2'">
+        <p class="loginNextSmsText">
+          Please enter the verification code received by
+            <span>{{isLoginNextPhoneNum}}</span>
+        </p>
+        <Input
+          v-model="loginNextSmsCode"
+          type="text"
+          placeholder="please enter Google verification code"
+          class="loginNext-input loginNext-sms-input">
+          <span slot="append"
+            class="my-slot-append"
+            @click="runSendSms"
+            :class="timer?'my-slot-append-gary':'my-slot-append'"
+          >
+            {{sendSms}}
+          </span>
+        </Input>
+      </div>
+      <div slot="footer">
+        <Button
+          type="primary"
+          size="large"
+          long
+          :loading="modal_loading"
+          @click="loginNextSubmit"
+        >submit</Button>
+      </div>
+    </Modal>
+  `,
+  props: ['loginNext', 'isLoginNextType', 'isLoginNextCookie', 'isLoginNextPhone'],
+  data() {
+    return {
+      sendSms: 'get verification code',
+      loginNextGoogleCode: '',
+      loginNextSmsCode: '',
+      modal_loading: false,
+      isLoginNextTypeNum: '',
+      isLoginNextCookieNum: '',
+      isLoginNextPhoneNum: '',
+      show: true,
+      count: '',
+      timer: null,
+    };
+  },
+  methods: {
+    loginNextSubmit() {
+      var that = this;
+      const data = {
+        authCode: this.loginNextSmsCode,
+        token: this.isLoginNextCookieNum,
+      };
+      post('api/user/confirm_login', JSON.stringify(data)).then(function(res) {
+        if (res.success) {
+          that.loginNext = false;
+          utils.setCookie('token', that.isLoginNextCookieNum);
+          window.location.reload();
+        } else {
+        }
+      });
+    },
+    runSendSms() {
+      const TIME_COUNT = 90;
+      if (!this.timer) {
+        const isLoginNextPhoneNumArr = this.isLoginNextPhoneNum.split(' ');
+        const isLoginNextPhoneNumCountry = isLoginNextPhoneNumArr[0].substring(1);
+        const isLoginNextPhoneNumPhone = isLoginNextPhoneNumArr[1];
+        const data = {
+          countryCode: isLoginNextPhoneNumCountry,
+          mobile: isLoginNextPhoneNumPhone,
+          operationType: '23',
+          token: this.isLoginNextCookieNum,
+        };
+        post('api/common/smsValidCode', JSON.stringify(data)).then(function(res) {
+          if (res.success) {
+          } else {
+          }
+        });
+        this.count = TIME_COUNT;
+        this.sendSms = 'Resend after ' + this.count + 's';
+        this.show = false;
+        this.timer = setInterval(() => {
+          if (this.count > 0 && this.count <= TIME_COUNT) {
+            this.count--;
+            this.sendSms = 'Resend after ' + this.count + ' s';
+          } else {
+            this.sendSms = 'Reacquire';
+            this.show = true;
+            clearInterval(this.timer);
+            this.timer = null;
+          }
+        }, 1000);
+      }
+    },
+    asyncCancel() {
+      this.$parent.$emit('isLoginNext', false);
+      this.modal_loading = false;
+    },
+    ok() {
+      this.$Message.info('Clicked ok');
+    },
+  },
+  watch: {
+    isLoginNextType: function(a, b) {
+      this.isLoginNextTypeNum = a;
+    },
+    isLoginNextCookie: function(a, b) {
+      this.isLoginNextCookieNum = a;
+    },
+    isLoginNextPhone: function(a, b) {
+      this.isLoginNextPhoneNum = a;
+    },
+  },
+};
+var o_my_registerGoogle = {
+  template: `
+    <Modal
+      v-model="registerGoogle"
+      @on-ok="ok"
+      class-name="vertical-center-modal"
+      @on-cancel="asyncCancel" class="my-login my-loginGoogle"
+      width="672"
+    >
+      <div class="loginGoogle-title">
+        <i class="loginGoogle-title-icon"></i>
+        <div class="loginGoogle-title-right-wrap">
+            <h1>Strengthen your account security</h1>
+            <h2>3 steps to bind Google authenticator</h2>
+        </div>
+      </div>
+      <ul class="loginGoogle-ul">
+        <li class="clear">
+          <div class="li-title">
+            <span class="list-num">1</span>
+            <p>Download google authenticator</p>
+            <div class="loginGoogle-ul-download-wrap">
+              <div class="loginGoogle-ul-download-google"></div>
+              <div class="loginGoogle-ul-download-ios"></div>
+            </div>
+          </div>
+        </li>
+        <li class="clear">
+          <div class="li-title">
+            <div class="qr"></div>
+            <div class="tip-img tip-img1"></div>
+            <span class="list-num">2</span>
+            <p style="width:158px">Use google authenticator to scan a barcode:</p>
+            <h6 style="color:#999;margin:26px 0 20px 50px">or</h6>
+            <p style="margin-left: 50px;">Enter Provided key:</p>
+            <h6 style="color:#999;margin: 5px 0 0 50px">
+              FZ3JXT6BF3QJOYI2
+              <span
+                style="color:#3461A7;cursor:pointer;margin-left:10px;text-decoration: underline;">
+                Copy
+              </span>
+            </h6>
+          </div>
+        </li>
+        <li class="clear" style="margin-bottom: 20px">
+          <div class="li-title">
+            <span class="list-num">3</span>
+            <div class="tip-img tip-img2"></div>
+            <p>Completion of binding</p>
+            <div class="input-wrap">
+              <Input
+                v-model="bindGooglePassword"
+                type="password"
+                placeholder="Please enter log in password"
+                class="bindGoogle-input"
+              >
+              </Input>
+              <Input
+                v-model="bindGooglePassword"
+                type="text"
+                placeholder="Please input the google code."
+                class="bindGoogle-input"
+              >
+              </Input>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <div slot="footer">
+        <Button type="primary" size="large" long :loading="modal_loading">Complete binding</Button>
+      </div>
     </Modal>
   `,
   data() {
-    return {};
+    return {
+      bindGooglePassword: '',
+      modal_loading: false,
+    };
   },
-  props: ['loginGoogle'],
+  props: ['registerGoogle'],
   methods: {
     asyncCancel() {
-      this.$parent.$emit('isloginGoogle', false);
+      this.$parent.$emit('isregisterGoogle', false);
       this.modal_loading = false;
     },
     ok() {
@@ -835,8 +1040,6 @@ var o_my_loginGoogle = {
     },
   },
 };
-
-
 
 // header
 
@@ -852,13 +1055,7 @@ var o_header = {
         <i-col span="10" class="om-market">
           <ul>
             <li>
-              <a href="">{{name}}</a>
-            </li>
-            <li>
-              <a href="otc_adverts.html">场外交易</a>
-            </li>
-            <li>
-              <a href="otc_adverts_trade.html">币币交易</a>
+              <a href="#">{{name}}</a>
             </li>
           </ul>
         </i-col>
@@ -879,14 +1076,13 @@ var o_header = {
               </a>
             </li>
             <li class="items">
-              <a href="#">资金管理</a>
+              <a type="primary" @click="showLogin()">Login</a>
             </li>
             <li class="items">
-              <!--<a href="otc_my_advert.html">我的挂单</a>-->
-              <a type="primary" @click="showLogin()">我的挂单</a>
+              <a href="otc_my_advert.html">我的挂单</a>
             </li>
             <li class="items my-orders">
-              <Badge count="3">
+              <Badge :count="orders.length">
                 <a href="otc_my_order.html" class="demo-badge" @click="isMyordersShow=!isMyordersShow">my order</a>
               </Badge>
               <div class="order-card" style="display:none;">
@@ -924,7 +1120,13 @@ var o_header = {
         </i-col>
       </Row>
       <mylogin :login="isLoginShow"></mylogin>
-      <mylogingoogle :login-google="isLoginGoogleShow"></mylogingoogle>
+      <myloginnext
+        :login-next="isLoginNextShow"
+        :is-login-next-type="isLoginNextType"
+        :is-login-next-cookie="isLoginNextCookie"
+        :is-login-next-phone="isLoginNextPhone"
+      ></myloginnext>
+      <myregistergoogle :register-google="isRegisterGoogleShow"></myregistergoogle>
     </div>
   `,
   data() {
@@ -934,8 +1136,12 @@ var o_header = {
       orders: [],
       ws: null,
       uid: 0,
-      isLoginShow: false,
-      isLoginGoogleShow: false,
+      isLoginShow : false,
+      isLoginNextShow : false,
+      isRegisterGoogleShow : false,
+      isLoginNextType:'',
+      isLoginNextCookie:'',
+      isLoginNextPhone:'',
     };
   },
   methods: {
@@ -950,7 +1156,8 @@ var o_header = {
         this.language = '中文';
       }
       var languageCode = this.language === '中文' ? 'zh' : 'en';
-      document.documentElement.style.direction = languageCode === 'zh' ? 'ltr' : 'rtl';
+      // document.body.style.direction = languageCode === 'zh' ? 'ltr' : 'rtl';
+      document.body.dir = languageCode === 'zh' ? 'ltr' : 'rtl';
       localStorage.setItem('locale', languageCode);
       this.$parent.$emit('locale', languageCode);
     },
@@ -997,7 +1204,8 @@ var o_header = {
   },
   components: {
     mylogin: o_my_login,
-    mylogingoogle: o_my_loginGoogle,
+    myloginnext: o_my_loginNext,
+    myregistergoogle: o_my_registerGoogle,
   },
   created: function() {
     if (utils.getCookie('token')) {
@@ -1014,10 +1222,23 @@ var o_header = {
   },
   mounted() {
     this.$on('islogin', function(i) {
+      console.log(i);
       this.isLoginShow = i;
     });
-    this.$on('isloginGoogle', function(i) {
-      this.isLoginGoogleShow = i;
+    this.$on("isregisterGoogle", function (i) {
+      this.isRegisterGoogleShow = i;
+    });
+    this.$on("isLoginNext", function (i) {
+      this.isLoginNextShow = i;
+    });
+    this.$on("isLoginNextType", function (i) {
+      this.isLoginNextType = i;
+    });
+    this.$on("isLoginNextCookie", function (i) {
+      this.isLoginNextCookie = i;
+    });
+    this.$on("isLoginNextPhone", function (i) {
+      this.isLoginNextPhone = i;
     });
     if (utils.getCookie('token')) {
       var that = this;
