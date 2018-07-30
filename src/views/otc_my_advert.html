@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+
+<head>
+  <title>UPEX</title>
+  @@include('header.html')
+  <link rel="stylesheet" href="../styles/my_goods.css?rev=@@hash">
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <o-header ref="header"></o-header>
+    <div class="wrapper">
+      <div class="pend-order">
+        <div class="header">
+          <h3>{{ $t('pendingOrder') }}</h3>
+        </div>
+        <div class="main">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Pending order type</th>
+                <th>Total amount/Remaining</th>
+                <th>unit price</th>
+                <th>Limit</th>
+                <th>Time</th>
+                <th>Operating</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in pendingOrdersList" :key="item.id">
+                <td>
+                  <Avatar size="large" style="background-color: #5C95EA">{{item.side.toLowerCase()}}</Avatar>
+                </td>
+                <td>{{item.volume}}</td>
+                <td>{{item.price}}</td>
+                <td>{{item.minTrade}} -- {{item.maxTrade}} SAR</td>
+                <td>{{item.ctime | time}}</td>
+                <td>
+                  <i-button @click="pause(item)" :disabled="item.status === 3 || item.status === 4 || item.status === 5" type="text">{{ item.status === 6 ? 'Enable' : 'Pause' }}</i-button>
+                  <i-button @click="cancel(item)" :disabled="item.status === 4 || item.status === 5" type="text">Cancel</i-button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pager">
+          <Page :total="pendingOrdersCount" @on-change="getAdvert" :current="current" :page-size="pageSize" size="small" show-total></Page>
+        </div>
+        <Modal v-model="showModal" width="500" class="pend-order_modal">
+          <div class="g-body">
+            <div class="g-body_title">
+              <i class="pend-icon icon-wait"></i>
+              {{ modalMsg.title }}
+            </div>
+            <div class="g-body_desc">{{ modalMsg.desc }}</div>
+          </div>
+          <div slot="footer">
+            <i-button type="text" @click="showModal = false">Cancel</i-button>
+            <i-button type="warning" @click="manualAction">{{ modalMsg.confirmText }}</i-button>
+          </div>
+        </Modal>
+      </div>
+    </div>
+  </div>
+  @@include('footer.html')
+  <script src="../scripts/locale/my_goods.js?rev=@@hash"></script>
+  <script src="../scripts/my_goods.js?rev=@@hash"></script>
+</body>
+
+</html>

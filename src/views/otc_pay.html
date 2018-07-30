@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+
+<head>
+  <title>UPEX</title>
+  @@include('header.html')
+  <link rel="stylesheet" href="../styles/pay.css?rev=@@hash">
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <o-header ref="header"></o-header>
+    <div v-if="step<4" class="wrapper" style="margin-bottom: 70px;margin-top:30px;">
+      <div class="pay">
+        <div class="pay-header">
+            <h3 v-if="step==1">
+              Payment to the seller
+              <span>{{orderInfo.totalPrice}}SAR</span>
+            </h3>
+            <h3 v-if="step==2">
+              Waiting for seller to confirm payment
+            </h3>
+            <h3 v-if="step==3">
+              <span>
+                Successful transaction - arrived at
+                <span style="color:#0CBF48"> {{orderInfo.totalPrice}}USDT</span>
+              </span>
+            </h3>
+            <div class="step-wrapper">
+              <Steps :current="step">
+                <Step content="Successfully order"></Step>
+                <Step content="Payment and confirma"></Step>
+                <Step content="Seller confirms payment"></Step>
+                <Step content="USDT arrival"></Step>
+              </Steps>
+            </div>
+        </div>
+        <div class="pay-info">
+          <Row>
+            <i-col span="12">
+              <div class="info-header">order information</div>
+                <ul v-if="step<3">
+                  <li class="info-items">
+                    <Row>
+                      <i-col span="6" class="info-key">Order Number :</i-col>
+                      <i-col span="18" class="info-value">{{orderInfo.sequence}}</i-col>
+                    </Row>
+                  </li>
+                  <li class="info-items">
+                    <Row>
+                      <i-col span="6" class="info-key">Total purchases :</i-col>
+                      <i-col span="18" class="info-value">{{orderInfo.volume}}</i-col>
+                    </Row>
+                  </li>
+                  <li class="info-items">
+                    <Row>
+                      <i-col span="6" class="info-key">Total price :</i-col>
+                      <i-col span="18" class="info-value">{{orderInfo.totalPrice}}</i-col>
+                    </Row>
+                  </li>
+                </ul>
+                <ul v-if="step==3">
+                  <li class="info-items">
+                    <Row>
+                      <i-col span="6" class="info-key">Order Number :</i-col>
+                      <i-col span="18" class="info-value">{{orderInfo.sequence}}</i-col>
+                    </Row>
+                  </li>
+                  <li class="info-items">
+                    <Row>
+                      <i-col span="6" class=" info-key">Received :</i-col>
+                      <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.volume}}</i-col>
+                    </Row>
+                  </li>
+                  <li class="info-items">
+                    <Row>
+                      <i-col span="6" class="info-key">Payments :</i-col>
+                      <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalPrice}}</i-col>
+                    </Row>
+                  </li>
+                  <li class="info-items">
+                    <Row>
+                      <i-col span="6" class="info-key">Time of arrival :</i-col>
+                      <i-col span="18" class="info-value">{{orderInfo.totalPrice}}</i-col>
+                    </Row>
+                  </li>
+
+                </ul>
+            </i-col>
+            <i-col span="12">
+              <div class="info-header">{{ $t('orderInfo') }}</div>
+                <ul class="bankcard">
+                  <li v-for="(i, index) in orderInfo.paymentBanks">
+                    <Row>
+                      <i-col span="9" class="info-key">
+                        Bank {{ index + 1 }}
+                      </i-col>
+                      <i-col span="15" class="info-value">{{i.bankName}}</i-col>
+                    </Row>
+                    <Row>
+                      <i-col span="9" class="info-key">
+                        Card number
+                      </i-col>
+                      <i-col span="15" class="info-value">{{i.cardNo}}</i-col>
+                    </Row>
+                    <Row>
+                      <i-col span="9" class="info-key">
+                        Account :
+                      </i-col>
+                      <i-col span="15" class="info-value">{{i.name}}</i-col>
+                    </Row>
+                    <Row>
+                      <i-col span="9" class="info-key">
+                        Iban number
+                      </i-col>
+                      <i-col span="15" class="info-value">{{i.ibanNo}}</i-col>
+                    </Row>
+                  </li>
+                </ul>
+                <Row>
+                  <i-col span="9">
+                    <Icon type="android-call"></Icon>
+                    Phone
+                  </i-col>
+                  <i-col span="15">
+                    {{orderInfo.seller.hideMobileNumber}}
+                  </i-col>
+                </Row>
+                <Row>
+                  <i-col span="9">
+                    <Icon type="android-contacts"></Icon>
+                    socialNumber
+                  </i-col>
+                  <i-col span="15">
+                    <input type="text" name="Social Number" readonly class="input-copy" :value="orderInfo.seller.userExtView.watchapp" @click="copy($event)">
+                    <a class="contact" :href="'https://api.whatsapp.com/send?phone='+orderInfo.seller.userExtView.watchapp">
+                      <Icon type="ios-telephone-outline"></Icon>contact seller</a>
+                  </i-col>
+                </Row>
+            </i-col>
+          </Row>
+        </div>
+        <div class="pay-status" v-if="step<2">
+          <h3>
+            Please complete the payment in
+            <span class="pay-left-time">{{leftTime}}</span>
+          </h3>
+          <div style="margin-top: 20px;">
+            <button @click="toPay" class="pay-btn">i Paid</button>
+            <span class="pay-tips">After successful payment, please click the button to inform the seller</span>
+          </div>
+          <i-button type="text" size="large" class="cancel-order" @click.native="cancelPay">cancel order</i-button>
+        </div>
+        <div class="pay-status" v-if="step==2">
+          <h5>The seller did not confirm within
+            <span style="color: #00FF00;">24</span> hours, customer service intervention to assist the transaction</h5>
+          <h3>Time left
+            <span class="pay-left-time">{{leftTime}}</span>
+          </h3>
+        </div>
+        <div v-if="step==3" class="return">
+          <a href="otc_adverts.html">Return home</a>
+        </div>
+        <div v-if="step<3" class="pay-footer">
+          <ul>
+            <li>1. Your remittance will be directly transferred to the seller's account. During the transaction, the digital
+              currency sold by the seller is .Please feel free to purchase it</li>
+            <li>2. Please complete the payment within the stipulated time, and be sure to click "</li>
+            <li>3. After the seller confirms, the system will put the digital currency into your account </li>
+            <li>4. If the order is cancelled three times that day, the purchase function will be</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!--订单超时显示-->
+    <div v-if="step==4" class="wrapper">
+      <div class="expired">
+        <h2 style="color:red;">Order expired, unable to view payment information!</h2>
+        <ul>
+          <li>
+            <span>Reason for failure :</span>
+            <span>Order expired</span>
+          </li>
+          <li>
+            <span>Order Number :</span>
+            <span>{{ orderInfo.sequence }}</span>
+          </li>
+          <li>
+            <span>Total purchases :</span>
+            <span>{{ orderInfo.volume }}</span>
+          </li>
+          <li>
+            <span>Total price :</span>
+            <span>{{ orderInfo.totalPrice }}</span>
+          </li>
+        </ul>
+        <p>If you have already paid, you can click on the
+          <a href="#" style="color:red;">appeal</a>
+        </p>
+        <div class="return">
+          <a href="otc_adverts.html">Return home</a>
+        </div>
+      </div>
+    </div>
+    <!--订单超时END-->
+    <div class="o-modal pay-modal" :class="isPayDialogShow?'is-show':'is-not-show'">
+      <div class="content">
+        <div class="content-wrapper" style="width:440px; height: 223px;">
+          <div class="pay-modal-title">
+            <h3>Has payment been made?</h3>
+            <p>If you do not pay, you will be treated as a title!</p>
+          </div>
+          <Row class="pay-modal-content">
+            <i-col span="8">
+              <i-button type="text" size="large" @click.native="isPayDialogShow = false">
+                <u>cancel</u>
+              </i-button>
+            </i-col>
+            <i-col span="16">
+              <button @click="paid" class="paid">Aready paid</button>
+            </i-col>
+          </Row>
+        </div>
+      </div>
+    </div>
+    <!-- -->
+    <div class="o-modal pay-info-modal" :class="isPayInfoDialogShow? 'is-show': 'is-not-show'">
+      <div class="content">
+        <div class="content-wrapper" style="width:500px; height: 424px ;">
+          <div class="p-i-header">
+            My transfer information
+            <Icon @click="close" type="close" class="close"></Icon>
+          </div>
+          <div class="p-i-content">
+            <ul>
+              <li>
+                <label> digits after remittance card number</label>
+                <div>
+                  <input type="number" v-model="card">
+                  <p class="error" v-if="cardErrorTips">{{ cardErrorTips }}</p>
+                </div>
+              </li>
+              <li>
+                <label> digits after remittance card number</label>
+                <div>
+                  <input type="number" v-model="recard">
+                  <p class="error" v-if="recardErrorTips">{{ recardErrorTips }}</p>
+                </div>
+              </li>
+              <li>
+                <button @click="confirm" class="confirm">Confirm</button>
+                <p>
+                  Please be sure to check the bank card information, fill in the information error, resulting in the transaction issue borne
+                  by the user
+                </p>
+                <p class="error" v-if="infoError">{{ infoError }}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  @@include('footer.html')
+  <script src="../scripts/locale/pay.js?rev=@@hash"></script>
+  <script src="../scripts/pay.js?rev=@@hash"></script>
+</body>
+
+</html>

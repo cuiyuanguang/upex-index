@@ -1,0 +1,440 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+
+<head>
+  <title>UPEX</title>
+  @@include('header.html')
+  <link rel="stylesheet" href="../styles/all_goods.css?rev=@@hash">
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <!--header-->
+    <o-header ref="header"></o-header>
+    <div class="banner">
+      {{ $t('welcome') }}
+    </div>
+
+    <div class="list wrapper">
+      <Row>
+        <i-col class="tags" :span="4" :class="tag=='BUY' ? 'act' :'disact' ">
+          <span @click="tag='BUY'">Buy USDT</span>
+        </i-col>
+        <i-col class="tags" :span="4" :class="tag=='SELL' ? 'act' :'disact' ">
+          <span @click="tag='SELL'">Sell USDT</span>
+        </i-col>
+        <i-col span="8" offset="8">
+          <div style="text-align: right">
+            <span>Market price is not satisfied?</span>
+            <i-button type="ghost" shape="circle" style="color:#ff7100;font-weight: bold;background-color: #ffffff;" @click.native.prevent="showPostDialog();">
+              <Icon type="plus-round"></Icon>
+              post pending orders
+            </i-button>
+          </div>
+        </i-col>
+      </Row>
+      <div>
+        <div v-show="tag=='BUY'">
+          <table class="buylist">
+            <tr>
+              <th>Business</th>
+              <th>Amount</th>
+              <th>
+                Limit
+                <br/>
+                <span class="limit-tips">(min-purchase amount - max-purchase amount)</span>
+              </th>
+              <th>unit price</th>
+              <th>operation</th>
+            </tr>
+            <tr v-for="item in buylist" :key="item.id">
+              <td>
+                <div class="seller">Buyer</div>
+                {{item.userName}}
+              </td>
+              <td>{{item.volume}} USDT</td>
+              <td>
+                {{item.minTrade}}--{{item.maxTrade}} SAR
+              </td>
+              <td class="price">{{item.price}} SAR</td>
+              <td>
+                <button @click="showSellUsdt(i)" class="buy-btn">Sell USDT</button>
+              </td>
+            </tr>
+          </table>
+          <div class="page">
+            <div class="wrapper">
+              <div>
+                <Page show-total @on-change="toBuyPage" :page-size="pageSize" :total="total" :current="sellCurrentPage" size="small"></Page>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-show="tag=='SELL'">
+          <table class="buylist">
+            <tr>
+              <th>Business</th>
+              <th>Amount</th>
+              <th>
+                Limit
+                <br/>
+                <span class="limit-tips">(min-purchase amount- max-purchase amount)</span>
+              </th>
+              <th>unit price</th>
+              <th>payment method</th>
+              <th>operation</th>
+            </tr>
+            <tr v-for="item in selllist" :key="item.id">
+              <td>
+                <div class="seller">Seller</div>
+                {{item.userName}}
+              </td>
+              <td>{{item.volume}} USDT</td>
+              <td>
+                {{item.minTrade}}--{{item.maxTrade}} SAR
+
+              </td>
+              <td class="price">{{item.price}} SAR</td>
+              <td>{{item.paymentBanks[0].bankName}}</td>
+              <td>
+                <button @click="showBuyUsdt(i)" class="buy-btn">Buy USDT</button>
+              </td>
+            </tr>
+          </table>
+          <div class="page">
+            <div class="wrapper">
+              <div>
+                <Page show-total @on-change="toSellPage" :page-size="pageSize" :total="sellTotal" :current="currentPage" size="small"></Page>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="o-modal post-modal" :class="isPostDialogShow ? 'is-show' :'is-not-show' ">
+      <div class="content">
+        <div class="content-wrapper" style="padding:0;">
+          <div class="title">
+            <span> Post pending orders </span>
+            <span class="close">
+              <Icon type="close-round" @click="closePostDialog"></Icon>
+            </span>
+          </div>
+          <div class="main-content">
+            <Tabs v-model="postTag">
+              <Tab-Pane label="Buy USDT" :disabled="buyDisabled" name="BUY">
+                <div style="width: 400px;">
+                  <div class="input-group">
+                    <div>
+                      <span class="input-label">Unit price</span>
+                      <span class="input-tips">Current market price {{marketPrice.exchange_sell_min || marketPrice.exchange_rate }} SAR</span>
+                    </div>
+                    <div>
+                      <i-input type="number" v-model="postData.price" placeholder="Enter your expected selling price">
+                        <Icon class="o-sar" slot="prepend"></Icon>
+                      </i-input>
+                    </div>
+                  </div>
+                  <div class="input-group">
+                    <div>
+                      <span class="input-label">Quantity</span>
+                      <span class="input-tips">Balance {{balance}} USDT</span>
+                    </div>
+                    <div>
+                      <i-input v-model="postData.volume " type="number" placeholder="Enter your expected sell quantity">
+                        <Icon class="o-usdt" slot="prepend"></Icon>
+                      </i-input>
+                    </div>
+                  </div>
+                  <div>Selling amount(SAR): {{postData.volume * postData.price || 0}}</div>
+                  <div class="input-group">
+                    <div>
+                      <span class="input-label">Single transaction limit(SAR)</span>
+                    </div>
+                    <div>
+                      <Row>
+                        <i-col span="10">
+                          <i-input v-model="postData.minTrade" type="number" placeholder="min">
+                            <Icon class="o-min" slot="prepend"></Icon>
+                          </i-input>
+                        </i-col>
+                        <i-col class="o-to" span="4">
+                          To </i-col>
+                        <i-col span="10">
+                          <i-input v-model="postData.maxTrade" type="number" placeholder="max">
+                            <Icon class="o-max" slot="prepend"></Icon>
+                          </i-input>
+                        </i-col>
+                      </Row>
+                    </div>
+                  </div>
+                  <div>
+                    <button @click="postOrder" class="o-buy-sell-btn">Buy USDT</button>
+                  </div>
+                  <div v-if="error.postDataError" class="error">{{error.postDataError}}</div>
+                </div>
+              </Tab-Pane>
+              <Tab-Pane label="Sell USDT" :disabled="sellDisabled" name="SELL">
+                <div style="width: 400px;">
+                  <div class="input-group">
+                    <div>
+                      <span class="input-label">Unit price</span>
+                      <span class="input-tips">Current market price {{marketPrice.exchange_sell_min || marketPrice.exchange_rate }} SAR</span>
+                    </div>
+                    <div>
+                      <i-input number v-model="postData.price" placeholder="Enter your expected selling price">
+                        <Icon class="o-sar" slot="prepend"></Icon>
+                      </i-input>
+                    </div>
+                  </div>
+                  <div class="input-group">
+                    <div>
+                      <span class="input-label">Quantity</span>
+                      <span class="input-tips">Balance {{balance}} USDT</span>
+                    </div>
+                    <div>
+                      <i-input v-model="postData.volume " number placeholder="Enter your expected sell quantity">
+                        <Icon class="o-usdt" slot="prepend"></Icon>
+                      </i-input>
+                    </div>
+                  </div>
+                  <div>Selling amount(SAR): {{postData.volume * postData.price}}</div>
+                  <div class="input-group">
+                    <div>
+                      <span class="input-label">Single transaction limit(SAR)</span>
+                    </div>
+                    <div>
+                      <Row>
+                        <i-col span="10">
+                          <i-input v-model="postData.minTrade" type="number" placeholder="min">
+                            <Icon class="o-min" slot="prepend"></Icon>
+                          </i-input>
+                        </i-col>
+                        <i-col class="o-to" span="4">
+                          To </i-col>
+                        <i-col span="10">
+                          <i-input v-model="postData.maxTrade" type="number" placeholder="max">
+                            <Icon class="o-max" slot="prepend"></Icon>
+                          </i-input>
+                        </i-col>
+                      </Row>
+                    </div>
+                  </div>
+                  <div>
+                    <button @click="postOrder" class="o-buy-sell-btn">Sell USDT</button>
+                  </div>
+                  <div v-if="error.postDataError" class="error">{{error.postDataError}}</div>
+                </div>
+              </Tab-Pane>
+            </Tabs>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--buy-sell-modal-->
+    <div class="o-modal buy-sell-modal" :class="isBuyDialogShow? 'is-show':'is-not-show' ">
+      <div class="content">
+        <div class="content-wrapper" style="padding: 20px;width: 1200px;">
+          <Icon type="close-circled" class="o-close" @click="closeBuyDialog"></Icon>
+          <div v-if="tag=='BUY'">
+            avaliable {{balance}} USDT
+          </div>
+          <Row>
+            <i-col span="4">
+              <p class="item-name">数量:</p>
+              <p class="item-name" v-if="buyData.method">支付方式:</p>
+            </i-col>
+            <i-col span="3">
+              <p class="txt-bold">{{buyData.restAmount}}</p>
+              <p class="txt-bold" v-if="buyData.method" v-html="buyData.method"></p>
+            </i-col>
+            <i-col span="6">
+              <div class="order-input-wrapper">
+                <div class="order-input" :class="buyAmountErrorText ? 'error' : ''">
+                  <input type="number" v-model="buyData.buyAmount" @change="changeAmount($event)" @focus="buyAmountAppendText = 'All'" @blur="buyAmountAppendText = 'SAR'"
+                  />
+                  <div class="order-input-append">
+                    <span @click="tradeAll('amount')">{{ buyAmountAppendText }}</span>
+                  </div>
+                </div>
+                <p class="order-input-tips" :class="buyAmountErrorText ? 'error' : ''">
+                  Limit: {{buyData.min}} -- {{buyAmountMax}}SAR
+                </p>
+                <p class="error txt-right" v-show="buyAmountErrorText">{{ buyAmountErrorText }}</p>
+              </div>
+            </i-col>
+            <i-col span="1" class="txt-center">
+              <Icon type="arrow-swap" size="18" color="#666" style="margin-top:16px"></Icon>
+            </i-col>
+            <i-col span="6">
+              <div class="order-input-wrapper">
+                <div class="order-input" :class="buyTotalErrorText ? 'error' : ''">
+                  <input type="number" v-model="buyData.buyTotal" @change="changeTotal($event)" @focus="buyTotalAppendText = 'All'" @blur="buyTotalAppendText = 'USDT'"
+                  />
+                  <div class="order-input-append">
+                    <span @click="tradeAll('total')">{{ buyTotalAppendText }}</span>
+                  </div>
+                </div>
+                <p class="order-input-tips" :class="buyTotalErrorText ? 'error' : ''">
+                  Limit:{{ buyTotalMin }} -- {{ buyTotalMax }}USDT
+                </p>
+                <p class="error txt-right" v-show="buyTotalErrorText">{{ buyTotalErrorText }}</p>
+              </div>
+            </i-col>
+            <i-col span="4" class="btn-wrapper">
+              <button v-show="tag==='BUY'" @click="sell" class="order-btn">sell</button>
+              <button v-show="tag==='SELL'" @click="buy" class="order-btn">buy</button>
+            </i-col>
+          </Row>
+          <div class="buyError error">{{error.buyError}}</div>
+        </div>
+      </div>
+    </div>
+
+    <!--挂单-->
+    <Modal v-model="isPricePromptShow" title="Modal Title" ok-text="OK" cancel-text="Cancel" width="420">
+      <p slot="header" style="color: #333333; text-align: center">
+        <span>Price deviation prompt</span>
+      </p>
+      <div>
+        <div v-if="postTag=='SELL'" style="padding:20px;text-align: center; height: 136px; background: rgba(171, 15, 15, 1);; color: white; font-size: 16px;">
+          <img src="../images/warning.png" alt="">
+          <p>{{postErroMsg}}</p>
+        </div>
+        <div v-if="postTag=='BUY'" style="padding:20px;text-align: center; height: 136px; background: rgba(171, 15, 15, 1);; color: white; font-size: 16px;">
+          <img src="../images/warning.png" alt="">
+          <p>{{postErroMsg}}</p>
+        </div>
+        <div style="padding: 0 50px;font-size: 16px;">
+          <p style="margin: 10px 0;">
+            <span>Current market price</span>
+            <span>{{marketPrice.exchange_sell_min}} SAR</span>
+          </p>
+          <p style="margin: 10px 0;">
+            <span>Current release price: </span>
+            <span style="color:red;">{{postData.price}} SAR</span>
+          </p>
+        </div>
+      </div>
+      <div slot="footer">
+        <a href="#" @click="confirmRelease">cofirm release</a>
+        <a href="#" @click="modifyPostOrder" class="i-modify" style="width:220px;display: inline-block;
+				height:44px;background:rgba(255,237,0,1);
+				border-radius:5px;">Immediately modify</a>
+      </div>
+    </Modal>
+
+    <!-- confirm pending order -->
+    <div class="o-modal pend-order-modal" :class="isPendModalShow? 'is-show' :'is-not-show'">
+      <div class="content">
+        <div class="content-wrapper" style="padding:0;">
+          <div class="p-header">
+            <span>Confirm pending order to sell USDT</span>
+            <Icon @click="isPendModalShow=false" type="close" class="o-close"></Icon>
+          </div>
+          <div class="p-info">
+            <Row>
+              <i-col span="6" class="key">Unit price</i-col>
+              <i-col span="18" class="value">{{postData.price}}</i-col>
+            </Row>
+            <Row>
+              <i-col span="6" class="key">Quanlity</i-col>
+              <i-col span="18" class="value">{{postData.volume}}</i-col>
+            </Row>
+            <Row>
+              <i-col span="6" class="key">Limit</i-col>
+              <i-col span="18" class="value">{{postData.minTrade}} SAR -- {{postData.maxTrade}} SAR</i-col>
+            </Row>
+            <Row>
+              <i-col span="6" class="key">Selling amount</i-col>
+              <i-col span="18" class="value">{{postData.volume}}</i-col>
+            </Row>
+            <div v-if="postTag=='SELL'" class="settings">
+              <div class="s-header">
+                <p class="key" @click="showMoreSettings = !showMoreSettings">More settings
+                  <Icon :type="showMoreSettings ? 'chevron-up' : 'chevron-down'"></Icon>
+                </p>
+              </div>
+              <div v-show="showMoreSettings" class="s-body">
+                <Row>
+                  <i-col class="key" span="6">
+                    WhatsApp
+                  </i-col>
+                  <i-col span="12">
+                    <span v-if="!changeWhatsApp">{{ whatsApp }}</span>
+                    <input class="input-single-line" v-else type="text" v-model="newWhatsApp" :focus="changeWhatsApp" :readonly="!changeWhatsApp">
+                  </i-col>
+                  <i-col span="6">
+                    <i-button type="text" size="small" style="color:#ffffff;" v-if="!changeWhatsApp" @click.native="handleChangeWhatsApp">change</i-button>
+                    <p v-else>
+                      <i-button type="text" size="small" style="color:#ffffff;" @click="cancelChangeWhatsApp">cancel</i-button>
+                      <i-button type="success" size="small" @click="confirmChangeWhatsApp">ok</i-button>
+                    </p>
+                  </i-col>
+                </Row>
+                <Row>
+                  <i-col span="24" class="key">Bank Card</i-col>
+                </Row>
+                <Row v-for="(i, index) in cardInfo">
+                  <i-col span="20">
+                    <p style="color: #ffffff;">{{ item.bankName }}</p>
+                    <p class="key">{{item.cardNo}}</p>
+                  </i-col>
+                  <i-col span="4">
+                    <i-switch v-model="cardStatus[index]"></i-switch>
+                  </i-col>
+                </Row>
+              </div>
+            </div>
+          </div>
+          <div class="rtabs">
+            <Row>
+              <i-col :span="12" :class="postData.checkType==='1'?'tb-act':'tb-disact'">
+                <span @click="postData.checkType='1'">Google verification code</span>
+              </i-col>
+              <i-col :span="12" :class="postData.checkType==='2'?'tb-act':'tb-disact'">
+                <span @click="postData.checkType='2'">SMS verification</span>
+              </i-col>
+            </Row>
+            <div>
+              <div class="gg" v-show="postData.checkType==='1'">
+                <input v-model="gCode" type="text">
+              </div>
+              <div class="sms" v-show="postData.checkType==='2'">
+                <input v-model="smsCode" type="text">
+                <span v-show="sms" class="sendMsg">{{sendText}}s</span>
+                <span v-show="!sms" @click="sendMsg" class="sendMsg">sms</span>
+              </div>
+            </div>
+
+          </div>
+          <div class="p-foot">
+            <a class="return" @click="modifyPostOrder">return to edit</a>
+            <a class="config" @click="confirmPostOrder" href="#">Confirm pending</a>
+            <div class="p-foot-tips" :class="error.postError ? 'error' : ''">{{error.postError}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- confirm pending order end -->
+
+    <!--bind card-->
+    <bindcard :show="isBindCardShow"></bindcard>
+    <confirm :show="isConfirmBindShow"></confirm>
+    <!--bind card end-->
+
+    <acontact :show="isContactShow" :isWatchupBind="isWatchAppBind"></acontact>
+    <gauth :show="isGoogleAuthShow"></gauth>
+    <selectcard :show="isSelectCardShow" :cards="cardInfo"></selectcard>
+
+  </div>
+
+  <!--footer-->
+  @@include('footer.html')
+  <script src="../scripts/locale/all_goods.js?rev=@@hash"></script>
+  <script src="../scripts/all_goods.js?rev=@@hash"></script>
+</body>
+
+</html>

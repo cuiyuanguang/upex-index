@@ -1,0 +1,326 @@
+.expired {
+  padding: 10px 30px;
+  width: 1200px;
+  height: 500px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.5);
+  margin: 20px 0;
+  margin-bottom: 331px;
+  margin-top: 20px;
+}
+
+.success-tips {
+  top: 30%;
+  right: 42%;
+}
+
+.expired h2 {
+  margin-top: 40px;
+}
+
+.expired ul {
+  margin-top: 20px;
+}
+
+.expired a {
+  font-size: 14px;
+}
+
+.expired .return {
+  margin-top: 40px;
+}
+
+.expired ul > li {
+  height: 30px;
+}
+
+.pay {
+  width: 1200px;
+  min-height: 751px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.5);
+}
+
+.pay .pay-header {
+  padding: 10px 30px;
+  border-bottom: 1px solid #f4f4f4;
+}
+
+.pay .pay-header .step-wrapper {
+  margin-top: 30px;
+}
+
+.pay .ivu-steps-content {
+  position: relative;
+  top: -50px;
+  left: -81px;
+}
+
+.pay .step-wrapper .ivu-steps {
+  left: 45px;
+  top: 10px;
+  position: relative;
+}
+
+.pay .step-wrapper .ivu-steps-item.ivu-steps-status-finish .ivu-steps-head-inner {
+  background-color: #fff;
+  border-color: #0cbf48;
+}
+
+.pay .step-wrapper .ivu-steps-item.ivu-steps-status-finish .ivu-steps-tail > i:after {
+  background: #0cbf48;
+}
+
+.pay .step-wrapper .ivu-steps-item.ivu-steps-status-finish .ivu-steps-head-inner span,
+.ivu-steps-item.ivu-steps-status-finish .ivu-steps-head-inner > .ivu-steps-icon {
+  color: #0cbf48;
+}
+
+.pay .step-wrapper .ivu-steps-item.ivu-steps-status-process .ivu-steps-head-inner {
+  border-color: #0cbf48;
+  background-color: #0cbf48;
+}
+
+.pay .pay-info {
+  padding: 10px 30px;
+}
+
+.pay .pay-cookie {
+  padding: 10px 30px;
+}
+
+.pay .pay-info .info-header {
+  padding-left: 5px;
+  background: rgba(248, 248, 248, 1);
+  height: 50px;
+  line-height: 50px;
+  border-right: 1px solid #f4f4f4;
+  font-size: 18px;
+  color: rgba(51, 51, 51, 1);
+}
+
+.pay .pay-info .bankcard li {
+  border-bottom: 1px dashed #d4d0d0;
+}
+
+.pay .pay-info > .ivu-row {
+  border: 1px solid rgba(244, 244, 244, 1);
+}
+
+.pay .pay-info .info-items {
+  margin-bottom: 15px;
+}
+
+.pay .pay-info .info-items > .ivu-row {
+  padding-left: 30px;
+}
+
+.pay .pay-info .info-items .info-key {
+  color: rgba(102, 102, 102, 1);
+}
+
+.pay .pay-info .info-items .info-value {
+  font-family: SanFranciscoDisplay-Semibold;
+  color: rgba(51, 51, 51, 1);
+}
+
+.pay .pay-info .ivu-row {
+  margin: 10px;
+}
+
+.pay .pay-info .ivu-row .contact {
+  background: #0cbf48;
+  padding: 2px 5px;
+  color: white;
+  height: 25px;
+  display: inline-block;
+  border-radius: 12px;
+}
+.pay .pay-info .ivu-row .copy {
+  border: none;
+  background: #0cbf48;
+  color: white;
+  padding: 2px 5px;
+  height: 25px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  outline: none;
+}
+
+.pay .pay-info .ivu-row .copy:hover {
+  background-color: #0bb042;
+}
+
+.wait-pay .received {
+  width: 170px;
+  height: 44px;
+  background: rgba(255, 237, 0, 1);
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  font-size: 16px;
+  font-family: SanFranciscoDisplay-Medium;
+  color: rgba(51, 51, 51, 1);
+}
+
+.pay .return {
+  padding: 0 30px;
+}
+
+.pay .pay-info .ivu-row .contact:hover {
+  background: rgb(8, 147, 54);
+}
+
+.pay .pay-info .ivu-row .ivu-btn-success {
+  background-color: #0cbf48;
+  border-color: #19be6b;
+}
+
+.pay .input-copy {
+  position: relative;
+	outline: none;
+	border: none;
+	color: #495060;
+	cursor: pointer;
+	width: 120px;
+}
+
+.pay .input-copy::selection {
+	background-color: transparent;
+}
+
+.pay .input-copy:hover {
+	border-bottom: 1px solid #495060;
+}
+
+.pay .pay-status {
+  padding: 10px 30px;
+}
+
+.pay .pay-status h3 {
+  font-size: 18px;
+  color: rgba(51, 51, 51, 1);
+}
+
+.pay .pay-status .pay-left-time {
+  font-size: 18px;
+  color: rgba(255, 46, 46, 1);
+}
+
+.pay .pay-status .pay-btn {
+  border: none;
+  width: 140px;
+  height: 44px;
+  background: rgba(255, 237, 0, 1);
+  border-radius: 5px;
+}
+
+.pay .pay-status .pay-tips {
+  display: inline-block;
+  width: 466px;
+  height: 38px;
+  line-height: 38px;
+  text-align: center;
+  background: rgba(251, 246, 184, 1);
+  border-radius: 5px;
+}
+
+.pay .pay-status .cancel-order {
+  margin-top: 30px;
+  font-size: 14px;
+  color: rgba(52, 97, 167, 1);
+  line-height: 16px;
+}
+
+.pay .pay-status .wait-time > span:first-child {
+  font-size: 16px;
+  color: rgba(51, 51, 51, 1);
+  line-height: 19px;
+}
+
+.pay .pay-status .wait-time > span:last-child {
+  font-size: 16px;
+  color: rgba(12, 191, 72, 1);
+}
+
+.pay .pay-footer {
+  padding: 10px 30px;
+}
+
+#app .pay-modal .pay-modal-title {
+  text-align: center;
+  padding-top: 40px;
+}
+
+#app .pay-modal .pay-modal-title p {
+  margin: 18px;
+}
+
+#app .pay-modal .content-wrapper .pay-modal-content {
+  padding: 20px 30px;
+}
+
+#app .pay-modal .content-wrapper .pay-modal-content .cancel {
+  line-height: 44px;
+}
+
+#app .pay-modal .content-wrapper .pay-modal-content .paid {
+  width: 251px;
+  height: 44px;
+  background: rgba(255, 237, 0, 1);
+  border: 0;
+  border-radius: 5px;
+  line-height: 44px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  color: rgba(51, 51, 51, 1);
+}
+
+#app .pay-info-modal .content .content-wrapper {
+  padding: 0;
+}
+
+#app .pay-info-modal .content .content-wrapper .p-i-header {
+  padding: 20px 30px;
+  font-size: 18px;
+  color: rgba(51, 51, 51, 1);
+  line-height: 21px;
+  border-bottom: 1px solid rgba(230, 230, 230, 1);
+}
+
+#app .pay-info-modal .content .content-wrapper .p-i-header .close {
+  position: absolute;
+  right: 30px;
+}
+
+#app .pay-info-modal .content .content-wrapper .p-i-content {
+  padding: 0 50px;
+}
+
+#app .pay-info-modal .content .content-wrapper .p-i-content label {
+  font-size: 14px;
+  color: rgba(51, 51, 51, 1);
+}
+
+#app .pay-info-modal .content .content-wrapper .p-i-content input {
+  width: 400px;
+  height: 40px;
+  background: rgba(250, 250, 250, 1);
+  border-radius: 2px;
+  border: 1px solid rgba(238, 238, 238, 1);
+}
+
+#app .pay-info-modal .content .content-wrapper .p-i-content li {
+  margin: 30px 0px;
+}
+
+#app .pay-info-modal .content .content-wrapper .p-i-content .confirm {
+  border: none;
+  width: 400px;
+  height: 44px;
+  background: rgba(255, 237, 0, 1);
+  border-radius: 5px;
+  font-size: 16px;
+  color: rgba(51, 51, 51, 1);
+}

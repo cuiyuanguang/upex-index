@@ -1,0 +1,143 @@
+@font-face {
+  font-family: 'pend_icon';
+  src: url('data:application/x-font-woff;charset=utf-8;base64,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') format('woff');
+}
+
+.pend-icon {
+  margin: 0 5px;
+  font-family: 'pend_icon' !important;
+  font-size: 28px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-cart-normal:before {
+  content: '\e61c';
+}
+
+.icon-cart-hover:before {
+  content: '\e61d';
+}
+
+.icon-wait:before {
+  content: '\e621';
+}
+
+.pend-order {
+  background: white;
+  margin: 20px auto;
+  min-height: 810px;
+}
+
+.pend-order .main th,
+.pend-order .main td {
+  width: 17%;
+  text-align: center;
+  border: none;
+}
+
+.pend-order .header {
+  padding: 30px;
+}
+
+.pend-order .header h3 {
+  margin-left: 20px;
+  font-size: 25px;
+}
+
+.pend-order .table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pend-order .table thead {
+  background: rgba(244, 244, 244, 1);
+  box-shadow: 0px 1px 0px 0px rgba(241, 241, 241, 1);
+  line-height: 50px;
+}
+
+.pend-order .table tbody td {
+  line-height: 70px;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.pend-order .table .ivu-avatar-large {
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  border-radius: 18px;
+}
+
+.pend-order .table .ivu-avatar-large>* {
+  line-height: 36px;
+  text-transform: capitalize;
+}
+
+.ivu-btn-text {
+  color: #5C95EA;
+}
+
+.pend-order .table .text-primary {
+  color: #5c95ea;
+}
+
+.pend-order .pager {
+  text-align: center;
+  height: 70px;
+  line-height: 70px;
+}
+
+.pend-order_modal .ivu-modal-body {
+  padding: 24px 30px 0;
+}
+
+.pend-order_modal .g-body {
+  margin-top: 40px;
+  height: 100px;
+  text-align: center;
+  color: #333333;
+  font-size: 18px;
+}
+
+.pend-order_modal .g-body .g-body_title {
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 28px;
+  line-height: 28px;
+  font-weight: bold;
+}
+
+.pend-order_modal .ivu-modal-footer {
+  margin-top: 60px;
+  padding: 0 30px 30px;
+  border-top: none;
+}
+
+.pend-order_modal .ivu-modal-footer .ivu-btn-warning {
+  padding: 12px 50px;
+  height: 44px;
+  line-height: 22px;
+  font-size: 16px;
+  color: #333333;
+  background-color: #FFED00;
+  border-color: #FFED00;
+}
+
+.pend-order_modal .ivu-modal-footer .error-tips {
+  position: absolute;
+  right: 30px;
+  bottom: 7px;
+  height: 16px;
+  line-height: 16px;
+  color: #FF4949;
+}
+
+.pend-order_tips {
+  top: 50%;
+  left: 50%;
+  margin-left: -130px;
+  margin-top: -50px;
+}

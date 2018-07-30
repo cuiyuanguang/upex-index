@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+
+<head>
+  <title>UPEX</title>
+  @@include('header.html')
+  <link rel="stylesheet" href="../styles/my_order.css?rev=@@hash">
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <o-header ref="header"></o-header>
+    <div class="wrapper">
+      <div class="order">
+        <div class="header">
+          <h3>{{ $t('myOrder') }}</h3>
+        </div>
+        <div class="body">
+          <table>
+            <tr>
+              <th>Order number</th>
+              <th>Transaction Type</th>
+              <th>Number of transactions</th>
+              <th>Total price</th>
+              <th>unit price</th>
+              <th>Time</th>
+              <th>Trading partners</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+            <tr v-for="item in list" :key="item.sequence">
+              <td>{{item.sequence}}</td>
+              <td>{{ userInfo.uid == item.buyer.id ? 'Buy' : 'Sell' }}</td>
+              <td>{{item.volume}}USDT</td>
+              <td>{{item.totalPrice}}SAR</td>
+              <td>{{item.price}}SAR</td>
+              <td>{{item.ctime | getDateFromMillionSeconds}}</td>
+              <td>{{ userInfo.uid == item.buyer.id ? item.buyer.showNickName : item.seller.showNickName }}</td>
+              <td :class="item.status=='3'? 'complete' :'abnormal'">{{item.status | statusSemantics}}</td>
+              <td>
+                <a v-if="item.buyer.id==userInfo.uid" class="view" :href="'otc_pay.html?sequence='+item.sequence">view</a>
+                <a v-else class="view" :href="'otc_wait_pay.html?sequence='+item.sequence">view</a>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="pager">
+          <Page show-total @on-change="getMyOrder" :page-size="pageSize" :total="total" :current="current" size="small"></Page>
+        </div>
+      </div>
+    </div>
+  </div>
+  @@include('footer.html')
+  <script src="../scripts/locale/my_order.js?rev=@@hash"></script>
+  <script src="../scripts/my_order.js?rev=@@hash"></script>
+</body>
+
+</html>

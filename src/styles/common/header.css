@@ -1,0 +1,175 @@
+.my-login .clear:after {
+    content: ".";
+    clear: both;
+    display: block;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.my-login .ivu-modal-header-inner {
+    text-align: center;
+}
+
+.my-login .ivu-modal {
+    top: 0;
+}
+
+.my-login .ivu-modal-header {
+    border-bottom: none;
+    padding-top: 27px;
+    padding-bottom: 27px;
+}
+
+.my-login .ivu-modal-close {
+    right: 30px;
+    top: 20px;
+}
+
+.my-login .ivu-input {
+    height: 40px
+}
+
+.my-login .iview-input {
+    width: 400px;
+    margin: 0 auto;
+    display: block;
+}
+
+.my-login .iview-input:after {
+    content: ".";
+    clear: both;
+    display: block;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.my-login .ivu-input-group-append {
+    position: absolute;
+    right: 1px;
+    z-index: 2;
+    background: #fff;
+    border: none;
+    top: 1px;
+    height: 38px;
+    line-height: 34px;
+    width: auto;
+    cursor: pointer;
+    color: #bbbec4;
+}
+.my-login .ivu-modal-body{
+    position: relative;
+    z-index: 2;
+}
+.my-login .ivu-modal-footer {
+    display: block;
+    width: 400px;
+    padding: 0 0 30px;
+}
+
+.my-login .ivu-btn-primary {
+    background-color: #5c95ea;
+    border-color: #5C95EA;
+}
+
+.my-login .login-footer-wrap {
+    text-align: center;
+    padding-top: 30px;
+    font-size: 14px;
+}
+
+.my-login .login-footer-wrap span {
+    margin: 0 5px;
+}
+
+.my-login .login-footer-wrap .blue {
+    color: #3461a7;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.my-login .login-footer-wrap .black {
+    color: #333;
+}
+
+.my-login .ivu-tabs-bar {
+    border: none;
+    padding: 0 50px;
+    margin-bottom: 30px;
+}
+
+.my-login .ivu-tabs-nav .ivu-tabs-tab {
+    padding: 8px 0;
+}
+
+.my-login .ivu-tabs {
+    overflow: inherit;
+    color: #879FC2;
+}
+
+.my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item-active, .my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item:hover, .my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu-active,.my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu:hover {
+    color: #5C95EA;
+    border-bottom-color: #5C95EA;
+}
+
+.my-login .ivu-input-group-with-append .ivu-input,.my-login .ivu-input-group-with-append.ivu-input-group-small .ivu-input, .my-login .ivu-input-group-append,.my-login .ivu-input-group > .ivu-input:last-child {
+    border-radius: 4px !important;
+}
+
+.my-login .vertical-center-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.my-login .is-red .ivu-input {
+    border: 1px solid #ff2e2e;
+}
+
+.my-login .my-login-error {
+    color: #ff2e2e;
+    font-size: 14px;
+    width: 400px;
+    margin: 0 auto;
+    height: 30px;
+    line-height: 30px;
+}
+
+.my-login .ivu-input-group-prepend {
+    position: absolute;
+    left: 1px;
+    z-index: 3;
+    background: #fff;
+    border: none;
+    top: 1px;
+    width: 87px;
+    cursor: pointer;
+    color: #bbbec4;
+    height: 38px;
+    line-height: 30px;
+    border-right: 1px solid #DBDBDB;
+}
+
+.my-login .ivu-select-single .ivu-select-input {
+    text-align: center;
+}
+
+.my-login .iview-input-countryPhone .ivu-input {
+    text-indent: 87px;
+}
+
+.my-login .ivu-modal-content {
+    overflow: hidden;
+}
+
+.my-login .iview-input-countryPhone-span {
+    float: right;
+    color: #aaa;
+}
+
+.my-login .ivu-select-dropdown {
+    text-align: left;
+    left: -1px !important;
+    width: 400px !important;
+}

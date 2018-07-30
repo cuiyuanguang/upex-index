@@ -1,0 +1,660 @@
+@charset "UTF-8";
+div,
+ul {
+  margin: 0 auto;
+}
+
+ul>li {
+  list-style: none;
+}
+
+.flex-wrapper {
+  width: 100%;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.wrapper {
+  width: 1200px;
+}
+
+
+/* to avoid {{}}  expression when render dom*/
+[v-cloak]{
+  display: none;
+}
+
+body {
+  font-size: 14px;
+  background-color: #EBEBEB;
+}
+
+button {
+  cursor: pointer;
+}
+
+input::-webkit-inner-spin-button {
+  display: none !important;
+}
+
+.is-show {
+  display: block !important;
+}
+
+.is-not-show {
+  display: none;
+}
+
+.error {
+  border-color: red !important;
+  color: red !important;
+}
+
+.success {
+  color: #0CBF48;
+}
+
+/*  style of o-modal			 */
+
+.o-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(55, 55, 55, .6);
+  height: 100%;
+  z-index: 10000;
+}
+
+.o-modal>.content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: auto;
+}
+
+.o-modal>.content>.content-wrapper {
+  position: relative;
+  top: 20%;
+  margin: 0 auto;
+  padding: 0;
+  width: 500px;
+  background-color: white;
+  border-radius: 5px;
+}
+
+/******************************
+ * style of navbar			  *
+ ******************************/
+
+.om-header {
+  height: 50px;
+  background-color: #0f0f10;
+  color: #ADADAD;
+}
+
+.om-header .my-orders:hover .order-card {
+  display: block !important;
+}
+
+.om-header .management>ul>li {
+  position: relative;
+}
+
+.om-header .order-card {
+  width: 365px;
+  min-height: 430px;
+  position: absolute;
+  background: #ffffff;
+  border-radius: 3px;
+  right: 0;
+  z-index: 1002;
+  box-shadow: 0px 2px 9px 0px rgba(210, 210, 210, 0.46);
+}
+
+.om-header .om-market ul>li>a {
+  line-height: 50px;
+  color: #ADADAD;
+}
+
+.om-header .order-card .card-header {
+  border-bottom: 1px solid #EEEEEE;
+  padding: 14px 15px;
+}
+
+.om-header .order-card .card-header a {
+  position: absolute;
+  right: 15px;
+}
+
+.om-header .order-card ul>li .ivu-row {
+  padding: 0 16px;
+  border-bottom: 1px solid #EEEEEE;
+}
+
+.om-header .order-card ul>li .ivu-row .ivu-col-span-4:first-child {
+  height: 66px;
+  line-height: 66px;
+}
+
+.om-header .order-card .buyType {
+  font-size: 12px;
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  background: #FF2E2E;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 33px;
+  color: white;
+}
+
+.om-header .order-card .sellType {
+  font-size: 12px;
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  background: rgba(92, 149, 234, 1);
+  border-radius: 50%;
+  text-align: center;
+  line-height: 33px;
+  color: white;
+}
+
+.om-header>.wrapper {
+  margin: 0 auto;
+}
+
+.om-header .logo-wrapper {
+  margin-top: 14px;
+}
+
+.om-header .om-market ul>li {
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.om-header .management ul>li>a {
+  line-height: 50px;
+  color: #ADADAD;
+}
+
+.om-header>.ivu-row>.ivu-col-span-10:last-child {
+  padding-right: 20px;
+}
+
+.om-header .management .items {
+  float: right;
+  margin-left: 15px;
+}
+
+.om-header ul>li>a>svg {
+  position: relative;
+  top: 3px;
+}
+
+.om-header .order-card ul>li .ivu-row .ivu-col>.tip {
+  margin-top: 17px;
+  color: #333333;
+}
+
+.om-header .order-card ul li .ivu-col-span-4:last-child {
+  line-height: 66px;
+}
+
+.om-header .order-card .view {
+  display: inline-block;
+  border: 1px solid;
+  height: 20px;
+  width: 40px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 10px;
+  font-size: 10px;
+}
+
+.om-header .order-card .card-footer {
+  text-align: center;
+  margin-top: 6px;
+  text-align: center;
+}
+
+.om-header .items .ivu-badge {
+  line-height: 50px;
+}
+
+.om-header .items .ivu-badge a {
+  color: #ADADAD;
+}
+
+.om-header .ivu-dropdown {
+  line-height: 50px;
+}
+
+.om-header .ivu-dropdown a {
+  color: #ADADAD;
+}
+
+.om-header .arrow {
+  border: 10px solid #020202;
+  z-index: 10000000;
+  width: 6px;
+  height: -14px;
+  position: absolute;
+  top: -23px;
+  right: 14px;
+  border-color: #ff000000;
+  border-bottom: 13px solid white;
+}
+
+.om-header .items .ivu-badge .ivu-badge-count {
+  /* width: 10px; */
+  position: absolute;
+  -webkit-transform: translateX(50%);
+  -ms-transform: translateX(50%);
+  transform: translateX(50%);
+  top: 3px;
+  right: 0;
+  height: 16px;
+  border-radius: 10px;
+  min-width: 16px;
+  background: #ed3f14;
+  color: #fff;
+  line-height: 16px;
+  text-align: center;
+  font-size: 12px;
+  white-space: nowrap;
+  -webkit-transform-origin: -10% center;
+  -ms-transform-origin: -10% center;
+  transform-origin: -10% center;
+  z-index: 10;
+  box-shadow: none;
+  padding: 0;
+}
+
+/*****************************/
+
+/*       bind card style     */
+
+/*****************************/
+
+.add-bankcard-modal .content .content-wrapper {
+  background: white;
+  border-radius: 5px;
+}
+
+.add-bankcard-modal .content .content-wrapper .o-header {
+  position: relative;
+  height: 60px;
+  line-height: 60px;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 0 30px;
+}
+
+.add-bankcard-modal .content .content-wrapper .o-header span {
+  font-size: 18px;
+  font-family: SanFranciscoDisplay-Semibold;
+  color: #333333;
+}
+
+.add-bankcard-modal .content .content-wrapper .o-header .close {
+  position: absolute;
+  right: 30px;
+  top: 20px;
+}
+
+.add-bankcard-modal .content .content-wrapper .o-content {
+  padding: 0 50px 30px;
+}
+
+.add-bankcard-modal .content .content-wrapper .o-content ul li {
+  list-style: none;
+  margin-top: 30px;
+}
+
+.add-bankcard-modal .content .content-wrapper .o-content ul li p {
+  font-size: 14px;
+  font-family: SanFranciscoDisplay-Medium;
+  color: #333333;
+}
+
+.add-bankcard-modal .content .content-wrapper .o-content ul li input {
+  height: 40px;
+  width: 400px;
+  background: #fafafa;
+  border-radius: 2px;
+  border: 1px solid #eeeeee;
+}
+
+.add-bankcard-modal .content .content-wrapper .o-content ul li button {
+  outline: none;
+  border: none;
+  width: 400px;
+  height: 44px;
+  background: #ffed00;
+  border-radius: 5px;
+}
+
+/*********************************/
+
+/* style of confirm bind card    */
+
+/*********************************/
+
+.confirm-bankcard-modal .content .content-wrapper .o-header {
+  position: relative;
+  height: 60px;
+  line-height: 60px;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 0 30px;
+}
+
+.confirm-bankcard-modal .content .content-wrapper .o-header span {
+  font-size: 18px;
+  font-family: SanFranciscoDisplay-Semibold;
+  color: #333333;
+}
+
+.confirm-bankcard-modal .content .content-wrapper .o-header .close {
+  position: absolute;
+  right: 30px;
+  top: 20px;
+}
+
+.confirm-bankcard-modal .content .content-wrapper .o-content .info {
+  font-size: 16px;
+  color: white;
+  height: 218px;
+  background: linear-gradient(-138.7deg, #596fed, #4878f6);
+  padding: 0 40px;
+}
+
+.confirm-bankcard-modal .content .content-wrapper .o-content .info ul {
+  padding-top: 25px;
+}
+
+.confirm-bankcard-modal .content .content-wrapper .o-content .info ul li {
+  list-style: none;
+  margin-top: 15px;
+}
+
+.confirm-bankcard-modal .content .content-wrapper .o-content .foot {
+  margin-top: 20px;
+  padding: 0 30px 30px;
+  text-align: center;
+}
+
+.confirm-bankcard-modal .content .content-wrapper .o-content .foot .return {
+  margin-right: 110px;
+  color: #333333;
+}
+
+.confirm-bankcard-modal .content .content-wrapper .o-content .foot .binding {
+  width: 240px;
+  height: 44px;
+  background: #ffed00;
+  border-radius: 5px;
+  border: none;
+}
+
+.confirm-bankcard-modal .ivu-tabs-content .ivu-tabs-tabpane {
+  padding: 0 30px;
+}
+
+.confirm-bankcard-modal .ivu-tabs-content .ivu-tabs-tabpane .g-code {
+  margin-top: 20px;
+  width: 440px;
+  height: 40px;
+  background: #fafafa;
+  border-radius: 2px;
+  border: 1px solid #eeeeee;
+}
+
+.confirm-bankcard-modal .nav-text {
+  width: 100%;
+}
+
+.confirm-bankcard-modal .nav-text .ivu-tabs-tab {
+  height: 50px;
+  line-height: 34px;
+  width: 50%;
+  font-size: 14px;
+  color: #434343;
+  margin-right: 0;
+  text-align: center;
+  background-color: #ebebeb;
+}
+
+.confirm-bankcard-modal .nav-text .ivu-tabs-tab .ivu-icon-social-google {
+  color: #ff6a4b;
+}
+
+.confirm-bankcard-modal .nav-text .ivu-tabs-tab .ivu-icon-android-textsms {
+  color: #009688;
+}
+
+.confirm-bankcard-modal .nav-text .ivu-tabs-tab-active {
+  background-color: #fff;
+  border: none;
+}
+
+.confirm-bankcard-modal .nav-text .ivu-tabs-ink-bar {
+  background-color: white;
+}
+
+/******************************googe validate**************************/
+
+.google-modal .content .content-wrapper .close {
+  position: relative;
+  left: 20px;
+  top: 20px;
+}
+
+.google-modal .content .content-wrapper .g-body {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.google-modal .content .content-wrapper .g-body>div:first-child>img {
+  width: 7%;
+}
+
+.google-modal .content .content-wrapper .key {
+  display: block;
+  margin-top: 55px;
+  padding-right: 50px;
+  line-height: 66px;
+  width: 240px;
+  height: 65px;
+  background: rgba(250, 250, 250, 1);
+  border-radius: 5px;
+  border: 1px solid rgba(238, 238, 238, 1);
+  position: absolute;
+  right: 29%;
+}
+
+.google-modal .content .content-wrapper .key>img {
+  position: absolute;
+  right: 11px;
+  top: 13px;
+  width: 15%;
+}
+
+/**********************googe validate end****************************/
+
+/***************************add contact style ***********************/
+
+.add-contact-modal>.content>.content-wrapper .a-header {
+  height: 60px;
+  line-height: 60px;
+  margin-left: 20px;
+  font-size: 18px;
+  color: rgba(51, 51, 51, 1);
+}
+
+.add-contact-modal>.content>.content-wrapper .a-header .close {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+.add-contact-modal>.content>.content-wrapper .tp {
+  text-align: center;
+  width: 500px;
+  height: 218px;
+  background: rgba(244, 244, 244, 1);
+}
+
+.add-contact-modal>.content>.content-wrapper .tp>div>img {
+  margin-top: 60px;
+}
+
+.add-contact-modal>.content>.content-wrapper .a-body ul.bt {
+  margin: 30px 40px;
+  text-align: center;
+}
+
+.add-contact-modal>.content>.content-wrapper .a-body ul.bt>li {
+  margin-bottom: 30px;
+}
+
+.add-contact-modal>.content>.content-wrapper .a-body ul.bt li .ivu-input-wrapper {
+  height: 40px;
+}
+
+.add-contact-modal>.content>.content-wrapper .a-body ul.bt li .ivu-input-wrapper input {
+  height: 40px;
+}
+
+.add-contact-modal>.content>.content-wrapper .a-body ul.bt li>button {
+  width: 426px;
+  height: 44px;
+  background: rgba(255, 237, 0, 1);
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}
+
+.add-contact-modal>.content>.content-wrapper .a-body ul.bt li>button:hover {
+  background: rgb(215, 202, 20);
+}
+
+.success-tips {
+  top: 39%;
+  right: 24%;
+  width: 260px;
+  height: 100px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+  position: absolute;
+  color: white;
+  z-index: 100;
+}
+
+.success-tips>div {
+  margin-top: 20px;
+}
+
+.success-tips>* {
+  text-align: center;
+}
+
+/***************************add contact style end ***********************/
+
+.select-card-modal>.content>.content-wrapper>.s-header {
+  height: 60px;
+  line-height: 60px;
+  padding-left: 30px;
+}
+
+.select-card-modal>.content>.content-wrapper>.s-header>.close {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+.select-card-modal>.content>.content-wrapper>.s-body {
+  padding: 20px 30px;
+  background: linear-gradient(-138.7deg, rgba(89, 111, 237, 1), rgba(72, 120, 246, 1));
+  color: white;
+  min-height: 200px;
+}
+
+.select-card-modal>.content>.content-wrapper>.s-body p {
+  color: #BBCEFF;
+}
+
+.select-card-modal>.content>.content-wrapper>.s-body ul>li {
+  margin-bottom: 20px;
+}
+
+.select-card-modal>.content>.content-wrapper>.s-foot {
+  text-align: center;
+  padding: 20px;
+}
+
+.select-card-modal>.content>.content-wrapper>.s-foot button {
+  width: 400px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background: #FFED00;
+  color: #333333;
+  font-size: 16px;
+  font-weight: 500;
+  outline: none;
+}
+
+.select-card-modal>.content>.content-wrapper>.s-foot button:hover {
+  background: rgb(227, 212, 7);
+}
+
+
+.toast {
+  position: fixed;
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.1);
+}
+
+.toast-content {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px;
+  min-width: 220px;
+  height: 100px;
+  text-align: center;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: rgba(0,0,0,0.8);
+  border-radius: 8px;
+}
+
+.toast-content .toast-content-image {
+  height: 40px;
+  line-height: 40px;
+}
+.toast-content .toast-content-text {
+  height: 30px;
+  padding-top: 10px;
+  line-height: 20px;
+}
+
+.toast-content .toast-content-image img{
+  vertical-align: middle;
+  max-width: 40px;
+  max-height: 40px;
+}
