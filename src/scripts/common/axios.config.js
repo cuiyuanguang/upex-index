@@ -29,6 +29,7 @@ $http.interceptors.request.use(
 $http.interceptors.response.use(
   function(response) {
     // 处理响应数据
+    const locale = localStorage.getItem('locale') || 'zh';
     const result = response.data;
     if (result) {
       if (result.code !== 0) {
@@ -37,14 +38,14 @@ $http.interceptors.response.use(
           console.log(result);
           // location.href = 'http://localhost:8080/exchange-web/login.html?ref=http://localhost:9090/otc-web/';
         }
-        Toast.show(result.message, { icon: 'warning' });
+        Toast.show(toastMsg[result.code][locale], { icon: 'warning' });
         return {
           success: false,
           data: result.message,
         };
       }
       if (response.config.method === 'post') {
-        Toast.show(result.message, { icon: 'ok' });
+        Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
       }
       return {
         success: true,

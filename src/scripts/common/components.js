@@ -949,7 +949,10 @@ var o_header = {
       } else {
         this.language = '中文';
       }
-      this.$parent.$emit('locale', this.language === '中文' ? 'zh' : 'en');
+      var languageCode = this.language === '中文' ? 'zh' : 'en';
+      document.documentElement.style.direction = languageCode === 'zh' ? 'ltr' : 'rtl';
+      localStorage.setItem('locale', languageCode);
+      this.$parent.$emit('locale', languageCode);
     },
     getMyOrder() {
       var data = {
