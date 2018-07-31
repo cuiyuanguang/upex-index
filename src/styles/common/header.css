@@ -6,7 +6,9 @@
     overflow: hidden;
     visibility: hidden;
 }
-
+.my-login .ivu-modal-body{
+  padding:0;
+}
 .my-login .ivu-modal-header-inner {
     text-align: center;
 }
