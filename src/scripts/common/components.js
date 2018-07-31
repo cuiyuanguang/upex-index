@@ -756,11 +756,6 @@ var o_my_login = {
                     'isLoginNextPhone',
                     that.selectCountry + ' ' + that.loginPhoneVal
                   );
-                }else if(res.data.data.type === '3'){
-                  that.$parent.$emit(
-                    'isLoginNextEmail',
-                    that.selectCountry + ' ' + that.loginPhoneVal
-                  );
                 }
                 that.$parent.$emit('isLoginNext', true);
                 that.$parent.$emit('isLoginNextType', res.data.data.type);
@@ -793,9 +788,16 @@ var o_my_login = {
             };
             post('api/user/login_in', JSON.stringify(data)).then(function (res) {
               if (res.success) {
-                that.modal_loading = false;
+               if(res.data.data.type === '3'){
+                  that.$parent.$emit(
+                    'isLoginNextEmail',
+                    that.loginPhoneVal
+                  );
+                }
+                that.$parent.$emit('isLoginNext', true);
+                that.$parent.$emit('isLoginNextType', res.data.data.type);
+                that.$parent.$emit('isLoginNextCookie', res.data.data.token);
                 that.$parent.$emit('islogin', false);
-                that.loginGoogle = true;
               } else {
                 that.modal_loading = false;
               }
@@ -836,10 +838,10 @@ var o_my_loginNext = {
       @on-cancel="asyncCancel" class="my-login my-loginNext"
       width="500"
     >
-      <div class="loginNext-title" v-if="isLoginNextTypeNum === '2'">Google verification code</div>
-      <div class="loginNext-title" v-if="isLoginNextTypeNum === '1'">SMS verification</div>
+      <div class="loginNext-title" v-if="isLoginNextTypeNum === '1'">Google verification code</div>
+      <div class="loginNext-title" v-if="isLoginNextTypeNum === '2'">SMS verification</div>
       <div class="loginNext-title" v-if="isLoginNextTypeNum === '3'">E-mail verification</div>
-      <div v-if="isLoginNextTypeNum === '2'">
+      <div v-if="isLoginNextTypeNum === '1'">
       <Input
         v-model="loginNextSmsCode"
         type="text"
@@ -848,7 +850,7 @@ var o_my_loginNext = {
       </Input>
        <p class="my-loginNext-error">{{loginNextErrorText}}</p>
       </div>
-      <div v-if="isLoginNextTypeNum === '1'">
+      <div v-if="isLoginNextTypeNum === '2'">
         <p class="loginNextSmsText">
           Please enter the verification code received by
             <span>{{isLoginNextPhoneNum}}</span>
@@ -860,7 +862,27 @@ var o_my_loginNext = {
           class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':' '">
           <span slot="append"
             class="my-slot-append"
-            @click="runSendSms"
+            @click="runSendSms('phone')"
+            :class="timer?'my-slot-append-gary':'my-slot-append'"
+          >
+            {{sendSms}}
+          </span>
+        </Input>
+        <p class="my-loginNext-error" style="margin-bottom: 38px">{{loginNextErrorText}}</p>
+      </div>
+         <div v-if="isLoginNextTypeNum === '3'">
+        <p class="loginNextSmsText">
+          Please enter the verification code received by
+            <span>{{isLoginNextEmailNum}}</span>
+        </p>
+        <Input
+          v-model="loginNextSmsCode"
+          type="text"
+          placeholder="please enter Google verification code"
+          class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':' '">
+          <span slot="append"
+            class="my-slot-append"
+            @click="runSendSms('email')"
             :class="timer?'my-slot-append-gary':'my-slot-append'"
           >
             {{sendSms}}
@@ -879,7 +901,7 @@ var o_my_loginNext = {
       </div>
     </Modal>
   `,
-  props: ['loginNext', 'isLoginNextType', 'isLoginNextCookie', 'isLoginNextPhone'],
+  props: ['loginNext', 'isLoginNextType', 'isLoginNextCookie', 'isLoginNextPhone','isLoginNextEmail'],
   data() {
     return {
       loginNextError: false,
@@ -891,6 +913,7 @@ var o_my_loginNext = {
       isLoginNextTypeNum: '',
       isLoginNextCookieNum: '',
       isLoginNextPhoneNum: '',
+      isLoginNextEmailNum: '',
       show: true,
       count: '',
       timer: null,
@@ -928,23 +951,39 @@ var o_my_loginNext = {
       }
 
     },
-    runSendSms() {
+    runSendSms(type) {
       const TIME_COUNT = 90;
       if (!this.timer) {
         const isLoginNextPhoneNumArr = this.isLoginNextPhoneNum.split(' ');
         const isLoginNextPhoneNumCountry = isLoginNextPhoneNumArr[0].substring(1);
         const isLoginNextPhoneNumPhone = isLoginNextPhoneNumArr[1];
-        const data = {
-          countryCode: isLoginNextPhoneNumCountry,
-          mobile: isLoginNextPhoneNumPhone,
-          operationType: '23',
-          token: this.isLoginNextCookieNum,
-        };
-        post('api/common/smsValidCode', JSON.stringify(data)).then(function (res) {
-          if (res.success) {
-          } else {
-          }
-        });
+        var data;
+        if(type === 'phone'){
+          data = {
+            countryCode: isLoginNextPhoneNumCountry,
+            mobile: isLoginNextPhoneNumPhone,
+            operationType: '23',
+            token: this.isLoginNextCookieNum,
+          };
+          post('api/common/smsValidCode', JSON.stringify(data)).then(function (res) {
+            if (res.success) {
+            } else {
+            }
+          });
+        }else if(type === 'email'){
+          data = {
+            email: this.isLoginNextEmailNum,
+            operationType: '4',
+            token: this.isLoginNextCookieNum,
+          };
+          post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
+            if (res.success) {
+
+            } else {
+
+            }
+          });
+        }
         this.count = TIME_COUNT;
         this.sendSms = 'Resend after ' + this.count + 's';
         this.show = false;
@@ -978,6 +1017,9 @@ var o_my_loginNext = {
     },
     isLoginNextPhone: function (a, b) {
       this.isLoginNextPhoneNum = a;
+    },
+    isLoginNextEmail: function (a, b) {
+      this.isLoginNextEmailNum = a;
     },
   },
 };
@@ -1156,6 +1198,7 @@ var o_header = {
         :is-login-next-type="isLoginNextType"
         :is-login-next-cookie="isLoginNextCookie"
         :is-login-next-phone="isLoginNextPhone"
+        :is-login-next-email="isLoginNextEmail"
       ></myloginnext>
       <myregistergoogle :register-google="isRegisterGoogleShow"></myregistergoogle>
     </div>
@@ -1173,6 +1216,7 @@ var o_header = {
       isLoginNextType: '',
       isLoginNextCookie: '',
       isLoginNextPhone: '',
+      isLoginNextEmail: '',
     };
   },
   methods: {
@@ -1270,6 +1314,9 @@ var o_header = {
     });
     this.$on("isLoginNextPhone", function (i) {
       this.isLoginNextPhone = i;
+    });
+    this.$on("isLoginNextEmail", function (i) {
+      this.isLoginNextEmail = i;
     });
     if (utils.getCookie('token')) {
       var that = this;
