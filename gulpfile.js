@@ -115,7 +115,7 @@ gulp.task('style', () => {
 
 // 压缩javascript
 gulp.task('script', () => {
-  var ajaxProductionUrl = "API_URL = 'https://cnodejs.com'";
+  var ajaxProductionUrl = "API_URL = 'http://test.upex.io/otc-web/'";
   gulp.src('src/scripts/**/*.js', { base: 'src' })
     .pipe(plumber({
       errorHandler: errorAlert
