@@ -775,7 +775,14 @@ var o_my_login = {
     loginPasswordFocus() {
       this.loginPasswordError = false;
     },
+    clear(){
+      this.loginEmailVal = '';
+      this.loginEmailPassword = '';
+      this.loginPhoneVal = '';
+      this.loginPhonePassword = '';
+    },
     asyncCancel() {
+      clear();
       this.$parent.$emit('islogin', false);
       this.modal_loading = false;
     },
@@ -823,6 +830,7 @@ var o_my_login = {
                 that.$parent.$emit('isLoginNextCookie', res.data.data.token);
                 that.$parent.$emit('islogin', false);
                 that.modal_loading = false;
+                clear()
               } else {
                 that.modal_loading = false;
               }
@@ -859,6 +867,7 @@ var o_my_login = {
                 that.$parent.$emit('isLoginNextType', res.data.data.type);
                 that.$parent.$emit('isLoginNextCookie', res.data.data.token);
                 that.$parent.$emit('islogin', false);
+                clear()
               } else {
                 that.modal_loading = false;
               }
