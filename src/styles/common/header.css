@@ -312,10 +312,10 @@
 
 .loginNext-input {
     text-align: center;
-    margin: 50px 0 78px;
+    margin: 50px 0 0;
 }
 .loginNext-sms-input{
-    margin: 20px 0 60px;
+    margin: 20px 0 0;
     position: relative;
 }
 .loginNext-input .ivu-input {
@@ -325,13 +325,21 @@
 .loginNext-input .ivu-input-group-append{
     position: absolute;
     right: 51px;
-    width: 147px;
     color:#3461A7;
     text-align: right;
+}
+.loginNext-input-red .ivu-input{
+    border-color:#ff2e2e;
 }
 .loginNext-input .my-slot-append-gary{
     color:#999;
     cursor: auto;
+}
+.my-loginNext-error{
+ margin: 0 0 48px 50px;
+  height:30px;
+  line-height: 30px;
+  color:#ff2e2e;
 }
 .loginNextSmsText{
     text-align: left;

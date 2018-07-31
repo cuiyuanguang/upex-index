@@ -3,7 +3,7 @@
 /** ************************** */
 
 var Toast = {
-  show: function(content, options) {
+  show: function (content, options) {
     var toastEl = document.getElementById('toast');
     if (toastEl) {
       document.body.removeChild(toastEl);
@@ -26,7 +26,7 @@ var Toast = {
     }
     if (duration > 100) {
       var _this = this;
-      var timer = setTimeout(function() {
+      var timer = setTimeout(function () {
         _this.hide();
         if (typeof callback === 'function') {
           callback();
@@ -35,7 +35,7 @@ var Toast = {
       }, duration);
     }
   },
-  hide: function() {
+  hide: function () {
     var toast = document.getElementById('toast');
     if (toast) {
       document.body.removeChild(toast);
@@ -75,9 +75,10 @@ var o_input = {
       }
     },
   },
-  destoryed() {},
+  destoryed() {
+  },
   watch: {
-    value: function(n, o) {
+    value: function (n, o) {
       if (!this.type) {
         return;
       }
@@ -362,7 +363,7 @@ var o_confirm = {
         ibanNo: this.cardInfo.ibanNo,
         checkType: this.tab,
         checkValue: this.tab == '1' ? this.gcode : this.ecode,
-      }).then(function(res) {
+      }).then(function (res) {
         if (res.data.message == 'otc.result.success') {
           that.$parent.$emit('isConfirmShow', false);
           that.$parent.$emit('isCardBinded', true);
@@ -379,11 +380,11 @@ var o_confirm = {
   mounted() {
     var that = this;
     // to recieve the trigger of the confirm
-    this.$parent.$on('isConfirmShow', function(i) {
+    this.$parent.$on('isConfirmShow', function (i) {
       that.show = i;
     });
     //to recieve the car info
-    this.$parent.$on('cardInfo', function(i) {
+    this.$parent.$on('cardInfo', function (i) {
       that.cardInfo = i;
     });
   },
@@ -430,9 +431,9 @@ var selectCard = {
   },
   props: ['show', 'cards'],
   methods: {
-    getStatus: function() {
+    getStatus: function () {
       var arr = [];
-      this.cards.forEach(function(i) {
+      this.cards.forEach(function (i) {
         arr.push(false);
       });
       return arr;
@@ -453,7 +454,7 @@ var selectCard = {
       this.$parent.$emit('tradeCards', this.selectedCards);
       Toast.show('success', {
         icon: 'ok',
-        callback: function() {
+        callback: function () {
           that.$parent.$emit('isSelectCardShow', false);
           that.selectedCards = [];
         },
@@ -512,7 +513,7 @@ var addContact = {
     },
     bind() {
       var that = this;
-      post('api/watchapp', this.wapp).then(function(res) {
+      post('api/watchapp', this.wapp).then(function (res) {
         if (res.data.message == 'otc.result.success') {
           that.$parent.$emit('isAddContactShow', false);
         }
@@ -742,12 +743,17 @@ var o_my_login = {
               mobileNumber: that.loginPhoneVal,
               loginPword: that.loginPhonePassword,
             };
-            post('api/user/login_in', JSON.stringify(data)).then(function(res) {
+            post('api/user/login_in', JSON.stringify(data)).then(function (res) {
               console.log(res);
               if (res.success) {
                 if (res.data.data.type === '2') {
                   that.$parent.$emit(
                     'isLoginNextPhone',
+                    that.selectCountry + ' ' + that.loginPhoneVal
+                  );
+                }else if(res.data.data.type === '3'){
+                  that.$parent.$emit(
+                    'isLoginNextEmail',
                     that.selectCountry + ' ' + that.loginPhoneVal
                   );
                 }
@@ -780,7 +786,7 @@ var o_my_login = {
               mobileNumber: that.loginEmailVal,
               loginPword: that.loginEmailPassword,
             };
-            post('api/user/login_in', JSON.stringify(data)).then(function(res) {
+            post('api/user/login_in', JSON.stringify(data)).then(function (res) {
               if (res.success) {
                 that.modal_loading = false;
                 that.$parent.$emit('islogin', false);
@@ -796,7 +802,7 @@ var o_my_login = {
     },
     getCountry() {
       var that = this;
-      get('api/country', {}, this.token).then(function(res) {
+      get('api/country', {}, this.token).then(function (res) {
         if (res.success) {
           that.countryArr = res.data.data;
         } else {
@@ -807,11 +813,11 @@ var o_my_login = {
       this.loginWrap = name;
     },
   },
-  mounted: function() {
+  mounted: function () {
     this.getCountry();
   },
   watch: {
-    login: function(a, b) {
+    login: function (a, b) {
       this.login1 = a;
     },
   },
@@ -825,18 +831,19 @@ var o_my_loginNext = {
       @on-cancel="asyncCancel" class="my-login my-loginNext"
       width="500"
     >
-      <div class="loginNext-title" v-if="isLoginNextTypeNum === '1'">Google verification code</div>
-      <div class="loginNext-title" v-if="isLoginNextTypeNum === '2'">SMS verification</div>
+      <div class="loginNext-title" v-if="isLoginNextTypeNum === '2'">Google verification code</div>
+      <div class="loginNext-title" v-if="isLoginNextTypeNum === '1'">SMS verification</div>
       <div class="loginNext-title" v-if="isLoginNextTypeNum === '3'">E-mail verification</div>
-      <div v-if="isLoginNextTypeNum === '1'">
+      <div v-if="isLoginNextTypeNum === '2'">
       <Input
-        v-model="loginNextGoogleCode"
+        v-model="loginNextSmsCode"
         type="text"
         placeholder="please enter Google verification code"
-        class="loginNext-input">
+        class="loginNext-input"  @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':''">
       </Input>
+       <p class="my-loginNext-error">{{loginNextErrorText}}</p>
       </div>
-      <div v-if="isLoginNextTypeNum === '2'">
+      <div v-if="isLoginNextTypeNum === '1'">
         <p class="loginNextSmsText">
           Please enter the verification code received by
             <span>{{isLoginNextPhoneNum}}</span>
@@ -845,7 +852,7 @@ var o_my_loginNext = {
           v-model="loginNextSmsCode"
           type="text"
           placeholder="please enter Google verification code"
-          class="loginNext-input loginNext-sms-input">
+          class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':' '">
           <span slot="append"
             class="my-slot-append"
             @click="runSendSms"
@@ -854,6 +861,7 @@ var o_my_loginNext = {
             {{sendSms}}
           </span>
         </Input>
+        <p class="my-loginNext-error" style="margin-bottom: 38px">{{loginNextErrorText}}</p>
       </div>
       <div slot="footer">
         <Button
@@ -869,6 +877,8 @@ var o_my_loginNext = {
   props: ['loginNext', 'isLoginNextType', 'isLoginNextCookie', 'isLoginNextPhone'],
   data() {
     return {
+      loginNextError: false,
+      loginNextErrorText: '',
       sendSms: 'get verification code',
       loginNextGoogleCode: '',
       loginNextSmsCode: '',
@@ -882,20 +892,36 @@ var o_my_loginNext = {
     };
   },
   methods: {
+    loginNextFocus(){
+      this.loginNextError = false;
+      this.loginNextErrorText = ''
+    },
     loginNextSubmit() {
       var that = this;
-      const data = {
-        authCode: this.loginNextSmsCode,
-        token: this.isLoginNextCookieNum,
-      };
-      post('api/user/confirm_login', JSON.stringify(data)).then(function(res) {
-        if (res.success) {
-          that.loginNext = false;
-          utils.setCookie('token', that.isLoginNextCookieNum);
-          window.location.reload();
+      if(!this.modal_loading){
+        that.modal_loading = true;
+        const data = {
+          authCode: this.loginNextSmsCode,
+          token: this.isLoginNextCookieNum,
+        };
+        if (this.loginNextSmsCode.length === 0) {
+          this.loginNextError = true;
+          that.modal_loading = false;
+          this.loginNextErrorText = '不能为空'
         } else {
+          post('api/user/confirm_login', JSON.stringify(data)).then(function (res) {
+            if (res.success) {
+              that.modal_loading = false;
+              that.loginNext = false;
+              utils.setCookie('token', that.isLoginNextCookieNum);
+              window.location.reload();
+            } else {
+              that.modal_loading = false;
+            }
+          });
         }
-      });
+      }
+
     },
     runSendSms() {
       const TIME_COUNT = 90;
@@ -909,7 +935,7 @@ var o_my_loginNext = {
           operationType: '23',
           token: this.isLoginNextCookieNum,
         };
-        post('api/common/smsValidCode', JSON.stringify(data)).then(function(res) {
+        post('api/common/smsValidCode', JSON.stringify(data)).then(function (res) {
           if (res.success) {
           } else {
           }
@@ -939,13 +965,13 @@ var o_my_loginNext = {
     },
   },
   watch: {
-    isLoginNextType: function(a, b) {
+    isLoginNextType: function (a, b) {
       this.isLoginNextTypeNum = a;
     },
-    isLoginNextCookie: function(a, b) {
+    isLoginNextCookie: function (a, b) {
       this.isLoginNextCookieNum = a;
     },
-    isLoginNextPhone: function(a, b) {
+    isLoginNextPhone: function (a, b) {
       this.isLoginNextPhoneNum = a;
     },
   },
@@ -1136,12 +1162,12 @@ var o_header = {
       orders: [],
       ws: null,
       uid: 0,
-      isLoginShow : false,
-      isLoginNextShow : false,
-      isRegisterGoogleShow : false,
-      isLoginNextType:'',
-      isLoginNextCookie:'',
-      isLoginNextPhone:'',
+      isLoginShow: false,
+      isLoginNextShow: false,
+      isRegisterGoogleShow: false,
+      isLoginNextType: '',
+      isLoginNextCookie: '',
+      isLoginNextPhone: '',
     };
   },
   methods: {
@@ -1174,12 +1200,12 @@ var o_header = {
       if (that.websock.readyState === that.websock.OPEN) {
         that.websocketsend(agentData);
       } else if (that.websock.readyState === that.websock.CONNECTING) {
-        setTimeout(function() {
+        setTimeout(function () {
           that.websocketsend(agentData);
         }, 300);
       } else {
         that.initWebSocket();
-        setTimeout(function() {
+        setTimeout(function () {
           that.websocketsend(agentData);
         }, 500);
       }
@@ -1207,10 +1233,10 @@ var o_header = {
     myloginnext: o_my_loginNext,
     myregistergoogle: o_my_registerGoogle,
   },
-  created: function() {
+  created: function () {
     if (utils.getCookie('token')) {
       var that = this;
-      get('api/userInfo').then(function(res) {
+      get('api/userInfo').then(function (res) {
         if (res.success) {
           that.uid = res.data.data.userExtView.uid;
           window.localStorage.setItem('uid', that.uid);
@@ -1221,7 +1247,7 @@ var o_header = {
     // this.threadPoxi();
   },
   mounted() {
-    this.$on('islogin', function(i) {
+    this.$on('islogin', function (i) {
       console.log(i);
       this.isLoginShow = i;
     });
@@ -1242,7 +1268,7 @@ var o_header = {
     });
     if (utils.getCookie('token')) {
       var that = this;
-      this.getMyOrder().then(function(res) {
+      this.getMyOrder().then(function (res) {
         if (res.success) {
           if (res.data.data.rsts.length > 5) {
             that.orders = res.data.data.rsts.slice(0, 5);
@@ -1254,7 +1280,7 @@ var o_header = {
     }
   },
   filters: {
-    toHours: function(time) {
+    toHours: function (time) {
       return new Date(time).toLocaleTimeString();
     },
   },
