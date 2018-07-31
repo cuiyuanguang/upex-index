@@ -40,7 +40,7 @@ $http.interceptors.response.use(
           callback: function() {
             if (result.code == 2048) {
               utils.delCookie('token');
-              location.href = 'otc_adverts.html';
+              location.href = 'otc_adverts.html?auth=1';
             }
           }
         });

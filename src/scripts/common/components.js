@@ -62,6 +62,18 @@ var i18nComponentsMessages = {
     zh: '首页',
     en: 'Home',
   },
+  pendingOrder: {
+    zh: '我的挂单',
+    en: 'pending orders',
+  },
+  allOrder: {
+    zh: '我的订单',
+    en: 'my orders',
+  },
+  seeAllOrder: {
+    zh: '查看所有订单',
+    en: 'view all my orders',
+  },
   bindGoogleAuthMsg: {
     zh: '为了您的账户安全，我们强烈推荐您进行谷歌验证',
     en: 'For your account security, we strongly recommend that you turn on second verification',
@@ -1174,23 +1186,23 @@ var o_header = {
             <img src="../images/Header-Logo-en.png" width="138px" height="21px" alt="">
           </a>
         </i-col>
-        <i-col span="15" class="om-market">
+        <i-col span="12" class="om-market">
           <ul>
             <li>
               <a href="otc_adverts.html">{{ $t('homepage') }}</a>
             </li>
           </ul>
         </i-col>
-        <i-col span="6" class="management">
-          <ul>
+        <i-col span="9" class="management">
+          <ul class="text-right">
             <li class="items my-orders" v-if="logined">
               <Badge :count="orders.length">
-                <a href="otc_my_order.html" class="demo-badge" @click="isMyordersShow=!isMyordersShow">我的订单</a>
+                <a href="otc_my_order.html" class="demo-badge" @click="isMyordersShow=!isMyordersShow">{{ $t('allOrder') }}</a>
               </Badge>
               <div class="order-card" style="display:none;">
                 <div class="arrow"></div>
                 <div class="card-header">
-                  <span>Onging order</span>
+                  <span>Ongoing order</span>
                   <a href="otc_my_order.html">All orders > </a>
                 </div>
                 <ul>
@@ -1214,12 +1226,12 @@ var o_header = {
                   </li>
                 </ul>
                 <div class="card-footer">
-                  <a href="#">查看所有订单</a>
+                  <a href="otc_my_order.html">{{ $t('seeAllOrder') }}</a>
                 </div>
               </div>
             </li>
             <li class="items" v-if="logined">
-              <a href="otc_my_advert.html">我的挂单</a>
+              <a href="otc_my_advert.html">{{ $t('pendingOrder') }}</a>
             </li>
             <li class="items" v-if="logined">
               <a type="primary" @click="loginOut">{{ $t('loginout') }}</a>
@@ -1343,6 +1355,10 @@ var o_header = {
     myregistergoogle: o_my_registerGoogle,
   },
   mounted() {
+    if (utils.getParam('auth') == 1) {
+      this.isLoginShow = true;
+      return;
+    }
     if (utils.getCookie('token')) {
       var that = this;
       get('api/userInfo').then(function (res) {
