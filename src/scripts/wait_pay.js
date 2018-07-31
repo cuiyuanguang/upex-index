@@ -48,12 +48,12 @@ var waitPay = new Vue({
         content: '是否已经收到货款？',
         onOk: function() {
           var data = {
-            sequence: '${sequence}',
+            sequence: _this.sequence,
           };
           post('api/confirmOrder', data).then(function(res) {
             if (res.success) {
               _this.step = 3;
-              _this.getOrderInfo();
+              _this.getOrderInfo(_this.sequence);
             }
           });
         },
@@ -93,9 +93,9 @@ var waitPay = new Vue({
       this.step += 1;
     },
     //-------------------------GET ORDER INFO-----------------------------------------------//
-    getOrderInfo: function() {
+    getOrderInfo: function(sequence) {
       var that = this;
-      get('api/orderDetail', { sequence: '${sequence}' }).then(function(res) {
+      get('api/orderDetail', { sequence: sequence }).then(function(res) {
         var data = res.data.data;
         //to make sure the status of the order
         that.step = data.status;
@@ -131,7 +131,9 @@ var waitPay = new Vue({
     //------------------------------GET ORDER INFO END---------------------------------------//
   },
   mounted: function() {
-    // this.getOrderInfo();
+    var sequence = utils.getParam('sequence');
+    this.sequence = sequence;
+    this.getOrderInfo(sequence);
   },
   watch: {
     locale: function(newVal, oldVal) {
