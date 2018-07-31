@@ -159,18 +159,36 @@
    */
   function transform(obj) {
     var result = {};
-    for(var key in obj) {
+    for (var key in obj) {
       if (obj.hasOwnProperty(key)) {
-        for(var k in obj[key]) {
+        for (var k in obj[key]) {
           if (obj[key].hasOwnProperty(k)) {
-            result[k] = {
-              [key]: obj[key][k],
-            };
+            result[k] = result[k] || {};
+            result[k][key] = obj[key][k];
           }
         }
       }
     }
     return result;
+  }
+
+  /**
+   * [getParam ]
+   * @param  {String} name
+   * @param  {String} url   [default:location.href]
+   * @return {String|Boolean}
+   */
+  /* eslint-disable */
+  function getParam(name, url) {
+    if (typeof name !== 'string') return false;
+    if (!url) url = window.location.href;
+    // 当遇到name[xx]时，对方括号做一下转义为 name\[xxx\]，因为下面还需要使用name做正则
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+    var results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
 
   if (!w.utils) {
@@ -185,6 +203,7 @@
       getHost: getHost,
       initData: initData,
       transform: transform,
+      getParam: getParam,
     };
   }
 })(window);

@@ -11,11 +11,11 @@ var pay = new Vue({
   components: {
     oHeader: o_header,
     om_notice: om_notice,
-    oinput: o_input,
   },
   data: function () {
     return {
       locale: 'zh',
+      sequence: '',
       //trigger of pay modal
       isPayDialogShow: false,
       //trigger of pay info modal
@@ -55,7 +55,7 @@ var pay = new Vue({
         title: '取消订单',
         content: '<p><span class="error">如您已向卖家付款，请千万不要取消订单</span><br>当日累计3次取消，会限制当日购买功能</p>',
         onOk: function () {
-          post('api/cancelOrder', '${sequence}').then(function (res) {
+          post('api/cancelOrder', _this.sequence).then(function (res) {
             location.reload();
           });
         },
@@ -76,7 +76,7 @@ var pay = new Vue({
         var now = new Date().getTime();
         var expiredTime;
         // if time is seconds 
-        if (time > 1000) {
+        if (limitTime > 1000) {
           expiredTime = limitTime;
         }
         //if time is million seconds
@@ -111,15 +111,15 @@ var pay = new Vue({
       if (this.cardErrorTips || this.recardErrorTips) {
         return;
       }
-      var that = this;
       var data = {
         card: this.card,
-        sequence: '${sequence}'
+        sequence: this.sequence,
       }
+      var that = this;
       post("api/orderPayed", data).then(function (res) {
         if (res.success) {
           that.isPayInfoDialogShow = false;
-          that.getOrderInfo();
+          that.getOrderInfo(that.sequence);
         }
       })
     },
@@ -134,9 +134,9 @@ var pay = new Vue({
       this.step += 1;
     },
     //-------------------------GET ORDER INFO-----------------------------------------------//
-    getOrderInfo: function () {
-      var that = this
-      get('api/orderDetail', { 'sequence': '${sequence}' }, )
+    getOrderInfo: function (sequence) {
+      var that = this;
+      get('api/orderDetail', { sequence: sequence }, )
         .then(function (res) {
           var data = res.data.data;
           //to make sure the status of the order
@@ -159,7 +159,9 @@ var pay = new Vue({
     //------------------------------GET ORDER INFO END---------------------------------------//	
   },
   mounted: function () {
-    this.getOrderInfo();
+    var sequence = utils.getParam('sequence');
+    this.sequence = sequence;
+    this.getOrderInfo(sequence);
   },
   watch: {
     locale: function(newVal, oldVal) {

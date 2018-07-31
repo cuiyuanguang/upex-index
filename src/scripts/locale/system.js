@@ -2,14 +2,17 @@ var toastMsg = {
   '0': {
     zh: '成功',
     en: 'success',
+    sa: ''
   },
   '2048': {
     zh: '签名错误',
-    en: 'Signature error'
+    en: 'Signature error',
+    sa: ''
   },
   '10001': {
     zh: '系统异常，请联系管理员',
-    en: 'System boom'
+    en: 'System boom',
+    sa: ''
   },
   // '10002': '用户未登录',
   // '10003': '滑动验证错误',

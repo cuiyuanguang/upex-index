@@ -34,18 +34,23 @@ $http.interceptors.response.use(
     if (result) {
       if (result.code != 0) {
         // 接口错误码判断
-        if (response.config.url !== 'api/adverts' && result.code == 2048) {
-          console.log(result);
-          // location.href = 'http://localhost:8080/exchange-web/login.html?ref=http://localhost:9090/otc-web/';
-        }
-        Toast.show(toastMsg[result.code][locale], { icon: 'warning' });
+        // Toast.show(toastMsg[result.code][locale], { icon: 'warning' });
+        Toast.show(result.message, {
+          icon: 'warning',
+          callback: function() {
+            if (result.code == 2048) {
+              utils.delCookie('token');
+            }
+          }
+        });
         return {
           success: false,
           data: result.message,
         };
       }
       if (response.config.method === 'post') {
-        Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
+        // Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
+        Toast.show(result.message, { icon: 'ok' });
       }
       return {
         success: true,
