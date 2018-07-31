@@ -1086,7 +1086,7 @@ var o_header = {
         <i-col span="10" class="om-market">
           <ul>
             <li>
-              <a href="#">{{name}}</a>
+              <a href="otc_adverts.html">{{name}}</a>
             </li>
           </ul>
         </i-col>
@@ -1107,14 +1107,14 @@ var o_header = {
               </a>
             </li>
             <li class="items">
-              <a type="primary" @click="showLogin()">Login</a>
+              <a type="primary" @click="showLogin()">登录</a>
             </li>
             <li class="items">
               <a href="otc_my_advert.html">我的挂单</a>
             </li>
             <li class="items my-orders">
               <Badge :count="orders.length">
-                <a href="otc_my_order.html" class="demo-badge" @click="isMyordersShow=!isMyordersShow">my order</a>
+                <a href="otc_my_order.html" class="demo-badge" @click="isMyordersShow=!isMyordersShow">我的订单</a>
               </Badge>
               <div class="order-card" style="display:none;">
                 <div class="arrow"></div>
