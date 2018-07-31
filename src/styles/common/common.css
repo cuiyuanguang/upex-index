@@ -16,6 +16,11 @@
 body[dir='rtl'] * {
   direction: rtl;
 }
+
+body[dir='ltr'] * {
+  direction: ltr;
+}
+
 body[dir='rtl'] .ivu-col-span-1,
 body[dir='rtl'] .ivu-col-span-10,
 body[dir='rtl'] .ivu-col-span-11,
@@ -44,9 +49,22 @@ body[dir='rtl'] .ivu-col-span-9 {
   direction: rtl;
 }
 
-body[dir='ltr'] * {
-  direction: ltr;
+.text-left {
+  text-align: left;
 }
+
+.text-right {
+  text-align: right;
+}
+
+body[dir='rtl'] .text-left {
+  text-align: right;
+}
+
+body[dir='rtl'] .text-right {
+  text-align: left;
+}
+
 
 div,
 ul {
@@ -177,6 +195,7 @@ input::-webkit-inner-spin-button {
 .om-header .order-card .card-header {
   border-bottom: 1px solid #eeeeee;
   padding: 14px 15px;
+  text-align: left;
 }
 
 .om-header .order-card .card-header a {
@@ -228,8 +247,9 @@ input::-webkit-inner-spin-button {
 
 .om-header .om-market ul > li,
 .om-header .management ul > li {
-  display: inline-block;
   margin-left: 20px;
+  display: inline-block;
+  vertical-align: top;
 }
 
 
@@ -237,10 +257,6 @@ input::-webkit-inner-spin-button {
 .om-header .management ul > li > a {
   line-height: 50px;
   color: #adadad;
-}
-
-.om-header .management ul {
-  text-align: right;
 }
 
 .om-header > .ivu-row > .ivu-col-span-10:last-child {
@@ -278,7 +294,8 @@ input::-webkit-inner-spin-button {
   text-align: center;
 }
 
-.om-header .items .ivu-badge {
+.om-header .items span {
+  display: inline-block;
   line-height: 50px;
 }
 
