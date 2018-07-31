@@ -43,117 +43,83 @@ var Toast = {
   },
 };
 
-//input
-var o_input = {
-  template: `
-    <div>
-      <input 
-        :class="isError? 'error':'not-error'"
-        :type="type"
-        v-bind:value="value"
-        v-on:input="$emit('input', $event.target.value)"
-      />
-      <div v-show="isError" class="error" >{{errorMsg}}</div>
-    </div>
-  `,
-  data() {
-    return {
-      isError: false,
-      errorMsg: '',
-    };
-  },
-  props: ['value', 'type', 'length', 'max', 'min'],
-  methods: {
-    isRealNum(val) {
-      if (val === '' || val == null) {
-        return false;
-      }
-      if (!isNaN(val)) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-  },
-  destoryed() {},
-  watch: {
-    value: function(n, o) {
-      if (!this.type) {
-        return;
-      }
+Vue.use(VueI18n);
 
-      if (this.type == 'number') {
-        if (!this.isRealNum(parseInt(n))) {
-          this.isError = true;
-          this.errorMsg = 'not a number';
-          console.log('');
-          return;
-        }
-        if (String(n).length < this.length) {
-          this.isError = true;
-          this.errorMsg = 'require min' + this.length;
-          return;
-        }
-        if (n > this.max) {
-          this.isError = true;
-          this.errorMsg = 'bigger than max';
-          return;
-        }
-        if (n < this.min) {
-          this.isError = true;
-          this.errorMsg = 'little than min';
-          return;
-        }
-        this.isError = false;
-      }
-      if (this.type == 'email') {
-        var re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
-        if (!re.test(n)) {
-          this.errorMsg = 'not a mail';
-          return;
-        }
-      }
-      // if (this.type == "text" && this.length) {
-
-      // }
-    },
+var i18nComponentsMessages = {
+  bindGoogleAuthMsg: {
+    zh: '为了您的账户安全，我们强烈推荐您进行谷歌验证',
+    en: 'For your account security, we strongly recommend that you turn on second verification',
   },
-  filters: {
-    fixed(v, n) {
-      return v.toFixed(n);
-    },
+  googleAuthBtn: {
+    zh: '身份验证',
+    en: 'Google Authenticator',
+  },
+  addContact: {
+    zh: '添加社交账号',
+    en: 'Add contact information',
+  },
+  addContactTips: {
+    zh: '请留下您的联系方式以便通知支付信息',
+    en: 'In order to contact you for payment, please leave your contact information.',
+  },
+  submit: {
+    zh: '提交',
+    en: 'submit',
+  },
+  account: {
+    zh: '账号',
+    en: 'account',
+  },
+  choseCard: {
+    zh: '选择交易银行卡',
+    en: 'Select trade card',
+  },
+  addCard: {
+    zh: '添加银行卡',
+    en: 'Add bank card',
+  },
+  openingBank: {
+    zh: '开户行',
+    en: 'opening bank',
+  },
+  accountName: {
+    zh: '账户名',
+    en: 'account name',
+  },
+  bankNumber: {
+    zh: '银行卡号',
+    en: 'Bank Number',
+  },
+  number: {
+    zh: '账号',
+    en: 'Number',
+  },
+  bind: {
+    zh: '绑定',
+    en: 'bind',
+  },
+  notEmpty: {
+    zh: '不能为空',
+    en: 'can not be empty',
+  },
+  received: {
+    zh: '已到账',
+    en: 'has been received',
+  },
+  viewAccount: {
+    zh: '查看账户',
+    en: 'view Account',
+  },
+  continueTrade: {
+    zh: '继续交易',
+    en: 'continue trade',
   },
 };
 
-var om_warn = {
-  template: `
-    <div class="o-modal google-modal" :class="show?'is-show':'is-not-show'">
-      <div class="content">
-        <div class="content-wrapper" style="padding:0;width:420px;height:343px">
-          <div class="g-header">
-            <Icon @click="close" type="close" class="close"></Icon>
-          </div>
-          <div class="g-body">
-            this is a test o !
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
-  data() {
-    return {};
-  },
-  props: ['show'],
-  methods: {
-    close() {
-      this.$parent.$emit('isGoogleAuthShow', false);
-    },
-    toGoogeAuth() {
-      var host = utils.getHost();
-      window.location.href = host + '/exchange-web/toopen_google_authenticator.html';
-    },
-  },
-};
+var i18nComponents = new VueI18n({
+  locale: 'zh', // set locale
+  messages: utils.transform(i18nComponentsMessages),
+});
 
 // notice component
 var om_notice = {
@@ -166,7 +132,7 @@ var om_notice = {
             <img src="../images/arrive.png" alt="">
           </div>
           <div class="main-content" style=" text-align: center;margin-top: 33px;">
-            <h3> {{amount}} USDT has been successfully received</h3>
+            <h3> {{amount}} USDT {{ $t('received') }}</h3>
           </div>
           <div class="foot" style="text-align: center;">
             <a
@@ -176,7 +142,7 @@ var om_notice = {
               style="font-size: 14px;
               color: rgba(51, 51, 51, 1);
               margin-right: 20px;"
-            >View account</a>
+            >{{ $t('viewAccount') }}</a>
             <a
               class="current"
               @click="current"
@@ -191,17 +157,14 @@ var om_notice = {
               font-size: 16px;
               color: rgba(51, 51, 51, 1);
               text-decoration: none;"
-            >Currency trading</a>
+            >{{ $t('continueTrade') }}</a>
           </div>
         </div>
       </div>
     </div>
   `,
-  data() {
-    return {};
-  },
-  props: ['amount', 'show'],
-  computed: {},
+  i18n: i18nComponents,
+  props: ['amount', 'show', 'locale'],
   methods: {
     close() {
       this.$parent.$emit('isNoticeShow', false);
@@ -213,6 +176,13 @@ var om_notice = {
       this.$parent.$emit('isNoticeShow', false);
     },
   },
+  watch: {
+    locale: function(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+      }
+    }
+  }
 };
 
 /** **********************bind card component********************* */
@@ -222,16 +192,16 @@ var o_bindcard = {
       <div class="content">
         <div class="content-wrapper">
           <div class="o-header">
-            <span>Add bank card</span>
+            <span>{{ $t('addCard') }}</span>
             <Icon @click="close" type="close" class="close"></Icon>
           </div>
           <div class="o-content">
             <ul>
-              <li><p>Account bank</p><input v-model="cardInfo.bankName" type="text"></li>
-              <li><p>Account name</p><input v-model="cardInfo.name" type="text"></li>
-              <li><p>Bank card number</p><input v-model="cardInfo.cardNo"  type="text"></li>
-              <li><p>Iban Number</p><input v-model="cardInfo.ibanNo"  type="text"></li>
-              <li><button @click="binding">Binding</button></li>
+              <li><p>{{ $t('openingBank') }}</p><input v-model="cardInfo.bankName" type="text"></li>
+              <li><p>{{ $t('accountName') }}</p><input v-model="cardInfo.name" type="text"></li>
+              <li><p>{{ $t('bankNumber') }}</p><input v-model="cardInfo.cardNo"  type="text"></li>
+              <li><p>Iban {{ $t('number') }}</p><input v-model="cardInfo.ibanNo"  type="text"></li>
+              <li><button @click="binding">{{ $t('bind') }}</button></li>
             </ul>
             <div class="foot" style="color: #ff3300;" v-show="errorMsg">{{ errorMsg }}</div>
           </div>
@@ -239,6 +209,7 @@ var o_bindcard = {
       </div>
     </div>
   `,
+  i18n: i18nComponents,
   data() {
     return {
       // show trigger;
@@ -252,7 +223,7 @@ var o_bindcard = {
       errorMsg: '',
     };
   },
-  props: ['show'],
+  props: ['show', 'locale'],
   methods: {
     close() {
       this.$parent.$emit('isBindShow', false);
@@ -264,7 +235,7 @@ var o_bindcard = {
         !this.cardInfo.cardNo ||
         !this.cardInfo.ibanNo
       ) {
-        this.errorMsg = '不能为空';
+        this.errorMsg = this.$t('notEmpty');
       } else {
         this.errorMsg = '';
         //hide bind dialog
@@ -276,6 +247,13 @@ var o_bindcard = {
       }
     },
   },
+  watch: {
+    locale: function(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+      }
+    }
+  }
 };
 
 /** **********************confirm bind card component********************* */
@@ -286,7 +264,7 @@ var o_confirm = {
       <div class="content">
         <div class="content-wrapper">
           <div class="o-header">
-            <span>Add bank card</span>
+            <span>{{ $t('addCard') }}</span>
             <Icon @click="close" type="close" class="close"></Icon>
           </div>
           <div class="o-content">
@@ -294,25 +272,25 @@ var o_confirm = {
               <ul>
                 <li>
                   <Row>
-                    <i-col span="10">Accunt bank</i-col>
+                    <i-col span="10">{{ $t('openingBank') }}</i-col>
                     <i-col span="8">{{cardInfo.bankName}}</i-col>
                   </Row>
                 </li>
                 <li>
                   <Row>
-                    <i-col span="10">Accunt Name</i-col>
+                    <i-col span="10">{{ $t('accountName') }}</i-col>
                     <i-col span="8">{{cardInfo.name}}</i-col>
                   </Row>
                 </li>
                 <li>
                   <Row>
-                    <i-col span="10">Bank card number</i-col>
+                    <i-col span="10">{{ $t('bankNumber') }}</i-col>
                     <i-col span="8">{{cardInfo.cardNo}}</i-col>
                   </Row>
                 </li>
                 <li>
                   <Row>
-                    <i-col span="10">Iban Number</i-col>
+                    <i-col span="10">Iban {{ $t('number') }}</i-col>
                     <i-col span="8">{{cardInfo.ibanNo}}</i-col>
                   </Row>
                 </li>
@@ -337,6 +315,7 @@ var o_confirm = {
       </div>
     </div>
   `,
+  i18n: i18nComponents,
   data() {
     return {
       cardInfo: {},
@@ -375,7 +354,7 @@ var o_confirm = {
     },
     //--------------END OF BINDING CARD--------------------------------------
   },
-  props: ['show', 'isWatchupBind'],
+  props: ['show', 'isWatchupBind', 'locale'],
   mounted() {
     var that = this;
     // to recieve the trigger of the confirm
@@ -387,6 +366,13 @@ var o_confirm = {
       that.cardInfo = i;
     });
   },
+  watch: {
+    locale: function(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+      }
+    }
+  }
 };
 //---------------------------------END-----------------------------------------------------
 
@@ -397,7 +383,7 @@ var selectCard = {
       <div class="content">
         <div class="content-wrapper">
           <div class="s-header">
-            Select trade card
+            {{ $t('choseCard') }}
             <Icon @click="close" type="close" class="close"></Icon>
           </div>
           <div class="s-body">
@@ -416,19 +402,20 @@ var selectCard = {
             </ul>
           </div>
           <div class="s-foot">
-            <button @click="submit">submit</button>
+            <button @click="submit">{{ $t('submit') }}</button>
           </div>
         </div>
       </div>
     </div>
   `,
+  i18n: i18nComponents,
   data() {
     return {
       selectedCards: [],
       status: [],
     };
   },
-  props: ['show', 'cards'],
+  props: ['show', 'cards', 'locale'],
   methods: {
     getStatus: function() {
       var arr = [];
@@ -463,6 +450,13 @@ var selectCard = {
   mounted() {
     this.status = this.getStatus();
   },
+  watch: {
+    locale: function(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+      }
+    }
+  }
 };
 //----------------------------------END-------------------------------------------------
 
@@ -473,17 +467,17 @@ var addContact = {
       <div class="content">
         <div class="content-wrapper">
           <div class="o-header">
-            Add contact information
+            {{ $t('addContact') }}
             <Icon @click="close" type="close" class="close"></Icon>
           </div>
           <div class="o-content">
             <div class="tp">
               <div><img src="../images/whatup.png" /></div>
-              <p>In order to contact you for payment, please leave your contact information.</p>
+              <p>{{ $t('addContactTips') }}</p>
             </div>
             <ul class="bt">
               <li>
-                <p>WhatsApp account</p>
+                <p>WhatsApp {{ $t('account') }}</p>
                 <i-input v-model="wapp">
                   <i-select slot="prepend" style="width: 80px">
                     <Option value="http">+ 186</Option>
@@ -492,7 +486,7 @@ var addContact = {
                 </i-input>
               </li>
               <li>
-                <button @click="bind">submit</button>
+                <button @click="bind">{{ $t('submit') }}</button>
               </li>
             </ul>
           </div>
@@ -500,12 +494,13 @@ var addContact = {
       </div>
     </div>
   `,
+  i18n: i18nComponents,
   data() {
     return {
       wapp: '',
     };
   },
-  props: ['show'],
+  props: ['show', 'locale'],
   methods: {
     close() {
       this.$parent.$emit('isContactShow', false);
@@ -519,6 +514,13 @@ var addContact = {
       });
     },
   },
+  watch: {
+    locale: function(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+      }
+    }
+  }
 };
 //-----------------END----------------------------------------------------------
 
@@ -534,21 +536,18 @@ var g_auth = {
           <div class="g-body">
             <div><img src="../images/warn.png"/></div>
             <span style="font-size:16px;color: #333333;">
-              For your account security, we strongly recommend that you turn <br/>
-              on second verification
+              {{ $t('bindGoogleAuthMsg') }}
             </span>
             <a @click="toGoogeAuth"   target="blank" class="key">
-              Google Authenticator <img src="../images/gauth.png" />
+              {{ $t('googleAuthBtn') }} <img src="../images/gauth.png" />
             </a>
           </div>
         </div>
       </div>
     </div>
   `,
-  data() {
-    return {};
-  },
-  props: ['show'],
+  i18n: i18nComponents,
+  props: ['show', 'locale'],
   methods: {
     close() {
       this.$parent.$emit('isGoogleAuthShow', false);
@@ -558,6 +557,13 @@ var g_auth = {
       window.location.href = host + '/exchange-web/toopen_google_authenticator.html';
     },
   },
+  watch: {
+    locale: function(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+      }
+    }
+  }
 };
 
 
