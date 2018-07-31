@@ -5,6 +5,10 @@
 ## Build Setup
 
 ``` bash
+# node >= 9.4.0, npm >= 5.6.0
+# 基于gulp构建，因此需要全局安装gulp
+npm install gulp -g
+
 # install dependencies
 npm install
 

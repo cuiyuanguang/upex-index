@@ -132,6 +132,11 @@ gulp.task('script', () => {
 
 // 压缩HTML
 gulp.task('html', () => {
+  gulp.src(['src/index.html'])
+    .pipe(plumber({
+      errorHandler: errorAlert
+    }))
+    .pipe(gulp.dest('release/'));
   gulp.src('src/views/**/*.html', { base: 'src' })
     .pipe(fileinclude({
       prefix: '@@', // 引用文件前缀
