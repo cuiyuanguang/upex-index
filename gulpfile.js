@@ -74,7 +74,7 @@ gulp.task('static:dev', () => {
 
 // 开发构建
 var apiProxy = proxy('/api', {
-  target: 'http://localhost:9090/otc-web/',
+  target: 'http://localhost:8080/otc-web/',
   changeOrigin: true,
 });
 gulp.task('dev', ['style:dev', 'script:dev', 'html:dev', 'static:dev'], () => {
