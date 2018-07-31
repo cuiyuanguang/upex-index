@@ -18,17 +18,17 @@
     <div class="list wrapper">
       <Row>
         <i-col class="tags" :span="4" :class="tag=='BUY' ? 'act' :'disact' ">
-          <span @click="tag='BUY'">Buy USDT</span>
+          <span @click="tag='BUY'">{{ $t('buy') }} USDT</span>
         </i-col>
         <i-col class="tags" :span="4" :class="tag=='SELL' ? 'act' :'disact' ">
-          <span @click="tag='SELL'">Sell USDT</span>
+          <span @click="tag='SELL'">{{ $t('sell') }} USDT</span>
         </i-col>
         <i-col span="8" offset="8">
           <div style="text-align: right">
-            <span>Market price is not satisfied?</span>
+            <span>{{ $t('notSatisfied') }} ?</span>
             <i-button type="ghost" shape="circle" style="color:#ff7100;font-weight: bold;background-color: #ffffff;" @click.native.prevent="showPostDialog();">
               <Icon type="plus-round"></Icon>
-              post pending orders
+              {{ $t('releaseAdvert') }}
             </i-button>
           </div>
         </i-col>
@@ -37,19 +37,19 @@
         <div v-show="tag=='BUY'">
           <table class="buylist">
             <tr>
-              <th>Business</th>
-              <th>Amount</th>
+              <th>{{ $t('seller') }}</th>
+              <th>{{ $t('amount') }}</th>
               <th>
-                Limit
+                {{ $t('limit') }}
                 <br/>
-                <span class="limit-tips">(min-purchase amount - max-purchase amount)</span>
+                <span class="limit-tips">({{ $t('min2maxPurchase') }})</span>
               </th>
-              <th>unit price</th>
-              <th>operation</th>
+              <th>{{ $t('unitPrice') }}</th>
+              <th>{{ $t('operation') }}</th>
             </tr>
             <tr v-for="item in buylist" :key="item.id">
               <td>
-                <div class="seller">Buyer</div>
+                <div class="seller">{{ $t('seller') }}</div>
                 {{item.userName}}
               </td>
               <td>{{item.volume}} USDT</td>
@@ -58,7 +58,7 @@
               </td>
               <td class="price">{{item.price}} SAR</td>
               <td>
-                <button @click="showSellUsdt(i)" class="buy-btn">Sell USDT</button>
+                <button @click="showSellUsdt(item)" class="buy-btn">{{ $t('buy') }} USDT</button>
               </td>
             </tr>
           </table>
@@ -73,31 +73,30 @@
         <div v-show="tag=='SELL'">
           <table class="buylist">
             <tr>
-              <th>Business</th>
-              <th>Amount</th>
+              <th>{{ $t('buyer') }}</th>
+              <th>{{ $t('amount') }}</th>
               <th>
-                Limit
+                {{ $t('limit') }}
                 <br/>
-                <span class="limit-tips">(min-purchase amount- max-purchase amount)</span>
+                <span class="limit-tips">({{ $t('min2maxPurchase') }})</span>
               </th>
-              <th>unit price</th>
-              <th>payment method</th>
-              <th>operation</th>
+              <th>{{ $t('unitPrice') }}</th>
+              <th>{{ $t('payment') }}</th>
+              <th>{{ $t('operation') }}</th>
             </tr>
             <tr v-for="item in selllist" :key="item.id">
               <td>
-                <div class="seller">Seller</div>
+                <div class="seller">{{ $t('buyer') }}</div>
                 {{item.userName}}
               </td>
               <td>{{item.volume}} USDT</td>
               <td>
                 {{item.minTrade}}--{{item.maxTrade}} SAR
-
               </td>
               <td class="price">{{item.price}} SAR</td>
               <td>{{item.paymentBanks[0].bankName}}</td>
               <td>
-                <button @click="showBuyUsdt(i)" class="buy-btn">Buy USDT</button>
+                <button @click="showBuyUsdt(item)" class="buy-btn">{{ $t('sell') }} USDT</button>
               </td>
             </tr>
           </table>
@@ -116,41 +115,41 @@
       <div class="content">
         <div class="content-wrapper" style="padding:0;">
           <div class="title">
-            <span> Post pending orders </span>
+            <span>{{ $t('releaseAdvert') }}</span>
             <span class="close">
               <Icon type="close-round" @click="closePostDialog"></Icon>
             </span>
           </div>
           <div class="main-content">
             <Tabs v-model="postTag">
-              <Tab-Pane label="Buy USDT" :disabled="buyDisabled" name="BUY">
+              <Tab-Pane :label="$t('buy') + 'USDT'" :disabled="buyDisabled" name="BUY">
                 <div style="width: 400px;">
                   <div class="input-group">
                     <div>
-                      <span class="input-label">Unit price</span>
-                      <span class="input-tips">Current market price {{marketPrice.exchange_sell_min || marketPrice.exchange_rate }} SAR</span>
+                      <span class="input-label">{{ $t('unitPrice') }}</span>
+                      <span class="input-tips">{{ $t('currentPrice') }} {{marketPrice.exchange_sell_min || marketPrice.exchange_rate }} SAR</span>
                     </div>
                     <div>
-                      <i-input type="number" v-model="postData.price" placeholder="Enter your expected selling price">
+                      <i-input type="number" v-model="postData.price" :placeholder="$t('pricePlaceholder')">
                         <Icon class="o-sar" slot="prepend"></Icon>
                       </i-input>
                     </div>
                   </div>
                   <div class="input-group">
                     <div>
-                      <span class="input-label">Quantity</span>
-                      <span class="input-tips">Balance {{balance}} USDT</span>
+                      <span class="input-label">{{ $t('quantity') }}</span>
+                      <span class="input-tips">{{ $t('balance') }} {{balance}} USDT</span>
                     </div>
                     <div>
-                      <i-input v-model="postData.volume " type="number" placeholder="Enter your expected sell quantity">
+                      <i-input v-model="postData.volume " type="number" :placeholder="$t('amountPlaceholder')">
                         <Icon class="o-usdt" slot="prepend"></Icon>
                       </i-input>
                     </div>
                   </div>
-                  <div>Selling amount(SAR): {{postData.volume * postData.price || 0}}</div>
+                  <div>{{ $t('totalPrice') }}(SAR): {{postData.volume * postData.price || 0}}</div>
                   <div class="input-group">
                     <div>
-                      <span class="input-label">Single transaction limit(SAR)</span>
+                      <span class="input-label">{{ $t('transactionLimit') }}(SAR)</span>
                     </div>
                     <div>
                       <Row>
@@ -170,39 +169,39 @@
                     </div>
                   </div>
                   <div>
-                    <button @click="postOrder" class="o-buy-sell-btn">Buy USDT</button>
+                    <button @click="postOrder" class="o-buy-sell-btn">{{ $t('buy') }} USDT</button>
                   </div>
                   <div v-if="error.postDataError" class="error">{{error.postDataError}}</div>
                 </div>
               </Tab-Pane>
-              <Tab-Pane label="Sell USDT" :disabled="sellDisabled" name="SELL">
+              <Tab-Pane :label="$t('sell') + 'USDT'" :disabled="sellDisabled" name="SELL">
                 <div style="width: 400px;">
                   <div class="input-group">
                     <div>
-                      <span class="input-label">Unit price</span>
-                      <span class="input-tips">Current market price {{marketPrice.exchange_sell_min || marketPrice.exchange_rate }} SAR</span>
+                      <span class="input-label">{{ $t('unitPrice') }}</span>
+                      <span class="input-tips">{{ $t('currentPrice') }} {{marketPrice.exchange_sell_min || marketPrice.exchange_rate }} SAR</span>
                     </div>
                     <div>
-                      <i-input number v-model="postData.price" placeholder="Enter your expected selling price">
+                      <i-input number v-model="postData.price" :placeholder="$t('pricePlaceholder')">
                         <Icon class="o-sar" slot="prepend"></Icon>
                       </i-input>
                     </div>
                   </div>
                   <div class="input-group">
                     <div>
-                      <span class="input-label">Quantity</span>
+                      <span class="input-label">{{ $t('amount') }}</span>
                       <span class="input-tips">Balance {{balance}} USDT</span>
                     </div>
                     <div>
-                      <i-input v-model="postData.volume " number placeholder="Enter your expected sell quantity">
+                      <i-input v-model="postData.volume " number :placeholder="$t('amountPlaceholder')">
                         <Icon class="o-usdt" slot="prepend"></Icon>
                       </i-input>
                     </div>
                   </div>
-                  <div>Selling amount(SAR): {{postData.volume * postData.price}}</div>
+                  <div>{{ $t('totalPrice') }}(SAR): {{postData.volume * postData.price}}</div>
                   <div class="input-group">
                     <div>
-                      <span class="input-label">Single transaction limit(SAR)</span>
+                      <span class="input-label">{{ $t('transactionLimit') }}(SAR)</span>
                     </div>
                     <div>
                       <Row>
@@ -222,7 +221,7 @@
                     </div>
                   </div>
                   <div>
-                    <button @click="postOrder" class="o-buy-sell-btn">Sell USDT</button>
+                    <button @click="postOrder" class="o-buy-sell-btn">{{ $t('sell') }} USDT</button>
                   </div>
                   <div v-if="error.postDataError" class="error">{{error.postDataError}}</div>
                 </div>
@@ -239,12 +238,12 @@
         <div class="content-wrapper" style="padding: 20px;width: 1200px;">
           <Icon type="close-circled" class="o-close" @click="closeBuyDialog"></Icon>
           <div v-if="tag=='BUY'">
-            avaliable {{balance}} USDT
+            {{ $t('balance') }} {{balance}} USDT
           </div>
           <Row>
             <i-col span="4">
-              <p class="item-name">数量:</p>
-              <p class="item-name" v-if="buyData.method">支付方式:</p>
+              <p class="item-name">{{ $t('amount') }}:</p>
+              <p class="item-name" v-if="buyData.method">{{ $t('payment') }}:</p>
             </i-col>
             <i-col span="3">
               <p class="txt-bold">{{buyData.restAmount}}</p>
@@ -260,7 +259,7 @@
                   </div>
                 </div>
                 <p class="order-input-tips" :class="buyAmountErrorText ? 'error' : ''">
-                  Limit: {{buyData.min}} -- {{buyAmountMax}}SAR
+                  {{ $t('limit') }}: {{buyData.min}} -- {{buyAmountMax}}SAR
                 </p>
                 <p class="error txt-right" v-show="buyAmountErrorText">{{ buyAmountErrorText }}</p>
               </div>
@@ -278,14 +277,14 @@
                   </div>
                 </div>
                 <p class="order-input-tips" :class="buyTotalErrorText ? 'error' : ''">
-                  Limit:{{ buyTotalMin }} -- {{ buyTotalMax }}USDT
+                  {{ $t('limit') }}:{{ buyTotalMin }} -- {{ buyTotalMax }}USDT
                 </p>
                 <p class="error txt-right" v-show="buyTotalErrorText">{{ buyTotalErrorText }}</p>
               </div>
             </i-col>
             <i-col span="4" class="btn-wrapper">
-              <button v-show="tag==='BUY'" @click="sell" class="order-btn">sell</button>
-              <button v-show="tag==='SELL'" @click="buy" class="order-btn">buy</button>
+              <button v-show="tag==='BUY'" @click="sell" class="order-btn">{{ $t('sell') }}</button>
+              <button v-show="tag==='SELL'" @click="buy" class="order-btn">{{ $t('buy') }}</button>
             </i-col>
           </Row>
           <div class="buyError error">{{error.buyError}}</div>
@@ -294,9 +293,9 @@
     </div>
 
     <!--挂单-->
-    <Modal v-model="isPricePromptShow" title="Modal Title" ok-text="OK" cancel-text="Cancel" width="420">
+    <Modal v-model="isPricePromptShow" width="420">
       <p slot="header" style="color: #333333; text-align: center">
-        <span>Price deviation prompt</span>
+        <span>{{ $t('deviationWarn') }}</span>
       </p>
       <div>
         <div v-if="postTag=='SELL'" style="padding:20px;text-align: center; height: 136px; background: rgba(171, 15, 15, 1);; color: white; font-size: 16px;">
@@ -309,20 +308,20 @@
         </div>
         <div style="padding: 0 50px;font-size: 16px;">
           <p style="margin: 10px 0;">
-            <span>Current market price</span>
+            <span>{{ $t('currentPrice') }}</span>
             <span>{{marketPrice.exchange_sell_min}} SAR</span>
           </p>
           <p style="margin: 10px 0;">
-            <span>Current release price: </span>
+            <span>{{ $t('currentReleasePrice') }}</span>
             <span style="color:red;">{{postData.price}} SAR</span>
           </p>
         </div>
       </div>
       <div slot="footer">
-        <a href="#" @click="confirmRelease">cofirm release</a>
+        <a href="#" @click="confirmRelease">{{ $t('confirmRelease') }}</a>
         <a href="#" @click="modifyPostOrder" class="i-modify" style="width:220px;display: inline-block;
 				height:44px;background:rgba(255,237,0,1);
-				border-radius:5px;">Immediately modify</a>
+				border-radius:5px;">{{ $t('modifyNow') }}</a>
       </div>
     </Modal>
 
@@ -331,25 +330,25 @@
       <div class="content">
         <div class="content-wrapper" style="padding:0;">
           <div class="p-header">
-            <span>Confirm pending order to sell USDT</span>
+            <span>{{ $t('confirmRelease') }}</span>
             <Icon @click="isPendModalShow=false" type="close" class="o-close"></Icon>
           </div>
           <div class="p-info">
             <Row>
-              <i-col span="6" class="key">Unit price</i-col>
+              <i-col span="6" class="key">{{ $t('unitPrice') }}</i-col>
               <i-col span="18" class="value">{{postData.price}}</i-col>
             </Row>
             <Row>
-              <i-col span="6" class="key">Quanlity</i-col>
+              <i-col span="6" class="key">{{ $t('quantity') }}</i-col>
               <i-col span="18" class="value">{{postData.volume}}</i-col>
             </Row>
             <Row>
-              <i-col span="6" class="key">Limit</i-col>
+              <i-col span="6" class="key">{{ $t('limit') }}</i-col>
               <i-col span="18" class="value">{{postData.minTrade}} SAR -- {{postData.maxTrade}} SAR</i-col>
             </Row>
             <Row>
-              <i-col span="6" class="key">Selling amount</i-col>
-              <i-col span="18" class="value">{{postData.volume}}</i-col>
+              <i-col span="6" class="key">{{ $t('totalPrice') }}</i-col>
+              <i-col span="18" class="value">{{postData.volume * postData.price}}</i-col>
             </Row>
             <div v-if="postTag=='SELL'" class="settings">
               <div class="s-header">
@@ -375,7 +374,7 @@
                   </i-col>
                 </Row>
                 <Row>
-                  <i-col span="24" class="key">Bank Card</i-col>
+                  <i-col span="24" class="key">{{ $t('bankCard') }}</i-col>
                 </Row>
                 <Row v-for="(i, index) in cardInfo">
                   <i-col span="20">
@@ -392,10 +391,10 @@
           <div class="rtabs">
             <Row>
               <i-col :span="12" :class="postData.checkType==='1'?'tb-act':'tb-disact'">
-                <span @click="postData.checkType='1'">Google verification code</span>
+                <span @click="postData.checkType='1'">{{ $t('googleAuthCode') }}</span>
               </i-col>
               <i-col :span="12" :class="postData.checkType==='2'?'tb-act':'tb-disact'">
-                <span @click="postData.checkType='2'">SMS verification</span>
+                <span @click="postData.checkType='2'">{{ $t('smsCode') }}</span>
               </i-col>
             </Row>
             <div>
@@ -408,11 +407,10 @@
                 <span v-show="!sms" @click="sendMsg" class="sendMsg">sms</span>
               </div>
             </div>
-
           </div>
           <div class="p-foot">
-            <a class="return" @click="modifyPostOrder">return to edit</a>
-            <a class="config" @click="confirmPostOrder" href="#">Confirm pending</a>
+            <a class="return" @click="modifyPostOrder">{{ $t('backEdit') }}</a>
+            <a class="config" @click="confirmPostOrder" href="#">{{ $t('confirmRelease') }}</a>
             <div class="p-foot-tips" :class="error.postError ? 'error' : ''">{{error.postError}}</div>
           </div>
         </div>
@@ -421,13 +419,13 @@
     <!-- confirm pending order end -->
 
     <!--bind card-->
-    <bindcard :show="isBindCardShow"></bindcard>
-    <confirm :show="isConfirmBindShow"></confirm>
+    <bindcard :show="isBindCardShow" :locale="locale"></bindcard>
+    <confirm :show="isConfirmBindShow" :locale="locale"></confirm>
     <!--bind card end-->
 
-    <acontact :show="isContactShow" :isWatchupBind="isWatchAppBind"></acontact>
-    <gauth :show="isGoogleAuthShow"></gauth>
-    <selectcard :show="isSelectCardShow" :cards="cardInfo"></selectcard>
+    <acontact :show="isContactShow" :isWatchupBind="isWatchAppBind" :locale="locale"></acontact>
+    <gauth :show="isGoogleAuthShow" :locale="locale"></gauth>
+    <selectcard :show="isSelectCardShow" :cards="cardInfo" :locale="locale"></selectcard>
 
   </div>
 

@@ -1,5 +1,7 @@
 Vue.use(VueI18n);
 
+// // console.log(utils.transform(messages));
+
 var i18n = new VueI18n({
   locale: 'zh', // set locale
   messages: utils.transform(messages),
@@ -15,7 +17,6 @@ var allGoods = new Vue({
     gauth: g_auth,
     acontact: addContact,
     selectcard: selectCard,
-    oinput: o_input,
   },
   data: function() {
     return {
@@ -339,20 +340,20 @@ var allGoods = new Vue({
         return;
       }
       if (parseFloat(this.postData.price) > this.marketPrice.exchange_rate * 1.5) {
-        this.postErroMsg = '挂单价格大于市价50%，可能给您带来损失！';
+        this.postErroMsg = this.$t('moreThan50Percent');
         this.isPricePromptShow = true;
         this.isPostDialogShow = false;
         return;
       }
       if (parseFloat(this.postData.price) < this.marketPrice.exchange_rate * 0.5) {
-        this.postErroMsg = '挂单价格小于市价50%，可能给您带来损失！';
+        this.postErroMsg = this.$t('lessThan50Percent');
         this.isPricePromptShow = true;
         this.isPostDialogShow = false;
         return;
       }
       if (this.postTag == 'BUY') {
         if (parseFloat(this.postData.price) > this.marketPrice.exchange_sell_max) {
-          this.postErroMsg = '挂单价格低于市场最高买价，可能给您带来损失！';
+          this.postErroMsg = this.$t('lessThanHighestPurchase');
           this.isPricePromptShow = true;
           this.isPostDialogShow = false;
           return;
@@ -360,7 +361,7 @@ var allGoods = new Vue({
       }
       if (this.postTag == 'SELL') {
         if (parseFloat(this.postData.price) > this.marketPrice.exchange_buy_min) {
-          this.postErroMsg = '挂单价格高于市场最低卖价，可能给您带来损失！';
+          this.postErroMsg = this.$t('moreThanLowestPrice');
           this.isPricePromptShow = true;
           this.isPostDialogShow = false;
           return;
