@@ -14,6 +14,18 @@ var messages = {
     en: 'Market price is not satisfied',
     sa: '',
   },
+  dealOrderBeforeRelease: {
+    zh: '请处理完现有订单再发布',
+    en: 'please deal with your pending order before releasing',
+  },
+  releaseBuyOnly: {
+    zh: '卖单发布已达上限，只能发布买单',
+    en: 'sell order is up to limit, you can only release buy order',
+  },
+  releaseSellOnly: {
+    zh: '卖单发布已达上限，只能发布买单',
+    en: 'sell order is up to limit, you can only release buy order',
+  },
   sell: {
     zh: '卖出',
     en: 'Sell',

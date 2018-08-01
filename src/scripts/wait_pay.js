@@ -1,5 +1,3 @@
-Vue.use(VueI18n);
-
 var i18n = new VueI18n({
   locale: 'zh', // set locale
   messages: utils.transform(messages),
@@ -39,6 +37,12 @@ var waitPay = new Vue({
         socialNumber: '333',
       },
     };
+  },
+  computed: {
+    arrivalTime: function() {
+      var date = new Date(this.orderInfo.paymentTime);
+      return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+    },
   },
   methods: {
     confirmOrder: function() {
@@ -131,6 +135,15 @@ var waitPay = new Vue({
     //------------------------------GET ORDER INFO END---------------------------------------//
   },
   mounted: function() {
+    var locale = localStorage.getItem('locale');
+    if (locale) {
+      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
+      this.$i18n.locale = locale;
+    }
+    var that = this;
+    this.$on('locale', function(i) {
+      that.locale = i;
+    });
     var sequence = utils.getParam('sequence');
     this.sequence = sequence;
     this.getOrderInfo(sequence);

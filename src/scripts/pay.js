@@ -1,5 +1,3 @@
-Vue.use(VueI18n);
-
 var i18n = new VueI18n({
   locale: 'zh', // set locale
   messages: utils.transform(messages),
@@ -44,6 +42,12 @@ var pay = new Vue({
       },
     }
   },
+  computed: {
+    arrivalTime: function() {
+      var date = new Date(this.orderInfo.paymentTime);
+      return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+    },
+  },
   methods: {
     //pay modal methods-------------
     toPay() {
@@ -52,8 +56,8 @@ var pay = new Vue({
     cancelPay() {
       var _this = this;
       this.$Modal.confirm({
-        title: '取消订单',
-        content: '<p><span class="error">如您已向卖家付款，请千万不要取消订单</span><br>当日累计3次取消，会限制当日购买功能</p>',
+        title: _this.$t('cancelOrder'),
+        content: '<p><span class="error">' + _this.$t('paidAndNoCancel') + '</span><br>' + _this.$t('helpTipsFourth') + '</p>',
         onOk: function () {
           post('api/cancelOrder', _this.sequence).then(function (res) {
             location.reload();
@@ -84,7 +88,7 @@ var pay = new Vue({
           expiredTime = createTime + limitTime * 60 * 1000;
         }
         if ((expiredTime - now) < 0) {
-          that.leftTime = "order expired!"
+          that.leftTime = that.$t('orderExpired');
         } else {
           that.leftTime = utils.MillisecondToDate(expiredTime - now);
         }
@@ -159,6 +163,14 @@ var pay = new Vue({
     //------------------------------GET ORDER INFO END---------------------------------------//	
   },
   mounted: function () {
+    var locale = localStorage.getItem('locale');
+    if (locale) {
+      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
+      this.$i18n.locale = locale;
+    }
+    this.$on('locale', function(i) {
+      this.locale = i;
+    });
     var sequence = utils.getParam('sequence');
     this.sequence = sequence;
     this.getOrderInfo(sequence);

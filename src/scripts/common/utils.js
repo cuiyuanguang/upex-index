@@ -62,10 +62,6 @@
     }
   }
 
-  function addZero(num) {
-    return num > 10 ? num : '0' + num;
-  }
-
   //时间戳 返回 小时
   function MillisecondToDate(msd) {
     var time = parseInt(msd, 10) / 1000;
@@ -73,9 +69,9 @@
       if (time > 60 && time < 3600) {
         time =
           '00:' +
-          addZero(parseInt(time / 60)) +
+          parseInt(time / 60) +
           ':' +
-          addZero(parseInt((parseFloat(time / 60) - parseInt(time / 60)) * 60));
+          parseInt((parseFloat(time / 60) - parseInt(time / 60)) * 60);
       } else if (time >= 60 * 60 && time < 60 * 60 * 24) {
         time =
           parseInt(time / 3600) +
@@ -88,14 +84,14 @@
               60
           );
       } else {
-        time = '00:' + '00:' + addZero(parseInt(time));
+        time = '00:' + '00:' + parseInt(time);
       }
     }
 
     var a = time.split(':');
     var temp = '';
     a.forEach(function(i) {
-      if (parseInt(i) < 9 && parseInt(i) > 0) {
+      if (parseInt(i) <= 9 && parseInt(i) > 0) {
         i = '0' + i;
       }
       temp += i + ':';

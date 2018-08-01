@@ -1,7 +1,3 @@
-Vue.use(VueI18n);
-
-// // console.log(utils.transform(messages));
-
 var i18n = new VueI18n({
   locale: 'zh', // set locale
   messages: utils.transform(messages),
@@ -123,16 +119,6 @@ var allGoods = new Vue({
     },
   },
   methods: {
-    tabChange(name) {
-      this.currentTab = name;
-      // const params = {
-      //   coin: this.coin,
-      //   side: name === 'Buy' ? 'BUY' : 'SELL',
-      //   pageNum: this.page,
-      //   pageSize: 10,
-      // };
-      // this.getAdverts(params);
-    },
     //get market price
     getMarketPrice: function() {
       var that = this;
@@ -501,9 +487,9 @@ var allGoods = new Vue({
         var buyCount = res.data.data.BUY;
         var sellCount = res.data.data.SELL;
         if (buyCount >= 2 && sellCount >= 2) {
-          Toast.show('请处理完现有订单再发布', { icon: 'warning' });
+          Toast.show(that.$t('dealOrderBeforeRelease'), { icon: 'warning' });
         } else if (buyCount >= 2 && sellCount < 2) {
-          Toast.show('买单发布已达上限，只能发布卖单', {
+          Toast.show(that.$t('releaseSellOnly'), {
             icon: 'warning',
             duration: 1500,
             callback: function() {
@@ -512,8 +498,8 @@ var allGoods = new Vue({
               _this.isPostDialogShow = true;
             },
           });
-        } else {
-          Toast.show('卖单发布已达上限，只能发布买单', {
+        } else if (buyCount < 2 && sellCount >= 2) {
+          Toast.show(that.$t('releaseBuyOnly'), {
             icon: 'warning',
             duration: 1500,
             callback: function() {
@@ -522,6 +508,8 @@ var allGoods = new Vue({
               _this.isPostDialogShow = true;
             },
           });
+        } else {
+          _this.isPostDialogShow = true;
         }
       });
     },
@@ -564,6 +552,11 @@ var allGoods = new Vue({
   },
   mounted: function() {
     var that = this;
+    var locale = localStorage.getItem('locale');
+    if (locale) {
+      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
+      this.$i18n.locale = locale;
+    }
     this.$on('locale', function(i) {
       that.locale = i;
     });

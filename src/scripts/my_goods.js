@@ -1,5 +1,3 @@
-Vue.use(VueI18n);
-
 var i18n = new VueI18n({
   locale: 'zh', // set locale
   messages: utils.transform(messages),
@@ -23,44 +21,44 @@ var myGoods = new Vue({
     modalMsg: {
       title: '',
       desc: '',
-      confirmText: 'Confirm',
+      confirmText: '确认',
     },
   },
   methods: {
     //get user advert
-    getAdvert: function (page) {
+    getAdvert: function(page) {
       var that = this;
       var data = {
         pageNum: page || 1,
         pageSize: this.pageSize,
       };
-      get('api/personAdverts/processing', data).then(function (res) {
+      get('api/personAdverts/processing', data).then(function(res) {
         that.pendingOrdersList = res.data.data.rsts;
         that.pendingOrdersCount = res.data.data.count;
       });
     },
-    pause: function (item) {
-      this.action = item.status === 6 ? 'enable' : 'pause';
+    pause: function(item) {
+      this.action = item.status === 6 ? this.$t('start') : this.$t('pause');
       this.advertId = item.id;
       this.modalMsg = {
-        title: item.status === 6 ? 'Enable order' : 'Pause order',
-        desc: 'Confirm ' + this.action + ' this order？',
-        confirmText: 'Confirm',
+        title: item.status === 6 ? this.$t('start') : this.$t('pause'),
+        desc: this.$t('confirm') + this.action + this.$t('thisOrder'),
+        confirmText: this.$t('confirm'),
       };
       this.showModal = true;
     },
-    cancel: function (item) {
+    cancel: function(item) {
       if (item.status === 5 || item.status === 6) {
         this.modalMsg = {
-          title: 'Temporarily unable to remove',
-          desc: 'Pending orders, after processing, you can go offline',
-          confirmText: 'Immediate treatment',
+          title: this.$t('unremovable'),
+          desc: this.$t('unremovableTips'),
+          confirmText: this.$t('unremovableOperation'),
         };
       } else {
         this.modalMsg = {
-          title: 'Remove order',
-          desc: 'Confirm remove this order？',
-          confirmText: 'Confirm',
+          title: this.$t('removable'),
+          desc: this.$t('removableTips'),
+          confirmText: this.$t('confirm'),
         };
         this.cancelable = true;
         this.advertId = item.id;
@@ -68,16 +66,19 @@ var myGoods = new Vue({
       this.showModal = true;
       this.action = 'cancel';
     },
-    manualAction: function () {
+    manualAction: function() {
       var that = this;
       var api = {
-        'pause': 'api/suspendAdvert',
-        'enable': 'api/openAdvert',
-        'cancel': 'api/closeAdvert'
-      }
-      if ((that.cancelable && that.action === 'cancel') || that.action === 'pause' || that.action ===
-        'enable') {
-        post(api[that.action], that.advertId).then(function (res) {
+        pause: 'api/suspendAdvert',
+        enable: 'api/openAdvert',
+        cancel: 'api/closeAdvert',
+      };
+      if (
+        (that.cancelable && that.action === 'cancel') ||
+        that.action === 'pause' ||
+        that.action === 'enable'
+      ) {
+        post(api[that.action], that.advertId).then(function(res) {
           if (res.success) {
             that.showModal = false;
             that.getAdvert();
@@ -86,60 +87,10 @@ var myGoods = new Vue({
       } else {
         location.href = './otc_adverts.html';
       }
-
-
-      // var that = this;
-      // if (that.action === 'pause') {
-      //   post('api/suspendAdvert', that.advertId, that.token).then(function (res) {
-      //     if (res.success) {
-      //       that.showModal = false;
-      //       that.showTips = true;
-      //       that.getAdvert();
-      //       setTimeout(function () {
-      //         that.showTips = false;
-      //       }, 2000);
-      //     } else {
-      //       that.errorText = res.data;
-      //     }
-      //   });
-      // }
-      // if (that.action === 'enable') {
-      //   post('api/openAdvert', that.advertId, that.token).then(function (res) {
-      //     if (res.success) {
-      //       that.showModal = false;
-      //       that.showTips = true;
-      //       that.getAdvert();
-      //       setTimeout(function () {
-      //         that.showTips = false;
-      //       }, 2000);
-      //     } else {
-      //       that.errorText = res.data;
-      //     }
-      //   });
-      // }
-      // if (that.action === 'cancel') {
-      //   if (that.cancelable) {
-      //     post('api/closeAdvert', that.advertId, that.token).then(function (res) {
-      //       if (res.success) {
-      //         that.showModal = false;
-      //         that.showTips = true;
-      //         that.getAdvert();
-      //         setTimeout(function () {
-      //           that.showTips = false;
-      //         }, 2000);
-      //       } else {
-      //         that.errorText = res.data;
-      //       }
-      //     });
-      //   } else {
-      //     location.href = './otc_adverts.html';
-      //   }
-      // }
-
     },
   },
   filters: {
-    time: function (stamp) {
+    time: function(stamp) {
       var date = new Date(stamp);
       var month = date.getMonth() + 1 > 9 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1);
       var day = date.getDate() > 9 ? date.getDate() : '0' + date.getDate();
@@ -148,7 +99,16 @@ var myGoods = new Vue({
       return month + '-' + day + ' ' + hour + ':' + minute;
     },
   },
-  created: function () {
+  mounted() {
+    var locale = localStorage.getItem('locale');
+    if (locale) {
+      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
+      this.$i18n.locale = locale;
+    }
+    var that = this;
+    this.$on('locale', function(i) {
+      that.locale = i;
+    });
     this.getAdvert();
   },
   watch: {

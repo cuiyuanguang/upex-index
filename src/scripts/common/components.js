@@ -74,6 +74,30 @@ var i18nComponentsMessages = {
     zh: '查看所有订单',
     en: 'view all my orders',
   },
+  ongoingOrders: {
+    zh: '进行中的订单',
+    en: 'Ongoing orders',
+  },
+  viewOrder: {
+    zh: '查看',
+    en: 'view',
+  },
+  payToSeller: {
+    zh: '须向卖家支付',
+    en: 'payment to seller',
+  },
+  waitForBuyer: {
+    zh: '等待买家支付',
+    en: 'Wait for buyer to pay',
+  },
+  payInTime: {
+    zh: '支付截止时间',
+    en: 'Complete the payment in',
+  },
+  waitForTime: {
+    zh: '交易截止时间',
+    en: 'Waiting for the buyer to pay',
+  },
   bindGoogleAuthMsg: {
     zh: '为了您的账户安全，我们强烈推荐您进行谷歌验证',
     en: 'For your account security, we strongly recommend that you turn on second verification',
@@ -540,12 +564,24 @@ var addContact = {
             <ul class="bt">
               <li>
                 <p>WhatsApp {{ $t('account') }}</p>
-                <i-input v-model="wapp">
-                  <i-select slot="prepend" style="width: 80px">
-                    <Option value="http">+ 186</Option>
-                    <Option value="https">+ 2300</Option>
-                  </i-select>
-                </i-input>
+                <Input
+                  v-model="wapp"
+                  placeholder="Enter your WhatsApp number"
+                  class="iview-input iview-input-countryPhone"
+                >
+                  <Select v-model="selectCountry" slot="prepend" filterable style="width:86px">
+                    <Option
+                      v-if="countryArr.length > 0"
+                      v-for="country in countryArr"
+                      :value="country.dialingCode"
+                      :label="country.dialingCode"
+                      style="width:100%;"
+                    >
+                      <span class="float-left">{{country.dialingCode}}</span>
+                      <span class="float-right" style="color:#aaaaaa;">{{country.enName}}</span>
+                    </Option>
+                  </Select>
+                </Input>
               </li>
               <li>
                 <button @click="bind">{{ $t('submit') }}</button>
@@ -560,6 +596,8 @@ var addContact = {
   data() {
     return {
       wapp: '',
+      countryArr: [],
+      selectCountry: '+86',
     };
   },
   props: ['show', 'locale'],
@@ -567,14 +605,25 @@ var addContact = {
     close() {
       this.$parent.$emit('isContactShow', false);
     },
+    getCountry() {
+      var that = this;
+      get('api/country').then(function (res) {
+        if (res.success) {
+          that.countryArr = res.data.data;
+        }
+      });
+    },
     bind() {
       var that = this;
-      post('api/watchapp', this.wapp).then(function (res) {
+      post('api/watchapp', this.selectCountry + ',' +this.wapp).then(function (res) {
         if (res.data.message == 'otc.result.success') {
           that.$parent.$emit('isAddContactShow', false);
         }
       });
     },
+  },
+  mounted: function() {
+    this.getCountry();
   },
   watch: {
     locale: function (newVal, oldVal) {
@@ -879,7 +928,7 @@ var o_my_login = {
     },
     getCountry() {
       var that = this;
-      get('api/country', {}, this.token).then(function (res) {
+      get('api/country').then(function (res) {
         if (res.success) {
           that.countryArr = res.data.data;
         } else {
@@ -1652,25 +1701,25 @@ var o_header = {
               <div class="order-card" style="display:none;">
                 <div class="arrow"></div>
                 <div class="card-header">
-                  <span>Ongoing order</span>
-                  <a href="otc_my_order.html">All orders > </a>
+                  <span class="float-left">{{ $t('ongoingOrders') }}</span>
+                  <a href="otc_my_order.html">{{ $t('allOrder') }} > </a>
                 </div>
                 <ul>
                   <li v-for="item in orders" :key="item.sequence">
                     <Row>
-                      <i-col span="4">
+                      <i-col span="2" class="text-left">
                         <div class="buyType" v-if="item.buyer.id==uid">buy</div>
                         <div class="sellType" v-else>sell</div>
                       </i-col>
-                      <i-col span="16">
-                        <div v-if="item.buyer.id==uid" class="tip"> Payment to the seller {{item.totalPrice}}SAR</div>
-                        <div v-else class="tip"> Waiting for buyers payment{{item.totalPrice}}SAR</div>
-                        <span v-if="item.buyer.id==uid">Complete the payment in {{item.ctime | toHours }}</span>
-                        <span v-else>Waiting for the buyer to pay {{item.ctime | toHours }}</span>
+                      <i-col span="18" class="text-left" style="padding-left:6px;">
+                        <div v-if="item.buyer.id==uid" class="tip">{{ $t('payToSeller') }} {{item.totalPrice}}SAR</div>
+                        <div v-else class="tip">{{ $t('waitForBuyer') }}{{item.totalPrice}}SAR</div>
+                        <span v-if="item.buyer.id==uid">{{ $t('payInTime') }} {{item.ctime | toHours }}</span>
+                        <span v-else>{{ $t('waitForTime') }} {{item.ctime | toHours }}</span>
                       </i-col>
-                      <i-col span="4">
-                        <a v-if="item.buyer.id==uid" class="view" :href="'otc_pay.html?sequence='+item.sequence">view</a>
-                        <a v-else class="view" :href="'otc_wait_pay.html?sequence='+item.sequence">view</a>
+                      <i-col span="4" class="text-right">
+                        <a v-if="item.buyer.id==uid" class="view" :href="'otc_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
+                        <a v-else class="view" :href="'otc_wait_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
                       </i-col>
                     </Row>
                   </li>
@@ -1692,19 +1741,18 @@ var o_header = {
             <li class="items" v-if="!logined">
               <a type="primary" @click="showRegister()">{{ $t('register') }}</a>
             </li>
-            <li class="items" @click="toggleLanguage">
-              <a href="javascript:;">
-                <svg t="1530500732088" style="height: 14px;width: 14px;" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                    p-id="773" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
-                  <defs>
-                    <style type="text/css"></style>
-                  </defs>
-                  <path d="M512 0a512 512 0 1 0 0 1024A512 512 0 0 0 512 0z m0 99.181714c33.060571 0 98.304 86.747429 136.192 214.674286H375.808C413.696 185.782857 478.939429 99.181714 512 99.181714z m-400.896 512a413.549714 413.549714 0 0 1 0-198.217143H253.805714a808.96 808.96 0 0 0 0 198.217143H111.030857z m38.619429 99.035429h122.733714c17.554286 68.900571 43.300571 130.194286 73.216 179.858286a414.500571 414.500571 0 0 1-196.022857-179.931429z m122.733714-396.434286H149.723429a414.573714 414.573714 0 0 1 196.096-179.858286 675.620571 675.620571 0 0 0-73.362286 179.931429zM512 924.964571c-33.645714 0-98.669714-86.747429-136.338286-214.674285h272.676572C610.669714 838.217143 545.572571 924.891429 512 924.891429z m157.988571-313.782857H354.011429a688.859429 688.859429 0 0 1 0-198.217143H669.988571a687.542857 687.542857 0 0 1 0 198.217143z m204.288-297.252571h-122.733714a675.181714 675.181714 0 0 0-73.362286-179.931429 414.500571 414.500571 0 0 1 196.096 179.931429z m-196.022857 576.146286a675.108571 675.108571 0 0 0 73.289143-179.785143h122.733714a414.427429 414.427429 0 0 1-196.022857 179.785143z m91.940572-278.893715a809.033143 809.033143 0 0 0 0-198.217143h142.774857a413.988571 413.988571 0 0 1 0 198.217143H770.194286z"
-                      fill="#ADADAD" p-id="774">
-                  </path>
-                </svg>
-                <span>{{ language }}</span>
-              </a>
+            <li class="items">
+              <Dropdown @on-click="toggleLanguage">
+                <a href="javascript:void(0)">
+                  Language
+                  <Icon type="arrow-down-b"></Icon>
+                </a>
+                <DropdownMenu slot="list">
+                  <DropdownItem name="zh">ZH</DropdownItem>
+                  <DropdownItem name="en">EN</DropdownItem>
+                  <DropdownItem name="sa">SA</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
             </li>
           </ul>
         </i-col>
@@ -1724,7 +1772,6 @@ var o_header = {
   i18n: i18nComponents,
   data() {
     return {
-      language: 'English',
       orders: [],
       ws: null,
       uid: 0,
@@ -1744,20 +1791,15 @@ var o_header = {
     showLogin() {
       this.isLoginShow = true;
     },
+
     showRegister() {
       this.isregister = true;
     },
-    toggleLanguage() {
-      if (this.language === '中文') {
-        this.language = 'English';
-      } else {
-        this.language = '中文';
-      }
-      var locale = this.language === '中文' ? 'en' : 'zh';
-      // document.body.style.direction = locale === 'zh' ? 'ltr' : 'rtl';
-      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
-      localStorage.setItem('locale', locale);
-      this.$parent.$emit('locale', locale);
+    toggleLanguage(name) {
+      this.$i18n.locale = name;
+      document.body.dir = name === 'zh' ? 'ltr' : 'rtl';
+      localStorage.setItem('locale', name);
+      this.$parent.$emit('locale', name);
     },
     threadPoxi() {
       var agentData = 'mymessage';
@@ -1811,9 +1853,14 @@ var o_header = {
     myregistergoogle: o_my_registerGoogle,
   },
   mounted() {
-    if (utils.getParam('auth') == 1) {
-      this.isLoginShow = true;
-      return;
+    // if (utils.getParam('auth') == 1) {
+    //   this.isLoginShow = true;
+    //   return;
+    // }
+    var locale = localStorage.getItem('locale');
+    if (locale) {
+      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
+      this.$i18n.locale = locale;
     }
     if (utils.getCookie('token')) {
       var that = this;
@@ -1861,7 +1908,7 @@ var o_header = {
     });
     if (utils.getCookie('token')) {
       var that = this;
-      this.getMyOrder().then(function (res) {
+      get('api/personOrders').then(function (res) {
         if (res.success) {
           if (res.data.data.rsts.length > 5) {
             that.orders = res.data.data.rsts.slice(0, 5);

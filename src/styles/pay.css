@@ -48,18 +48,17 @@
 
 .pay .pay-header .step-wrapper {
   margin-top: 30px;
+  padding-top: 30px;
 }
 
 .pay .ivu-steps-content {
   position: relative;
   top: -50px;
-  left: -81px;
+  padding-left: 0;
 }
 
 .pay .step-wrapper .ivu-steps {
-  left: 45px;
-  top: 10px;
-  position: relative;
+  margin: 0 auto;
 }
 
 .pay .step-wrapper .ivu-steps-item.ivu-steps-status-finish .ivu-steps-head-inner {
