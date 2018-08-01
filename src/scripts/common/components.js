@@ -1032,6 +1032,100 @@ var o_my_loginNext = {
     },
   },
 };
+var o_my_register = {
+    template: `
+      <Modal
+      v-model="register"
+      @on-ok="ok"
+      class-name="vertical-center-modal"
+      @on-cancel="asyncCancel" class="my-login"
+      width="500"
+      >
+      <Tabs v-model="loginWrap" @on-click="loginEmailChange">
+        <TabPane label="E-mail" name="loginEmail">
+          <!--<Input-->
+            <!--:class="loginEmailError?'is-red':'is-gray'"-->
+            <!--v-model="loginEmailVal"-->
+            <!--placeholder="Enter your email"-->
+            <!--class="iview-input"-->
+            <!--@on-focus="loginEmailFocus"-->
+          <!--&gt;</Input>-->
+          <!--<p class="my-login-error">{{loginEmailErrorText}}</p>-->
+          <!--<Input-->
+            <!--:class="loginEmailPasswordError?'is-red':'is-gray'"-->
+            <!--v-model="loginEmailPassword"-->
+            <!--type="password"-->
+            <!--placeholder="Enter your password"-->
+            <!--class="iview-input"-->
+            <!--@on-focus="loginEmailPasswordFocus"-->
+          <!--&gt;-->
+            <!--<span slot="append" class="my-slot-append" @click="runForgetPassword">forget password?</span>-->
+          <!--</Input>-->
+          <!--<p class="my-login-error">{{loginEmailPasswordErrorText}}</p>-->
+        </TabPane>
+        <TabPane label="Phone" name="loginPhone">
+          <!--<Input-->
+            <!--:class="loginPhoneError?'is-red':'is-gray'"-->
+            <!--v-model="loginPhoneVal"-->
+            <!--placeholder="Enter your Phone number"-->
+            <!--class="iview-input iview-input-countryPhone"-->
+            <!--@on-focus="loginPhoneFocus"-->
+          <!--&gt;-->
+            <!--<Select v-model="selectCountry" slot="prepend" filterable style="width:86px">-->
+              <!--<Option-->
+                <!--v-if="countryArr.length > 0"-->
+                <!--v-for="country in countryArr"-->
+                <!--:value="country.dialingCode"-->
+                <!--:label="country.dialingCode"-->
+              <!--&gt;-->
+                <!--<span class="">{{country.dialingCode}}</span>-->
+                <!--<span class="iview-input-countryPhone-span">{{country.enName}}</span>-->
+              <!--</Option>-->
+            <!--</Select>-->
+          <!--</Input>-->
+          <!--<p class="my-login-error">{{loginPhoneErrorText}}</p>-->
+          <!--<Input-->
+            <!--:class="loginPhonePasswordError?'is-red':'is-gray'"-->
+            <!--v-model="loginPhonePassword"-->
+            <!--type="password"-->
+            <!--placeholder="Enter your password"-->
+            <!--class="iview-input"-->
+            <!--@on-focus="loginPhonePasswordFocus"-->
+          <!--&gt;-->
+            <!--<span slot="append" class="my-slot-append" @click="runForgetPassword">forget password?</span>-->
+          <!--</Input>-->
+            <!--<p class="my-login-error">{{loginPhonePasswordErrorText}}</p>-->
+        </TabPane>
+      </Tabs>
+      <div slot="footer">
+        <!--<Button type="primary" size="large" long :loading="modal_loading" @click="mySubmit">Log in</Button>-->
+        <!--<div class="login-footer-wrap">-->
+          <!--<span class="black">No account</span>-->
+          <!--<span class="blue" @click="runRegister">Register an account</span>-->
+        <!--</div>-->
+      </div>
+      </Modal>
+    `,
+  data() {
+    return {
+      loginWrap: '',
+      modal_loading: false,
+    };
+  },
+  props: ['register'],
+  methods: {
+    loginEmailChange(name) {
+      this.loginWrap = name;
+    },
+    asyncCancel() {
+      this.$parent.$emit('isregister', false);
+      this.modal_loading = false;
+    },
+    ok() {
+      this.$Message.info('Clicked ok');
+    },
+  },
+};
 var o_my_registerGoogle = {
   template: `
     <Modal
@@ -1209,6 +1303,7 @@ var o_header = {
         :is-login-next-phone="isLoginNextPhone"
         :is-login-next-email="isLoginNextEmail"
       ></myloginnext>
+      <myregister :register="isregister"></myregister>
       <myregistergoogle :register-google="isRegisterGoogleShow"></myregistergoogle>
     </div>
   `,
@@ -1222,6 +1317,7 @@ var o_header = {
       isLoginShow: false,
       isLoginNextShow: false,
       isRegisterGoogleShow: false,
+      isregister: false,
       isLoginNextType: '',
       isLoginNextCookie: '',
       isLoginNextPhone: '',
@@ -1326,6 +1422,9 @@ var o_header = {
     });
     this.$on("isLoginNextEmail", function (i) {
       this.isLoginNextEmail = i;
+    });
+    this.$on("isregister", function (i) {
+      this.isregister = i;
     });
     if (utils.getCookie('token')) {
       var that = this;
