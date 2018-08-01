@@ -96,15 +96,17 @@ var allGoods = new Vue({
       buyAmountErrorText: '',
       buyTotalAppendText: 'USDT',
       buyTotalErrorText: '',
-      total: 0,
+      totalPage: 0,
+      buyTotal: 0,
       sellTotal: 0,
       pageSize: 10,
-      currentPage: 1,
+      buyCurrentPage: 1,
       sellCurrentPage: 1,
       selllist: [],
       buylist: [],
-      test: 'test',
       modal4: false,
+      tabs: ['Buy', 'Sell'],
+      currentTab: 'Buy',
     };
   },
   computed: {
@@ -121,6 +123,16 @@ var allGoods = new Vue({
     },
   },
   methods: {
+    tabChange(name) {
+      this.currentTab = name;
+      // const params = {
+      //   coin: this.coin,
+      //   side: name === 'Buy' ? 'BUY' : 'SELL',
+      //   pageNum: this.page,
+      //   pageSize: 10,
+      // };
+      // this.getAdverts(params);
+    },
     //get market price
     getMarketPrice: function() {
       var that = this;
@@ -244,9 +256,9 @@ var allGoods = new Vue({
         i.paymentBanks &&
         i.paymentBanks
           .map(function(item) {
-            return item.bankName + '\n';
+            return item.bankName;
           })
-          .join();
+          .join('<br/>');
       this.buyData.restAmount = i.volume;
       this.buyData.paymentBanks = this.tradeCard;
       this.buyData.min = i.minTrade;
@@ -525,9 +537,9 @@ var allGoods = new Vue({
       get('api/adverts', data).then(function(res) {
         if (res.success) {
           that.totalPage = Math.round(res.data.data.count / that.pageSize);
-          that.selllist = res.data.data.rsts;
-          that.sellCurrentPage = page;
-          that.sellTotal = res.data.data.count;
+          that.buylist = res.data.data.rsts;
+          that.buyCurrentPage = page;
+          that.buyTotal = res.data.data.count;
         }
       });
     },
@@ -543,9 +555,9 @@ var allGoods = new Vue({
       get('api/adverts', data).then(function(res) {
         if (res.success) {
           that.totalPage = Math.round(res.data.data.count / that.pageSize);
-          that.buylist = res.data.data.rsts;
-          that.currentPage = page;
-          that.total = res.data.data.count;
+          that.selllist = res.data.data.rsts;
+          that.sellCurrentPage = page;
+          that.sellTotal = res.data.data.count;
         }
       });
     },

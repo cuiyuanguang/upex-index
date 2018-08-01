@@ -46,6 +46,34 @@ var Toast = {
 Vue.use(VueI18n);
 
 var i18nComponentsMessages = {
+  login: {
+    zh: '登录',
+    en: 'Log In',
+  },
+  loginout: {
+    zh: '注销',
+    en: 'Log Out',
+  },
+  register: {
+    zh: '注册',
+    en: 'Register',
+  },
+  homepage: {
+    zh: '首页',
+    en: 'Home',
+  },
+  pendingOrder: {
+    zh: '我的挂单',
+    en: 'pending orders',
+  },
+  allOrder: {
+    zh: '我的订单',
+    en: 'my orders',
+  },
+  seeAllOrder: {
+    zh: '查看所有订单',
+    en: 'view all my orders',
+  },
   bindGoogleAuthMsg: {
     zh: '为了您的账户安全，我们强烈推荐您进行谷歌验证',
     en: 'For your account security, we strongly recommend that you turn on second verification',
@@ -93,6 +121,10 @@ var i18nComponentsMessages = {
   number: {
     zh: '账号',
     en: 'Number',
+  },
+  backEdit: {
+    zh: '返回修改',
+    en: 'back to edit',
   },
   bind: {
     zh: '绑定',
@@ -298,17 +330,23 @@ var o_confirm = {
             </div>
             <div class="verify">
               <Tabs v-model="tab">
-                <Tab-Pane name="1" class="robin" label="Google verification code"  icon="social-google" >
-                  <input v-model="gcode" placeholder="please enter verification code" class="g-code" type="text">
+                <Tab-Pane name="1" label="Google verification code"  icon="social-google" >
+                  <div class="g-code">
+                    <input v-model="gcode" placeholder="please enter verification code" type="text">
+                  </div>
                 </Tab-Pane>
                 <Tab-Pane  name="2" label="SMS verification" icon="android-textsms">
-                  <input v-model="ecode" placeholder="please enter verification code" class="g-code" type="text">
+                  <div class="g-code">
+                    <input v-model="ecode" type="text">
+                    <span v-show="sms" class="sendMsg">{{sendText}}s</span>
+                    <span v-show="!sms" @click="sendMsg" class="sendMsg">sms</span>
+                  </div>
                 </Tab-Pane>
               </Tabs>
             </div>
             <div class="foot">
-              <a href="#" class="return" @click="backToEdit"><u>Return to edit</u></a>
-              <button @click="bind" class="binding">Binding</button>
+              <a href="#" class="return" @click="backToEdit"><u>{{ $t('backEdit') }}</u></a>
+              <button @click="bind" class="binding">{{ $t('bind') }}</button>
             </div>
           </div>
         </div>
@@ -322,6 +360,8 @@ var o_confirm = {
       gcode: '',
       ecode: '',
       tab: '1',
+      sms: false,
+      sendText: 'send'
     };
   },
   methods: {
@@ -331,6 +371,28 @@ var o_confirm = {
     backToEdit() {
       this.$parent.$emit('isConfirmShow', false);
       this.$parent.$emit('isBindShow', true);
+    },
+    sendMsg: function() {
+      var that = this;
+      get('api/verifycode_sms', {
+        type: 8,
+      }).then(function(res) {
+        if (res.success) {
+          that.sms = true;
+          that.sendMsgCountDown();
+        }
+      });
+    },
+    sendMsgCountDown: function() {
+      var that = this;
+      that.sendText = 300;
+      var b = setInterval(function() {
+        that.sendText--;
+        if (that.sendText == 0) {
+          that.sms = false;
+          clearInterval(b);
+        }
+      }, 1000);
     },
     bind() {
       var that = this;
@@ -470,7 +532,7 @@ var addContact = {
             {{ $t('addContact') }}
             <Icon @click="close" type="close" class="close"></Icon>
           </div>
-          <div class="o-content">
+          <div class="o-body">
             <div class="tp">
               <div><img src="../images/whatup.png" /></div>
               <p>{{ $t('addContactTips') }}</p>
@@ -756,7 +818,6 @@ var o_my_login = {
               loginPword: that.loginPhonePassword,
             };
             post('api/user/login_in', JSON.stringify(data)).then(function (res) {
-              console.log(res);
               if (res.success) {
                 if (res.data.data.type === '2') {
                   that.$parent.$emit(
@@ -1222,49 +1283,29 @@ var o_my_registerGoogle = {
 var o_header = {
   template: `
     <div id="header" class="om-header">
-      <Row class="flex-wrapper">
-        <i-col class="logo-wrapper" span="4">
+      <Row class="om-header-row">
+        <i-col class="logo-wrapper" span="3">
           <a href="otc_adverts.html">
             <img src="../images/Header-Logo-en.png" width="138px" height="21px" alt="">
           </a>
         </i-col>
-        <i-col span="10" class="om-market">
+        <i-col span="12" class="om-market">
           <ul>
             <li>
-              <a href="otc_adverts.html">{{name}}</a>
+              <a href="otc_adverts.html">{{ $t('homepage') }}</a>
             </li>
           </ul>
         </i-col>
-        <i-col span="10" class="management">
-          <ul>
-            <li class="items" @click="toggleLanguage">
-              <a href="javascript:;">
-                <svg t="1530500732088" style="height: 14px;width: 14px;" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                    p-id="773" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
-                  <defs>
-                    <style type="text/css"></style>
-                  </defs>
-                  <path d="M512 0a512 512 0 1 0 0 1024A512 512 0 0 0 512 0z m0 99.181714c33.060571 0 98.304 86.747429 136.192 214.674286H375.808C413.696 185.782857 478.939429 99.181714 512 99.181714z m-400.896 512a413.549714 413.549714 0 0 1 0-198.217143H253.805714a808.96 808.96 0 0 0 0 198.217143H111.030857z m38.619429 99.035429h122.733714c17.554286 68.900571 43.300571 130.194286 73.216 179.858286a414.500571 414.500571 0 0 1-196.022857-179.931429z m122.733714-396.434286H149.723429a414.573714 414.573714 0 0 1 196.096-179.858286 675.620571 675.620571 0 0 0-73.362286 179.931429zM512 924.964571c-33.645714 0-98.669714-86.747429-136.338286-214.674285h272.676572C610.669714 838.217143 545.572571 924.891429 512 924.891429z m157.988571-313.782857H354.011429a688.859429 688.859429 0 0 1 0-198.217143H669.988571a687.542857 687.542857 0 0 1 0 198.217143z m204.288-297.252571h-122.733714a675.181714 675.181714 0 0 0-73.362286-179.931429 414.500571 414.500571 0 0 1 196.096 179.931429z m-196.022857 576.146286a675.108571 675.108571 0 0 0 73.289143-179.785143h122.733714a414.427429 414.427429 0 0 1-196.022857 179.785143z m91.940572-278.893715a809.033143 809.033143 0 0 0 0-198.217143h142.774857a413.988571 413.988571 0 0 1 0 198.217143H770.194286z"
-                      fill="#ADADAD" p-id="774">
-                  </path>
-                </svg>
-                <span>{{ language }}</span>
-              </a>
-            </li>
-            <li class="items">
-              <a type="primary" @click="showLogin()">登录</a>
-            </li>
-            <li class="items">
-              <a href="otc_my_advert.html">我的挂单</a>
-            </li>
-            <li class="items my-orders">
+        <i-col span="9" class="management">
+          <ul class="text-right">
+            <li class="items my-orders" v-if="logined">
               <Badge :count="orders.length">
-                <a href="otc_my_order.html" class="demo-badge" @click="isMyordersShow=!isMyordersShow">我的订单</a>
+                <a href="otc_my_order.html" class="demo-badge" @click="isMyordersShow=!isMyordersShow">{{ $t('allOrder') }}</a>
               </Badge>
               <div class="order-card" style="display:none;">
                 <div class="arrow"></div>
                 <div class="card-header">
-                  <span>Onging order</span>
+                  <span>Ongoing order</span>
                   <a href="otc_my_order.html">All orders > </a>
                 </div>
                 <ul>
@@ -1288,9 +1329,35 @@ var o_header = {
                   </li>
                 </ul>
                 <div class="card-footer">
-                  <a href="#">查看所有订单</a>
+                  <a href="otc_my_order.html">{{ $t('seeAllOrder') }}</a>
                 </div>
               </div>
+            </li>
+            <li class="items" v-if="logined">
+              <a href="otc_my_advert.html">{{ $t('pendingOrder') }}</a>
+            </li>
+            <li class="items" v-if="logined">
+              <a type="primary" @click="loginOut">{{ $t('loginout') }}</a>
+            </li>
+            <li class="items" v-if="!logined">
+              <a type="primary" @click="showLogin()">{{ $t('login') }}</a>
+            </li>
+            <li class="items" v-if="!logined">
+              <a type="primary" @click="showLogin()">{{ $t('register') }}</a>
+            </li>
+            <li class="items" @click="toggleLanguage">
+              <a href="javascript:;">
+                <svg t="1530500732088" style="height: 14px;width: 14px;" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                    p-id="773" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
+                  <defs>
+                    <style type="text/css"></style>
+                  </defs>
+                  <path d="M512 0a512 512 0 1 0 0 1024A512 512 0 0 0 512 0z m0 99.181714c33.060571 0 98.304 86.747429 136.192 214.674286H375.808C413.696 185.782857 478.939429 99.181714 512 99.181714z m-400.896 512a413.549714 413.549714 0 0 1 0-198.217143H253.805714a808.96 808.96 0 0 0 0 198.217143H111.030857z m38.619429 99.035429h122.733714c17.554286 68.900571 43.300571 130.194286 73.216 179.858286a414.500571 414.500571 0 0 1-196.022857-179.931429z m122.733714-396.434286H149.723429a414.573714 414.573714 0 0 1 196.096-179.858286 675.620571 675.620571 0 0 0-73.362286 179.931429zM512 924.964571c-33.645714 0-98.669714-86.747429-136.338286-214.674285h272.676572C610.669714 838.217143 545.572571 924.891429 512 924.891429z m157.988571-313.782857H354.011429a688.859429 688.859429 0 0 1 0-198.217143H669.988571a687.542857 687.542857 0 0 1 0 198.217143z m204.288-297.252571h-122.733714a675.181714 675.181714 0 0 0-73.362286-179.931429 414.500571 414.500571 0 0 1 196.096 179.931429z m-196.022857 576.146286a675.108571 675.108571 0 0 0 73.289143-179.785143h122.733714a414.427429 414.427429 0 0 1-196.022857 179.785143z m91.940572-278.893715a809.033143 809.033143 0 0 0 0-198.217143h142.774857a413.988571 413.988571 0 0 1 0 198.217143H770.194286z"
+                      fill="#ADADAD" p-id="774">
+                  </path>
+                </svg>
+                <span>{{ language }}</span>
+              </a>
             </li>
           </ul>
         </i-col>
@@ -1307,13 +1374,14 @@ var o_header = {
       <myregistergoogle :register-google="isRegisterGoogleShow"></myregistergoogle>
     </div>
   `,
+  i18n: i18nComponents,
   data() {
     return {
-      name: '首页',
-      language: '中文',
+      language: 'English',
       orders: [],
       ws: null,
       uid: 0,
+      logined: false,
       isLoginShow: false,
       isLoginNextShow: false,
       isRegisterGoogleShow: false,
@@ -1335,18 +1403,11 @@ var o_header = {
       } else {
         this.language = '中文';
       }
-      var languageCode = this.language === '中文' ? 'zh' : 'en';
-      // document.body.style.direction = languageCode === 'zh' ? 'ltr' : 'rtl';
-      document.body.dir = languageCode === 'zh' ? 'ltr' : 'rtl';
-      localStorage.setItem('locale', languageCode);
-      this.$parent.$emit('locale', languageCode);
-    },
-    getMyOrder() {
-      var data = {
-        pageSize: 5,
-        pageNum: 1,
-      };
-      return get('api/personOrders/processing', data);
+      var locale = this.language === '中文' ? 'en' : 'zh';
+      // document.body.style.direction = locale === 'zh' ? 'ltr' : 'rtl';
+      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
+      localStorage.setItem('locale', locale);
+      this.$parent.$emit('locale', locale);
     },
     threadPoxi() {
       var agentData = 'mymessage';
@@ -1381,28 +1442,49 @@ var o_header = {
     websocketclose(e) {
       console.log('connection closed (' + e.code + ')');
     },
+    loginOut() {
+      post('api/user/login_out').then(function(res) {
+        if (res.success) {
+          localStorage.clear();
+          utils.clearCookie();
+          setTimeout(function() {
+            location.href = 'otc_adverts.html';
+          }, 1500);
+        }
+      });
+    },
   },
   components: {
     mylogin: o_my_login,
     myloginnext: o_my_loginNext,
     myregistergoogle: o_my_registerGoogle,
   },
-  created: function () {
+  mounted() {
+    if (utils.getParam('auth') == 1) {
+      this.isLoginShow = true;
+      return;
+    }
     if (utils.getCookie('token')) {
       var that = this;
       get('api/userInfo').then(function (res) {
         if (res.success) {
+          that.logined = true;
           that.uid = res.data.data.userExtView.uid;
           window.localStorage.setItem('uid', that.uid);
+          var data = { pageSize: 5, pageNum: 1 };
+          get('api/personOrders/processing', data).then(function (result) {
+            if (result.success) {
+              if (result.data.data.rsts.length > 5) {
+                that.orders = result.data.data.rsts.slice(0, 5);
+                return;
+              }
+              that.orders = result.data.data.rsts;
+            }
+          });
         }
       });
     }
-    // this.initWebSocket();
-    // this.threadPoxi();
-  },
-  mounted() {
     this.$on('islogin', function (i) {
-      console.log(i);
       this.isLoginShow = i;
     });
     this.$on("isregisterGoogle", function (i) {

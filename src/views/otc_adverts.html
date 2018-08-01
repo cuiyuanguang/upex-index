@@ -23,8 +23,8 @@
         <i-col class="tags" :span="4" :class="tag=='SELL' ? 'act' :'disact' ">
           <span @click="tag='SELL'">{{ $t('sell') }} USDT</span>
         </i-col>
-        <i-col span="8" offset="8">
-          <div style="text-align: right">
+        <i-col span="16">
+          <div class="text-right">
             <span>{{ $t('notSatisfied') }} ?</span>
             <i-button type="ghost" shape="circle" style="color:#ff7100;font-weight: bold;background-color: #ffffff;" @click.native.prevent="showPostDialog();">
               <Icon type="plus-round"></Icon>
@@ -45,6 +45,7 @@
                 <span class="limit-tips">({{ $t('min2maxPurchase') }})</span>
               </th>
               <th>{{ $t('unitPrice') }}</th>
+              <th>{{ $t('payment') }}</th>
               <th>{{ $t('operation') }}</th>
             </tr>
             <tr v-for="item in buylist" :key="item.id">
@@ -57,6 +58,7 @@
                 {{item.minTrade}}--{{item.maxTrade}} SAR
               </td>
               <td class="price">{{item.price}} SAR</td>
+              <td>{{item.paymentBanks[0].bankName}}</td>
               <td>
                 <button @click="showSellUsdt(item)" class="buy-btn">{{ $t('buy') }} USDT</button>
               </td>
@@ -65,7 +67,7 @@
           <div class="page">
             <div class="wrapper">
               <div>
-                <Page show-total @on-change="toBuyPage" :page-size="pageSize" :total="total" :current="sellCurrentPage" size="small"></Page>
+                <Page show-total @on-change="toBuyPage" :page-size="pageSize" :total="buyTotal" :current="buyCurrentPage" size="small"></Page>
               </div>
             </div>
           </div>
@@ -81,7 +83,6 @@
                 <span class="limit-tips">({{ $t('min2maxPurchase') }})</span>
               </th>
               <th>{{ $t('unitPrice') }}</th>
-              <th>{{ $t('payment') }}</th>
               <th>{{ $t('operation') }}</th>
             </tr>
             <tr v-for="item in selllist" :key="item.id">
@@ -94,7 +95,6 @@
                 {{item.minTrade}}--{{item.maxTrade}} SAR
               </td>
               <td class="price">{{item.price}} SAR</td>
-              <td>{{item.paymentBanks[0].bankName}}</td>
               <td>
                 <button @click="showBuyUsdt(item)" class="buy-btn">{{ $t('sell') }} USDT</button>
               </td>
@@ -103,7 +103,7 @@
           <div class="page">
             <div class="wrapper">
               <div>
-                <Page show-total @on-change="toSellPage" :page-size="pageSize" :total="sellTotal" :current="currentPage" size="small"></Page>
+                <Page show-total @on-change="toSellPage" :page-size="pageSize" :total="sellTotal" :current="sellCurrentPage" size="small"></Page>
               </div>
             </div>
           </div>
@@ -283,8 +283,8 @@
               </div>
             </i-col>
             <i-col span="4" class="btn-wrapper">
-              <button v-show="tag==='BUY'" @click="sell" class="order-btn">{{ $t('sell') }}</button>
-              <button v-show="tag==='SELL'" @click="buy" class="order-btn">{{ $t('buy') }}</button>
+              <button v-show="tag==='BUY'" @click="buy" class="order-btn">{{ $t('buy') }}</button>
+              <button v-show="tag==='SELL'" @click="sell" class="order-btn">{{ $t('sell') }}</button>
             </i-col>
           </Row>
           <div class="buyError error">{{error.buyError}}</div>

@@ -35,22 +35,23 @@ $http.interceptors.response.use(
       if (result.code != 0) {
         // 接口错误码判断
         // Toast.show(toastMsg[result.code][locale], { icon: 'warning' });
-        Toast.show(result.message, {
+        Toast.show(result.message || result.msg, {
           icon: 'warning',
           callback: function() {
             if (result.code == 2048) {
               utils.delCookie('token');
+              location.href = 'otc_adverts.html?auth=1';
             }
           }
         });
         return {
           success: false,
-          data: result.message,
+          data: result.message || result.msg,
         };
       }
       if (response.config.method === 'post') {
         // Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
-        Toast.show(result.message, { icon: 'ok' });
+        Toast.show(result.message || result.msg, { icon: 'ok' });
       }
       return {
         success: true,
