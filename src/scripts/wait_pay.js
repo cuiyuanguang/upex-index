@@ -40,6 +40,12 @@ var waitPay = new Vue({
       },
     };
   },
+  computed: {
+    arrivalTime: function() {
+      var date = new Date(this.orderInfo.paymentTime);
+      return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+    },
+  },
   methods: {
     confirmOrder: function() {
       var _this = this;

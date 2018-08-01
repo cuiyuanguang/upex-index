@@ -14,21 +14,21 @@
       <div class="pay">
         <div class="pay-header">
           <h3 v-if="step==1">
-            Waiting for buyers payment
+            {{ $t('waitForBuyer') }}
           </h3>
           <h3 v-if="step==2">
-            Buyer has already paid {{orderInfo.totalPrice}} SAR
+            {{ $t('buyerPaid') }} {{orderInfo.totalPrice}} SAR
           </h3>
           <h3 v-if="step==3">
-            Successful transaction - arrived at
+            {{ $t('transactionSuccessful') }} - {{ $t('receivePayment') }}
             <span style="color:#0CBF48">{{orderInfo.totalPrice}} SAR</span>
           </h3>
           <div class="step-wrapper">
             <Steps :current="step">
-              <Step content="Successfully order"></Step>
-              <Step content="Waiting for buyers payment"></Step>
-              <Step content="Confirm payment "></Step>
-              <Step content="Transaction complete"></Step>
+              <Step :content="$t('orderSuccess')"></Step>
+              <Step :content="$t('waitForBuyer')"></Step>
+              <Step :content="$t('payAndConfirm')"></Step>
+              <Step :content="$t('tradeDone')"></Step>
             </Steps>
           </div>
         </div>
@@ -39,19 +39,19 @@
               <ul v-if="step<3">
                 <li class="info-items">
                   <Row>
-                    <i-col span="6" class="info-key">Order Number :</i-col>
+                    <i-col span="6" class="info-key">{{ $t('orderNo') }} :</i-col>
                     <i-col span="18" class="info-value">{{orderInfo.orderId}}</i-col>
                   </Row>
                 </li>
                 <li class="info-items">
                   <Row>
-                    <i-col span="6" class="info-key">Total purchases :</i-col>
+                    <i-col span="6" class="info-key">{{ $t('totalPurchase') }} :</i-col>
                     <i-col span="18" class="info-value">{{orderInfo.totalVolume}}</i-col>
                   </Row>
                 </li>
                 <li class="info-items">
                   <Row>
-                    <i-col span="6" class="info-key">Total price :</i-col>
+                    <i-col span="6" class="info-key">{{ $t('totalPrice') }} :</i-col>
                     <i-col span="18" class="info-value">{{orderInfo.totalPrice}}</i-col>
                   </Row>
                 </li>
@@ -59,37 +59,37 @@
               <ul v-if="step==3">
                 <li class="info-items">
                   <Row>
-                    <i-col span="6" class="info-key">Order Number :</i-col>
+                    <i-col span="6" class="info-key">{{ $t('orderNo') }} :</i-col>
                     <i-col span="18" class="info-value">{{orderInfo.orderId}}</i-col>
                   </Row>
                 </li>
                 <li class="info-items">
                   <Row>
-                    <i-col span="6" class=" info-key">Received :</i-col>
+                    <i-col span="6" class=" info-key">{{ $t('received') }} :</i-col>
                     <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalVolume}}</i-col>
                   </Row>
                 </li>
                 <li class="info-items">
                   <Row>
-                    <i-col span="6" class="info-key">Selling quantity :</i-col>
+                    <i-col span="6" class="info-key">{{ $t('sold') }} :</i-col>
                     <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalPrice}}</i-col>
                   </Row>
                 </li>
                 <li class="info-items">
                   <Row>
-                    <i-col span="6" class="info-key">Time of arrival :</i-col>
-                    <i-col span="18" class="info-value">{{orderInfo.totalPrice}}</i-col>
+                    <i-col span="6" class="info-key">{{ $t('timeOfArrival') }} :</i-col>
+                    <i-col span="18" class="info-value">{{ arrivalTime }}</i-col>
                   </Row>
                 </li>
               </ul>
             </i-col>
             <i-col span="12">
-              <div class="info-header">{{ $t('orderInfo') }}</div>
+              <div class="info-header">{{ $t('buyInfo') }}</div>
               <div>
                 <Row>
                   <i-col span="9">
                     <Icon type="person" size="16"></Icon>
-                    Buyer Name
+                    {{ $t('buyName') }}
                   </i-col>
                   <i-col span="15">
                     {{orderInfo.nickname}}
@@ -98,7 +98,7 @@
                 <Row>
                   <i-col span="9">
                     <Icon type="iphone" size="20" style="width: 12px;text-align: center;"></Icon>
-                    Phone
+                    {{ $t('phone') }}
                   </i-col>
                   <i-col span="15">
                     {{orderInfo.phone}}
@@ -107,12 +107,12 @@
                 <Row>
                   <i-col span="9">
                     <Icon type="android-contacts" size="16"></Icon>
-                    SocialNumber
+                    {{ $t('socialNumber') }}
                   </i-col>
                   <i-col span="15">
                     <input type="text" name="Social Number" readonly class="input-copy" :value="orderInfo.socialNumber" @click="copy($event)">
                     <a class="contact" :href="'https://api.whatsapp.com/send?phone='+orderInfo.socialNumber">
-                      <Icon type="ios-telephone-outline"></Icon>contact seller</a>
+                      <Icon type="ios-telephone-outline"></Icon>{{ $t('contactBuyer') }}</a>
                   </i-col>
                 </Row>
               </div>
@@ -120,33 +120,32 @@
           </Row>
         </div>
         <div class="pay-status" v-if="step==1">
-          <h3>Waiting for the buyer to pay</h3>
+          <h3>{{ $t('waitForBuyer') }}</h3>
           <h3>
-            Time Left:
+            {{ $t('restTime') }}:
             <span style="color: red;">{{leftTime}}</span>
           </h3>
-          <p>1. The delay in arrival time due to force majeure factors such as cross-banking, large-scale transfer, and bank
-            settlement is beyond the control of both the buyer and the seller. Please wait patiently.</p>
-          <p>2. Cancellation orders up to 3 times on that day will be limited to the purchase function on that day.</p>
+          <p>1. {{ $t('helpTipsFirst') }}</p>
+          <p>2. {{ $t('helpTipsSecond') }}</p>
         </div>
         <div class="pay-status" v-if="step==2">
-          <h3>After the bank card {{ orderInfo.bankCardLastNum }}, to pay you
-            <span style="color:RGBA(255, 113, 0, 1);"> {{orderInfo.totalPrice}}</span> SAR , whether to receive the full amount?
-            <br> If you do not receive it yet, pleasewait patiently
+          <h3>{{ $t('lastFourNumber') }} {{ orderInfo.bankCardLastNum }}, {{ $t('payYou') }}
+            <span style="color:RGBA(255, 113, 0, 1);"> {{orderInfo.totalPrice}}</span> SAR , {{ $t('receiveAll') }}
+            <br> {{ $t('notReceiveAndWait') }}
           </h3>
-          <h3>Time Left:
+          <h3>{{ $t('restTime') }}:
             <span style="color: red;"> {{leftTime}}</span>
           </h3>
           <div class="wait-pay" style="margin: 20px 0;">
-            <button @click="confirmOrder" class="received">Confirm payment</button>
+            <button @click="confirmOrder" class="received">{{ $t('confirm') }}</button>
           </div>
           <p>
-            1. If you do not receive the money within 24 hours, or the amount does not match, please contact customer service
-            <br> 2. Order overtime is not confirmed, customer service will assist the transaction
+            1. {{ $t('helpTipsThird') }}
+            <br> 2. {{ $t('helpTipsFourth') }}
           </p>
         </div>
         <div class="pay-status" v-if="step==3">
-          <h2 style="color: rgb(40, 198, 40)">transaction finished Successfully!</h2>
+          <h2 style="color: rgb(40, 198, 40)">{{ $t('tradeDone') }}</h2>
         </div>
       </div>
     </div>
