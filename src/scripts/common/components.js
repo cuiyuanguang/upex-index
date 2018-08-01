@@ -74,6 +74,30 @@ var i18nComponentsMessages = {
     zh: '查看所有订单',
     en: 'view all my orders',
   },
+  ongoingOrders: {
+    zh: '进行中的订单',
+    en: 'Ongoing orders',
+  },
+  viewOrder: {
+    zh: '查看',
+    en: 'view',
+  },
+  payToSeller: {
+    zh: '须向卖家支付',
+    en: 'payment to seller',
+  },
+  waitForBuyer: {
+    zh: '等待买家支付',
+    en: 'Wait for buyer to pay',
+  },
+  payInTime: {
+    zh: '支付截止时间',
+    en: 'Complete the payment in',
+  },
+  waitForTime: {
+    zh: '交易截止时间',
+    en: 'Waiting for the buyer to pay',
+  },
   bindGoogleAuthMsg: {
     zh: '为了您的账户安全，我们强烈推荐您进行谷歌验证',
     en: 'For your account security, we strongly recommend that you turn on second verification',
@@ -540,12 +564,24 @@ var addContact = {
             <ul class="bt">
               <li>
                 <p>WhatsApp {{ $t('account') }}</p>
-                <i-input v-model="wapp">
-                  <i-select slot="prepend" style="width: 80px">
-                    <Option value="http">+ 186</Option>
-                    <Option value="https">+ 2300</Option>
-                  </i-select>
-                </i-input>
+                <Input
+                  v-model="wapp"
+                  placeholder="Enter your WhatsApp number"
+                  class="iview-input iview-input-countryPhone"
+                >
+                  <Select v-model="selectCountry" slot="prepend" filterable style="width:86px">
+                    <Option
+                      v-if="countryArr.length > 0"
+                      v-for="country in countryArr"
+                      :value="country.dialingCode"
+                      :label="country.dialingCode"
+                      style="width:100%;"
+                    >
+                      <span class="float-left">{{country.dialingCode}}</span>
+                      <span class="float-right" style="color:#aaaaaa;">{{country.enName}}</span>
+                    </Option>
+                  </Select>
+                </Input>
               </li>
               <li>
                 <button @click="bind">{{ $t('submit') }}</button>
@@ -560,6 +596,8 @@ var addContact = {
   data() {
     return {
       wapp: '',
+      countryArr: [],
+      selectCountry: '+86',
     };
   },
   props: ['show', 'locale'],
@@ -567,14 +605,25 @@ var addContact = {
     close() {
       this.$parent.$emit('isContactShow', false);
     },
+    getCountry() {
+      var that = this;
+      get('api/country').then(function (res) {
+        if (res.success) {
+          that.countryArr = res.data.data;
+        }
+      });
+    },
     bind() {
       var that = this;
-      post('api/watchapp', this.wapp).then(function (res) {
+      post('api/watchapp', this.selectCountry + ',' +this.wapp).then(function (res) {
         if (res.data.message == 'otc.result.success') {
           that.$parent.$emit('isAddContactShow', false);
         }
       });
     },
+  },
+  mounted: function() {
+    this.getCountry();
   },
   watch: {
     locale: function(newVal, oldVal) {
@@ -782,7 +831,7 @@ var o_my_login = {
       this.loginPhonePassword = '';
     },
     asyncCancel() {
-      clear();
+      this.clear();
       this.$parent.$emit('islogin', false);
       this.modal_loading = false;
     },
@@ -830,7 +879,7 @@ var o_my_login = {
                 that.$parent.$emit('isLoginNextCookie', res.data.data.token);
                 that.$parent.$emit('islogin', false);
                 that.modal_loading = false;
-                clear()
+                that.clear()
               } else {
                 that.modal_loading = false;
               }
@@ -867,7 +916,7 @@ var o_my_login = {
                 that.$parent.$emit('isLoginNextType', res.data.data.type);
                 that.$parent.$emit('isLoginNextCookie', res.data.data.token);
                 that.$parent.$emit('islogin', false);
-                clear()
+                that.clear()
               } else {
                 that.modal_loading = false;
               }
@@ -879,7 +928,7 @@ var o_my_login = {
     },
     getCountry() {
       var that = this;
-      get('api/country', {}, this.token).then(function (res) {
+      get('api/country').then(function (res) {
         if (res.success) {
           that.countryArr = res.data.data;
         } else {
@@ -1211,25 +1260,25 @@ var o_header = {
               <div class="order-card" style="display:none;">
                 <div class="arrow"></div>
                 <div class="card-header">
-                  <span>Ongoing order</span>
-                  <a href="otc_my_order.html">All orders > </a>
+                  <span class="float-left">{{ $t('ongoingOrders') }}</span>
+                  <a href="otc_my_order.html">{{ $t('allOrder') }} > </a>
                 </div>
                 <ul>
                   <li v-for="item in orders" :key="item.sequence">
                     <Row>
-                      <i-col span="4">
+                      <i-col span="2" class="text-left">
                         <div class="buyType" v-if="item.buyer.id==uid">buy</div>
                         <div class="sellType" v-else>sell</div>
                       </i-col>
-                      <i-col span="16">
-                        <div v-if="item.buyer.id==uid" class="tip"> Payment to the seller {{item.totalPrice}}SAR</div>
-                        <div v-else class="tip"> Waiting for buyers payment{{item.totalPrice}}SAR</div>
-                        <span v-if="item.buyer.id==uid">Complete the payment in {{item.ctime | toHours }}</span>
-                        <span v-else>Waiting for the buyer to pay {{item.ctime | toHours }}</span>
+                      <i-col span="18" class="text-left" style="padding-left:6px;">
+                        <div v-if="item.buyer.id==uid" class="tip">{{ $t('payToSeller') }} {{item.totalPrice}}SAR</div>
+                        <div v-else class="tip">{{ $t('waitForBuyer') }}{{item.totalPrice}}SAR</div>
+                        <span v-if="item.buyer.id==uid">{{ $t('payInTime') }} {{item.ctime | toHours }}</span>
+                        <span v-else>{{ $t('waitForTime') }} {{item.ctime | toHours }}</span>
                       </i-col>
-                      <i-col span="4">
-                        <a v-if="item.buyer.id==uid" class="view" :href="'otc_pay.html?sequence='+item.sequence">view</a>
-                        <a v-else class="view" :href="'otc_wait_pay.html?sequence='+item.sequence">view</a>
+                      <i-col span="4" class="text-right">
+                        <a v-if="item.buyer.id==uid" class="view" :href="'otc_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
+                        <a v-else class="view" :href="'otc_wait_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
                       </i-col>
                     </Row>
                   </li>
@@ -1364,10 +1413,10 @@ var o_header = {
     myregistergoogle: o_my_registerGoogle,
   },
   mounted() {
-    if (utils.getParam('auth') == 1) {
-      this.isLoginShow = true;
-      return;
-    }
+    // if (utils.getParam('auth') == 1) {
+    //   this.isLoginShow = true;
+    //   return;
+    // }
     if (utils.getCookie('token')) {
       var that = this;
       get('api/userInfo').then(function (res) {
