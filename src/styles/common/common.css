@@ -345,6 +345,18 @@ input::-webkit-inner-spin-button {
   padding: 0;
 }
 
+.om-header .management > ul > li .ivu-select-dropdown {
+  width: 80px;
+}
+
+.om-header .management > ul > li .ivu-select-dropdown .ivu-dropdown-menu {
+  min-width: 80px;
+}
+
+.om-header .management > ul > li .ivu-select-dropdown .ivu-dropdown-menu .ivu-dropdown-item{
+  text-align: center;
+}
+
 /*****************************/
 
 /*       bind card style     */

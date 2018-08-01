@@ -1,5 +1,3 @@
-Vue.use(VueI18n);
-
 var i18n = new VueI18n({
   locale: 'zh', // set locale
   messages: utils.transform(messages),
@@ -165,6 +163,11 @@ var pay = new Vue({
     //------------------------------GET ORDER INFO END---------------------------------------//	
   },
   mounted: function () {
+    var locale = localStorage.getItem('locale');
+    if (locale) {
+      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
+      this.$i18n.locale = locale;
+    }
     this.$on('locale', function(i) {
       this.locale = i;
     });

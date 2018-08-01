@@ -136,7 +136,7 @@ var messages = {
     en: 'back to homepage',
   },
   helpTipsFirst: {
-    zh: '您的钱款将会直接转到卖家的账户，在交易过程中，订单中涉及的数字货币交付被系统锁定。请放心支付。',
+    zh: '您的钱款将会直接转到卖家的账户，在交易过程中，订单中涉及的数字货币将会被系统锁定。请放心支付。',
     en: 'Your remittance will be directly transferred to the seller\'s account. During the transaction, the digital currency sold by the seller is locked.Please feel free to purchase it.',
   },
   helpTipsSecond: {
