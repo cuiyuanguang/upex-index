@@ -209,7 +209,7 @@ var om_notice = {
     },
   },
   watch: {
-    locale: function(newVal, oldVal) {
+    locale: function (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
       }
@@ -280,7 +280,7 @@ var o_bindcard = {
     },
   },
   watch: {
-    locale: function(newVal, oldVal) {
+    locale: function (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
       }
@@ -372,21 +372,21 @@ var o_confirm = {
       this.$parent.$emit('isConfirmShow', false);
       this.$parent.$emit('isBindShow', true);
     },
-    sendMsg: function() {
+    sendMsg: function () {
       var that = this;
       get('api/verifycode_sms', {
         type: 8,
-      }).then(function(res) {
+      }).then(function (res) {
         if (res.success) {
           that.sms = true;
           that.sendMsgCountDown();
         }
       });
     },
-    sendMsgCountDown: function() {
+    sendMsgCountDown: function () {
       var that = this;
       that.sendText = 300;
-      var b = setInterval(function() {
+      var b = setInterval(function () {
         that.sendText--;
         if (that.sendText == 0) {
           that.sms = false;
@@ -429,7 +429,7 @@ var o_confirm = {
     });
   },
   watch: {
-    locale: function(newVal, oldVal) {
+    locale: function (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
       }
@@ -513,7 +513,7 @@ var selectCard = {
     this.status = this.getStatus();
   },
   watch: {
-    locale: function(newVal, oldVal) {
+    locale: function (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
       }
@@ -577,7 +577,7 @@ var addContact = {
     },
   },
   watch: {
-    locale: function(newVal, oldVal) {
+    locale: function (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
       }
@@ -620,7 +620,7 @@ var g_auth = {
     },
   },
   watch: {
-    locale: function(newVal, oldVal) {
+    locale: function (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
       }
@@ -633,7 +633,7 @@ var o_my_login = {
   template: `
     <Modal
       v-model="login1"
-      title="Welcome to UpEx.io"
+      title="Welcome Login"
       @on-cancel="asyncCancel"
       class="my-login"
       class-name="vertical-center-modal"
@@ -775,14 +775,14 @@ var o_my_login = {
     loginPasswordFocus() {
       this.loginPasswordError = false;
     },
-    clear(){
+    clear() {
       this.loginEmailVal = '';
       this.loginEmailPassword = '';
       this.loginPhoneVal = '';
       this.loginPhonePassword = '';
     },
     asyncCancel() {
-      clear();
+      this.clear();
       this.$parent.$emit('islogin', false);
       this.modal_loading = false;
     },
@@ -830,7 +830,7 @@ var o_my_login = {
                 that.$parent.$emit('isLoginNextCookie', res.data.data.token);
                 that.$parent.$emit('islogin', false);
                 that.modal_loading = false;
-                clear()
+                that.clear()
               } else {
                 that.modal_loading = false;
               }
@@ -857,7 +857,7 @@ var o_my_login = {
             };
             post('api/user/login_in', JSON.stringify(data)).then(function (res) {
               if (res.success) {
-               if(res.data.data.type === '3'){
+                if (res.data.data.type === '3') {
                   that.$parent.$emit(
                     'isLoginNextEmail',
                     that.loginPhoneVal
@@ -867,7 +867,7 @@ var o_my_login = {
                 that.$parent.$emit('isLoginNextType', res.data.data.type);
                 that.$parent.$emit('isLoginNextCookie', res.data.data.token);
                 that.$parent.$emit('islogin', false);
-                clear()
+                that.clear()
               } else {
                 that.modal_loading = false;
               }
@@ -971,7 +971,7 @@ var o_my_loginNext = {
       </div>
     </Modal>
   `,
-  props: ['loginNext', 'isLoginNextType', 'isLoginNextCookie', 'isLoginNextPhone','isLoginNextEmail'],
+  props: ['loginNext', 'isLoginNextType', 'isLoginNextCookie', 'isLoginNextPhone', 'isLoginNextEmail'],
   data() {
     return {
       loginNextError: false,
@@ -990,13 +990,13 @@ var o_my_loginNext = {
     };
   },
   methods: {
-    loginNextFocus(){
+    loginNextFocus() {
       this.loginNextError = false;
       this.loginNextErrorText = ''
     },
     loginNextSubmit() {
       var that = this;
-      if(!this.modal_loading){
+      if (!this.modal_loading) {
         that.modal_loading = true;
         const data = {
           authCode: this.loginNextSmsCode,
@@ -1028,7 +1028,7 @@ var o_my_loginNext = {
         const isLoginNextPhoneNumCountry = isLoginNextPhoneNumArr[0].substring(1);
         const isLoginNextPhoneNumPhone = isLoginNextPhoneNumArr[1];
         var data;
-        if(type === 'phone'){
+        if (type === 'phone') {
           data = {
             countryCode: isLoginNextPhoneNumCountry,
             mobile: isLoginNextPhoneNumPhone,
@@ -1040,7 +1040,7 @@ var o_my_loginNext = {
             } else {
             }
           });
-        }else if(type === 'email'){
+        } else if (type === 'email') {
           data = {
             email: this.isLoginNextEmailNum,
             operationType: '4',
@@ -1078,6 +1078,7 @@ var o_my_loginNext = {
       this.$Message.info('Clicked ok');
     },
   },
+
   watch: {
     isLoginNextType: function (a, b) {
       this.isLoginNextTypeNum = a;
@@ -1094,97 +1095,443 @@ var o_my_loginNext = {
   },
 };
 var o_my_register = {
-    template: `
+  template: `
       <Modal
       v-model="register"
-      @on-ok="ok"
       class-name="vertical-center-modal"
-      @on-cancel="asyncCancel" class="my-login"
+      @on-cancel="asyncCancel" class="my-login my-register"
       width="500"
+      title="Welcome Register"
       >
-      <Tabs v-model="loginWrap" @on-click="loginEmailChange">
-        <TabPane label="E-mail" name="loginEmail">
-          <!--<Input-->
-            <!--:class="loginEmailError?'is-red':'is-gray'"-->
-            <!--v-model="loginEmailVal"-->
-            <!--placeholder="Enter your email"-->
-            <!--class="iview-input"-->
-            <!--@on-focus="loginEmailFocus"-->
-          <!--&gt;</Input>-->
-          <!--<p class="my-login-error">{{loginEmailErrorText}}</p>-->
-          <!--<Input-->
-            <!--:class="loginEmailPasswordError?'is-red':'is-gray'"-->
-            <!--v-model="loginEmailPassword"-->
-            <!--type="password"-->
-            <!--placeholder="Enter your password"-->
-            <!--class="iview-input"-->
-            <!--@on-focus="loginEmailPasswordFocus"-->
-          <!--&gt;-->
-            <!--<span slot="append" class="my-slot-append" @click="runForgetPassword">forget password?</span>-->
-          <!--</Input>-->
-          <!--<p class="my-login-error">{{loginEmailPasswordErrorText}}</p>-->
+      <Tabs v-model="registerWrap" @on-click="tabChange">
+        <TabPane label="E-mail" name="tabEmail">
+          <Input
+            :class="emailValError?'is-red':'is-gray'"
+            v-model="emailVal"
+            placeholder="Enter your email"
+            class="iview-input"
+            @on-focus="emailValFocus"
+          ></Input>
+          <p class="my-login-error">{{emailValErrorText}}</p>
+          <Input
+          v-model="emailSmsCode"
+          type="text"
+          placeholder="E-mail verification code"
+          class="loginNext-input loginNext-sms-input" @on-focus="emailSmsCodeFocus" :class="emailSmsCodeError?'loginNext-input-red':' '">
+          <span slot="append"
+            class="my-slot-append"
+            @click="runSendSms('email')"
+            :class="timerEmail?'my-slot-append-gary':'my-slot-append'"
+          >
+            {{sendSmsEmail}}
+          </span>
+        </Input>
+        <p class="my-loginNext-error">{{emailSmsCodeErrorText}}</p>
+          <Input
+            :class="emailPasswordError?'is-red':'is-gray'"
+            v-model="emailPassword"
+            type="password"
+            placeholder="Enter your password"
+            class="iview-input"
+            @on-focus="emailPasswordFocus">
+          </Input>
+          <p class="my-login-error">{{emailPasswordErrorText}}</p>
+           <Input
+            :class="emailPasswordAgainError?'is-red':'is-gray'"
+            v-model="emailPasswordAgain"
+            type="password"
+            placeholder="Enter your password again"
+            class="iview-input"
+            @on-focus="emailPasswordAgainFocus">
+          </Input>
+          <p class="my-login-error">{{emailPasswordAgainErrorText}}</p>
         </TabPane>
-        <TabPane label="Phone" name="loginPhone">
-          <!--<Input-->
-            <!--:class="loginPhoneError?'is-red':'is-gray'"-->
-            <!--v-model="loginPhoneVal"-->
-            <!--placeholder="Enter your Phone number"-->
-            <!--class="iview-input iview-input-countryPhone"-->
-            <!--@on-focus="loginPhoneFocus"-->
-          <!--&gt;-->
-            <!--<Select v-model="selectCountry" slot="prepend" filterable style="width:86px">-->
-              <!--<Option-->
-                <!--v-if="countryArr.length > 0"-->
-                <!--v-for="country in countryArr"-->
-                <!--:value="country.dialingCode"-->
-                <!--:label="country.dialingCode"-->
-              <!--&gt;-->
-                <!--<span class="">{{country.dialingCode}}</span>-->
-                <!--<span class="iview-input-countryPhone-span">{{country.enName}}</span>-->
-              <!--</Option>-->
-            <!--</Select>-->
-          <!--</Input>-->
-          <!--<p class="my-login-error">{{loginPhoneErrorText}}</p>-->
-          <!--<Input-->
-            <!--:class="loginPhonePasswordError?'is-red':'is-gray'"-->
-            <!--v-model="loginPhonePassword"-->
-            <!--type="password"-->
-            <!--placeholder="Enter your password"-->
-            <!--class="iview-input"-->
-            <!--@on-focus="loginPhonePasswordFocus"-->
-          <!--&gt;-->
-            <!--<span slot="append" class="my-slot-append" @click="runForgetPassword">forget password?</span>-->
-          <!--</Input>-->
-            <!--<p class="my-login-error">{{loginPhonePasswordErrorText}}</p>-->
+        <TabPane label="Phone" name="registerPhone">
+          <Input
+            :class="phoneValError?'is-red':'is-gray'"
+            v-model="phoneVal"
+            placeholder="Enter your Phone number"
+            class="iview-input iview-input-countryPhone"
+            @on-focus="phoneValFocus"
+           >
+            <Select v-model="selectCountry" slot="prepend" filterable style="width:86px">
+              <Option
+                v-if="countryArr.length > 0"
+                v-for="country in countryArr"
+                :value="country.dialingCode"
+                :label="country.dialingCode"
+              >
+                <span class="">{{country.dialingCode}}</span>
+                <span class="iview-input-countryPhone-span">{{country.enName}}</span>
+              </Option>
+            </Select>
+            </Input>
+             <p class="my-loginNext-error">{{phoneValErrorText}}</p>
+          <Input
+          v-model="phoneSmsCode"
+          type="text"
+          placeholder="E-mail verification code"
+          class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
+          <span slot="append"
+            class="my-slot-append"
+            @click="runSendSms('phone')"
+            :class="timerPhone?'my-slot-append-gary':'my-slot-append'"
+          >
+            {{sendSmsPhone}}
+          </span>
+        </Input>
+        <p class="my-loginNext-error">{{phoneSmsCodeErrorText}}</p>
+          <Input
+            :class="phonePasswordError?'is-red':'is-gray'"
+            v-model="phonePassword"
+            type="password"
+            placeholder="Enter your password"
+            class="iview-input"
+            @on-focus="phonePasswordFocus">
+          </Input>
+          <p class="my-login-error">{{phonePasswordErrorText}}</p>
+           <Input
+            :class="phonePasswordAgainError?'is-red':'is-gray'"
+            v-model="phonePasswordAgain"
+            type="password"
+            placeholder="Enter your password again"
+            class="iview-input"
+            @on-focus="phonePasswordAgainFocus">
+          </Input>
+          <p class="my-login-error">{{phonePasswordAgainErrorText}}</p>
         </TabPane>
       </Tabs>
       <div slot="footer">
-        <!--<Button type="primary" size="large" long :loading="modal_loading" @click="mySubmit">Log in</Button>-->
-        <!--<div class="login-footer-wrap">-->
-          <!--<span class="black">No account</span>-->
-          <!--<span class="blue" @click="runRegister">Register an account</span>-->
-        <!--</div>-->
+        <Button type="primary" size="large" long :loading="modal_loading" @click="mySubmit">Register</Button>
+        <div class="login-footer-wrap">
+          <span class="black">I have an account</span>
+          <span class="blue" @click="runLogin">log in</span>
+        </div>
       </div>
-      </Modal>
+      </Modal>  
     `,
   data() {
     return {
-      loginWrap: '',
+      //email
+      emailVal: '',
+      emailValError: false,
+      emailValErrorText: '',
+      emailSmsCode: '',
+      emailSmsCodeError: false,
+      emailSmsCodeErrorText: '',
+      emailPassword: '',
+      emailPasswordError: false,
+      emailPasswordErrorText: '',
+      emailPasswordAgain: '',
+      emailPasswordAgainError: false,
+      emailPasswordAgainErrorText: '',
+      //phone
+      phoneVal: '',
+      phoneValError: false,
+      phoneValErrorText: '',
+      selectCountry: '+86',
+      countryArr: [],
+      phoneSmsCode: '',
+      phoneSmsCodeError: false,
+      phoneSmsCodeErrorText: '',
+      phonePassword: '',
+      phonePasswordError: false,
+      phonePasswordErrorText: '',
+      phonePasswordAgain: '',
+      phonePasswordAgainError: false,
+      phonePasswordAgainErrorText: '',
+      register: '',
+      registerWrap: 'tabEmail',
       modal_loading: false,
+      error: {
+        null: '不能为空',
+        phoneNum: '输入合法的电话号码',
+        emailNum: '输入合法的邮箱地址',
+        noSame: '两次密码不一样',
+        password: '以字母开头，长度在8-64之间，只能包含字符、数字',
+      },
+      sendSmsEmail: 'get verification code',
+      sendSmsPhone: 'get verification code',
+      showEmail: true,
+      showPhone: true,
+      countEmail: '',
+      countPhone: '',
+      timerEmail: null,
+      timerPhone: null,
     };
   },
   props: ['register'],
   methods: {
-    loginEmailChange(name) {
-      this.loginWrap = name;
+    //email
+    emailValFocus() {
+      this.emailValError = false;
+      this.emailValErrorText = '';
+    },
+    emailSmsCodeFocus() {
+      this.emailSmsCodeError = false;
+      this.emailSmsCodeErrorText = ''
+    },
+    emailPasswordFocus() {
+      this.emailPasswordError = false;
+      this.emailPasswordErrorText = '';
+      this.emailPasswordAgainError = false;
+      this.emailPasswordAgainErrorText = ''
+    },
+    emailPasswordAgainFocus() {
+      this.emailPasswordAgainError = false;
+      this.emailPasswordAgainErrorText = ''
+    },
+    //phone
+    phoneValFocus() {
+      this.phoneValError = false;
+      this.phoneValErrorText = '';
+    },
+    phoneSmsCodeFocus() {
+      this.phoneSmsCodeError = false;
+      this.phoneSmsCodeErrorText = ''
+    },
+    phonePasswordFocus() {
+      this.phonePasswordError = false;
+      this.phonePasswordErrorText = '';
+      this.phonePasswordAgainError = false;
+      this.phonePasswordAgainErrorText = ''
+    },
+    phonePasswordAgainFocus() {
+      this.phonePasswordAgainError = false;
+      this.phonePasswordAgainErrorText = ''
+    },
+    getCountry() {
+      var that = this;
+      get('api/country', {}, this.token).then(function (res) {
+        if (res.success) {
+          that.countryArr = res.data.data;
+        } else {
+        }
+      });
+    },
+    //发送验证码
+    runSendSms(type) {
+      const TIME_COUNT = 10;
+      var that = this;
+      var data;
+      if (type === 'phone') {
+        if(!that.timerPhone){
+          if (that.phoneVal === '') {
+            that.modal_loading = false;
+            that.phoneValError = true;
+            that.phoneValErrorText = that.error.null;
+          } else if (!that.phoneReg(that.phoneVal)) {
+            that.modal_loading = false;
+            that.phoneValError = true;
+            that.phoneValErrorText = that.error.phoneNum;
+          }else{
+            const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
+            const isLoginNextPhoneNumPhone = that.phoneVal;
+            data = {
+              countryCode: isLoginNextPhoneNumCountry,
+              mobile: isLoginNextPhoneNumPhone,
+              operationType: '1',
+            };
+            that.countPhone = TIME_COUNT;
+            that.sendSmsPhone = 'Resend after ' + that.countPhone + 's';
+            that.showPhone = false;
+            that.timerPhone = setInterval(() => {
+              if (that.countPhone > 0 && that.countPhone <= TIME_COUNT) {
+                that.countPhone--;
+                that.sendSmsPhone = 'Resend after ' + that.countPhone + ' s';
+              } else {
+                that.sendSmsPhone = 'Reacquire';
+                that.showPhone = true;
+                clearInterval(that.timerPhone);
+                that.timerPhone = null;
+              }
+            }, 1000);
+            post('api/common/smsValidCode', JSON.stringify(data)).then(function (res) {
+              if (res.success) {
+
+              } else {
+
+              }
+            });
+          }
+        }
+      } else if (type === 'email') {
+        if(!that.timerEmail){
+          if (that.emailVal === '') {
+            that.modal_loading = false;
+            that.emailValError = true;
+            that.emailValErrorText = that.error.null;
+          } else if (!that.emailReg(that.emailVal)) {
+            that.modal_loading = false;
+            that.emailValError = true;
+            that.emailValErrorText = that.error.emailNum;
+          }else{
+            data = {
+              email: that.emailVal,
+              operationType: '1',
+            };
+            that.countEmail = TIME_COUNT;
+            that.sendSmsEmail = 'Resend after ' + that.countEmail + 's';
+            that.showEmail = false;
+            that.timerEmail = setInterval(() => {
+              if (that.countEmail > 0 && that.countEmail <= TIME_COUNT) {
+                that.countEmail--;
+                that.sendSmsEmail = 'Resend after ' + that.countEmail + ' s';
+              } else {
+                that.sendSmsEmail = 'Reacquire';
+                that.showEmail = true;
+                clearInterval(that.timerEmail);
+                that.timerEmail = null;
+              }
+            }, 1000);
+            post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
+              if (res.success) {
+
+              } else {
+
+              }
+            });
+          }
+        }
+      }
+
+    },
+    tabChange(name) {
+      this.registerWrap = name;
+    },
+    //密码正则
+    passwordReg(passwordVal) {
+      var reg1 = /(.+)?\d(.+)?/;
+      var reg2 = /.*[a-zA-Z]+.*/;
+      return !(passwordVal.length < 8 || passwordVal.length > 64 || !reg1.test(passwordVal) || !reg2.test(passwordVal))
+    },
+    //phone正则
+    phoneReg(phoneval) {
+      var mobileRegx = /^\d{1,}$/;
+      return mobileRegx.test(phoneval);
+    },
+    //email正则
+    emailReg(emailval) {
+      var emailRegx = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      return emailRegx.test(emailval);
     },
     asyncCancel() {
       this.$parent.$emit('isregister', false);
+      this.clear();
       this.modal_loading = false;
     },
-    ok() {
-      this.$Message.info('Clicked ok');
+    mySubmit() {
+      var that = this;
+      var data;
+      if (!that.modal_loading) {
+        that.modal_loading = true;
+        if (that.registerWrap === 'registerPhone') {
+          if (that.phoneVal === '') {
+            that.modal_loading = false;
+            that.phoneValError = true;
+            that.phoneValErrorText = that.error.null;
+          } else if (!that.phoneReg(that.phoneVal)) {
+            that.modal_loading = false;
+            that.phoneValError = true;
+            that.phoneValErrorText = that.error.phoneNum;
+          } else if (that.phoneSmsCode === '') {
+            that.modal_loading = false;
+            that.phoneSmsCodeError = true;
+            that.phoneSmsCodeErrorText = that.error.null;
+          } else if (that.phonePassword === '') {
+            that.modal_loading = false;
+            that.phonePasswordError = true;
+            that.phonePasswordErrorText = that.error.null;
+          } else if (!that.passwordReg(that.phonePassword)) {
+            that.modal_loading = false;
+            that.phonePasswordError = true;
+            that.phonePasswordErrorText = that.error.password;
+          } else if (that.phonePasswordAgain === '') {
+            that.modal_loading = false;
+            that.phonePasswordAgainError = true;
+            that.phonePasswordAgainErrorText = that.error.null;
+          } else if (that.phonePassword !== that.phonePasswordAgain) {
+            that.modal_loading = false;
+            that.phonePasswordAgainError = true;
+            that.phonePasswordAgainErrorText = that.error.noSame;
+          }else{
+            const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
+            data = {
+              "smsAuthCode": that.phoneSmsCode,
+              "countryCode": isLoginNextPhoneNumCountry,
+              "mobileNumber": that.phoneVal,
+              "loginPword": that.phonePasswordAgain,
+            };
+            post('api/user/reg_mobile', JSON.stringify(data)).then(function (res) {
+              console.log(res);
+              if (res.success) {
+                this.$parent.$emit('isregister', false);
+                this.$parent.$emit('isregisterGoogle', true);
+              } else {
+
+              }
+            });
+          }
+        } else if (that.registerWrap === 'tabEmail') {
+          if (that.emailVal === '') {
+            that.modal_loading = false;
+            that.emailValError = true;
+            that.emailValErrorText = that.error.null;
+          } else if (!that.emailReg(that.emailVal)) {
+            that.modal_loading = false;
+            that.emailValError = true;
+            that.emailValErrorText = that.error.emailNum;
+          } else if (that.emailSmsCode === '') {
+            that.modal_loading = false;
+            that.emailSmsCodeError = true;
+            that.emailSmsCodeErrorText = that.error.null;
+          } else if (that.emailPassword === '') {
+            that.modal_loading = false;
+            that.emailPasswordError = true;
+            that.emailPasswordErrorText = that.error.null;
+          } else if (!that.passwordReg(that.emailPassword)) {
+            that.modal_loading = false;
+            that.emailPasswordError = true;
+            that.emailPasswordErrorText = that.error.password;
+          } else if (that.emailPasswordAgain === '') {
+            that.modal_loading = false;
+            that.emailPasswordAgainError = true;
+            that.emailPasswordAgainErrorText = that.error.null;
+          } else if (that.emailPassword !== that.emailPasswordAgain) {
+            that.modal_loading = false;
+            that.emailPasswordAgainError = true;
+            that.emailPasswordAgainErrorText = that.error.noSame;
+          } else {
+            data = {
+              "email": that.emailVal,
+              "loginPword": that.emailPasswordAgain,
+              "emailAuthCode": that.emailSmsCode
+            };
+            post('api/user/reg_email', JSON.stringify(data)).then(function (res) {
+              console.log(res);
+              if (res.success) {
+                this.$parent.$emit('isregister', false);
+                this.$parent.$emit('isregisterGoogle', true);
+              } else {
+
+              }
+            });
+          }
+        }
+      }
     },
+    clear() {
+      this.emailVal = '';
+      this.emailSmsCode = '';
+      this.emailPassword = '';
+      this.emailPasswordAgain = '';
+    },
+    runLogin() {
+      alert(1)
+    }
+  },
+  mounted: function () {
+    this.getCountry();
   },
 };
 var o_my_registerGoogle = {
@@ -1343,7 +1690,7 @@ var o_header = {
               <a type="primary" @click="showLogin()">{{ $t('login') }}</a>
             </li>
             <li class="items" v-if="!logined">
-              <a type="primary" @click="showLogin()">{{ $t('register') }}</a>
+              <a type="primary" @click="showRegister()">{{ $t('register') }}</a>
             </li>
             <li class="items" @click="toggleLanguage">
               <a href="javascript:;">
@@ -1383,9 +1730,9 @@ var o_header = {
       uid: 0,
       logined: false,
       isLoginShow: false,
+      isregister: false,
       isLoginNextShow: false,
       isRegisterGoogleShow: false,
-      isregister: false,
       isLoginNextType: '',
       isLoginNextCookie: '',
       isLoginNextPhone: '',
@@ -1396,6 +1743,9 @@ var o_header = {
     //login
     showLogin() {
       this.isLoginShow = true;
+    },
+    showRegister() {
+      this.isregister = true;
     },
     toggleLanguage() {
       if (this.language === '中文') {
@@ -1443,11 +1793,11 @@ var o_header = {
       console.log('connection closed (' + e.code + ')');
     },
     loginOut() {
-      post('api/user/login_out').then(function(res) {
+      post('api/user/login_out').then(function (res) {
         if (res.success) {
           localStorage.clear();
           utils.clearCookie();
-          setTimeout(function() {
+          setTimeout(function () {
             location.href = 'otc_adverts.html';
           }, 1500);
         }
@@ -1457,6 +1807,7 @@ var o_header = {
   components: {
     mylogin: o_my_login,
     myloginnext: o_my_loginNext,
+    myregister: o_my_register,
     myregistergoogle: o_my_registerGoogle,
   },
   mounted() {
@@ -1471,7 +1822,7 @@ var o_header = {
           that.logined = true;
           that.uid = res.data.data.userExtView.uid;
           window.localStorage.setItem('uid', that.uid);
-          var data = { pageSize: 5, pageNum: 1 };
+          var data = {pageSize: 5, pageNum: 1};
           get('api/personOrders/processing', data).then(function (result) {
             if (result.success) {
               if (result.data.data.rsts.length > 5) {

@@ -52,7 +52,7 @@
     position: absolute;
     right: 1px;
     z-index: 2;
-    background: #fff;
+    background: #fafafa;
     border: none;
     top: 1px;
     height: 38px;
@@ -194,7 +194,7 @@
     float: left;
     width: 80px;
     height: 80px;
-    background-image: url("../img/Google authenticator.png");
+    background-image: url("../../images/Google authenticator.png");
 }
 
 .loginGoogle-title-right-wrap {
@@ -253,11 +253,11 @@
 }
 
 .loginGoogle-ul li .li-title .tip-img1 {
-    background-image: url("../img/tip-img1.png");
+    background-image: url("../../images/tip-img1.png");
 }
 
 .loginGoogle-ul li .li-title .tip-img2 {
-    background-image: url("../img/tip-img2.png");
+    background-image: url("../../images/tip-img2.png");
 }
 
 .loginGoogle-ul li .li-title p {
@@ -287,11 +287,11 @@
 }
 
 .loginGoogle-ul-download-wrap .loginGoogle-ul-download-ios {
-    background-image: url("../img/download-ios.png");
+    background-image: url("../../images/download-ios.png");
 }
 
 .loginGoogle-ul-download-wrap .loginGoogle-ul-download-google {
-    background-image: url("../img/download-google.png");
+    background-image: url("../../images/download-google.png");
 }
 
 .bindGoogle-input {
@@ -350,4 +350,10 @@
 .loginNextSmsText span{
     color:#333;
     margin-left: 4px;
+}
+.my-register .loginNext-sms-input{
+ margin-top: 0;
+}
+.my-register .my-loginNext-error{
+  margin-bottom: 0;
 }
