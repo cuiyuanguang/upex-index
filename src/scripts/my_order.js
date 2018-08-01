@@ -66,6 +66,10 @@ var myOrder = new Vue({
       document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
       this.$i18n.locale = locale;
     }
+    var that = this;
+    this.$on('locale', function(i) {
+      that.locale = i;
+    });
     this.getMyOrder();
   },
   filters: {
@@ -77,6 +81,7 @@ var myOrder = new Vue({
   watch: {
     locale: function(newVal, oldVal) {
       if (newVal !== oldVal) {
+        console.log(newVal);
         this.$i18n.locale = newVal;
       }
     },

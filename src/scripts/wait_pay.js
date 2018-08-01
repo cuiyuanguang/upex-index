@@ -140,6 +140,10 @@ var waitPay = new Vue({
       document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
       this.$i18n.locale = locale;
     }
+    var that = this;
+    this.$on('locale', function(i) {
+      that.locale = i;
+    });
     var sequence = utils.getParam('sequence');
     this.sequence = sequence;
     this.getOrderInfo(sequence);

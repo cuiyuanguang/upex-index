@@ -1397,8 +1397,8 @@ var o_header = {
             <li class="items">
               <Dropdown @on-click="toggleLanguage">
                 <a href="javascript:void(0)">
-                  <Icon type="ios-world"></Icon>
-                  {{ language }}
+                  Language
+                  <Icon type="arrow-down-b"></Icon>
                 </a>
                 <DropdownMenu slot="list">
                   <DropdownItem name="zh">ZH</DropdownItem>
@@ -1425,7 +1425,6 @@ var o_header = {
   i18n: i18nComponents,
   data() {
     return {
-      language: 'ZH',
       orders: [],
       ws: null,
       uid: 0,
@@ -1446,7 +1445,6 @@ var o_header = {
       this.isLoginShow = true;
     },
     toggleLanguage(name) {
-      this.language = name.toUpperCase();
       this.$i18n.locale = name;
       // document.body.style.direction = locale === 'zh' ? 'ltr' : 'rtl';
       document.body.dir = name === 'zh' ? 'ltr' : 'rtl';

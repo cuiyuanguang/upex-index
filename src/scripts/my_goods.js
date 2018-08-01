@@ -105,6 +105,10 @@ var myGoods = new Vue({
       document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
       this.$i18n.locale = locale;
     }
+    var that = this;
+    this.$on('locale', function(i) {
+      that.locale = i;
+    });
     this.getAdvert();
   },
   watch: {
