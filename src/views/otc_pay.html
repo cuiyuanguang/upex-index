@@ -14,47 +14,47 @@
       <div class="pay">
         <div class="pay-header">
             <h3 v-if="step==1">
-              Payment to the seller
+              {{ $t('payToSeller') }}
               <span>{{orderInfo.totalPrice}}SAR</span>
             </h3>
             <h3 v-if="step==2">
-              Waiting for seller to confirm payment
+              {{ $t('waitForSellerConfirm') }}
             </h3>
             <h3 v-if="step==3">
               <span>
-                Successful transaction - arrived at
+                {{ $t('transactionSuccessful') }} - {{ $t('receivePayment') }}
                 <span style="color:#0CBF48"> {{orderInfo.totalPrice}}USDT</span>
               </span>
             </h3>
             <div class="step-wrapper">
               <Steps :current="step">
-                <Step content="Successfully order"></Step>
-                <Step content="Payment and confirma"></Step>
-                <Step content="Seller confirms payment"></Step>
-                <Step content="USDT arrival"></Step>
+                <Step :content="$t('orderSuccess')"></Step>
+                <Step :content="$t('payAndConfirm')"></Step>
+                <Step :content="$t('receiveAndConfirm')"></Step>
+                <Step :content="$t('USDTArrival')"></Step>
               </Steps>
             </div>
         </div>
         <div class="pay-info">
           <Row>
             <i-col span="12">
-              <div class="info-header">order information</div>
+              <div class="info-header">{{ $t('orderInfo') }}</div>
                 <ul v-if="step<3">
                   <li class="info-items">
                     <Row>
-                      <i-col span="6" class="info-key">Order Number :</i-col>
+                      <i-col span="6" class="info-key">{{ $t('orderNo') }} :</i-col>
                       <i-col span="18" class="info-value">{{orderInfo.sequence}}</i-col>
                     </Row>
                   </li>
                   <li class="info-items">
                     <Row>
-                      <i-col span="6" class="info-key">Total purchases :</i-col>
+                      <i-col span="6" class="info-key">{{ $t('totalPurchase') }} :</i-col>
                       <i-col span="18" class="info-value">{{orderInfo.volume}}</i-col>
                     </Row>
                   </li>
                   <li class="info-items">
                     <Row>
-                      <i-col span="6" class="info-key">Total price :</i-col>
+                      <i-col span="6" class="info-key">{{ $t('totalPrice') }} :</i-col>
                       <i-col span="18" class="info-value">{{orderInfo.totalPrice}}</i-col>
                     </Row>
                   </li>
@@ -62,56 +62,56 @@
                 <ul v-if="step==3">
                   <li class="info-items">
                     <Row>
-                      <i-col span="6" class="info-key">Order Number :</i-col>
+                      <i-col span="6" class="info-key">{{ $t('orderNo') }} :</i-col>
                       <i-col span="18" class="info-value">{{orderInfo.sequence}}</i-col>
                     </Row>
                   </li>
                   <li class="info-items">
                     <Row>
-                      <i-col span="6" class=" info-key">Received :</i-col>
+                      <i-col span="6" class=" info-key">{{ $t('received') }} :</i-col>
                       <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.volume}}</i-col>
                     </Row>
                   </li>
                   <li class="info-items">
                     <Row>
-                      <i-col span="6" class="info-key">Payments :</i-col>
+                      <i-col span="6" class="info-key">{{ $t('paid') }} :</i-col>
                       <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalPrice}}</i-col>
                     </Row>
                   </li>
                   <li class="info-items">
                     <Row>
-                      <i-col span="6" class="info-key">Time of arrival :</i-col>
-                      <i-col span="18" class="info-value">{{orderInfo.totalPrice}}</i-col>
+                      <i-col span="6" class="info-key">{{ $t('timeOfArrival') }} :</i-col>
+                      <i-col span="18" class="info-value">{{ arrivalTime }}</i-col>
                     </Row>
                   </li>
 
                 </ul>
             </i-col>
             <i-col span="12">
-              <div class="info-header">{{ $t('orderInfo') }}</div>
+              <div class="info-header">{{ $t('sellerInfo') }}</div>
                 <ul class="bankcard">
                   <li v-for="(i, index) in orderInfo.paymentBanks">
                     <Row>
                       <i-col span="9" class="info-key">
-                        Bank {{ index + 1 }}
+                        {{ $t('bank') }} {{ index + 1 }}
                       </i-col>
                       <i-col span="15" class="info-value">{{i.bankName}}</i-col>
                     </Row>
                     <Row>
                       <i-col span="9" class="info-key">
-                        Card number
+                        {{ $t('cardNo') }}
                       </i-col>
                       <i-col span="15" class="info-value">{{i.cardNo}}</i-col>
                     </Row>
                     <Row>
                       <i-col span="9" class="info-key">
-                        Account :
+                        {{ $t('accountName') }} :
                       </i-col>
                       <i-col span="15" class="info-value">{{i.name}}</i-col>
                     </Row>
                     <Row>
                       <i-col span="9" class="info-key">
-                        Iban number
+                        Iban {{ $t('iBanNo') }}
                       </i-col>
                       <i-col span="15" class="info-value">{{i.ibanNo}}</i-col>
                     </Row>
@@ -120,7 +120,7 @@
                 <Row>
                   <i-col span="9">
                     <Icon type="android-call"></Icon>
-                    Phone
+                    {{ $t('phone') }}
                   </i-col>
                   <i-col span="15">
                     {{orderInfo.seller.hideMobileNumber}}
@@ -129,12 +129,12 @@
                 <Row>
                   <i-col span="9">
                     <Icon type="android-contacts"></Icon>
-                    socialNumber
+                    {{ $t('socialNumber') }}
                   </i-col>
                   <i-col span="15">
                     <input type="text" name="Social Number" readonly class="input-copy" :value="orderInfo.seller.userExtView.watchapp" @click="copy($event)">
                     <a class="contact" :href="'https://api.whatsapp.com/send?phone='+orderInfo.seller.userExtView.watchapp">
-                      <Icon type="ios-telephone-outline"></Icon>contact seller</a>
+                      <Icon type="ios-telephone-outline"></Icon>{{ $t('contactSeller') }}</a>
                   </i-col>
                 </Row>
             </i-col>
@@ -142,32 +142,31 @@
         </div>
         <div class="pay-status" v-if="step<2">
           <h3>
-            Please complete the payment in
+            {{ $t('payInTime') }}
             <span class="pay-left-time">{{leftTime}}</span>
           </h3>
           <div style="margin-top: 20px;">
-            <button @click="toPay" class="pay-btn">i Paid</button>
-            <span class="pay-tips">After successful payment, please click the button to inform the seller</span>
+            <button @click="toPay" class="pay-btn">{{ $t('iPaid') }}</button>
+            <span class="pay-tips">{{ $t('iPaidTips') }}</span>
           </div>
-          <i-button type="text" size="large" class="cancel-order" @click.native="cancelPay">cancel order</i-button>
+          <i-button type="text" size="large" class="cancel-order" @click.native="cancelPay">{{ $t('cancelOrder') }}</i-button>
         </div>
         <div class="pay-status" v-if="step==2">
-          <h5>The seller did not confirm within
-            <span style="color: #00FF00;">24</span> hours, customer service intervention to assist the transaction</h5>
-          <h3>Time left
+          <h5>{{ $t('sellerNotConfirmIn') }}
+            <span style="color: #00FF00;">24</span> {{ $t('hour') }}, </h5>
+          <h3>{{ $t('restTime') }}
             <span class="pay-left-time">{{leftTime}}</span>
           </h3>
         </div>
         <div v-if="step==3" class="return">
-          <a href="otc_adverts.html">Return home</a>
+          <a href="otc_adverts.html">{{ $t('backToHome') }}</a>
         </div>
         <div v-if="step<3" class="pay-footer">
           <ul>
-            <li>1. Your remittance will be directly transferred to the seller's account. During the transaction, the digital
-              currency sold by the seller is .Please feel free to purchase it</li>
-            <li>2. Please complete the payment within the stipulated time, and be sure to click "</li>
-            <li>3. After the seller confirms, the system will put the digital currency into your account </li>
-            <li>4. If the order is cancelled three times that day, the purchase function will be</li>
+            <li>1. {{ $t('helpTipsFirst') }}</li>
+            <li>2. {{ $t('helpTipsSecond') }}</li>
+            <li>3. {{ $t('helpTipsThird') }}</li>
+            <li>4. {{ $t('helpTipsFourth') }}</li>
           </ul>
         </div>
       </div>
@@ -175,30 +174,30 @@
     <!--订单超时显示-->
     <div v-if="step==4" class="wrapper">
       <div class="expired">
-        <h2 style="color:red;">Order expired, unable to view payment information!</h2>
+        <h2 style="color:red;">{{ $t('orderExpiredTips') }}</h2>
         <ul>
           <li>
-            <span>Reason for failure :</span>
-            <span>Order expired</span>
+            <span>{{ $t('reasonForFailure') }} :</span>
+            <span>{{ $t('orderExpired') }}</span>
           </li>
           <li>
-            <span>Order Number :</span>
+            <span>{{ $t('orderNo') }} :</span>
             <span>{{ orderInfo.sequence }}</span>
           </li>
           <li>
-            <span>Total purchases :</span>
+            <span>{{ $t('totalPurchase') }} :</span>
             <span>{{ orderInfo.volume }}</span>
           </li>
           <li>
-            <span>Total price :</span>
+            <span>{{ $t('totalPrice') }} :</span>
             <span>{{ orderInfo.totalPrice }}</span>
           </li>
         </ul>
-        <p>If you have already paid, you can click on the
-          <a href="#" style="color:red;">appeal</a>
+        <p>{{ $t('paidAndClick') }}
+          <a href="#" style="color:red;">{{ $t('appeal') }}</a>
         </p>
         <div class="return">
-          <a href="otc_adverts.html">Return home</a>
+          <a href="otc_adverts.html">{{ $t('backToHome') }}</a>
         </div>
       </div>
     </div>
@@ -207,17 +206,17 @@
       <div class="content">
         <div class="content-wrapper" style="width:440px; height: 223px;">
           <div class="pay-modal-title">
-            <h3>Has payment been made?</h3>
-            <p>If you do not pay, you will be treated as a title!</p>
+            <h3>{{ $t('hasPaid') }}</h3>
+            <p>{{ $t('notPayWarn') }}</p>
           </div>
           <Row class="pay-modal-content">
             <i-col span="8">
               <i-button type="text" size="large" @click.native="isPayDialogShow = false">
-                <u>cancel</u>
+                <u>{{ $t('cancel') }}</u>
               </i-button>
             </i-col>
             <i-col span="16">
-              <button @click="paid" class="paid">Aready paid</button>
+              <button @click="paid" class="paid">{{ $t('alreadyPaid') }}</button>
             </i-col>
           </Row>
         </div>
@@ -234,24 +233,23 @@
           <div class="p-i-content">
             <ul>
               <li>
-                <label> digits after remittance card number</label>
+                <label>{{ $t('lastFourNumber') }}</label>
                 <div>
                   <input type="number" v-model="card">
                   <p class="error" v-if="cardErrorTips">{{ cardErrorTips }}</p>
                 </div>
               </li>
               <li>
-                <label> digits after remittance card number</label>
+                <label>{{ $t('lastFourNumber') }}</label>
                 <div>
                   <input type="number" v-model="recard">
                   <p class="error" v-if="recardErrorTips">{{ recardErrorTips }}</p>
                 </div>
               </li>
               <li>
-                <button @click="confirm" class="confirm">Confirm</button>
+                <button @click="confirm" class="confirm">{{ $t('confirm') }}</button>
                 <p>
-                  Please be sure to check the bank card information, fill in the information error, resulting in the transaction issue borne
-                  by the user
+                  {{ $t('transferTips') }}
                 </p>
                 <p class="error" v-if="infoError">{{ infoError }}</p>
               </li>
