@@ -1036,6 +1036,7 @@ var o_my_loginNext = {
       show: true,
       count: '',
       timer: null,
+      isLogined: false,
     };
   },
   methods: {
@@ -1059,9 +1060,16 @@ var o_my_loginNext = {
           post('api/user/confirm_login', JSON.stringify(data)).then(function (res) {
             if (res.success) {
               that.modal_loading = false;
-              that.loginNext = false;
+              that.$parent.$emit('isLoginNext', false);
               utils.setCookie('token', that.isLoginNextCookieNum);
-              window.location.reload();
+              get('api/userInfo').then(function(res) {
+                that.isLogined = res.data.code === 0;
+                var data = res.data.data;
+                if (that.isLogined) {
+                  that.$parent.$emit('logined', that.isLogined);
+                  sessionStorage.setItem('user', JSON.stringify(data));
+                }
+              });
             } else {
               that.modal_loading = false;
             }
@@ -1694,7 +1702,7 @@ var o_header = {
         </i-col>
         <i-col span="9" class="management">
           <ul class="text-right">
-            <li class="items my-orders" v-if="uid">
+            <li class="items my-orders" v-if="logined">
               <Badge :count="orders.length">
                 <a href="otc_my_order.html" class="demo-badge" @click="isMyordersShow=!isMyordersShow">{{ $t('allOrder') }}</a>
               </Badge>
@@ -1729,16 +1737,16 @@ var o_header = {
                 </div>
               </div>
             </li>
-            <li class="items" v-if="uid">
+            <li class="items" v-if="logined">
               <a href="otc_my_advert.html">{{ $t('pendingOrder') }}</a>
             </li>
-            <li class="items" v-if="uid">
+            <li class="items" v-if="logined">
               <a type="primary" @click="loginOut">{{ $t('loginout') }}</a>
             </li>
-            <li class="items" v-if="!uid">
+            <li class="items" v-if="!logined">
               <a type="primary" @click="showLogin()">{{ $t('login') }}</a>
             </li>
-            <li class="items" v-if="!uid">
+            <li class="items" v-if="!logined">
               <a type="primary" @click="showLogin()">{{ $t('register') }}</a>
             </li>
             <li class="items">
@@ -1784,11 +1792,6 @@ var o_header = {
       isLoginNextPhone: '',
       isLoginNextEmail: '',
     };
-  },
-  computed: {
-    uid: function() {
-      return sessionStorage.getItem('uid');
-    },
   },
   methods: {
     //login
@@ -1839,13 +1842,12 @@ var o_header = {
       console.log('connection closed (' + e.code + ')');
     },
     loginOut() {
+      var that = this;
       post('api/user/login_out').then(function (res) {
         if (res.success) {
-          localStorage.clear();
+          sessionStorage.clear();
           utils.clearCookie();
-          setTimeout(function () {
-            location.href = 'otc_adverts.html';
-          }, 1500);
+          that.logined = false;
         }
       });
     },
@@ -1866,6 +1868,7 @@ var o_header = {
       document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
       this.$i18n.locale = locale;
     }
+    
     if (utils.getCookie('token')) {
       var that = this;
       get('api/personOrders/processing').then(function (result) {
@@ -1878,6 +1881,10 @@ var o_header = {
         }
       });
     }
+    this.$on('logined', function (i) {
+      this.logined = i;
+    });
+    this.logined = sessionStorage.getItem('user') !== null;
     this.$on('islogin', function (i) {
       this.isLoginShow = i;
     });
