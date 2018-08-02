@@ -1211,12 +1211,12 @@ var o_my_register = {
             class="iview-input iview-input-countryPhone"
             @on-focus="phoneValFocus"
            >
-            <Select v-model="selectCountry" slot="prepend" filterable style="width:86px">
+            <Select v-model="selectCountry" slot="prepend" style="width:86px">
               <Option
-                v-if="countryArr.length > 0"
                 v-for="country in countryArr"
                 :value="country.dialingCode"
                 :label="country.dialingCode"
+                :key="country.dialingCode"
               >
                 <span class="">{{country.dialingCode}}</span>
                 <span class="iview-input-countryPhone-span">{{country.enName}}</span>
@@ -1478,6 +1478,8 @@ var o_my_register = {
       this.modal_loading = false;
     },
     mySubmit() {
+      this.$parent.$emit('isregister', false);
+      this.$parent.$emit('isregisterGoogle', true);
       var that = this;
       var data;
       if (!that.modal_loading) {
@@ -1627,9 +1629,9 @@ var o_my_registerGoogle = {
             <h6 style="color:#999;margin:26px 0 20px 50px">or</h6>
             <p style="margin-left: 50px;">Enter Provided key:</p>
             <h6 style="color:#999;margin: 5px 0 0 50px">
-              FZ3JXT6BF3QJOYI2
+             {{googleKey}}
               <span
-                style="color:#3461A7;cursor:pointer;margin-left:10px;text-decoration: underline;">
+                style="color:#3461A7;cursor:pointer;margin-left:10px;text-decoration: underline;" @click="doCopy">
                 Copy
               </span>
             </h6>
@@ -1668,10 +1670,36 @@ var o_my_registerGoogle = {
     return {
       bindGooglePassword: '',
       modal_loading: false,
+      googleKey:'1231231',
+      googleImg:'',
     };
   },
   props: ['registerGoogle'],
   methods: {
+    doCopy: function () {
+      this.$copyText(this.googleKey).then(function (e) {
+        alert('Copied')
+        console.log(e)
+      }, function (e) {
+        alert('Can not copy')
+        console.log(e)
+      })
+    },
+    getGoogleInfo(){
+     var that = this
+     var data={
+        'exchange-token':'12312312'
+      }
+      post('api/user/toopen_google_authenticator', JSON.stringify(data)).then(function (res) {
+        console.log(res);
+        if (res.success) {
+          that.googleKey = res.data.data.googleKey;
+          that.googleImg = res.data.data.googleImg;
+        } else {
+
+        }
+      });
+    },
     asyncCancel() {
       this.$parent.$emit('isregisterGoogle', false);
       this.modal_loading = false;
@@ -1746,8 +1774,8 @@ var o_header = {
             <li class="items" v-if="!logined">
               <a type="primary" @click="showLogin()">{{ $t('login') }}</a>
             </li>
-            <li class="items" v-if="!logined">
-              <a type="primary" @click="showLogin()">{{ $t('register') }}</a>
+            <li class="items" v-if="!uid">
+              <a type="primary" @click="showRegister()">{{ $t('register') }}</a>
             </li>
             <li class="items">
               <Dropdown @on-click="toggleLanguage">
@@ -1798,7 +1826,6 @@ var o_header = {
     showLogin() {
       this.isLoginShow = true;
     },
-
     showRegister() {
       this.isregister = true;
     },
