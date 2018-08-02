@@ -38,11 +38,11 @@ var myGoods = new Vue({
       });
     },
     pause: function(item) {
-      this.action = item.status === 6 ? this.$t('start') : this.$t('pause');
+      this.action = item.status === 6 ? 'start' : 'pause';
       this.advertId = item.id;
       this.modalMsg = {
         title: item.status === 6 ? this.$t('start') : this.$t('pause'),
-        desc: this.$t('confirm') + this.action + this.$t('thisOrder'),
+        desc: this.$t('confirm') + this.$t(this.action) + this.$t('thisOrder'),
         confirmText: this.$t('confirm'),
       };
       this.showModal = true;
@@ -70,13 +70,13 @@ var myGoods = new Vue({
       var that = this;
       var api = {
         pause: 'api/suspendAdvert',
-        enable: 'api/openAdvert',
+        start: 'api/openAdvert',
         cancel: 'api/closeAdvert',
       };
       if (
         (that.cancelable && that.action === 'cancel') ||
         that.action === 'pause' ||
-        that.action === 'enable'
+        that.action === 'start'
       ) {
         post(api[that.action], that.advertId).then(function(res) {
           if (res.success) {
@@ -87,16 +87,6 @@ var myGoods = new Vue({
       } else {
         location.href = './otc_adverts.html';
       }
-    },
-  },
-  filters: {
-    time: function(stamp) {
-      var date = new Date(stamp);
-      var month = date.getMonth() + 1 > 9 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1);
-      var day = date.getDate() > 9 ? date.getDate() : '0' + date.getDate();
-      var hour = date.getHours() > 9 ? date.getHours() : '0' + date.getHours();
-      var minute = date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes();
-      return month + '-' + day + ' ' + hour + ':' + minute;
     },
   },
   mounted() {
