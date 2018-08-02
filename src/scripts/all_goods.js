@@ -47,8 +47,6 @@ var allGoods = new Vue({
       isGoogleBind: false,
       isCardBind: false,
       isWatchAppBind: false,
-      whatsApp: '',
-      newWhatsApp: '',
       //bank card status
       cardInfo: [],
       selectedCard: [],
@@ -129,21 +127,16 @@ var allGoods = new Vue({
     },
     getUserInfo: function() {
       var that = this;
-      get('api/userInfo').then(function(res) {
-        var data = res.data.data;
-        that.isLogined = res.data.code === 0;
-        if (that.isLogined) {
-          sessionStorage.setItem('uid', data.id);
-          that.whatsApp = data.userExtView.watchapp;
-          that.balance = data.usdtAmount.balance;
-          that.isGoogleBind = data.googleAuthenticatorStatus === 1;
-          that.isWatchAppBind = data.userExtView.watchapp;
-          get('api/bankCard').then(function(result) {
-            if (result.data.data.length > 0) {
-              that.isCardBind = true;
-              that.cardInfo = result.data.data;
-            }
-          });
+      var user = JSON.parse(sessionStorage.getItem('user'));
+      that.isLogined = user !== null;
+      that.whatsApp = user.userExtView.watchapp;
+      that.balance = user.usdtAmount.balance;
+      that.isGoogleBind = user.googleAuthenticatorStatus === 1;
+      that.isWatchAppBind = user.userExtView.watchapp;
+      get('api/bankCard').then(function(result) {
+        if (result.data.data.length > 0) {
+          that.isCardBind = true;
+          that.cardInfo = result.data.data;
         }
       });
     },
@@ -416,25 +409,6 @@ var allGoods = new Vue({
       this.postErroMsg = '请确认你的信息';
       this.isPostDialogShow = false;
       this.isPendModalShow = true;
-    },
-    handleChangeWhatsApp: function() {
-      this.newWhatsApp = this.whatsApp;
-      this.changeWhatsApp = !this.changeWhatsApp;
-    },
-    cancelChangeWhatsApp: function() {
-      this.changeWhatsApp = !this.changeWhatsApp;
-      this.newWhatsApp = this.whatsApp;
-    },
-    confirmChangeWhatsApp: function() {
-      var _this = this;
-      post('api/watchapp', this.newWhatsApp).then(function(res) {
-        _this.changeWhatsApp = !_this.changeWhatsApp;
-        _this.whatsApp = _this.newWhatsApp;
-      });
-    },
-    cancelChangeWhatsApp: function() {
-      this.changeWhatsApp = !this.changeWhatsApp;
-      this.newWhatsApp = '';
     },
     // back to modify the post order price
     modifyPostOrder: function() {
