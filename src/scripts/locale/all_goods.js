@@ -23,8 +23,8 @@ var messages = {
     en: 'sell order is up to limit, you can only release buy order',
   },
   releaseSellOnly: {
-    zh: '卖单发布已达上限，只能发布买单',
-    en: 'sell order is up to limit, you can only release buy order',
+    zh: '买单发布已达上限，只能发布卖单',
+    en: 'buy order is up to limit, you can only release sell order',
   },
   sell: {
     zh: '卖出',

@@ -17,11 +17,11 @@
 
     <div class="list wrapper">
       <Row>
-        <i-col class="tags" :span="4" :class="tag=='BUY' ? 'act' :'disact' ">
-          <span @click="tag='BUY'">{{ $t('buy') }} USDT</span>
+        <i-col class="tags" :span="4" :class="showListTag=='BUY' ? 'act' :'disact' ">
+          <span @click="showListTag='BUY'">{{ $t('buy') }} USDT</span>
         </i-col>
-        <i-col class="tags" :span="4" :class="tag=='SELL' ? 'act' :'disact' ">
-          <span @click="tag='SELL'">{{ $t('sell') }} USDT</span>
+        <i-col class="tags" :span="4" :class="showListTag=='SELL' ? 'act' :'disact' ">
+          <span @click="showListTag='SELL'">{{ $t('sell') }} USDT</span>
         </i-col>
         <i-col span="16">
           <div class="text-right">
@@ -34,7 +34,7 @@
         </i-col>
       </Row>
       <div>
-        <div v-show="tag=='BUY'">
+        <div v-show="showListTag=='BUY'">
           <table class="buylist">
             <tr>
               <th>{{ $t('seller') }}</th>
@@ -72,7 +72,7 @@
             </div>
           </div>
         </div>
-        <div v-show="tag=='SELL'">
+        <div v-show="showListTag=='SELL'">
           <table class="buylist">
             <tr>
               <th>{{ $t('buyer') }}</th>
@@ -116,12 +116,12 @@
         <div class="content-wrapper" style="padding:0;">
           <div class="title">
             <span>{{ $t('releaseAdvert') }}</span>
-            <span class="close">
-              <Icon type="close-round" @click="closePostDialog"></Icon>
+            <span class="close" @click="closePostDialog">
+              <Icon type="close-round"></Icon>
             </span>
           </div>
           <div class="main-content">
-            <Tabs v-model="postTag">
+            <Tabs v-model="postOrderTag">
               <Tab-Pane :label="$t('buy') + 'USDT'" :disabled="buyDisabled" name="BUY">
                 <div style="width: 400px;">
                   <div class="input-group">
@@ -237,7 +237,7 @@
       <div class="content">
         <div class="content-wrapper" style="padding: 20px;width: 1200px;">
           <Icon type="close-circled" class="o-close" @click="closeBuyDialog"></Icon>
-          <div v-if="tag=='BUY'">
+          <div v-if="showListTag=='BUY'">
             {{ $t('balance') }} {{balance}} USDT
           </div>
           <Row>
@@ -283,8 +283,8 @@
               </div>
             </i-col>
             <i-col span="4" class="btn-wrapper">
-              <button v-show="tag==='BUY'" @click="buy" class="order-btn">{{ $t('buy') }}</button>
-              <button v-show="tag==='SELL'" @click="sell" class="order-btn">{{ $t('sell') }}</button>
+              <button v-show="showListTag==='BUY'" @click="buy" class="order-btn">{{ $t('buy') }}</button>
+              <button v-show="showListTag==='SELL'" @click="sell" class="order-btn">{{ $t('sell') }}</button>
             </i-col>
           </Row>
           <div class="buyError error">{{error.buyError}}</div>
@@ -298,18 +298,18 @@
         <span>{{ $t('deviationWarn') }}</span>
       </p>
       <div>
-        <div v-if="postTag=='SELL'" style="padding:20px;text-align: center; height: 136px; background: rgba(171, 15, 15, 1);; color: white; font-size: 16px;">
+        <div v-if="postOrderTag=='SELL'" style="padding:20px;text-align: center; height: 136px; background: rgba(171, 15, 15, 1);; color: white; font-size: 16px;">
           <img src="../images/warning.png" alt="">
           <p>{{postErroMsg}}</p>
         </div>
-        <div v-if="postTag=='BUY'" style="padding:20px;text-align: center; height: 136px; background: rgba(171, 15, 15, 1);; color: white; font-size: 16px;">
+        <div v-if="postOrderTag=='BUY'" style="padding:20px;text-align: center; height: 136px; background: rgba(171, 15, 15, 1);; color: white; font-size: 16px;">
           <img src="../images/warning.png" alt="">
           <p>{{postErroMsg}}</p>
         </div>
         <div style="padding: 0 50px;font-size: 16px;">
           <p style="margin: 10px 0;">
             <span>{{ $t('currentPrice') }}</span>
-            <span>{{marketPrice.exchange_sell_min}} SAR</span>
+            <span>{{marketPrice.exchange_sell_min || marketPrice.exchange_rate}} SAR</span>
           </p>
           <p style="margin: 10px 0;">
             <span>{{ $t('currentReleasePrice') }}</span>
@@ -350,7 +350,7 @@
               <i-col span="6" class="key">{{ $t('totalPrice') }}</i-col>
               <i-col span="18" class="value">{{postData.volume * postData.price}}</i-col>
             </Row>
-            <div v-if="postTag=='SELL'" class="settings">
+            <div v-if="postOrderTag=='SELL'" class="settings">
               <div class="s-header">
                 <p class="key" @click="showMoreSettings = !showMoreSettings">More settings
                   <Icon :type="showMoreSettings ? 'chevron-up' : 'chevron-down'"></Icon>
@@ -376,7 +376,7 @@
                 <Row>
                   <i-col span="24" class="key">{{ $t('bankCard') }}</i-col>
                 </Row>
-                <Row v-for="(i, index) in cardInfo">
+                <Row v-for="(item, index) in cardInfo">
                   <i-col span="20">
                     <p style="color: #ffffff;">{{ item.bankName }}</p>
                     <p class="key">{{item.cardNo}}</p>

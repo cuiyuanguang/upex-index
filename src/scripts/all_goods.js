@@ -18,7 +18,8 @@ var allGoods = new Vue({
     return {
       locale: 'zh',
       //挂单相关数据
-      postTag: 'BUY',
+      showListTag: 'BUY',
+      postOrderTag: 'BUY',
       postErroMsg: '',
       postData: {
         checkType: '1',
@@ -55,7 +56,6 @@ var allGoods = new Vue({
       tradeCard: [],
       balance: 0,
       //END user info
-      tag: 'BUY',
       buyDisabled: false,
       sellDisabled: false,
       //triggers
@@ -100,9 +100,6 @@ var allGoods = new Vue({
       sellCurrentPage: 1,
       selllist: [],
       buylist: [],
-      modal4: false,
-      tabs: ['Buy', 'Sell'],
-      currentTab: 'Buy',
     };
   },
   computed: {
@@ -136,26 +133,17 @@ var allGoods = new Vue({
         var data = res.data.data;
         that.isLogined = res.data.code === 0;
         if (that.isLogined) {
+          sessionStorage.setItem('uid', data.id);
           that.whatsApp = data.userExtView.watchapp;
           that.balance = data.usdtAmount.balance;
           that.isGoogleBind = data.googleAuthenticatorStatus === 1;
           that.isWatchAppBind = data.userExtView.watchapp;
-          that.isCardBinded().then(function(res) {
-            if (res.data.length > 0) {
-              that.cardInfo = res.data;
+          get('api/bankCard').then(function(result) {
+            if (result.data.data.length > 0) {
               that.isCardBind = true;
+              that.cardInfo = result.data.data;
             }
           });
-        }
-      });
-    },
-    //check if card binded
-    isCardBinded: function() {
-      return get('api/bankCard').then(function(res) {
-        if (res.success) {
-          return res.data;
-        } else {
-          return res.message;
         }
       });
     },
@@ -275,6 +263,10 @@ var allGoods = new Vue({
     },
     //buy
     buy: function() {
+      if (!this.isLogined) {
+        this.$refs.header.showLogin();
+        return;
+      }
       if (!this.buyData.buyTotal || !this.buyData.buyAmount) {
         this.buyAmountErrorText = '不能为空';
         this.buyTotalErrorText = '不能为空';
@@ -296,6 +288,10 @@ var allGoods = new Vue({
     },
     //sell usdt
     sell: function() {
+      if (!this.isLogined) {
+        this.$refs.header.showLogin();
+        return;
+      }
       if (!this.buyData.buyTotal || !this.buyData.buyAmount) {
         this.buyAmountErrorText = '不能为空';
         this.buyTotalErrorText = '不能为空';
@@ -312,6 +308,58 @@ var allGoods = new Vue({
           var sequence = res.data.data.sequence;
           that.isBuyDialogShow = false;
           window.location.href = 'otc_wait_pay.html?sequence=' + sequence;
+        }
+      });
+    },
+    showPostDialog: function() {
+      // check if login
+      if (!this.isLogined) {
+        this.$refs.header.showLogin();
+        return;
+      }
+      //check if google authed
+      if (!this.isGoogleBind) {
+        this.isGoogleAuthShow = true;
+        return;
+      }
+      //check if card binded
+      if (!this.isCardBind) {
+        this.isBindCardShow = true;
+        return;
+      }
+      // check if contact binded
+      if (!this.isWatchAppBind) {
+        this.isContactShow = true;
+        return;
+      }
+      var _this = this;
+      get('api/personAdverts/cnt').then(function(res) {
+        var buyCount = res.data.data.BUY;
+        var sellCount = res.data.data.SELL;
+        if (buyCount >= 2 && sellCount >= 2) {
+          Toast.show(_this.$t('dealOrderBeforeRelease'), { icon: 'warning' });
+        } else if (buyCount >= 2 && sellCount < 2) {
+          Toast.show(_this.$t('releaseSellOnly'), {
+            icon: 'warning',
+            duration: 1500,
+            callback: function() {
+              _this.buyDisabled = true;
+              _this.postOrderTag = 'SELL';
+              _this.isPostDialogShow = true;
+            },
+          });
+        } else if (buyCount < 2 && sellCount >= 2) {
+          Toast.show(_this.$t('releaseBuyOnly'), {
+            icon: 'warning',
+            duration: 1500,
+            callback: function() {
+              _this.sellDisabled = true;
+              _this.postOrderTag = 'BUY';
+              _this.isPostDialogShow = true;
+            },
+          });
+        } else {
+          _this.isPostDialogShow = true;
         }
       });
     },
@@ -349,7 +397,7 @@ var allGoods = new Vue({
         this.isPostDialogShow = false;
         return;
       }
-      if (this.postTag == 'BUY') {
+      if (this.postOrderTag == 'BUY') {
         if (parseFloat(this.postData.price) > this.marketPrice.exchange_sell_max) {
           this.postErroMsg = this.$t('lessThanHighestPurchase');
           this.isPricePromptShow = true;
@@ -357,7 +405,7 @@ var allGoods = new Vue({
           return;
         }
       }
-      if (this.postTag == 'SELL') {
+      if (this.postOrderTag == 'SELL') {
         if (parseFloat(this.postData.price) > this.marketPrice.exchange_buy_min) {
           this.postErroMsg = this.$t('moreThanLowestPrice');
           this.isPricePromptShow = true;
@@ -408,21 +456,21 @@ var allGoods = new Vue({
         this.error.postError = '验证码不能为空!';
         return;
       }
-      if (this.postTag == 'SELL') {
+      if (this.postOrderTag == 'SELL') {
         if (this.selectedCard.length < 1) {
           this.error.postError = '至少选择一张银行卡!';
           return;
         }
         this.postData.paymentBanks = this.selectedCard;
       }
-      this.postData.side = this.postTag;
+      this.postData.side = this.postOrderTag;
       post('api/advert', this.postData).then(function(res) {
         if (res.success) {
           that.isPendModalShow = false;
-          if (that.postTag === 'BUY') {
+          if (that.postOrderTag === 'BUY') {
             that.toBuyPage(1);
           }
-          if (that.postTag === 'SELL') {
+          if (that.postOrderTag === 'SELL') {
             that.toSellPage(1);
           }
         }
@@ -460,58 +508,6 @@ var allGoods = new Vue({
     },
     closePostDialog: function() {
       this.isPostDialogShow = false;
-    },
-    showPostDialog: function() {
-      // check if login
-      // if (!this.isLogined) {
-      //   window.location.href = utils.getHost() + "/exchange-web/login.html";
-      //   return;
-      // }
-      //check if google authed
-      if (!this.isGoogleBind) {
-        this.isGoogleAuthShow = true;
-        return;
-      }
-      //check if card binded
-      if (!this.isCardBind) {
-        this.isBindCardShow = true;
-        return;
-      }
-      // check if contact binded
-      if (!this.isWatchAppBind) {
-        this.isContactShow = true;
-        return;
-      }
-      var _this = this;
-      get('api/personAdverts/cnt').then(function(res) {
-        var buyCount = res.data.data.BUY;
-        var sellCount = res.data.data.SELL;
-        if (buyCount >= 2 && sellCount >= 2) {
-          Toast.show(that.$t('dealOrderBeforeRelease'), { icon: 'warning' });
-        } else if (buyCount >= 2 && sellCount < 2) {
-          Toast.show(that.$t('releaseSellOnly'), {
-            icon: 'warning',
-            duration: 1500,
-            callback: function() {
-              _this.buyDisabled = true;
-              _this.postTag = 'SELL';
-              _this.isPostDialogShow = true;
-            },
-          });
-        } else if (buyCount < 2 && sellCount >= 2) {
-          Toast.show(that.$t('releaseBuyOnly'), {
-            icon: 'warning',
-            duration: 1500,
-            callback: function() {
-              _this.sellDisabled = true;
-              _this.postTag = 'BUY';
-              _this.isPostDialogShow = true;
-            },
-          });
-        } else {
-          _this.isPostDialogShow = true;
-        }
-      });
     },
     // sell page handle
     toSellPage: function(page) {
@@ -584,8 +580,6 @@ var allGoods = new Vue({
     this.$on('isSelectCardShow', function(i) {
       that.isSelectCardShow = i;
     });
-  },
-  created: function() {
     this.getCardStatus();
     if (utils.getCookie('token')) {
       this.getUserInfo();

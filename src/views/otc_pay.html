@@ -90,30 +90,30 @@
             <i-col span="12">
               <div class="info-header">{{ $t('sellerInfo') }}</div>
                 <ul class="bankcard">
-                  <li v-for="(i, index) in orderInfo.paymentBanks">
+                  <li v-for="(item, index) in orderInfo.paymentBanks">
                     <Row>
                       <i-col span="9" class="info-key">
                         {{ $t('bank') }} {{ index + 1 }}
                       </i-col>
-                      <i-col span="15" class="info-value">{{i.bankName}}</i-col>
+                      <i-col span="15" class="info-value">{{item.bankName}}</i-col>
                     </Row>
                     <Row>
                       <i-col span="9" class="info-key">
                         {{ $t('cardNo') }}
                       </i-col>
-                      <i-col span="15" class="info-value">{{i.cardNo}}</i-col>
+                      <i-col span="15" class="info-value">{{item.cardNo}}</i-col>
                     </Row>
                     <Row>
                       <i-col span="9" class="info-key">
                         {{ $t('accountName') }} :
                       </i-col>
-                      <i-col span="15" class="info-value">{{i.name}}</i-col>
+                      <i-col span="15" class="info-value">{{item.name}}</i-col>
                     </Row>
                     <Row>
                       <i-col span="9" class="info-key">
                         Iban {{ $t('iBanNo') }}
                       </i-col>
-                      <i-col span="15" class="info-value">{{i.ibanNo}}</i-col>
+                      <i-col span="15" class="info-value">{{item.ibanNo}}</i-col>
                     </Row>
                   </li>
                 </ul>

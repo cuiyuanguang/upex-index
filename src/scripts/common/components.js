@@ -1347,7 +1347,7 @@ var o_header = {
         </i-col>
         <i-col span="9" class="management">
           <ul class="text-right">
-            <li class="items my-orders" v-if="logined">
+            <li class="items my-orders" v-if="uid">
               <Badge :count="orders.length">
                 <a href="otc_my_order.html" class="demo-badge" @click="isMyordersShow=!isMyordersShow">{{ $t('allOrder') }}</a>
               </Badge>
@@ -1382,16 +1382,16 @@ var o_header = {
                 </div>
               </div>
             </li>
-            <li class="items" v-if="logined">
+            <li class="items" v-if="uid">
               <a href="otc_my_advert.html">{{ $t('pendingOrder') }}</a>
             </li>
-            <li class="items" v-if="logined">
+            <li class="items" v-if="uid">
               <a type="primary" @click="loginOut">{{ $t('loginout') }}</a>
             </li>
-            <li class="items" v-if="!logined">
+            <li class="items" v-if="!uid">
               <a type="primary" @click="showLogin()">{{ $t('login') }}</a>
             </li>
-            <li class="items" v-if="!logined">
+            <li class="items" v-if="!uid">
               <a type="primary" @click="showLogin()">{{ $t('register') }}</a>
             </li>
             <li class="items">
@@ -1427,7 +1427,6 @@ var o_header = {
     return {
       orders: [],
       ws: null,
-      uid: 0,
       logined: false,
       isLoginShow: false,
       isLoginNextShow: false,
@@ -1438,6 +1437,11 @@ var o_header = {
       isLoginNextPhone: '',
       isLoginNextEmail: '',
     };
+  },
+  computed: {
+    uid: function() {
+      return sessionStorage.getItem('uid');
+    },
   },
   methods: {
     //login
@@ -1513,21 +1517,13 @@ var o_header = {
     }
     if (utils.getCookie('token')) {
       var that = this;
-      get('api/userInfo').then(function (res) {
-        if (res.success) {
-          that.logined = true;
-          that.uid = res.data.data.userExtView.uid;
-          window.localStorage.setItem('uid', that.uid);
-          var data = { pageSize: 5, pageNum: 1 };
-          get('api/personOrders/processing', data).then(function (result) {
-            if (result.success) {
-              if (result.data.data.rsts.length > 5) {
-                that.orders = result.data.data.rsts.slice(0, 5);
-                return;
-              }
-              that.orders = result.data.data.rsts;
-            }
-          });
+      get('api/personOrders/processing').then(function (result) {
+        if (result.success) {
+          if (result.data.data.rsts.length > 5) {
+            that.orders = result.data.data.rsts.slice(0, 5);
+            return;
+          }
+          that.orders = result.data.data.rsts;
         }
       });
     }
@@ -1555,18 +1551,6 @@ var o_header = {
     this.$on("isregister", function (i) {
       this.isregister = i;
     });
-    if (utils.getCookie('token')) {
-      var that = this;
-      get('api/personOrders').then(function (res) {
-        if (res.success) {
-          if (res.data.data.rsts.length > 5) {
-            that.orders = res.data.data.rsts.slice(0, 5);
-            return;
-          }
-          that.orders = res.data.data.rsts;
-        }
-      });
-    }
   },
   filters: {
     toHours: function (time) {
