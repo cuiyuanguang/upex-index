@@ -180,8 +180,8 @@ var messages = {
     en: 'Has payment been made ?',
   },
   notPayWarn: {
-    zh: '若您还没有支付，您将会被视为骗子',
-    en: 'If you do not pay, you will be treated as a cheater!'
+    zh: '若您还没有支付，您将会受到严肃处理',
+    en: 'If you do not pay, you will be punished!'
   },
   cancel: {
     zh: '取消',

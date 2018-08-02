@@ -23,7 +23,7 @@
             <h3 v-if="step==3">
               <span>
                 {{ $t('transactionSuccessful') }} - {{ $t('receivePayment') }}
-                <span style="color:#0CBF48"> {{orderInfo.totalPrice}}USDT</span>
+                <span style="color:#0CBF48"> {{orderInfo.totalPrice}} USDT</span>
               </span>
             </h3>
             <div class="step-wrapper">
@@ -49,13 +49,13 @@
                   <li class="info-items">
                     <Row>
                       <i-col span="6" class="info-key">{{ $t('totalPurchase') }} :</i-col>
-                      <i-col span="18" class="info-value">{{orderInfo.volume}}</i-col>
+                      <i-col span="18" class="info-value">{{orderInfo.volume}} USDT</i-col>
                     </Row>
                   </li>
                   <li class="info-items">
                     <Row>
                       <i-col span="6" class="info-key">{{ $t('totalPrice') }} :</i-col>
-                      <i-col span="18" class="info-value">{{orderInfo.totalPrice}}</i-col>
+                      <i-col span="18" class="info-value">{{orderInfo.totalPrice}} SAR</i-col>
                     </Row>
                   </li>
                 </ul>
@@ -69,13 +69,13 @@
                   <li class="info-items">
                     <Row>
                       <i-col span="6" class=" info-key">{{ $t('received') }} :</i-col>
-                      <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.volume}}</i-col>
+                      <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.volume}} USDT</i-col>
                     </Row>
                   </li>
                   <li class="info-items">
                     <Row>
                       <i-col span="6" class="info-key">{{ $t('paid') }} :</i-col>
-                      <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalPrice}}</i-col>
+                      <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalPrice}} SAR</i-col>
                     </Row>
                   </li>
                   <li class="info-items">
@@ -93,7 +93,7 @@
                   <li v-for="(item, index) in orderInfo.paymentBanks">
                     <Row>
                       <i-col span="9" class="info-key">
-                        {{ $t('bank') }} {{ index + 1 }}
+                        {{ $t('bank') }}
                       </i-col>
                       <i-col span="15" class="info-value">{{item.bankName}}</i-col>
                     </Row>
@@ -133,7 +133,7 @@
                   </i-col>
                   <i-col span="15">
                     <input type="text" name="Social Number" readonly class="input-copy" :value="orderInfo.seller.userExtView.watchapp" @click="copy($event)">
-                    <a class="contact" :href="'https://api.whatsapp.com/send?phone='+orderInfo.seller.userExtView.watchapp">
+                    <a class="contact" :href="'https://api.whatsapp.com/send?phone='+whatsAppLink" target="_blank">
                       <Icon type="ios-telephone-outline"></Icon>{{ $t('contactSeller') }}</a>
                   </i-col>
                 </Row>
@@ -186,11 +186,11 @@
           </li>
           <li>
             <span>{{ $t('totalPurchase') }} :</span>
-            <span>{{ orderInfo.volume }}</span>
+            <span>{{ orderInfo.volume }} USDT</span>
           </li>
           <li>
             <span>{{ $t('totalPrice') }} :</span>
-            <span>{{ orderInfo.totalPrice }}</span>
+            <span>{{ orderInfo.totalPrice }} SAR</span>
           </li>
         </ul>
         <p>{{ $t('paidAndClick') }}
@@ -235,14 +235,14 @@
               <li>
                 <label>{{ $t('lastFourNumber') }}</label>
                 <div>
-                  <input type="number" v-model="card">
+                  <input type="text" maxlength="4" v-model="card">
                   <p class="error" v-if="cardErrorTips">{{ cardErrorTips }}</p>
                 </div>
               </li>
               <li>
                 <label>{{ $t('lastFourNumber') }}</label>
                 <div>
-                  <input type="number" v-model="recard">
+                  <input type="text" maxlength="4" v-model="recard">
                   <p class="error" v-if="recardErrorTips">{{ recardErrorTips }}</p>
                 </div>
               </li>
