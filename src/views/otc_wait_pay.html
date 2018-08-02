@@ -46,13 +46,13 @@
                 <li class="info-items">
                   <Row>
                     <i-col span="6" class="info-key">{{ $t('totalPurchase') }} :</i-col>
-                    <i-col span="18" class="info-value">{{orderInfo.totalVolume}}</i-col>
+                    <i-col span="18" class="info-value">{{orderInfo.totalVolume}} USDT</i-col>
                   </Row>
                 </li>
                 <li class="info-items">
                   <Row>
                     <i-col span="6" class="info-key">{{ $t('totalPrice') }} :</i-col>
-                    <i-col span="18" class="info-value">{{orderInfo.totalPrice}}</i-col>
+                    <i-col span="18" class="info-value">{{orderInfo.totalPrice}} SAR</i-col>
                   </Row>
                 </li>
               </ul>
@@ -66,21 +66,21 @@
                 <li class="info-items">
                   <Row>
                     <i-col span="6" class=" info-key">{{ $t('received') }} :</i-col>
-                    <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalVolume}}</i-col>
+                    <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalVolume}} USDT</i-col>
                   </Row>
                 </li>
                 <li class="info-items">
                   <Row>
                     <i-col span="6" class="info-key">{{ $t('sold') }} :</i-col>
-                    <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalPrice}}</i-col>
+                    <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalPrice}} SAR</i-col>
                   </Row>
                 </li>
-                <li class="info-items">
+                <!-- <li class="info-items">
                   <Row>
                     <i-col span="6" class="info-key">{{ $t('timeOfArrival') }} :</i-col>
                     <i-col span="18" class="info-value">{{ arrivalTime }}</i-col>
                   </Row>
-                </li>
+                </li> -->
               </ul>
             </i-col>
             <i-col span="12">
@@ -111,7 +111,7 @@
                   </i-col>
                   <i-col span="15">
                     <input type="text" name="Social Number" readonly class="input-copy" :value="orderInfo.socialNumber" @click="copy($event)">
-                    <a class="contact" :href="'https://api.whatsapp.com/send?phone='+orderInfo.socialNumber">
+                    <a class="contact" :href="'https://api.whatsapp.com/send?phone='+whatsAppLink" target="_blank">
                       <Icon type="ios-telephone-outline"></Icon>{{ $t('contactBuyer') }}</a>
                   </i-col>
                 </Row>

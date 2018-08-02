@@ -33,8 +33,8 @@ var waitPay = new Vue({
         totalVolume: 0,
         orderId: 0,
         bankCard: [],
-        phone: '110',
-        socialNumber: '333',
+        phone: '',
+        socialNumber: '',
       },
     };
   },
@@ -42,6 +42,10 @@ var waitPay = new Vue({
     arrivalTime: function() {
       var date = new Date(this.orderInfo.paymentTime);
       return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+    },
+    whatsAppLink: function() {
+      var whatsAppStr = this.orderInfo.socialNumber;
+      return whatsAppStr.substr(whatsAppStr.indexOf(',') + 1);
     },
   },
   methods: {
