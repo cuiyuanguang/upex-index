@@ -1744,17 +1744,17 @@ var o_header = {
                   <li v-for="item in orders" :key="item.sequence">
                     <Row>
                       <i-col span="2" class="text-left">
-                        <div class="buyType" v-if="item.buyer.id==uid">buy</div>
+                        <div class="buyType" v-if="item.buyer.id==userInfo.id">buy</div>
                         <div class="sellType" v-else>sell</div>
                       </i-col>
                       <i-col span="18" class="text-left" style="padding-left:6px;">
-                        <div v-if="item.buyer.id==uid" class="tip">{{ $t('payToSeller') }} {{item.totalPrice}}SAR</div>
+                        <div v-if="item.buyer.id==userInfo.id" class="tip">{{ $t('payToSeller') }} {{item.totalPrice}}SAR</div>
                         <div v-else class="tip">{{ $t('waitForBuyer') }}{{item.totalPrice}}SAR</div>
-                        <span v-if="item.buyer.id==uid">{{ $t('payInTime') }} {{item.ctime | toHours }}</span>
+                        <span v-if="item.buyer.id==userInfo.id">{{ $t('payInTime') }} {{item.ctime | toHours }}</span>
                         <span v-else>{{ $t('waitForTime') }} {{item.ctime | toHours }}</span>
                       </i-col>
                       <i-col span="4" class="text-right">
-                        <a v-if="item.buyer.id==uid" class="view" :href="'otc_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
+                        <a v-if="item.buyer.id==userInfo.id" class="view" :href="'otc_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
                         <a v-else class="view" :href="'otc_wait_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
                       </i-col>
                     </Row>
@@ -1774,7 +1774,7 @@ var o_header = {
             <li class="items" v-if="!logined">
               <a type="primary" @click="showLogin()">{{ $t('login') }}</a>
             </li>
-            <li class="items" v-if="!uid">
+            <li class="items" v-if="!logined">
               <a type="primary" @click="showRegister()">{{ $t('register') }}</a>
             </li>
             <li class="items">
@@ -1810,6 +1810,7 @@ var o_header = {
     return {
       orders: [],
       ws: null,
+      userInfo: {},
       logined: false,
       isLoginShow: false,
       isregister: false,
@@ -1890,6 +1891,7 @@ var o_header = {
     //   this.isLoginShow = true;
     //   return;
     // }
+    this.userInfo = JSON.parse(sessionStorage.getItem('user'));
     var locale = localStorage.getItem('locale');
     if (locale) {
       document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
