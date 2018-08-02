@@ -177,4 +177,8 @@ var messages = {
     en: 'back to edit',
     sa: '',
   },
+  noData: {
+    zh: '暂无数据',
+    en: 'No Data',
+  },
 };
