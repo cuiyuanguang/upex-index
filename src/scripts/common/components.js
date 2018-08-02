@@ -45,6 +45,24 @@ var Toast = {
 
 Vue.use(VueI18n);
 
+Vue.filter('date', function(utc) {
+  var date = new Date(utc);
+  var format = 'yyyy-MM-dd hh:mm:ss';
+  var o = {
+    "M+": date.getMonth() + 1, //月份 
+    "d+": date.getDate(), //日 
+    "h+": date.getHours(), //小时 
+    "m+": date.getMinutes(), //分 
+    "s+": date.getSeconds(), //秒 
+    "q+": Math.floor((date.getMonth() + 3) / 3), //季度 
+    "S": date.getMilliseconds() //毫秒 
+  };
+  if (/(y+)/.test(format)) format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+  for (var k in o)
+  if (new RegExp("(" + k + ")").test(format)) format = format.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+  return format;
+});
+
 var i18nComponentsMessages = {
   login: {
     zh: '登录',
@@ -83,12 +101,12 @@ var i18nComponentsMessages = {
     en: 'view',
   },
   payToSeller: {
-    zh: '须向卖家支付',
+    zh: '已向卖家支付',
     en: 'payment to seller',
   },
   waitForBuyer: {
-    zh: '等待买家支付',
-    en: 'Wait for buyer to pay',
+    zh: '买家已支付',
+    en: 'Buyer has paid',
   },
   payInTime: {
     zh: '支付截止时间',
@@ -866,7 +884,7 @@ var o_my_login = {
               mobileNumber: that.loginPhoneVal,
               loginPword: that.loginPhonePassword,
             };
-            post('api/user/login_in', JSON.stringify(data)).then(function (res) {
+            post('api/user/login_in', JSON.stringify(data), false).then(function (res) {
               if (res.success) {
                 if (res.data.data.type === '2') {
                   that.$parent.$emit(
@@ -1876,6 +1894,9 @@ var o_header = {
           sessionStorage.clear();
           utils.clearCookie();
           that.logined = false;
+          if (location.pathname !== '/views/otc_adverts.html') {
+            location.href = 'otc_adverts.html';
+          }
         }
       });
     },
