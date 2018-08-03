@@ -1,3 +1,6 @@
+.grecaptcha-badge{
+  display: none;
+}
 .my-login .clear:after {
     content: ".";
     clear: both;
@@ -353,3 +356,4 @@
 .my-register .my-loginNext-error{
   margin-bottom: 0;
 }
+
