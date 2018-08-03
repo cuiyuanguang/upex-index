@@ -590,7 +590,6 @@ var addContact = {
                 >
                   <Select v-model="selectCountry" slot="prepend" filterable style="width:86px;">
                     <Option
-                      v-if="countryArr.length > 0"
                       v-for="(country, index) in countryArr"
                       :key="index"
                       :value="country.dialingCode"
@@ -743,7 +742,6 @@ var o_my_login = {
           >
             <Select v-model="selectCountry" @on-change="loginPhoneFocus" slot="prepend" filterable style="width:86px">
               <Option
-                v-if="countryArr.length > 0"
                 v-for="(country, index) in countryArr"
                 :value="country.dialingCode"
                 :label="country.dialingCode"
