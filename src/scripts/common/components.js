@@ -192,6 +192,7 @@ var i18nComponentsMessages = {
 
 var i18nComponents = new VueI18n({
   locale: 'zh', // set locale
+  fallbackLocale: 'zh',
   messages: utils.transform(i18nComponentsMessages),
 });
 
