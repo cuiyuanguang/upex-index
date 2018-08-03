@@ -39,6 +39,7 @@ $http.interceptors.response.use(
           icon: 'warning',
           callback: function() {
             if (result.code == 2048) {
+              sessionStorage.clear();
               utils.delCookie('token');
               location.href = 'otc_adverts.html?auth=1';
             }
@@ -49,7 +50,8 @@ $http.interceptors.response.use(
           data: result.message || result.msg,
         };
       }
-      if (response.config.method === 'post') {
+      if (response.config.method === 'post' && response.config.showToast) {
+        console.log(response);
         // Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
         Toast.show(result.message || result.msg, { icon: 'ok' });
       }
@@ -68,14 +70,16 @@ $http.interceptors.response.use(
   }
 );
 
-function post(url, data) {
-  return $http.post(url, data).then(function(response) {
+function post(url, data, showToast) {
+  var show = typeof showToast === 'undefined' ? true : showToast;
+  return $http.post(url, data, { showToast: show }).then(function(response) {
     return response;
   });
 }
 
-function get(url, params) {
-  return $http.get(url, { params: params }).then(function(response) {
+function get(url, params, showToast) {
+  var show = typeof showToast === 'undefined' ? true : showToast;
+  return $http.get(url, { params: params, showToast: show }).then(function(response) {
     return response;
   });
 }

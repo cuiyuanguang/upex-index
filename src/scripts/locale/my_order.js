@@ -67,4 +67,8 @@ var messages = {
     zh: '查看',
     en: 'view',
   },
+  noData: {
+    zh: '暂无数据',
+    en: 'No Data',
+  },
 };

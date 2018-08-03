@@ -40,6 +40,7 @@ var pay = new Vue({
         },
         user: {},
       },
+      whatsAppLink: '',
     }
   },
   computed: {
@@ -103,14 +104,10 @@ var pay = new Vue({
       if (!this.card) {
         this.cardErrorTips = "不能为空";
         return;
-      } else {
-        this.cardErrorTips = "";
       }
       if (!this.recard) {
         this.recardErrorTips = "不能为空";
         return;
-      } else {
-        this.recardErrorTips = "";
       }
       if (this.cardErrorTips || this.recardErrorTips) {
         return;
@@ -125,7 +122,7 @@ var pay = new Vue({
           that.isPayInfoDialogShow = false;
           that.getOrderInfo(that.sequence);
         }
-      })
+      });
     },
     //------------end-----------------
     copy: function (e) {
@@ -146,8 +143,6 @@ var pay = new Vue({
           //to make sure the status of the order
           that.step = data.status;
           //create time of the order
-          //limit time of pay
-          //if order  paid
           var payTime;
           if (data.status == 2) {
             payTime = data.limitTime;
@@ -158,6 +153,8 @@ var pay = new Vue({
           that.payCountdown(data.ctime, payTime);
           // set  orderInfo;
           that.orderInfo = data;
+          var whatsAppStr = data.seller.userExtView.watchapp;
+          that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf(',') + 1);
         });
     }
     //------------------------------GET ORDER INFO END---------------------------------------//	
@@ -182,18 +179,19 @@ var pay = new Vue({
       }
     },
     card: function (n, o) {
-      if (n.length > 4) {
-        this.card = o;
+      if (!n) {
+        this.cardErrorTips = '不能为空';
+      } else {
+        this.cardErrorTips = '';
       }
     },
     recard: function (n, o) {
-      if (n.length > 4) {
-        this.recard = o;
-      }
-      if (n != this.card) {
-        this.recardErrorTips = "两次输入的信息不一致";
+      if (!n) {
+        this.recardErrorTips = '不能为空';
+      } else if (n != this.card) {
+        this.recardErrorTips = '两次输入的信息不一致';
       } else {
-        this.recardErrorTips = "";
+        this.recardErrorTips = '';
       }
     }
   },

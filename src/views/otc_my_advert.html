@@ -32,15 +32,16 @@
                 <td>
                   <Avatar size="large" style="background-color: #5C95EA">{{item.side.toLowerCase()}}</Avatar>
                 </td>
-                <td>{{item.volume}}</td>
-                <td>{{item.price}}</td>
+                <td>{{ item.volume - item.sell }} / {{ item.volume }} USDT</td>
+                <td>{{item.price}} SAR</td>
                 <td>{{item.minTrade}} -- {{item.maxTrade}} SAR</td>
-                <td>{{item.ctime | time}}</td>
+                <td>{{item.ctime | date}}</td>
                 <td>
                   <i-button @click="pause(item)" :disabled="item.status === 3 || item.status === 4 || item.status === 5" type="text">{{ item.status === 6 ? $t('start') : $t('pause') }}</i-button>
                   <i-button @click="cancel(item)" :disabled="item.status === 4 || item.status === 5" type="text">{{ $t('cancel') }}</i-button>
                 </td>
               </tr>
+              <tr v-if="!pendingOrdersList.length"><td colspan="9">{{ $t('noData') }}</td></tr>
             </tbody>
           </table>
         </div>
@@ -56,7 +57,7 @@
             <div class="g-body_desc">{{ modalMsg.desc }}</div>
           </div>
           <div slot="footer">
-            <i-button type="text" @click="showModal = false">Cancel</i-button>
+            <i-button type="text" @click="showModal = false">{{ $t('cancel') }}</i-button>
             <i-button type="warning" @click="manualAction">{{ modalMsg.confirmText }}</i-button>
           </div>
         </Modal>

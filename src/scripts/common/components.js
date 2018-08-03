@@ -45,6 +45,24 @@ var Toast = {
 
 Vue.use(VueI18n);
 
+Vue.filter('date', function(utc) {
+  var date = new Date(utc);
+  var format = 'yyyy-MM-dd hh:mm:ss';
+  var o = {
+    "M+": date.getMonth() + 1, //月份
+    "d+": date.getDate(), //日
+    "h+": date.getHours(), //小时
+    "m+": date.getMinutes(), //分
+    "s+": date.getSeconds(), //秒
+    "q+": Math.floor((date.getMonth() + 3) / 3), //季度
+    "S": date.getMilliseconds() //毫秒
+  };
+  if (/(y+)/.test(format)) format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+  for (var k in o)
+  if (new RegExp("(" + k + ")").test(format)) format = format.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+  return format;
+});
+
 var i18nComponentsMessages = {
   login: {
     zh: '登录',
@@ -83,12 +101,12 @@ var i18nComponentsMessages = {
     en: 'view',
   },
   payToSeller: {
-    zh: '须向卖家支付',
+    zh: '已向卖家支付',
     en: 'payment to seller',
   },
   waitForBuyer: {
-    zh: '等待买家支付',
-    en: 'Wait for buyer to pay',
+    zh: '买家已支付',
+    en: 'Buyer has paid',
   },
   payInTime: {
     zh: '支付截止时间',
@@ -1075,6 +1093,7 @@ var o_my_loginNext = {
       show: true,
       count: '',
       timer: null,
+      isLogined: false,
     };
   },
   methods: {
@@ -1098,9 +1117,16 @@ var o_my_loginNext = {
           post('api/user/confirm_login', JSON.stringify(data)).then(function (res) {
             if (res.success) {
               that.modal_loading = false;
-              that.loginNext = false;
+              that.$parent.$emit('isLoginNext', false);
               utils.setCookie('token', that.isLoginNextCookieNum);
-              window.location.reload();
+              get('api/userInfo').then(function(res) {
+                that.isLogined = res.data.code === 0;
+                var data = res.data.data;
+                if (that.isLogined) {
+                  that.$parent.$emit('logined', that.isLogined);
+                  sessionStorage.setItem('user', JSON.stringify(data));
+                }
+              });
             } else {
               that.modal_loading = false;
             }
@@ -1806,7 +1832,7 @@ var o_header = {
         </i-col>
         <i-col span="9" class="management">
           <ul class="text-right">
-            <li class="items my-orders" v-if="uid">
+            <li class="items my-orders" v-if="logined">
               <Badge :count="orders.length">
                 <a href="otc_my_order.html" class="demo-badge" @click="isMyordersShow=!isMyordersShow">{{ $t('allOrder') }}</a>
               </Badge>
@@ -1820,17 +1846,17 @@ var o_header = {
                   <li v-for="item in orders" :key="item.sequence">
                     <Row>
                       <i-col span="2" class="text-left">
-                        <div class="buyType" v-if="item.buyer.id==uid">buy</div>
+                        <div class="buyType" v-if="item.buyer.id==userInfo.id">buy</div>
                         <div class="sellType" v-else>sell</div>
                       </i-col>
                       <i-col span="18" class="text-left" style="padding-left:6px;">
-                        <div v-if="item.buyer.id==uid" class="tip">{{ $t('payToSeller') }} {{item.totalPrice}}SAR</div>
+                        <div v-if="item.buyer.id==userInfo.id" class="tip">{{ $t('payToSeller') }} {{item.totalPrice}}SAR</div>
                         <div v-else class="tip">{{ $t('waitForBuyer') }}{{item.totalPrice}}SAR</div>
-                        <span v-if="item.buyer.id==uid">{{ $t('payInTime') }} {{item.ctime | toHours }}</span>
+                        <span v-if="item.buyer.id==userInfo.id">{{ $t('payInTime') }} {{item.ctime | toHours }}</span>
                         <span v-else>{{ $t('waitForTime') }} {{item.ctime | toHours }}</span>
                       </i-col>
                       <i-col span="4" class="text-right">
-                        <a v-if="item.buyer.id==uid" class="view" :href="'otc_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
+                        <a v-if="item.buyer.id==userInfo.id" class="view" :href="'otc_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
                         <a v-else class="view" :href="'otc_wait_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
                       </i-col>
                     </Row>
@@ -1841,16 +1867,16 @@ var o_header = {
                 </div>
               </div>
             </li>
-            <li class="items" v-if="uid">
+            <li class="items" v-if="logined">
               <a href="otc_my_advert.html">{{ $t('pendingOrder') }}</a>
             </li>
-            <li class="items" v-if="uid">
+            <li class="items" v-if="logined">
               <a type="primary" @click="loginOut">{{ $t('loginout') }}</a>
             </li>
-            <li class="items" v-if="!uid">
+            <li class="items" v-if="!logined">
               <a type="primary" @click="showLogin()">{{ $t('login') }}</a>
             </li>
-            <li class="items" v-if="!uid">
+            <li class="items" v-if="!logined">
               <a type="primary" @click="showRegister()">{{ $t('register') }}</a>
             </li>
             <li class="items">
@@ -1886,6 +1912,7 @@ var o_header = {
     return {
       orders: [],
       ws: null,
+      userInfo: {},
       logined: false,
       isLoginShow: false,
       isregister: false,
@@ -1950,13 +1977,15 @@ var o_header = {
       console.log('connection closed (' + e.code + ')');
     },
     loginOut() {
+      var that = this;
       post('api/user/login_out').then(function (res) {
         if (res.success) {
-          localStorage.clear();
+          sessionStorage.clear();
           utils.clearCookie();
-          setTimeout(function () {
+          that.logined = false;
+          if (location.pathname !== '/views/otc_adverts.html') {
             location.href = 'otc_adverts.html';
-          }, 1500);
+          }
         }
       });
     },
@@ -1972,11 +2001,13 @@ var o_header = {
     //   this.isLoginShow = true;
     //   return;
     // }
+    this.userInfo = JSON.parse(sessionStorage.getItem('user'));
     var locale = localStorage.getItem('locale');
     if (locale) {
       document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
       this.$i18n.locale = locale;
     }
+
     if (utils.getCookie('token')) {
       var that = this;
       get('api/personOrders/processing').then(function (result) {
@@ -1989,6 +2020,10 @@ var o_header = {
         }
       });
     }
+    this.$on('logined', function (i) {
+      this.logined = i;
+    });
+    this.logined = sessionStorage.getItem('user') !== null;
     this.$on('islogin', function (i) {
       this.isLoginShow = i;
     });

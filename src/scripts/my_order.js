@@ -13,10 +13,7 @@ var myOrder = new Vue({
     locale: 'zh',
     pageSize: 10,
     current: 1,
-    userInfo: {
-      uid: window.localStorage.getItem('uid'),
-    },
-    uid: '',
+    userInfo: {},
     list: [],
     total: 0,
   },
@@ -66,6 +63,7 @@ var myOrder = new Vue({
       document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
       this.$i18n.locale = locale;
     }
+    this.userInfo = JSON.parse(sessionStorage.getItem('user'));
     var that = this;
     this.$on('locale', function(i) {
       that.locale = i;
