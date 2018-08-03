@@ -29,6 +29,11 @@ var toastMsg = {
     en: 'User not logged in',
     sa: 'لم يتم تسجيل دخول المستخدم',
   },
+  '10003': {
+    zh: '谷歌验证不通过',
+    en: 'Google verification failed',
+    sa: 'فشل التحقق من Google',
+  },
   '10004': {
     zh: '短信发送失败',
     en: 'message failed to send',
