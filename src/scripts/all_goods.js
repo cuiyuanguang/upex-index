@@ -134,11 +134,11 @@ var allGoods = new Vue({
       console.log(val);
     },
     getUserInfo: function() {
-      var user = JSON.parse(sessionStorage.getItem('user'));
-      this.whatsApp = user.userExtView.watchapp;
-      this.balance = user.usdtAmount.balance;
-      this.isGoogleBind = user.googleAuthenticatorStatus === 1;
-      this.isWatchAppBind = user.userExtView.watchapp;
+      var user = JSON.parse(localStorage.getItem('user'));
+      this.whatsApp = user && user.userExtView.watchapp;
+      this.balance = user && user.usdtAmount.balance;
+      this.isGoogleBind = user && user.googleAuthenticatorStatus === 1;
+      this.isWatchAppBind = user && user.userExtView.watchapp;
     },
     getBindedCard: function() {
       var that = this;
@@ -197,7 +197,7 @@ var allGoods = new Vue({
     // sell USDT
     showSellUsdt: function(i) {
       // check if login
-      if (!sessionStorage.getItem('user')) {
+      if (!localStorage.getItem('user')) {
         this.$refs.header.showLogin();
         return;
       }
@@ -239,7 +239,7 @@ var allGoods = new Vue({
     //buy USDT
     showBuyUsdt: function(i) {
       // check if login
-      if (!sessionStorage.getItem('user')) {
+      if (!localStorage.getItem('user')) {
         this.$refs.header.showLogin();
         return;
       }
@@ -261,7 +261,7 @@ var allGoods = new Vue({
     },
     //buy
     buy: function() {
-      if (!sessionStorage.getItem('user')) {
+      if (!localStorage.getItem('user')) {
         this.$refs.header.showLogin();
         return;
       }
@@ -286,7 +286,7 @@ var allGoods = new Vue({
     },
     //sell usdt
     sell: function() {
-      if (!sessionStorage.getItem('user')) {
+      if (!localStorage.getItem('user')) {
         this.$refs.header.showLogin();
         return;
       }
@@ -311,7 +311,7 @@ var allGoods = new Vue({
     },
     showPostDialog: function() {
       // check if login
-      var user = JSON.parse(sessionStorage.getItem('user'));
+      var user = JSON.parse(localStorage.getItem('user'));
       this.whatsApp = user.userExtView.watchapp;
       this.balance = user.usdtAmount.balance;
       this.isGoogleBind = user.googleAuthenticatorStatus === 1;
@@ -351,7 +351,7 @@ var allGoods = new Vue({
           // 获取用户余额
           get('api/finance/account_balance').then(function(res) {
             if (res.success) {
-              that.balance = res.data.data.allCoinMap.USDT.present_coin_balance;
+              that.balance = res.data.data.allCoinMap.USDT.normal_balance;
             }
           });
           // 获取发单数量及类型

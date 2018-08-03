@@ -104,7 +104,7 @@ var waitPay = new Vue({
     //-------------------------GET ORDER INFO-----------------------------------------------//
     getOrderInfo: function(sequence) {
       var that = this;
-      var user = JSON.parse(sessionStorage.getItem('user'));
+      var user = JSON.parse(localStorage.getItem('user'));
       get('api/orderDetail', { sequence: sequence }, ).then(function (res) {
         var data = res.data.data;
         if (data.sellerId != user.id) {
