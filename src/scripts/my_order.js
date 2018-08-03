@@ -64,7 +64,7 @@ var myOrder = new Vue({
       document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
       this.$i18n.locale = locale;
     }
-    this.userInfo = JSON.parse(sessionStorage.getItem('user'));
+    this.userInfo = JSON.parse(localStorage.getItem('user'));
     var that = this;
     this.$on('locale', function(i) {
       that.locale = i;

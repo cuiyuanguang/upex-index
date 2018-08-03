@@ -39,7 +39,7 @@ $http.interceptors.response.use(
           icon: 'warning',
           callback: function() {
             if (result.code == 2048) {
-              sessionStorage.clear();
+              localStorage.clear();
               utils.delCookie('token');
               location.href = 'otc_adverts.html?auth=1';
             }

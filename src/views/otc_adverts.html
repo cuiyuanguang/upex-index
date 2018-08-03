@@ -56,7 +56,7 @@
                   <div class="seller">{{ $t('seller') }}</div>
                   {{item.userName}}
                 </td>
-                <td>{{item.volume - item.sell}} USDT</td>
+                <td>{{(item.volume - item.sell).toFixed(4)}} USDT</td>
                 <td>
                   {{item.minTrade}}--{{item.maxTrade}} SAR
                 </td>
@@ -98,7 +98,7 @@
                   <div class="seller">{{ $t('buyer') }}</div>
                   {{item.userName}}
                 </td>
-                <td>{{item.volume - item.sell}} USDT</td>
+                <td>{{(item.volume - item.sell).toFixed(4)}} USDT</td>
                 <td>
                   {{item.minTrade}}--{{item.maxTrade}} SAR
                 </td>

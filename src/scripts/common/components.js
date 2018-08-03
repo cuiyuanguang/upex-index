@@ -1124,7 +1124,7 @@ var o_my_loginNext = {
                 var data = res.data.data;
                 if (that.isLogined) {
                   that.$parent.$emit('logined', that.isLogined);
-                  sessionStorage.setItem('user', JSON.stringify(data));
+                  localStorage.setItem('user', JSON.stringify(data));
                 }
               });
             } else {
@@ -1926,7 +1926,7 @@ var o_header = {
   },
   computed: {
     uid: function () {
-      return sessionStorage.getItem('uid');
+      return localStorage.getItem('uid');
     },
   },
   methods: {
@@ -1980,7 +1980,7 @@ var o_header = {
       var that = this;
       post('api/user/login_out').then(function (res) {
         if (res.success) {
-          sessionStorage.clear();
+          localStorage.clear();
           utils.clearCookie();
           that.logined = false;
           if (location.pathname !== '/views/otc_adverts.html') {
@@ -2001,7 +2001,7 @@ var o_header = {
     //   this.isLoginShow = true;
     //   return;
     // }
-    this.userInfo = JSON.parse(sessionStorage.getItem('user'));
+    this.userInfo = JSON.parse(localStorage.getItem('user'));
     var locale = localStorage.getItem('locale');
     if (locale) {
       document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
@@ -2023,7 +2023,7 @@ var o_header = {
     this.$on('logined', function (i) {
       this.logined = i;
     });
-    this.logined = sessionStorage.getItem('user') !== null;
+    this.logined = localStorage.getItem('user') !== null;
     this.$on('islogin', function (i) {
       this.isLoginShow = i;
     });
