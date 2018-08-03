@@ -81,11 +81,7 @@
 }
 
 .pay .pay-info {
-  padding: 10px 30px;
-}
-
-.pay .pay-cookie {
-  padding: 10px 30px;
+  padding: 10px 20px;
 }
 
 .pay .pay-info .info-header {
@@ -150,7 +146,18 @@
   background-color: #0bb042;
 }
 
-.wait-pay .received {
+.pay-notice {
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 40px;
+}
+
+.pay-action {
+  margin-bottom: 20px;
+}
+
+.pay-action-btn {
   width: 170px;
   height: 44px;
   background: rgba(255, 237, 0, 1);
@@ -162,8 +169,9 @@
   color: rgba(51, 51, 51, 1);
 }
 
-.pay .return {
-  padding: 0 30px;
+.pay-tips {
+  margin-bottom: 20px;
+  line-height: 30px;
 }
 
 .pay .pay-info .ivu-row .contact:hover {
@@ -196,25 +204,7 @@
   padding: 10px 30px;
 }
 
-.pay .pay-status h3 {
-  font-size: 18px;
-  color: rgba(51, 51, 51, 1);
-}
-
-.pay .pay-status .pay-left-time {
-  font-size: 18px;
-  color: rgba(255, 46, 46, 1);
-}
-
-.pay .pay-status .pay-btn {
-  border: none;
-  width: 140px;
-  height: 44px;
-  background: rgba(255, 237, 0, 1);
-  border-radius: 5px;
-}
-
-.pay .pay-status .pay-tips {
+.pay .pay-action-tips {
   display: inline-block;
   width: 466px;
   height: 38px;
@@ -225,25 +215,9 @@
 }
 
 .pay .pay-status .cancel-order {
-  margin-top: 30px;
   font-size: 14px;
   color: rgba(52, 97, 167, 1);
   line-height: 16px;
-}
-
-.pay .pay-status .wait-time > span:first-child {
-  font-size: 16px;
-  color: rgba(51, 51, 51, 1);
-  line-height: 19px;
-}
-
-.pay .pay-status .wait-time > span:last-child {
-  font-size: 16px;
-  color: rgba(12, 191, 72, 1);
-}
-
-.pay .pay-footer {
-  padding: 10px 30px;
 }
 
 #app .pay-modal .pay-modal-title {

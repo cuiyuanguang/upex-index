@@ -10,16 +10,16 @@
 <body>
   <div id="app" v-cloak>
     <o-header ref="header"></o-header>
-    <div class="wrapper" style="margin-bottom: 70px;margin-top:30px;">
+    <div class="wrapper" style="margin-bottom: 70px;margin-top:30px;" v-show="orderInfo.orderId">
       <div class="pay">
         <div class="pay-header">
-          <h3 v-if="step==1">
+          <h3 v-if="step == 1">
             {{ $t('waitForBuyer') }}
           </h3>
-          <h3 v-if="step==2">
+          <h3 v-if="step == 2">
             {{ $t('buyerPaid') }} {{orderInfo.totalPrice}} SAR
           </h3>
-          <h3 v-if="step==3">
+          <h3 v-if="step == 3">
             {{ $t('transactionSuccessful') }} - {{ $t('receivePayment') }}
             <span style="color:#0CBF48">{{orderInfo.totalPrice}} SAR</span>
           </h3>
@@ -56,7 +56,7 @@
                   </Row>
                 </li>
               </ul>
-              <ul v-if="step==3">
+              <ul v-if="step == 3">
                 <li class="info-items">
                   <Row>
                     <i-col span="6" class="info-key">{{ $t('orderNo') }} :</i-col>
@@ -119,33 +119,36 @@
             </i-col>
           </Row>
         </div>
-        <div class="pay-status" v-if="step==1">
-          <h3>{{ $t('waitForBuyer') }}</h3>
-          <h3>
-            {{ $t('restTime') }}:
-            <span style="color: red;">{{leftTime}}</span>
-          </h3>
-          <p>1. {{ $t('helpTipsFirst') }}</p>
-          <p>2. {{ $t('helpTipsSecond') }}</p>
-        </div>
-        <div class="pay-status" v-if="step==2">
-          <h3>{{ $t('lastFourNumber') }} {{ orderInfo.bankCardLastNum }}, {{ $t('payYou') }}
-            <span style="color:RGBA(255, 113, 0, 1);"> {{orderInfo.totalPrice}}</span> SAR , {{ $t('receiveAll') }}
-            <br> {{ $t('notReceiveAndWait') }}
-          </h3>
-          <h3>{{ $t('restTime') }}:
-            <span style="color: red;"> {{leftTime}}</span>
-          </h3>
-          <div class="wait-pay" style="margin: 20px 0;">
-            <button @click="confirmOrder" class="received">{{ $t('confirm') }}</button>
-          </div>
-          <p>
-            1. {{ $t('helpTipsThird') }}
-            <br> 2. {{ $t('helpTipsFourth') }}
+        <div class="pay-status" v-if="step == 1" v-cloak>
+          <p class="pay-notice">
+            {{ $t('waitForBuyer') }}<br>
+            {{ $t('restTime') }}: <span class="text-error">{{leftTime}}</span>
+          </p>
+          <p class="pay-tips">
+            1. {{ $t('helpTipsFirst') }}<br>
+            2. {{ $t('helpTipsSecond') }}
           </p>
         </div>
-        <div class="pay-status" v-if="step==3">
-          <h2 style="color: rgb(40, 198, 40)">{{ $t('tradeDone') }}</h2>
+        <div class="pay-status" v-if="step == 2" v-cloak>
+          <p class="pay-notice">
+            {{ $t('lastFourNumber') }} {{ orderInfo.bankCardLastNum }}, {{ $t('payYou') }}
+            <span class="text-warn"> {{orderInfo.totalPrice}}</span> SAR , {{ $t('receiveAll') }}<br>
+            {{ $t('notReceiveAndWait') }}<br>
+            {{ $t('restTime') }}: <span class="text-error"> {{ leftTime != 0 ? leftTime : $t('orderExpired') }}</span>
+          </p>
+          <div class="pay-action" v-if="leftTime != 0">
+            <button @click="confirmOrder" class="pay-action-btn">{{ $t('confirm') }}</button>
+          </div>
+          <p class="pay-tips">
+            1. {{ $t('helpTipsThird') }}<br>
+            2. {{ $t('helpTipsFourth') }}
+          </p>
+          <div v-if="leftTime == 0" class="pay-tips">
+            <a href="otc_adverts.html">{{ $t('backToHome') }}</a>
+          </div>
+        </div>
+        <div class="pay-status" v-if="step == 3">
+          <p class="pay-notice">{{ $t('tradeDone') }}</p>
         </div>
       </div>
     </div>

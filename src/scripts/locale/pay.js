@@ -163,6 +163,14 @@ var messages = {
     zh: '订单已过期，无法查看支付信息',
     en: 'Order expired, unable to view payment information!'
   },
+  orderCanceled: {
+    zh: '订单已取消',
+    en: 'order canceled',
+  },
+  orderCanceledTips: {
+    zh: '订单已取消，无法继续支付',
+    en: 'Order canceled, unable to pay!'
+  },
   reasonForFailure: {
     zh: '失败原因',
     en: 'reason for failure',

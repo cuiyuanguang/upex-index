@@ -131,4 +131,8 @@ var messages = {
     zh: '确认',
     en: 'confirm',
   },
+  orderExpired: {
+    zh: '订单过期',
+    en: 'order expired',
+  },
 };
