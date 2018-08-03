@@ -587,10 +587,11 @@ var addContact = {
                   placeholder="Enter your WhatsApp number"
                   class="iview-input iview-input-countryPhone"
                 >
-                  <Select v-model="selectCountry" slot="prepend" filterable style="width:86px">
+                  <Select v-model="selectCountry" slot="prepend" filterable style="width:86px;">
                     <Option
                       v-if="countryArr.length > 0"
-                      v-for="country in countryArr"
+                      v-for="(country, index) in countryArr"
+                      :key="index"
                       :value="country.dialingCode"
                       :label="country.dialingCode"
                       style="width:100%;"
@@ -615,7 +616,7 @@ var addContact = {
     return {
       wapp: '',
       countryArr: [],
-      selectCountry: '+86',
+      selectCountry: '',
     };
   },
   props: ['show', 'locale'],
@@ -633,8 +634,8 @@ var addContact = {
     },
     bind() {
       var that = this;
-      post('api/watchapp', this.selectCountry + ',' +this.wapp).then(function (res) {
-        if (res.data.message == 'otc.result.success') {
+      post('api/watchapp', this.selectCountry + '-' +this.wapp).then(function (res) {
+        if (res.success) {
           that.$parent.$emit('isAddContactShow', false);
         }
       });
@@ -1768,8 +1769,8 @@ var o_header = {
                       <i-col span="18" class="text-left" style="padding-left:6px;">
                         <div v-if="item.buyer.id==userInfo.id" class="tip">{{ $t('payToSeller') }} {{item.totalPrice}}SAR</div>
                         <div v-else class="tip">{{ $t('waitForBuyer') }}{{item.totalPrice}}SAR</div>
-                        <span v-if="item.buyer.id==userInfo.id">{{ $t('payInTime') }} {{item.ctime | toHours }}</span>
-                        <span v-else>{{ $t('waitForTime') }} {{item.ctime | toHours }}</span>
+                        <span v-if="item.buyer.id==userInfo.id">{{ $t('payInTime') }} {{item.ctime | date }}</span>
+                        <span v-else>{{ $t('waitForTime') }} {{item.ctime | date }}</span>
                       </i-col>
                       <i-col span="4" class="text-right">
                         <a v-if="item.buyer.id==userInfo.id" class="view" :href="'otc_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
@@ -1959,10 +1960,5 @@ var o_header = {
     this.$on("isregister", function (i) {
       this.isregister = i;
     });
-  },
-  filters: {
-    toHours: function (time) {
-      return new Date(time).toLocaleTimeString();
-    },
   },
 };
