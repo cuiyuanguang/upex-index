@@ -822,17 +822,17 @@ var o_my_login = {
       var dataCaptcha = {
         'captcha': res
       };
-      post('api/common/googleValidCode', JSON.stringify(dataCaptcha)).then(function (res) {
+      post('api/common/googleValidCode', JSON.stringify(dataCaptcha),false).then(function (res) {
         console.log(res);
         if (res.success) {
           var data;
-          if (that.registerWrap === 'loginPhone') {
+          if (that.loginWrap === 'loginPhone') {
             data = {
               countryCode: that.selectCountry.slice(1),
               mobileNumber: that.loginPhoneVal,
               loginPword: that.loginPhonePassword,
             };
-            post('api/user/login_in', JSON.stringify(data)).then(function (res) {
+            post('api/user/login_in', JSON.stringify(data),false).then(function (res) {
               if (res.success) {
                 if (res.data.data.type === '2') {
                   that.$parent.$emit(
@@ -856,7 +856,7 @@ var o_my_login = {
               mobileNumber: that.loginEmailVal,
               loginPword: that.loginEmailPassword,
             };
-            post('api/user/login_in', JSON.stringify(data)).then(function (res) {
+            post('api/user/login_in', JSON.stringify(data),false).then(function (res) {
               if (res.success) {
                 if (res.data.data.type === '3') {
                   that.$parent.$emit(
@@ -875,7 +875,7 @@ var o_my_login = {
             });
           }
         } else {
-
+          that.modal_loading = false;
         }
       });
     },
@@ -1392,7 +1392,7 @@ var o_my_register = {
       var dataCaptcha = {
         'captcha': res
       };
-      post('api/common/googleValidCode', JSON.stringify(dataCaptcha)).then(function (res) {
+      post('api/common/googleValidCode', JSON.stringify(dataCaptcha),false).then(function (res) {
         console.log(res);
         if (res.success) {
           var data;
@@ -1404,7 +1404,7 @@ var o_my_register = {
               "mobileNumber": that.phoneVal,
               "loginPword": that.phonePasswordAgain,
             };
-            post('api/user/reg_mobile', JSON.stringify(data)).then(function (res) {
+            post('api/user/reg_mobile', JSON.stringify(data),false).then(function (res) {
               console.log(res);
               if (res.success) {
                 this.$parent.$emit('isregister', false);
@@ -1420,7 +1420,7 @@ var o_my_register = {
               "loginPword": that.emailPasswordAgain,
               "emailAuthCode": that.emailSmsCode
             };
-            post('api/user/reg_email', JSON.stringify(data)).then(function (res) {
+            post('api/user/reg_email', JSON.stringify(data),false).then(function (res) {
               console.log(res);
               if (res.success) {
                 this.$parent.$emit('isregister', false);
@@ -1792,7 +1792,7 @@ var o_my_registerGoogle = {
       var data = {
         'exchange-token': '12312312'
       };
-      post('api/user/toopen_google_authenticator', JSON.stringify(data)).then(function (res) {
+      post('api/user/toopen_google_authenticator', JSON.stringify(data),false).then(function (res) {
         console.log(res);
         if (res.success) {
           that.googleKey = res.data.data.googleKey;
