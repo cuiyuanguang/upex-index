@@ -56,7 +56,7 @@
                   <div class="seller">{{ $t('seller') }}</div>
                   {{item.userName}}
                 </td>
-                <td>{{item.volume}} USDT</td>
+                <td>{{item.volume - item.sell}} USDT</td>
                 <td>
                   {{item.minTrade}}--{{item.maxTrade}} SAR
                 </td>
@@ -98,7 +98,7 @@
                   <div class="seller">{{ $t('buyer') }}</div>
                   {{item.userName}}
                 </td>
-                <td>{{item.volume}} USDT</td>
+                <td>{{item.volume - item.sell}} USDT</td>
                 <td>
                   {{item.minTrade}}--{{item.maxTrade}} SAR
                 </td>
@@ -139,10 +139,16 @@
                       <span class="input-label">{{ $t('unitPrice') }}</span>
                       <span class="input-tips">{{ $t('currentPrice') }} {{marketPrice.exchange_sell_min || marketPrice.exchange_rate }} SAR</span>
                     </div>
-                    <div>
-                      <i-input type="number" v-model="postData.priceBUY" :placeholder="$t('pricePlaceholder')">
-                        <Icon class="o-sar" slot="prepend"></Icon>
-                      </i-input>
+                    <div class="o-input-number">
+                      <div class="o-input-number-append">SAR</div>
+                      <input-number
+                        size="large"
+                        v-model="postData.priceBUY"
+                        :min="marketPrice.trade_min_price"
+                        :placeholder="$t('pricePlaceholder')"
+                        ref="inputNumberPriceBUY"
+                      >
+                      </input-number>
                     </div>
                   </div>
                   <div class="input-group">
@@ -150,30 +156,49 @@
                       <span class="input-label">{{ $t('quantity') }}</span>
                       <span class="input-tips">{{ $t('balance') }} {{balance}} USDT</span>
                     </div>
-                    <div>
-                      <i-input v-model="postData.volumeBUY" type="number" :placeholder="$t('amountPlaceholder')">
-                        <Icon class="o-usdt" slot="prepend"></Icon>
-                      </i-input>
-                    </div>
+                    <div class="o-input-number">
+                        <div class="o-input-number-append">USDT</div>
+                        <input-number
+                          size="large"
+                          v-model="postData.volumeBUY"
+                          :min="marketPrice.trade_min_volume"
+                          :placeholder="$t('amountPlaceholder')"
+                          ref="inputNumberVolumeBUY"
+                        >
+                        </input-number>
+                      </div>
                   </div>
-                  <div>{{ $t('totalPrice') }}(SAR): {{postData.volumeBUY * postData.priceBUY || 0}}</div>
+                  <div>{{ $t('totalPrice') }}(SAR): {{ postTotalPrice || 0 }}</div>
                   <div class="input-group">
                     <div>
                       <span class="input-label">{{ $t('transactionLimit') }}(SAR)</span>
                     </div>
                     <div>
                       <Row>
-                        <i-col span="10">
-                          <i-input v-model="postData.minTradeBUY" type="number" placeholder="min">
-                            <Icon class="o-min" slot="prepend"></Icon>
-                          </i-input>
+                        <i-col span="11">
+                          <div class="o-input-number">
+                            <div class="o-input-number-append">Min</div>
+                            <input-number
+                              size="large"
+                              v-model="postData.minTradeBUY"
+                              :min="marketPrice.trade_min_price"
+                              :max="postBuyMax"
+                            >
+                            </input-number>
+                          </div>
                         </i-col>
-                        <i-col class="o-to" span="4">
-                          To </i-col>
-                        <i-col span="10">
-                          <i-input v-model="postData.maxTradeBUY" type="number" placeholder="max">
-                            <Icon class="o-max" slot="prepend"></Icon>
-                          </i-input>
+                        <i-col class="o-to" span="2">-</i-col>
+                        <i-col span="11">
+                          <div class="o-input-number">
+                            <div class="o-input-number-append">Max</div>
+                            <input-number
+                              size="large"
+                              v-model="postData.maxTradeBUY"
+                              :min="marketPrice.trade_min_price"
+                              :max="postBuyMax"
+                            >
+                            </input-number>
+                          </div>
                         </i-col>
                       </Row>
                     </div>
@@ -191,10 +216,16 @@
                       <span class="input-label">{{ $t('unitPrice') }}</span>
                       <span class="input-tips">{{ $t('currentPrice') }} {{marketPrice.exchange_sell_min || marketPrice.exchange_rate }} SAR</span>
                     </div>
-                    <div>
-                      <i-input number v-model="postData.priceSELL" :placeholder="$t('pricePlaceholder')">
-                        <Icon class="o-sar" slot="prepend"></Icon>
-                      </i-input>
+                    <div class="o-input-number">
+                      <div class="o-input-number-append">SAR</div>
+                      <input-number
+                        size="large"
+                        v-model="postData.priceSELL"
+                        :min="marketPrice.trade_min_price"
+                        :placeholder="$t('pricePlaceholder')"
+                        ref="inputNumberPriceSELL"
+                      >
+                      </input-number>
                     </div>
                   </div>
                   <div class="input-group">
@@ -202,30 +233,50 @@
                       <span class="input-label">{{ $t('amount') }}</span>
                       <span class="input-tips">{{ $t('balance') }} {{balance}} USDT</span>
                     </div>
-                    <div>
-                      <i-input v-model="postData.volumeSELL" number :placeholder="$t('amountPlaceholder')">
-                        <Icon class="o-usdt" slot="prepend"></Icon>
-                      </i-input>
+                    <div class="o-input-number">
+                      <div class="o-input-number-append">USDT</div>
+                      <input-number
+                        size="large"
+                        v-model="postData.volumeSELL"
+                        :min="marketPrice.trade_min_volume"
+                        :max="marketPrice.balance"
+                        :placeholder="$t('amountPlaceholder')"
+                        ref="inputNumberVolumeSELL"
+                      >
+                      </input-number>
                     </div>
                   </div>
-                  <div>{{ $t('totalPrice') }}(SAR): {{postData.volumeSELL * postData.priceSELL}}</div>
+                  <div>{{ $t('totalPrice') }}(SAR): {{ postTotalPrice || 0 }}</div>
                   <div class="input-group">
                     <div>
                       <span class="input-label">{{ $t('transactionLimit') }}(SAR)</span>
                     </div>
                     <div>
                       <Row>
-                        <i-col span="10">
-                          <i-input v-model="postData.minTradeSELL" type="number" placeholder="min">
-                            <Icon class="o-min" slot="prepend"></Icon>
-                          </i-input>
+                        <i-col span="11">
+                          <div class="o-input-number">
+                            <div class="o-input-number-append">Min</div>
+                            <input-number
+                              size="large"
+                              v-model="postData.minTradeSELL"
+                              :min="marketPrice.trade_min_price"
+                              :max="postSellMax"
+                            >
+                            </input-number>
+                          </div>
                         </i-col>
-                        <i-col class="o-to" span="4">
-                          To </i-col>
-                        <i-col span="10">
-                          <i-input v-model="postData.maxTradeSELL" type="number" placeholder="max">
-                            <Icon class="o-max" slot="prepend"></Icon>
-                          </i-input>
+                        <i-col class="o-to" span="2">-</i-col>
+                        <i-col span="11">
+                          <div class="o-input-number">
+                            <div class="o-input-number-append">Max</div>
+                            <input-number
+                              size="large"
+                              v-model="postData.maxTradeSELL"
+                              :min="marketPrice.trade_min_price"
+                              :max="postSellMax"
+                            >
+                            </input-number>
+                          </div>
                         </i-col>
                       </Row>
                     </div>

@@ -28,8 +28,16 @@ var allGoods = new Vue({
         maxTrade: '',
         minTrade: '',
         price: '',
-        side: '',
         volume: '',
+        maxTradeBUY: '',
+        minTradeBUY: '',
+        priceBUY: '',
+        volumeBUY: '',
+        maxTradeSELL: '',
+        minTradeSELL: '',
+        priceSELL: '',
+        volumeSELL: '',
+        side: '',
       },
       sendText: '',
       sms: false,
@@ -42,7 +50,6 @@ var allGoods = new Vue({
       },
       //END挂单相关数据
       //user info
-      isLogined: false,
       isGoogleBind: false,
       isCardBind: false,
       isWatchAppBind: false,
@@ -111,27 +118,26 @@ var allGoods = new Vue({
       var amount = Math.min(this.buyData.max / this.buyData.price, this.buyData.restAmount);
       return amount.toFixed(4);
     },
+    postTotalPrice: function() {
+      return (this.postData['volume' + this.postOrderTag] * this.postData['price' + this.postOrderTag]).toFixed(2);
+    },
+    postBuyMax: function() {
+      return this.postTotalPrice > 0 ? Math.min(this.postTotalPrice, this.marketPrice.trade_max_price) : this.marketPrice.trade_max_price;
+    },
+    postSellMax: function() {
+      return Math.min(this.postTotalPrice, this.marketPrice.trade_max_price);
+    },
   },
   methods: {
-    //get market price
-    getMarketPrice: function() {
-      var that = this;
-      get('api/rate').then(function(res) {
-        if (res.success) {
-          that.marketPrice.exchange_rate = res.data.data.exchange_rate;
-          that.marketPrice.exchange_buy_max = res.data.data.exchange_buy_max;
-          that.marketPrice.exchange_sell_min = res.data.data.exchange_sell_min;
-        }
-      });
+    inputNumberBlur: function(val) {
+      console.log(val);
     },
     getUserInfo: function() {
       var user = JSON.parse(sessionStorage.getItem('user'));
-      this.isLogined = user !== null;
       this.whatsApp = user.userExtView.watchapp;
       this.balance = user.usdtAmount.balance;
       this.isGoogleBind = user.googleAuthenticatorStatus === 1;
       this.isWatchAppBind = user.userExtView.watchapp;
-      
     },
     getBindedCard: function() {
       var that = this;
@@ -190,7 +196,7 @@ var allGoods = new Vue({
     // sell USDT
     showSellUsdt: function(i) {
       // check if login
-      if (!this.isLogined) {
+      if (!sessionStorage.getItem('user')) {
         this.$refs.header.showLogin();
         return;
       }
@@ -232,7 +238,7 @@ var allGoods = new Vue({
     //buy USDT
     showBuyUsdt: function(i) {
       // check if login
-      if (!this.isLogined) {
+      if (!sessionStorage.getItem('user')) {
         this.$refs.header.showLogin();
         return;
       }
@@ -254,7 +260,7 @@ var allGoods = new Vue({
     },
     //buy
     buy: function() {
-      if (!this.isLogined) {
+      if (!sessionStorage.getItem('user')) {
         this.$refs.header.showLogin();
         return;
       }
@@ -279,7 +285,7 @@ var allGoods = new Vue({
     },
     //sell usdt
     sell: function() {
-      if (!this.isLogined) {
+      if (!sessionStorage.getItem('user')) {
         this.$refs.header.showLogin();
         return;
       }
@@ -304,7 +310,12 @@ var allGoods = new Vue({
     },
     showPostDialog: function() {
       // check if login
-      if (!this.isLogined) {
+      var user = JSON.parse(sessionStorage.getItem('user'));
+      this.whatsApp = user.userExtView.watchapp;
+      this.balance = user.usdtAmount.balance;
+      this.isGoogleBind = user.googleAuthenticatorStatus === 1;
+      this.isWatchAppBind = user.userExtView.watchapp;
+      if (!user.id) {
         this.$refs.header.showLogin();
         return;
       }
@@ -323,40 +334,65 @@ var allGoods = new Vue({
         this.isContactShow = true;
         return;
       }
-      var _this = this;
-      get('api/personAdverts/cnt').then(function(res) {
-        var buyCount = res.data.data.BUY;
-        var sellCount = res.data.data.SELL;
-        if (buyCount >= 2 && sellCount >= 2) {
-          Toast.show(_this.$t('dealOrderBeforeRelease'), { icon: 'warning' });
-        } else if (buyCount >= 2 && sellCount < 2) {
-          Toast.show(_this.$t('releaseSellOnly'), {
-            icon: 'warning',
-            duration: 1500,
-            callback: function() {
-              _this.buyDisabled = true;
-              _this.postOrderTag = 'SELL';
-              _this.isPostDialogShow = true;
-            },
+      var that = this;
+      // 获取市场价格
+      get('api/rate').then(function(res) {
+        if (res.success) {
+          that.marketPrice.exchange_rate = res.data.data.exchange_rate;
+          that.marketPrice.exchange_buy_max = res.data.data.exchange_buy_max;
+          that.marketPrice.exchange_sell_min = res.data.data.exchange_sell_min;
+          that.marketPrice.trade_min_price = res.data.data.trade_min_price;
+          that.marketPrice.trade_max_price = res.data.data.trade_max_price;
+          that.postData.minTradeBUY = res.data.data.trade_min_price;
+          that.postData.minTradeSELL = res.data.data.trade_min_price;
+          that.postData.maxTradeBUY = res.data.data.trade_max_price;
+          that.postData.maxTradeSELL = res.data.data.trade_max_price;
+          // 获取用户余额
+          get('api/finance/account_balance').then(function(res) {
+            if (res.success) {
+              that.balance = res.data.data.allCoinMap.USDT.present_coin_balance;
+            }
           });
-        } else if (buyCount < 2 && sellCount >= 2) {
-          Toast.show(_this.$t('releaseBuyOnly'), {
-            icon: 'warning',
-            duration: 1500,
-            callback: function() {
-              _this.sellDisabled = true;
-              _this.postOrderTag = 'BUY';
-              _this.isPostDialogShow = true;
-            },
+          // 获取发单数量及类型
+          get('api/personAdverts/cnt').then(function(res) {
+            var buyCount = res.data.data.BUY;
+            var sellCount = res.data.data.SELL;
+            if (buyCount >= 2 && sellCount >= 2) {
+              Toast.show(that.$t('dealOrderBeforeRelease'), { icon: 'warning' });
+            } else if (buyCount >= 2 && sellCount < 2) {
+              Toast.show(that.$t('releaseSellOnly'), {
+                icon: 'warning',
+                duration: 1500,
+                callback: function() {
+                  that.buyDisabled = true;
+                  that.postOrderTag = 'SELL';
+                  that.isPostDialogShow = true;
+                },
+              });
+            } else if (buyCount < 2 && sellCount >= 2) {
+              Toast.show(that.$t('releaseBuyOnly'), {
+                icon: 'warning',
+                duration: 1500,
+                callback: function() {
+                  that.sellDisabled = true;
+                  that.postOrderTag = 'BUY';
+                  that.isPostDialogShow = true;
+                },
+              });
+            } else {
+              that.isPostDialogShow = true;
+            }
           });
-        } else {
-          _this.isPostDialogShow = true;
         }
       });
     },
     //post order
     postOrder: function() {
       var tag = this.postOrderTag;
+      this.$refs['inputNumberPrice' + tag].focused = false;
+      this.$refs['inputNumberVolume' + tag].focused = false;
+      this.$refs['inputNumberPrice' + tag].currentValue = this.postData['price' + tag];
+      this.$refs['inputNumberVolume' + tag].currentValue = this.postData['volume' + tag];
       if (
         !this.postData['price' + tag] ||
         !this.postData['volume' + tag] ||
@@ -365,6 +401,8 @@ var allGoods = new Vue({
       ) {
         this.error.postDataError = '不能为空';
         return;
+      } else {
+        this.error.postDataError = '';
       }
       if (parseFloat(this.postData['maxTrade' + tag]) < parseFloat(this.postData['minTrade' + tag])) {
         this.error.postDataError = '最大限额不能小于最小限额';
@@ -583,7 +621,6 @@ var allGoods = new Vue({
       this.getUserInfo();
       this.getBindedCard();
     }
-    this.getMarketPrice();
     this.toBuyPage();
     this.toSellPage();
   },
@@ -598,17 +635,13 @@ var allGoods = new Vue({
         this.error.postError = '';
       }
     },
-    'postData.minTrade': function(n, o) {
-      if (parseFloat(n) < parseFloat(this.postData.maxTrade)) {
-        this.error.postDataError = '';
-      }
-    },
-    'postData.maxTrade': function(n, o) {
-      if (
-        parseFloat(n) > parseFloat(this.postData.volume) &&
-        parseFloat(n) <= parseFloat(this.postData.price) * parseFloat(this.postData.volume)
-      ) {
-        this.error.postDataError = '';
+    postTotalPrice: function(newVal, oldVal) {
+      if (newVal > this.marketPrice.trade_max_price) {
+        this.postData['maxTrade' + this.postOrderTag] = this.marketPrice.trade_max_price;
+      } else if (newVal > 0 && newVal < this.marketPrice.trade_max_price) {
+        this.postData['maxTrade' + this.postOrderTag] = newVal;
+      } else {
+        this.postData['maxTrade' + this.postOrderTag] = this.marketPrice.trade_max_price;
       }
     },
   },
