@@ -80,6 +80,18 @@ body[dir='rtl'] .float-right {
   float: left;
 }
 
+.text-success {
+  color: #0cbf48;
+}
+
+.text-warn {
+  color: #ff7100;
+}
+
+.text-error {
+  color: #ed3f14;
+}
+
 
 div,
 ul {
@@ -634,6 +646,10 @@ input::-webkit-inner-spin-button {
 .add-contact-modal .o-body ul.bt li .ivu-input {
   height: 40px;
   line-height: 40px;
+}
+
+.add-contact-modal .o-body ul.bt li .ivu-input-group-prepend {
+  background: #ffffff;
 }
 
 .add-contact-modal .o-body ul.bt li .ivu-select-input {

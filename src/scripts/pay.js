@@ -137,9 +137,14 @@ var pay = new Vue({
     //-------------------------GET ORDER INFO-----------------------------------------------//
     getOrderInfo: function (sequence) {
       var that = this;
+      var user = JSON.parse(sessionStorage.getItem('user'));
       get('api/orderDetail', { sequence: sequence }, )
         .then(function (res) {
           var data = res.data.data;
+          if (data.buyerId != user.id) {
+            location.href = 'otc_wait_pay.html?sequence=' + sequence;
+            return;
+          }
           //to make sure the status of the order
           that.step = data.status;
           //create time of the order

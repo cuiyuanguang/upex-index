@@ -89,7 +89,7 @@ var waitPay = new Vue({
           expiredTime = createTime + limitTime * 60 * 1000;
         }
         if (expiredTime - now <= 0) {
-          that.leftTime = 'order expired!';
+          that.leftTime = 0;
         } else {
           that.leftTime = utils.MillisecondToDate(expiredTime - now);
         }
@@ -103,8 +103,13 @@ var waitPay = new Vue({
     //-------------------------GET ORDER INFO-----------------------------------------------//
     getOrderInfo: function(sequence) {
       var that = this;
-      get('api/orderDetail', { sequence: sequence }).then(function(res) {
+      var user = JSON.parse(sessionStorage.getItem('user'));
+      get('api/orderDetail', { sequence: sequence }, ).then(function (res) {
         var data = res.data.data;
+        if (data.sellerId != user.id) {
+          location.href = 'otc_pay.html?sequence=' + sequence;
+          return;
+        }
         //to make sure the status of the order
         that.step = data.status;
         //if trade success ,show the notice of  usdt arrival
