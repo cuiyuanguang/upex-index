@@ -35,7 +35,7 @@ $http.interceptors.response.use(
       if (result.code != 0) {
         // 接口错误码判断
         // Toast.show(toastMsg[result.code][locale], { icon: 'warning' });
-        Toast.show(result.message || result.msg, {
+        Toast.show(toastMsg[result.code][locale], {
           icon: 'warning',
           callback: function() {
             if (result.code == 2048) {
@@ -47,13 +47,12 @@ $http.interceptors.response.use(
         });
         return {
           success: false,
-          data: result.message || result.msg,
+          data: toastMsg[result.code][locale],
         };
       }
       if (response.config.method === 'post' && response.config.showToast) {
-        console.log(response);
         // Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
-        Toast.show(result.message || result.msg, { icon: 'ok' });
+        Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
       }
       return {
         success: true,
@@ -63,8 +62,8 @@ $http.interceptors.response.use(
   },
   function(error) {
     // http错误码判断
-    console.log(error);
-    // swal('Warning!', res.data.message, 'error');
+    console.log(error.response.statusText);
+    // location.href = 'otc_error.html?code=' + error.response.status;
     // 返回 response 里的错误信息
     return Promise.reject(error.response.statusText);
   }
