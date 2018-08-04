@@ -214,5 +214,17 @@ var messages = {
   transferTips: {
     zh: '请确认银行卡信息，因填写错误造成的损失一律由您自身承担',
     en: 'Please be sure to check the bank card information, fill in the information error, resulting in the transaction issue borne by the user',
-  }
+  },
+  copied: {
+    zh: '已复制',
+    en: 'has been copied',
+  },
+  noEmpty: {
+    zh: '不能这空',
+    en: 'can not be empty',
+  },
+  twiceNotEqual: {
+    zh: '两次输入不一致',
+    en: 'twice input is not equal the first',
+  },
 };

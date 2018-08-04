@@ -130,9 +130,6 @@ var allGoods = new Vue({
     },
   },
   methods: {
-    inputNumberBlur: function(val) {
-      console.log(val);
-    },
     getUserInfo: function() {
       var user = JSON.parse(localStorage.getItem('user'));
       this.whatsApp = user && user.userExtView.watchapp;
@@ -164,7 +161,7 @@ var allGoods = new Vue({
       var value = this.buyData.buyAmount;
       if (value < this.buyData.min || value > this.buyData.max) {
         this.buyAmountErrorText =
-          '请输入' + this.buyData.min + '到' + this.buyData.max + '之间的数字';
+          this.$t('buyInputLimit') + this.buyData.min + '-' + this.buyData.max;
         return;
       } else {
         this.buyAmountErrorText = '';
@@ -176,7 +173,7 @@ var allGoods = new Vue({
       var value = this.buyData.buyTotal;
       if (value < this.buyTotalMin || value > this.buyTotalMax) {
         this.buyTotalErrorText =
-          '请输入' + this.buyTotalMin + '到' + this.buyTotalMax + '之间的数字';
+          this.$t('buyInputLimit') + this.buyTotalMin + '-' + this.buyTotalMax;
         return;
       } else {
         this.buyTotalErrorText = '';
@@ -266,8 +263,8 @@ var allGoods = new Vue({
         return;
       }
       if (!this.buyData.buyTotal || !this.buyData.buyAmount) {
-        this.buyAmountErrorText = '不能为空';
-        this.buyTotalErrorText = '不能为空';
+        this.buyAmountErrorText = this.$t('noEmpty');
+        this.buyTotalErrorText = this.$t('noEmpty');
         return;
       }
       var that = this;
@@ -291,8 +288,8 @@ var allGoods = new Vue({
         return;
       }
       if (!this.buyData.buyTotal || !this.buyData.buyAmount) {
-        this.buyAmountErrorText = '不能为空';
-        this.buyTotalErrorText = '不能为空';
+        this.buyAmountErrorText = this.$t('noEmpty');
+        this.buyTotalErrorText = this.$t('noEmpty');
         return;
       }
       var that = this;
@@ -400,20 +397,20 @@ var allGoods = new Vue({
         !this.postData['minTrade' + tag] ||
         !this.postData['maxTrade' + tag]
       ) {
-        this.error.postDataError = '不能为空';
+        this.error.postDataError = this.$t('noEmpty');
         return;
       } else {
         this.error.postDataError = '';
       }
       if (parseFloat(this.postData['maxTrade' + tag]) < parseFloat(this.postData['minTrade' + tag])) {
-        this.error.postDataError = '最大限额不能小于最小限额';
+        this.error.postDataError = this.$t('maxNoLessThanMin');
         return;
       }
       if (
         parseFloat(this.postData['price' + tag]) * parseFloat(this.postData['volume' + tag]) <
         parseFloat(this.postData['maxTrade' + tag])
       ) {
-        this.error.postDataError = '最大限额不能大于总价';
+        this.error.postDataError = this.$t('maxNoMoreThanTotal');
         return;
       }
       if (parseFloat(this.postData['price' + tag]) > this.marketPrice.exchange_rate * 1.5) {
@@ -444,7 +441,6 @@ var allGoods = new Vue({
           return;
         }
       }
-      this.postErroMsg = '请确认你的信息';
       this.isPostDialogShow = false;
       this.isPendModalShow = true;
     },
@@ -482,12 +478,12 @@ var allGoods = new Vue({
       this.getSelectCards(this.cardStatus, this.cardInfo);
       this.postData.checkValue = this.postData.checkType == '1' ? this.gCode : this.smsCode;
       if (!this.postData.checkValue) {
-        this.error.postError = '验证码不能为空!';
+        this.error.postError = this.$t('verifyNoEmpty');
         return;
       }
       if (tag == 'SELL') {
         if (this.selectedCard.length < 1) {
-          this.error.postError = '至少选择一张银行卡!';
+          this.error.postError = this.$t('atLeastOneBank');
           return;
         }
         this.postData.paymentBanks = this.selectedCard;

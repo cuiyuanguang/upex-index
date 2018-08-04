@@ -147,4 +147,28 @@ var messages = {
     zh: '暂无数据',
     en: 'No Data',
   },
+  noEmpty: {
+    zh: '不能为空',
+    en: 'can not be empty',
+  },
+  maxNoLessThanMin: {
+    zh: '最大限额不能小于最小限额',
+    en: 'the max limit should not less than min',
+  },
+  maxNoMoreThanTotal: {
+    zh: '最大限额不能大于总价',
+    en: 'the max limit should not more than total',
+  },
+  verifyNoEmpty: {
+    zh: '验证码不能为空！',
+    en: 'verification should not be empty',
+  },
+  atLeastOneBank: {
+    zh: '至少选择一张银行卡',
+    en: 'chose one bank card at least',
+  },
+  buyInputLimit: {
+    zh: '输入限制为：',
+    en: 'the input limit is:'
+  }
 };

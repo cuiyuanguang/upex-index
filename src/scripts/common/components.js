@@ -88,6 +88,14 @@ var i18nComponentsMessages = {
     zh: '我的订单',
     en: 'my orders',
   },
+  buy: {
+    zh: '买入',
+    en: 'Buy',
+  },
+  sell: {
+    zh: '卖出',
+    en: 'Sell',
+  },
   seeAllOrder: {
     zh: '查看所有订单',
     en: 'view all my orders',
@@ -1846,8 +1854,8 @@ var o_header = {
                   <li v-for="item in orders" :key="item.sequence">
                     <Row>
                       <i-col span="2" class="text-left">
-                        <div class="buyType" v-if="item.buyer.id==userInfo.id">buy</div>
-                        <div class="sellType" v-else>sell</div>
+                        <div class="buyType" v-if="item.buyer.id==userInfo.id">{{ $t('buy') }}</div>
+                        <div class="sellType" v-else>{{ $t('sell') }}</div>
                       </i-col>
                       <i-col span="18" class="text-left" style="padding-left:6px;">
                         <div v-if="item.buyer.id==userInfo.id" class="tip">{{ $t('payToSeller') }} {{item.totalPrice}}SAR</div>

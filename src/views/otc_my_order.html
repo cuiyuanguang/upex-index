@@ -33,7 +33,7 @@
             <tbody>
               <tr v-for="item in list" :key="item.sequence">
                 <td>{{item.sequence}}</td>
-                <td>{{ userInfo.id == item.buyerId ? 'Buy' : 'Sell' }}</td>
+                <td>{{ userInfo.id == item.buyerId ? $t('buy') : $t('sell') }}</td>
                 <td>{{item.volume}} USDT</td>
                 <td>{{item.price}} SAR</td>
                 <td>{{item.totalPrice}} SAR</td>

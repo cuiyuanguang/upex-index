@@ -7,6 +7,14 @@ var messages = {
       zh: '类型',
       en: 'Pending order type',
     },
+    sell: {
+      zh: '卖出',
+      en: 'Sell',
+    },
+    buy: {
+      zh: '买入',
+      en: 'Buy',
+    },
     amount: {
       zh: '数量',
       en: 'Total amount',

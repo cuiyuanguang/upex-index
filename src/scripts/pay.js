@@ -103,11 +103,11 @@ var pay = new Vue({
     },
     confirm: function () {
       if (!this.card) {
-        this.cardErrorTips = "不能为空";
+        this.cardErrorTips = this.$t('noEmpty');
         return;
       }
       if (!this.recard) {
-        this.recardErrorTips = "不能为空";
+        this.recardErrorTips = this.$t('noEmpty');
         return;
       }
       if (this.cardErrorTips || this.recardErrorTips) {
@@ -128,8 +128,8 @@ var pay = new Vue({
     //------------end-----------------
     copy: function (e) {
       e.target.select();
-      document.execCommand("copy");
-      Toast.show(e.target.name + ' copied', { icon: 'ok', duration: 1500 });
+      document.execCommand('copy');
+      Toast.show(e.target.name + this.$t('copied'), { icon: 'ok', duration: 1500 });
     },
     //next step ----------------------
     next() {
@@ -186,16 +186,16 @@ var pay = new Vue({
     },
     card: function (n, o) {
       if (!n) {
-        this.cardErrorTips = '不能为空';
+        this.cardErrorTips = this.$t('noEmpty');
       } else {
         this.cardErrorTips = '';
       }
     },
     recard: function (n, o) {
       if (!n) {
-        this.recardErrorTips = '不能为空';
+        this.recardErrorTips = this.$t('noEmpty');
       } else if (n != this.card) {
-        this.recardErrorTips = '两次输入的信息不一致';
+        this.recardErrorTips = this.$t('twiceNotEqual');
       } else {
         this.recardErrorTips = '';
       }

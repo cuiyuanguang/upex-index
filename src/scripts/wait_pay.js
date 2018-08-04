@@ -51,23 +51,23 @@ var waitPay = new Vue({
   },
   methods: {
     confirmOrder: function() {
-      var _this = this;
+      var that = this;
       this.$Modal.confirm({
-        title: '确认收款',
-        content: '是否已经收到货款？',
+        title: that.$t('confirmReceive'),
+        content: that.$t('receiveAll'),
         onOk: function() {
           var data = {
-            sequence: _this.sequence,
+            sequence: that.sequence,
           };
           post('api/confirmOrder', data).then(function(res) {
             if (res.success) {
-              _this.step = 3;
-              _this.getOrderInfo(_this.sequence);
+              that.step = 3;
+              that.getOrderInfo(that.sequence);
             }
           });
         },
         onCancel: function() {
-          _this.$Modal.remove();
+          that.$Modal.remove();
         },
       });
     },
@@ -75,7 +75,7 @@ var waitPay = new Vue({
     copy: function(e) {
       e.target.select();
       document.execCommand('copy');
-      Toast.show(e.target.name + ' copied', { icon: 'ok', duration: 1500 });
+      Toast.show(e.target.name + this.$t('copied'), { icon: 'ok', duration: 1500 });
     },
     //Countdown
     payCountdown: function(createTime, limitTime) {

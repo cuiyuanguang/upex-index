@@ -116,8 +116,12 @@ var messages = {
     en: 'digits after remittance card number',
   },
   payYou: {
-    zh: '支付您',
+    zh: '向您支付',
     en: 'to pay you',
+  },
+  confirmReceive: {
+    zh: '确认收款',
+    en: 'confirm receipt?'
   },
   receiveAll: {
     zh: '是否收到全额货款？',
@@ -134,5 +138,9 @@ var messages = {
   orderExpired: {
     zh: '订单过期',
     en: 'order expired',
+  },
+  copied: {
+    zh: '已复制',
+    en: 'has been copied',
   },
 };

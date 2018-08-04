@@ -11,6 +11,14 @@ var messages = {
     zh: '交易类型',
     en: 'Transaction Type',
   },
+  sell: {
+    zh: '卖出',
+    en: 'Sell',
+  },
+  buy: {
+    zh: '买入',
+    en: 'Buy',
+  },
   tradingAmount: {
     zh: '交易额',
     en: 'Transaction Amount',
