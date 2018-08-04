@@ -12,7 +12,7 @@ var messages = {
     en: 'Transaction successful',
   },
   receivePayment: {
-    zh: '收到货款',
+    zh: '收到法币',
     en: 'Receive payment',
   },
   orderSuccess: {
@@ -100,7 +100,7 @@ var messages = {
     en: 'If the order is cancelled three times that day, the purchase function will be locked',
   },
   helpTipsThird: {
-    zh: '如您24小时内未收到货款或货款金额不正确，请联系客服',
+    zh: '如您24小时内未收到法币或法币金额不正确，请联系客服',
     en: 'If you do not receive the money within 24 hours, or the amount does not match, please contact customer service.',
   },
   helpTipsFourth: {
@@ -124,7 +124,7 @@ var messages = {
     en: 'confirm receipt?'
   },
   receiveAll: {
-    zh: '是否收到全额货款？',
+    zh: '是否收到全额法币？',
     en: 'whether to receive the full amount?'
   },
   notReceiveAndWait: {

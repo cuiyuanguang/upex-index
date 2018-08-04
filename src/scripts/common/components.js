@@ -108,13 +108,17 @@ var i18nComponentsMessages = {
     zh: '查看',
     en: 'view',
   },
-  payToSeller: {
+  paidToSeller: {
     zh: '已向卖家支付',
-    en: 'payment to seller',
+    en: 'already paid to seller',
   },
-  waitForBuyer: {
-    zh: '买家已支付',
-    en: 'Buyer has paid',
+  waitForBuyerPay: {
+    zh: '等待买家支付',
+    en: 'wait for buyer to pay',
+  },
+  waitForSellerConfirm: {
+    zh: '等待卖家确认收款',
+    en: 'wait for seller to confirm',
   },
   payInTime: {
     zh: '支付截止时间',
@@ -139,6 +143,10 @@ var i18nComponentsMessages = {
   addContactTips: {
     zh: '请留下您的联系方式以便通知支付信息',
     en: 'In order to contact you for payment, please leave your contact information.',
+  },
+  numericOrLetter: {
+    zh: '请输入数字或字母',
+    en: 'type numeric or letter here please',
   },
   submit: {
     zh: '提交',
@@ -180,7 +188,7 @@ var i18nComponentsMessages = {
     zh: '绑定',
     en: 'bind',
   },
-  notEmpty: {
+  noEmpty: {
     zh: '不能为空',
     en: 'can not be empty',
   },
@@ -280,13 +288,28 @@ var o_bindcard = {
           </div>
           <div class="o-content">
             <ul>
-              <li><p>{{ $t('openingBank') }}</p><input v-model="cardInfo.bankName" type="text"></li>
-              <li><p>{{ $t('accountName') }}</p><input v-model="cardInfo.name" type="text"></li>
-              <li><p>{{ $t('bankNumber') }}</p><input v-model="cardInfo.cardNo"  type="text"></li>
-              <li><p>Iban {{ $t('number') }}</p><input v-model="cardInfo.ibanNo"  type="text"></li>
+              <li>
+                <p>{{ $t('openingBank') }}</p>
+                <input v-model="cardInfo.bankName" maxlength="30">
+                <span class="error" v-if="bankNameError">{{ bankNameError }}</span>
+              </li>
+              <li>
+                <p>{{ $t('accountName') }}</p>
+                <input v-model="cardInfo.name" maxlength="30">
+                <span class="error" v-if="nameError">{{ nameError }}</span>
+              </li>
+              <li>
+                <p>{{ $t('bankNumber') }}</p>
+                <input v-model="cardInfo.cardNo" maxlength="30">
+                <span class="error" v-if="cardNoError">{{ cardNoError }}</span>
+              </li>
+              <li>
+                <p>Iban {{ $t('number') }}</p>
+                <input v-model="cardInfo.ibanNo" maxlength="30">
+                <span class="error" v-if="ibanNoError">{{ ibanNoError }}</span>
+              </li>
               <li><button @click="binding">{{ $t('bind') }}</button></li>
             </ul>
-            <div class="foot" style="color: #ff3300;" v-show="errorMsg">{{ errorMsg }}</div>
           </div>
         </div>
       </div>
@@ -301,26 +324,38 @@ var o_bindcard = {
         name: '',
         cardNo: '',
         ibanNo: '',
-        bankNo: 0,
       },
-      errorMsg: '',
+      bankNameError: '',
+      nameError: '',
+      cardNoError: '',
+      ibanNoError: '',
     };
   },
   props: ['show', 'locale'],
   methods: {
     close() {
+      for (var key in this.cardInfo) {
+        this.cardInfo[key] = '';
+      }
       this.$parent.$emit('isBindShow', false);
     },
+    invalidCheck(target) {
+      return /(\d|\w)+$/.test(target);
+    },
     binding() {
-      if (
-        !this.cardInfo.bankName ||
-        !this.cardInfo.name ||
-        !this.cardInfo.cardNo ||
-        !this.cardInfo.ibanNo
-      ) {
-        this.errorMsg = this.$t('notEmpty');
+      if (!this.cardInfo.bankName) {
+        this.bankNameError = this.$t('noEmpty');
+      } else if (!this.cardInfo.name) {
+        this.nameError = this.$t('noEmpty');
+      } else if (!this.cardInfo.cardNo) {
+        this.cardNoError = this.$t('noEmpty');
+      } else if (!this.cardInfo.ibanNo) {
+        this.ibanNoError = this.$t('noEmpty');
       } else {
-        this.errorMsg = '';
+        this.bankNameError = '';
+        this.nameError = '';
+        this.cardNoError = '';
+        this.ibanNoError = '';
         //hide bind dialog
         this.$parent.$emit('isBindShow', false);
         //transfer the cardInfo
@@ -335,7 +370,35 @@ var o_bindcard = {
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
       }
-    }
+    },
+    'cardInfo.bankName': function(val) {
+      if (val && !this.invalidCheck(val)) {
+        this.bankNameError = this.$t('numericOrLetter');
+      } else {
+        this.bankNameError = '';
+      }
+    },
+    'cardInfo.name': function(val) {
+      if (val && !this.invalidCheck(val)) {
+        this.nameError = this.$t('numericOrLetter');
+      } else {
+        this.nameError = '';
+      }
+    },
+    'cardInfo.cardNo': function(val) {
+      if (val && !this.invalidCheck(val)) {
+        this.cardNoError = this.$t('numericOrLetter');
+      } else {
+        this.cardNoError = '';
+      }
+    },
+    'cardInfo.ibanNo': function(val) {
+      if (val && !this.invalidCheck(val)) {
+        this.ibanNoError = this.$t('numericOrLetter');
+      } else {
+        this.ibanNoError = '';
+      }
+    },
   }
 };
 
@@ -592,9 +655,9 @@ var addContact = {
               <li>
                 <p>WhatsApp {{ $t('account') }}</p>
                 <Input
-                  v-model="wapp"
+                  v-model="wahtsApp"
+                  maxlength="30"
                   placeholder="Enter your WhatsApp number"
-                  class="iview-input iview-input-countryPhone"
                 >
                   <Select v-model="selectCountry" slot="prepend" filterable style="width:86px;">
                     <Option
@@ -609,6 +672,7 @@ var addContact = {
                     </Option>
                   </Select>
                 </Input>
+                <span class="error" v-if="accountErrorTips">{{ accountErrorTips }}</spam>
               </li>
               <li>
                 <button @click="bind">{{ $t('submit') }}</button>
@@ -622,9 +686,10 @@ var addContact = {
   i18n: i18nComponents,
   data() {
     return {
-      wapp: '',
+      wahtsApp: '',
       countryArr: [],
-      selectCountry: '',
+      selectCountry: '+86',
+      accountErrorTips: '',
     };
   },
   props: ['show', 'locale'],
@@ -641,12 +706,24 @@ var addContact = {
       });
     },
     bind() {
-      var that = this;
-      post('api/watchapp', this.selectCountry + '-' +this.wapp).then(function (res) {
-        if (res.success) {
-          that.$parent.$emit('isAddContactShow', false);
-        }
-      });
+      if (!this.wahtsApp) {
+        this.accountErrorTips = 'whatsApp' + this.$t('noEmpty');
+      } else if (!/(\d|\w)+$/.test(this.wahtsApp)) {
+        this.accountErrorTips = this.$t('numericOrLetter');
+      } else {
+        this.accountErrorTips = '';
+        var that = this;
+        post('api/watchapp', this.selectCountry + '-' + this.wahtsApp).then(function (res) {
+          if (res.success) {
+            get('api/userInfo').then(function(res) {
+              var data = res.data.data;
+              that.wahtsApp = '';
+              localStorage.setItem('user', JSON.stringify(data));
+              that.$parent.$emit('isAddContactShow', false);
+            });
+          }
+        });
+      }
     },
   },
   mounted: function () {
@@ -715,9 +792,14 @@ var o_my_login = {
       class-name="vertical-center-modal"
       width="500"
     >
-                <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
- @expired="onExpired" @verify="onVerify" sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi">
-            </vue-recaptcha>
+      <vue-recaptcha
+        ref="invisibleRecaptcha"
+        size="invisible"
+        @expired="onExpired"
+        @verify="onVerify"
+        sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi"
+      >
+      </vue-recaptcha>
       <Tabs v-model="loginWrap" @on-click="loginEmailChange">
         <TabPane label="E-mail" name="loginEmail">
           <Input
@@ -799,7 +881,7 @@ var o_my_login = {
       loginPhoneErrorText: '',
       //country
       countryArr: [],
-      selectCountry: '',
+      selectCountry: '+86',
       //password
       loginPhonePassword: '',
       loginPhonePasswordError: false,
@@ -831,7 +913,6 @@ var o_my_login = {
         'captcha': res
       };
       post('api/common/googleValidCode', JSON.stringify(dataCaptcha),false).then(function (res) {
-        console.log(res);
         if (res.success) {
           var data;
           if (that.loginWrap === 'loginPhone') {
@@ -1126,7 +1207,7 @@ var o_my_loginNext = {
             if (res.success) {
               that.modal_loading = false;
               that.$parent.$emit('isLoginNext', false);
-              utils.setCookie('token', that.isLoginNextCookieNum);
+              sessionStorage.setItem('token', that.isLoginNextCookieNum);
               get('api/userInfo').then(function(res) {
                 that.isLogined = res.data.code === 0;
                 var data = res.data.data;
@@ -1157,7 +1238,7 @@ var o_my_loginNext = {
             operationType: '23',
             token: this.isLoginNextCookieNum,
           };
-          post('api/common/smsValidCode', JSON.stringify(data)).then(function (res) {
+          post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
             if (res.success) {
             } else {
             }
@@ -1356,7 +1437,7 @@ var o_my_register = {
       phoneVal: '',
       phoneValError: false,
       phoneValErrorText: '',
-      selectCountry: '',
+      selectCountry: '+86',
       countryArr: [],
       phoneSmsCode: '',
       phoneSmsCodeError: false,
@@ -1483,7 +1564,7 @@ var o_my_register = {
     },
     getCountry() {
       var that = this;
-      get('api/country', {}, this.token).then(function (res) {
+      get('api/country').then(function (res) {
         if (res.success) {
           that.countryArr = res.data.data;
         } else {
@@ -1526,7 +1607,7 @@ var o_my_register = {
                 that.timerPhone = null;
               }
             }, 1000);
-            post('api/common/smsValidCode', JSON.stringify(data)).then(function (res) {
+            post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
               if (res.success) {
 
               } else {
@@ -1858,8 +1939,16 @@ var o_header = {
                         <div class="sellType" v-else>{{ $t('sell') }}</div>
                       </i-col>
                       <i-col span="18" class="text-left" style="padding-left:6px;">
-                        <div v-if="item.buyer.id==userInfo.id" class="tip">{{ $t('payToSeller') }} {{item.totalPrice}}SAR</div>
-                        <div v-else class="tip">{{ $t('waitForBuyer') }}{{item.totalPrice}}SAR</div>
+                        <div v-if="item.buyer.id==userInfo.id" class="tip">
+                          {{ item.status == 1 ? $t('waitForBuyerPay') : '' }}
+                          {{ item.status == 2 ? $t('paidToSeller') : '' }}
+                          {{item.totalPrice}}SAR
+                        </div>
+                        <div v-else class="tip">
+                          {{ item.status == 1 ? $t('waitForBuyerPay') : '' }}
+                          {{ item.status == 2 ? $t('waitForSellConfirm') : '' }}
+                          {{item.totalPrice}}SAR
+                        </div>
                         <span v-if="item.buyer.id==userInfo.id">{{ $t('payInTime') }} {{item.ctime | date }}</span>
                         <span v-else>{{ $t('waitForTime') }} {{item.ctime | date }}</span>
                       </i-col>
@@ -1989,7 +2078,6 @@ var o_header = {
       post('api/user/login_out').then(function (res) {
         if (res.success) {
           localStorage.clear();
-          utils.clearCookie();
           that.logined = false;
           if (location.pathname !== '/views/otc_adverts.html') {
             location.href = 'otc_adverts.html';
@@ -2016,10 +2104,10 @@ var o_header = {
       this.$i18n.locale = locale;
     }
 
-    if (utils.getCookie('token')) {
+    if (sessionStorage.getItem('token')) {
       var that = this;
       get('api/personOrders/processing').then(function (result) {
-        if (result.success) {
+        if (result.success && result.data.data.rsts) {
           if (result.data.data.rsts.length > 5) {
             that.orders = result.data.data.rsts.slice(0, 5);
             return;

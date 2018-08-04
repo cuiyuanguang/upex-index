@@ -72,8 +72,8 @@ var messages = {
     en: 'Current release price',
   },
   pricePlaceholder: {
-    zh: '请输入您的期望售价',
-    en: 'Enter your expected selling price',
+    zh: '请输入您的期望价格',
+    en: 'Enter your expected price',
   },
   quantity: {
     zh: '数量',
@@ -84,8 +84,8 @@ var messages = {
     en: 'Balance',
   },
   amountPlaceholder: {
-    zh: '请输入您的出售数量',
-    en: 'Enter your expected sell quantity',
+    zh: '请输入您的交易数量',
+    en: 'Enter your expected quantity',
   },
   totalPrice: {
     zh: '总价',

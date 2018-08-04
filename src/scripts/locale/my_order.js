@@ -67,9 +67,9 @@ var messages = {
     zh: '转账中',
     en: 'transfering',
   },
-  orderAbnormal: {
-    zh: '订单异常',
-    en: 'order abnormal',
+  orderExpired: {
+    zh: '订单过期',
+    en: 'order expired',
   },
   view: {
     zh: '查看',

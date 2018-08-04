@@ -12,7 +12,7 @@ var messages = {
     en: 'Transaction successful',
   },
   receivePayment: {
-    zh: '收到货款',
+    zh: '收到货币',
     en: 'Receive payment',
   },
   orderSuccess: {
@@ -131,6 +131,10 @@ var messages = {
     zh: '联系卖家',
     en: 'contact seller',
   },
+  tradeDone: {
+    zh: '交易完成',
+    en: 'Transaction complete',
+  },
   backToHome: {
     zh: '返回主页',
     en: 'back to homepage',
@@ -226,5 +230,13 @@ var messages = {
   twiceNotEqual: {
     zh: '两次输入不一致',
     en: 'twice input is not equal the first',
+  },
+  numericOrLetter: {
+    zh: '请输出数字或字母',
+    en: 'type numeric or letter here please',
+  },
+  lengthshouldBe4: {
+    zh: '请输入4位字符',
+    en: 'type 4 numeric or letter here',
   },
 };

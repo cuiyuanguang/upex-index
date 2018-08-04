@@ -10,20 +10,25 @@ var myGoods = new Vue({
   components: {
     oHeader: o_header,
   },
-  data: {
-    locale: 'zh',
-    current: 1,
-    pageSize: 10,
-    pendingOrdersList: [],
-    pendingOrdersCount: 0,
-    showModal: false,
-    cancelable: false,
-    pauseable: false,
-    modalMsg: {
-      title: '',
-      desc: '',
-      confirmText: '确认',
-    },
+  data: function() {
+    return {
+      locale: 'zh',
+      current: 1,
+      pageSize: 10,
+      pendingOrdersList: [],
+      pendingOrdersCount: 0,
+      showModal: false,
+      cancelable: false,
+      pauseable: false,
+      modalMsg: {
+        title: '',
+        desc: '',
+        confirmText: '确认',
+      },
+      action: '',
+      advertId: '',
+      sequence: '',
+    }
   },
   methods: {
     //get user advert
@@ -34,7 +39,7 @@ var myGoods = new Vue({
         pageSize: this.pageSize,
       };
       get('api/personAdverts/processing', data).then(function(res) {
-        that.pendingOrdersList = res.data.data.rsts;
+        that.pendingOrdersList = res.data.data.rsts || [];
         that.pendingOrdersCount = res.data.data.count;
       });
     },
@@ -63,6 +68,7 @@ var myGoods = new Vue({
         };
         this.cancelable = true;
         this.advertId = item.id;
+        this.sequence = item.sequence;
       }
       this.showModal = true;
       this.action = 'cancel';
@@ -81,12 +87,12 @@ var myGoods = new Vue({
       ) {
         post(api[that.action], that.advertId).then(function(res) {
           if (res.success) {
-            that.showModal = false;
             that.getAdvert();
           }
+          that.showModal = false;
         });
       } else {
-        location.href = './otc_adverts.html';
+        location.href = 'otc_my_order.html';
       }
     },
   },

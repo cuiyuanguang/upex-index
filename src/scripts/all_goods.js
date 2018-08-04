@@ -192,7 +192,7 @@ var allGoods = new Vue({
       }
     },
     // sell USDT
-    showSellUsdt: function(i) {
+    showSellUsdt: function(item) {
       // check if login
       if (!localStorage.getItem('user')) {
         this.$refs.header.showLogin();
@@ -219,41 +219,41 @@ var allGoods = new Vue({
       // 	return;
       // }
       this.isBuyDialogShow = true;
-      this.buyData.id = i.id;
-      this.buyData.price = i.price;
+      this.buyData.id = item.id;
+      this.buyData.price = item.price;
       this.buyData.method =
-        i.paymentBanks &&
-        i.paymentBanks
+        item.paymentBanks &&
+        item.paymentBanks
           .map(function(item) {
             return item.bankName;
           })
           .join('<br/>');
-      this.buyData.restAmount = i.volume;
+      this.buyData.restAmount = (item.volume - item.sell).toFixed(4);
       this.buyData.paymentBanks = this.tradeCard;
-      this.buyData.min = i.minTrade;
-      this.buyData.max = i.maxTrade;
+      this.buyData.min = item.minTrade;
+      this.buyData.max = item.maxTrade;
     },
     //buy USDT
-    showBuyUsdt: function(i) {
+    showBuyUsdt: function(item) {
       // check if login
       if (!localStorage.getItem('user')) {
         this.$refs.header.showLogin();
         return;
       }
       this.isBuyDialogShow = true;
-      if (i) {
-        this.buyData.id = i.id;
-        this.buyData.price = i.price;
+      if (item) {
+        this.buyData.id = item.id;
+        this.buyData.price = item.price;
         this.buyData.method =
-          i.paymentBanks &&
-          i.paymentBanks
+          item.paymentBanks &&
+          item.paymentBanks
             .map(function(item) {
               return item.bankName + '<br>';
             })
             .join('');
-        this.buyData.restAmount = i.volume;
-        this.buyData.min = i.minTrade;
-        this.buyData.max = i.maxTrade;
+        this.buyData.restAmount = (item.volume - item.sell).toFixed(4);
+        this.buyData.min = item.minTrade;
+        this.buyData.max = item.maxTrade;
       }
     },
     //buy
@@ -309,11 +309,11 @@ var allGoods = new Vue({
     showPostDialog: function() {
       // check if login
       var user = JSON.parse(localStorage.getItem('user'));
-      this.whatsApp = user.userExtView.watchapp;
-      this.balance = user.usdtAmount.balance;
-      this.isGoogleBind = user.googleAuthenticatorStatus === 1;
-      this.isWatchAppBind = user.userExtView.watchapp;
-      if (!user.id) {
+      this.whatsApp = user && user.userExtView.watchapp;
+      this.balance = user && user.usdtAmount.balance;
+      this.isGoogleBind = user && user.googleAuthenticatorStatus === 1;
+      this.isWatchAppBind = user && user.userExtView.watchapp;
+      if (!user || !user.id) {
         this.$refs.header.showLogin();
         return;
       }
@@ -480,6 +480,8 @@ var allGoods = new Vue({
       if (!this.postData.checkValue) {
         this.error.postError = this.$t('verifyNoEmpty');
         return;
+      } else {
+        this.error.postError = '';
       }
       if (tag == 'SELL') {
         if (this.selectedCard.length < 1) {
@@ -552,7 +554,7 @@ var allGoods = new Vue({
       get('api/adverts', data).then(function(res) {
         if (res.success) {
           that.totalPage = Math.round(res.data.data.count / that.pageSize);
-          that.buylist = res.data.data.rsts;
+          that.buylist = res.data.data.rsts || [];
           that.buyCurrentPage = page;
           that.buyTotal = res.data.data.count;
         }
@@ -570,7 +572,7 @@ var allGoods = new Vue({
       get('api/adverts', data).then(function(res) {
         if (res.success) {
           that.totalPage = Math.round(res.data.data.count / that.pageSize);
-          that.selllist = res.data.data.rsts;
+          that.selllist = res.data.data.rsts || [];
           that.sellCurrentPage = page;
           that.sellTotal = res.data.data.count;
         }
@@ -614,7 +616,7 @@ var allGoods = new Vue({
     this.$on('isSelectCardShow', function(i) {
       that.isSelectCardShow = i;
     });
-    if (utils.getCookie('token')) {
+    if (sessionStorage.getItem('token')) {
       this.getUserInfo();
       this.getBindedCard();
     }

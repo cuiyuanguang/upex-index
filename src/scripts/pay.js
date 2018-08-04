@@ -49,6 +49,11 @@ var pay = new Vue({
       var date = new Date(this.orderInfo.paymentTime);
       return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
     },
+    limitTime: function() {
+      if (this.orderInfo) {
+        return Math.ceil(this.orderInfo.countDownTime / 1000 / 60 / 60);
+      }
+    },
   },
   methods: {
     //pay modal methods-------------
@@ -187,6 +192,10 @@ var pay = new Vue({
     card: function (n, o) {
       if (!n) {
         this.cardErrorTips = this.$t('noEmpty');
+      } else if (!/(\d|\w)+$/.test(n)) {
+        this.cardErrorTips = this.$t('numericOrLetter');
+      } else if (n.length !== 4) {
+        this.cardErrorTips = this.$t('lengthshouldBe4');
       } else {
         this.cardErrorTips = '';
       }
@@ -194,8 +203,12 @@ var pay = new Vue({
     recard: function (n, o) {
       if (!n) {
         this.recardErrorTips = this.$t('noEmpty');
+      } else if (!/(\d|\w)+$/.test(n)) {
+        this.recardErrorTips = this.$t('numericOrLetter');
       } else if (n != this.card) {
         this.recardErrorTips = this.$t('twiceNotEqual');
+      } else if (n.length !== 4) {
+        this.recardErrorTips = this.$t('lengthshouldBe4');
       } else {
         this.recardErrorTips = '';
       }

@@ -22,8 +22,8 @@
             </h3>
             <h3 v-if="step==3">
               <span>
-                {{ $t('transactionSuccessful') }} - {{ $t('receivePayment') }}
-                <span style="color:#0CBF48"> {{orderInfo.totalPrice}} USDT</span>
+                {{ $t('transactionSuccessful') }} - {{ $t('received') }}
+                <span style="color:#0CBF48"> {{orderInfo.volume}} USDT</span>
               </span>
             </h3>
             <div class="step-wrapper">
@@ -153,7 +153,7 @@
         </div>
         <div class="pay-status" v-if="step==2">
           <p class="pay-notice">
-            {{ $t('sellerNotConfirmIn') }}<span class="text-success">24</span> {{ $t('hour') }}<br>
+            {{ $t('sellerNotConfirmIn') }}<span class="text-success">{{ limitTime }}</span> {{ $t('hour') }}<br>
             {{ $t('restTime') }}<span class="text-error">{{leftTime}}</span>
           </p>
         </div>

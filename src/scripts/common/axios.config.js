@@ -12,8 +12,8 @@ var $http = axios.create({
 $http.interceptors.request.use(
   function(config) {
     // 统一修改请求地址参数
-    if (utils.getCookie('token')) {
-      config.headers['exchange-token'] = utils.getCookie('token');
+    if (sessionStorage.getItem('token')) {
+      config.headers['exchange-token'] = sessionStorage.getItem('token');
     }
     // if (config.method === 'post' || config.method === 'option') {
     //   config.data = qs.stringify(config.data);
@@ -40,8 +40,8 @@ $http.interceptors.response.use(
           callback: function() {
             if (result.code == 2048) {
               localStorage.clear();
-              utils.delCookie('token');
-              location.href = 'otc_adverts.html?auth=1';
+              sessionStorage.clear();
+              location.href = 'otc_adverts.html';
             }
           }
         });

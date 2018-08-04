@@ -63,7 +63,7 @@
                 <td class="price">{{item.price}} SAR</td>
                 <td>{{item.paymentBanks[0].bankName}}</td>
                 <td>
-                  <button @click="showSellUsdt(item)" class="buy-btn">{{ $t('buy') }} USDT</button>
+                  <button @click="showBuyUsdt(item)" class="buy-btn">{{ $t('buy') }} USDT</button>
                 </td>
               </tr>
               <tr v-if="!buylist.length"><td colspan="6">{{ $t('noData') }}</td></tr>
@@ -104,7 +104,7 @@
                 </td>
                 <td class="price">{{item.price}} SAR</td>
                 <td>
-                  <button @click="showBuyUsdt(item)" class="buy-btn">{{ $t('sell') }} USDT</button>
+                  <button @click="showSellUsdt(item)" class="buy-btn">{{ $t('sell') }} USDT</button>
                 </td>
               </tr>
               <tr v-if="!selllist.length"><td colspan="5">{{ $t('noData') }}</td></tr>
@@ -145,6 +145,7 @@
                         size="large"
                         v-model="postData.priceBUY"
                         :min="marketPrice.trade_min_price"
+                        :max="500000"
                         :placeholder="$t('pricePlaceholder')"
                         ref="inputNumberPriceBUY"
                       >
@@ -162,6 +163,7 @@
                           size="large"
                           v-model="postData.volumeBUY"
                           :min="marketPrice.trade_min_volume"
+                          max="500000"
                           :placeholder="$t('amountPlaceholder')"
                           ref="inputNumberVolumeBUY"
                         >
@@ -222,6 +224,7 @@
                         size="large"
                         v-model="postData.priceSELL"
                         :min="marketPrice.trade_min_price"
+                        max="500000"
                         :placeholder="$t('pricePlaceholder')"
                         ref="inputNumberPriceSELL"
                       >
@@ -239,7 +242,7 @@
                         size="large"
                         v-model="postData.volumeSELL"
                         :min="marketPrice.trade_min_volume"
-                        :max="marketPrice.balance"
+                        :max="balance"
                         :placeholder="$t('amountPlaceholder')"
                         ref="inputNumberVolumeSELL"
                       >

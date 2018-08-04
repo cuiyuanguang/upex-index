@@ -20,7 +20,7 @@
             {{ $t('buyerPaid') }} {{orderInfo.totalPrice}} SAR
           </h3>
           <h3 v-if="step == 3">
-            {{ $t('transactionSuccessful') }} - {{ $t('receivePayment') }}
+            {{ $t('transactionSuccessful') }} - {{ $t('received') }}
             <span style="color:#0CBF48">{{orderInfo.totalPrice}} SAR</span>
           </h3>
           <div class="step-wrapper">
@@ -66,13 +66,13 @@
                 <li class="info-items">
                   <Row>
                     <i-col span="6" class=" info-key">{{ $t('received') }} :</i-col>
-                    <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalVolume}} USDT</i-col>
+                    <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalPrice}} SAR</i-col>
                   </Row>
                 </li>
                 <li class="info-items">
                   <Row>
                     <i-col span="6" class="info-key">{{ $t('sold') }} :</i-col>
-                    <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalPrice}} SAR</i-col>
+                    <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalVolume}} USDT</i-col>
                   </Row>
                 </li>
                 <!-- <li class="info-items">

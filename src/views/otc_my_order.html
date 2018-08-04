@@ -38,7 +38,7 @@
                 <td>{{item.price}} SAR</td>
                 <td>{{item.totalPrice}} SAR</td>
                 <td>{{item.ctime | date}}</td>
-                <td>{{ userInfo.id == item.buyerId ? item.buyer.showNickName : item.seller.showNickName }}</td>
+                <td>{{ userInfo.id == item.buyerId ? item.seller.showNickName : item.buyer.showNickName }}</td>
                 <td :class="item.status=='3'? 'complete' :'abnormal'">{{ statusSemantics(item.status) }}</td>
                 <td>
                   <a v-if="item.buyerId==userInfo.id" class="view" :href="'otc_pay.html?sequence='+item.sequence">{{ $t('view') }}</a>

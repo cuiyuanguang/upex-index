@@ -27,7 +27,7 @@ var myOrder = new Vue({
       };
       get('api/personOrders', data).then(function(res) {
         if (res.success) {
-          that.list = res.data.data.rsts;
+          that.list = res.data.data.rsts || [];
           that.current = page;
           that.total = res.data.data.count;
         }
@@ -54,7 +54,7 @@ var myOrder = new Vue({
         return this.$t('transfering');
       }
       if (v == '7') {
-        return this.$t('orderAbnormal');
+        return this.$t('orderExpired');
       }
     },
   },
@@ -80,7 +80,6 @@ var myOrder = new Vue({
   watch: {
     locale: function(newVal, oldVal) {
       if (newVal !== oldVal) {
-        console.log(newVal);
         this.$i18n.locale = newVal;
       }
     },
