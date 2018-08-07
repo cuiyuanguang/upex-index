@@ -26,10 +26,10 @@ var myOrder = new Vue({
         pageNum: page || 1,
       };
       get('api/personOrders', data).then(function(res) {
-        if (res.success) {
-          that.list = res.data.data.rsts || [];
+        if (res) {
+          that.list = res.rsts || [];
           that.current = page;
-          that.total = res.data.data.count;
+          that.total = res.count;
         }
       });
     },

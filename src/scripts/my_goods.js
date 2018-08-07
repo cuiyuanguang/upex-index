@@ -39,8 +39,8 @@ var myGoods = new Vue({
         pageSize: this.pageSize,
       };
       get('api/personAdverts/processing', data).then(function(res) {
-        that.pendingOrdersList = res.data.data.rsts || [];
-        that.pendingOrdersCount = res.data.data.count;
+        that.pendingOrdersList = res.rsts || [];
+        that.pendingOrdersCount = res.count;
       });
     },
     pause: function(item) {
@@ -86,7 +86,7 @@ var myGoods = new Vue({
         that.action === 'start'
       ) {
         post(api[that.action], that.advertId).then(function(res) {
-          if (res.success) {
+          if (res) {
             that.getAdvert();
           }
           that.showModal = false;

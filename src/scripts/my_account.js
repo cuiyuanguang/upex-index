@@ -299,8 +299,7 @@ var account = new Vue({
     getUserInfo() {
       var that = this;
       get('api/userInfo').then(function(res) {
-        var data = res.data.data;
-        that.user = data;
+        that.user = res;
       });
     },
     loginOut() {
@@ -336,7 +335,7 @@ var account = new Vue({
         if (valid) {
           if (name === 'formWhatsApp') {
             post('api/watchapp', that.selectCountry + '-' + that.formWhatsApp.number).then(function (res) {
-              if (res.success) {
+              if (res) {
                 that.modalWhatsApp = false;
                 that.getUserInfo();
               }
@@ -347,18 +346,34 @@ var account = new Vue({
             that.modalBankConfirm = true;
           }
           if (name === 'formBankConfirm') {
-            post('api/bankCard', {
-              bankName: that.formBankInfo.bankName,
-              name: that.formBankInfo.name,
-              cardNo: that.formBankInfo.cardNo,
-              ibanNo: that.formBankInfo.ibanNo,
-              checkType: that.tabVerifyActive,
-              checkValue: that.tabVerifyActive == '1' ? that.formBankConfirm.google : that.formBankConfirm.phone,
-            }).then(function (res) {
-              console.log(res);
-              that.modalBankConfirm = false;
-              that.getAllCard();
-            });
+            if (that.formBankInfo.id) {
+              put('api/bankCard', {
+                id: that.formBankInfo.id,
+                bankName: that.formBankInfo.bankName,
+                name: that.formBankInfo.name,
+                cardNo: that.formBankInfo.cardNo,
+                ibanNo: that.formBankInfo.ibanNo,
+                checkType: that.tabVerifyActive,
+                checkValue: that.tabVerifyActive == '1' ? that.formBankConfirm.google : that.formBankConfirm.phone,
+              }).then(function (res) {
+                that.modalBankConfirm = false;
+                that.getAllCard();
+              });
+            }
+            if (!that.formBankInfo.id) {
+              post('api/bankCard', {
+                id: that.formBankInfo.id,
+                bankName: that.formBankInfo.bankName,
+                name: that.formBankInfo.name,
+                cardNo: that.formBankInfo.cardNo,
+                ibanNo: that.formBankInfo.ibanNo,
+                checkType: that.tabVerifyActive,
+                checkValue: that.tabVerifyActive == '1' ? that.formBankConfirm.google : that.formBankConfirm.phone,
+              }).then(function (res) {
+                that.modalBankConfirm = false;
+                that.getAllCard();
+              });
+            }
           }
         } else {
           this.$Message.error('Fail!');
@@ -372,29 +387,27 @@ var account = new Vue({
     },
     getAllCard: function() {
       var that = this;
-      get('api/allBankCard').then(function(result) {
-        if (result.data.data.length > 0) {
-          that.bankData = result.data.data;
+      get('api/allBankCard').then(function(res) {
+        if (res.length > 0) {
+          that.bankData = res;
         }
       });
     },
     modifyBankInfo(data) {
       if (data) {
-        this.formBankInfo = data;
+        this.formBankInfo = JSON.parse(JSON.stringify(data));
       }
       this.modalBankInfo = true;
     },
     modifyBankStatus(data, value) {
-      console.log(data, value);
       post('api/switchBankCard', { id: data.id }).then(function(res){
-
       });
     },
     getLoginData(page) {
       var that = this;
       post('api/security/login_history', { pageNum: page, pageSize: 10 }, false).then(function(res) {
-        that.loginData = res.data.data.historyLoginList;
-        that.loginDataTotalCount = res.data.data.count;
+        that.loginData = res.historyLoginList;
+        that.loginDataTotalCount = res.count;
       });
     },
     loginPageChange(page) {
@@ -403,8 +416,8 @@ var account = new Vue({
     getSecurityData(page) {
       var that = this;
       post('api/security/setting_history', { pageNum: page, pageSize: 10 }, false).then(function(res) {
-        that.securityData = res.data.data.historySettingList;
-        that.securityDataTotalCount = res.data.data.count;
+        that.securityData = res.historySettingList;
+        that.securityDataTotalCount = res.count;
       });
     },
     securityPageChange(page) {
@@ -414,7 +427,7 @@ var account = new Vue({
       var that = this;
       that.sendDisabled = true;
       get('api/verifycode_sms', { type: 8 }).then(function (res) {
-        if (res.success) {
+        if (res) {
           that.countDown();
         }
       });

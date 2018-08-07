@@ -513,7 +513,7 @@ var o_confirm = {
       get('api/verifycode_sms', {
         type: 8,
       }).then(function (res) {
-        if (res.success) {
+        if (res) {
           that.sms = true;
           that.sendMsgCountDown();
         }
@@ -722,9 +722,9 @@ var addContact = {
     getCountry() {
       var that = this;
       get('api/country').then(function (res) {
-        if (res.success) {
-          that.countryArr = res.data.data;
-          localStorage.setItem('country', JSON.stringify(res.data.data));
+        if (res) {
+          that.countryArr = res;
+          localStorage.setItem('country', JSON.stringify(res));
         }
       });
     },
@@ -737,9 +737,9 @@ var addContact = {
         this.accountErrorTips = '';
         var that = this;
         post('api/watchapp', this.selectCountry + '-' + this.wahtsApp).then(function (res) {
-          if (res.success) {
+          if (res) {
             get('api/userInfo').then(function (res) {
-              var data = res.data.data;
+              var data = res;
               that.wahtsApp = '';
               localStorage.setItem('user', JSON.stringify(data));
               that.$parent.$emit('isAddContactShow', false);
@@ -942,7 +942,7 @@ var o_my_login = {
         'captcha': res
       };
       post('api/common/googleValidCode', JSON.stringify(dataCaptcha), false).then(function (res) {
-        if (res.success) {
+        if (res) {
           var data;
           if (that.loginWrap === 'loginPhone') {
             data = {
@@ -951,16 +951,16 @@ var o_my_login = {
               loginPword: that.loginPhonePassword,
             };
             post('api/user/login_in', JSON.stringify(data), false).then(function (res) {
-              if (res.success) {
-                if (res.data.data.type === '2') {
+              if (res) {
+                if (res.type === '2') {
                   that.$parent.$emit(
                     'isLoginNextPhone',
                     that.selectCountry + ' ' + that.loginPhoneVal
                   );
                 }
                 that.$parent.$emit('isLoginNext', true);
-                that.$parent.$emit('isLoginNextType', res.data.data.type);
-                that.$parent.$emit('isLoginNextCookie', res.data.data.token);
+                that.$parent.$emit('isLoginNextType', res.type);
+                that.$parent.$emit('isLoginNextCookie', res.token);
                 that.$parent.$emit('islogin', false);
                 that.modal_loading = false;
                 that.clear()
@@ -976,16 +976,16 @@ var o_my_login = {
               loginPword: that.loginEmailPassword,
             };
             post('api/user/login_in', JSON.stringify(data), false).then(function (res) {
-              if (res.success) {
-                if (res.data.data.type === '3') {
+              if (res) {
+                if (res.type === '3') {
                   that.$parent.$emit(
                     'isLoginNextEmail',
                     that.loginPhoneVal
                   );
                 }
                 that.$parent.$emit('isLoginNext', true);
-                that.$parent.$emit('isLoginNextType', res.data.data.type);
-                that.$parent.$emit('isLoginNextCookie', res.data.data.token);
+                that.$parent.$emit('isLoginNextType', res.type);
+                that.$parent.$emit('isLoginNextCookie', res.token);
                 that.$parent.$emit('islogin', false);
                 that.clear()
               } else {
@@ -1228,13 +1228,13 @@ var o_my_loginNext = {
           this.loginNextErrorText = this.$t('noEmpty')
         } else {
           post('api/user/confirm_login', JSON.stringify(data)).then(function (res) {
-            if (res.success) {
+            if (res) {
               that.modal_loading = false;
               that.$parent.$emit('isLoginNext', false);
               sessionStorage.setItem('token', that.isLoginNextCookieNum);
               get('api/userInfo').then(function (res) {
                 that.isLogined = res.data.code === 0;
-                var data = res.data.data;
+                var data = res;
                 if (that.isLogined) {
                   that.$parent.$emit('logined', that.isLogined);
                   localStorage.setItem('user', JSON.stringify(data));
@@ -1263,7 +1263,7 @@ var o_my_loginNext = {
             token: this.isLoginNextCookieNum,
           };
           post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
-            if (res.success) {
+            if (res) {
             } else {
             }
           });
@@ -1274,7 +1274,7 @@ var o_my_loginNext = {
             token: this.isLoginNextCookieNum,
           };
           post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
-            if (res.success) {
+            if (res) {
 
             } else {
 
@@ -1512,7 +1512,7 @@ var o_my_register = {
         'captcha': res
       };
       post('api/common/googleValidCode', JSON.stringify(dataCaptcha), false).then(function (res) {
-        if (res.success) {
+        if (res) {
           if (that.registerWrap === 'registerPhone') {
             const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
             data = {
@@ -1523,14 +1523,14 @@ var o_my_register = {
             };
             post('api/user/reg_mobile', JSON.stringify(data), false).then(function (res) {
               that.modal_loading = false;
-              if (res.success) {
-                sessionStorage.setItem('token', res.data.data);
-                that.$parent.$emit('isregisterCookie', res.data.data);
+              if (res) {
+                sessionStorage.setItem('token', res);
+                that.$parent.$emit('isregisterCookie', res);
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
                 get('api/userInfo').then(function (res) {
                   that.isLogined = res.data.code === 0;
-                  dataUserInfo = res.data.data;
+                  dataUserInfo = res;
                   if (that.isLogined) {
                     that.$parent.$emit('logined', that.isLogined);
                     localStorage.setItem('user', JSON.stringify(dataUserInfo));
@@ -1549,14 +1549,14 @@ var o_my_register = {
             };
             post('api/user/reg_email', JSON.stringify(data), false).then(function (res) {
               that.modal_loading = false;
-              if (res.success) {
-                sessionStorage.setItem('token', res.data.data);
-                that.$parent.$emit('isregisterCookie', res.data.data);
+              if (res) {
+                sessionStorage.setItem('token', res);
+                that.$parent.$emit('isregisterCookie', res);
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
                 get('api/userInfo').then(function (res) {
                   that.isLogined = res.data.code === '0';
-                  dataUserInfo = res.data.data;
+                  dataUserInfo = res;
                   if (that.isLogined) {
                     that.$parent.$emit('logined', that.isLogined);
                     localStorage.setItem('user', JSON.stringify(dataUserInfo));
@@ -1649,7 +1649,7 @@ var o_my_register = {
               }
             }, 1000);
             post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
-              if (res.success) {
+              if (res) {
 
               } else {
 
@@ -1687,7 +1687,7 @@ var o_my_register = {
               }
             }, 1000);
             post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
-              if (res.success) {
+              if (res) {
 
               } else {
 
@@ -1937,9 +1937,9 @@ var o_my_registerGoogle = {
         'exchange-token': that.isregisterToken
       };
       post('api/user/toopen_google_authenticator', JSON.stringify(data), false).then(function (res) {
-        if (res.success) {
-          that.googleKey = res.data.data.googleKey;
-          that.googleImg = res.data.data.googleImg;
+        if (res) {
+          that.googleKey = res.googleKey;
+          that.googleImg = res.googleImg;
         } else {
 
         }
@@ -1967,7 +1967,7 @@ var o_my_registerGoogle = {
             'loginPwd': that.bindGooglePassword,
           };
           post('api/user/google_verify', JSON.stringify(data)).then(function (res) {
-            if (res.success) {
+            if (res) {
               that.asyncCancel()
             } else {
 
@@ -2184,7 +2184,7 @@ var o_my_retrievePwd = {
         'captcha': res
       };
       post('api/common/googleValidCode', JSON.stringify(dataCaptcha), false).then(function (res) {
-        if (res.success) {
+        if (res) {
           if (that.registerWrap === 'registerPhone') {
             const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
             data = {
@@ -2195,7 +2195,7 @@ var o_my_retrievePwd = {
             };
             post('api/user/reg_mobile', JSON.stringify(data), false).then(function (res) {
               that.modal_loading = false;
-              if (res.success) {
+              if (res) {
                 this.$parent.$emit('isretrievePwdShow', false);
                 this.$parent.$emit('islogin', true);
                 this.clear();
@@ -2212,14 +2212,14 @@ var o_my_retrievePwd = {
             };
             post('api/user/reg_email', JSON.stringify(data), false).then(function (res) {
               that.modal_loading = false;
-              if (res.success) {
-                sessionStorage.setItem('token', res.data.data);
-                that.$parent.$emit('isregisterCookie', res.data.data);
+              if (res) {
+                sessionStorage.setItem('token', res);
+                that.$parent.$emit('isregisterCookie', res);
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
                 get('api/userInfo').then(function (res) {
                   that.isLogined = res.data.code === '0';
-                  dataUserInfo = res.data.data;
+                  dataUserInfo = res;
                   if (that.isLogined) {
                     that.$parent.$emit('logined', that.isLogined);
                     localStorage.setItem('user', JSON.stringify(dataUserInfo));
@@ -2277,8 +2277,8 @@ var o_my_retrievePwd = {
     getCountry() {
       var that = this;
       get('api/country').then(function (res) {
-        if (res.success) {
-          that.countryArr = res.data.data;
+        if (res) {
+          that.countryArr = res;
         } else {
         }
       });
@@ -2321,7 +2321,7 @@ var o_my_retrievePwd = {
               }
             }, 1000);
             post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
-              if (res.success) {
+              if (res) {
 
               } else {
 
@@ -2359,7 +2359,7 @@ var o_my_retrievePwd = {
               }
             }, 1000);
             post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
-              if (res.success) {
+              if (res) {
 
               } else {
 
@@ -2682,7 +2682,7 @@ var o_header = {
     loginOut() {
       var that = this;
       post('api/user/login_out').then(function (res) {
-        if (res.success) {
+        if (res) {
           localStorage.clear();
           that.logined = false;
           if (location.pathname !== '/views/otc_adverts.html') {
@@ -2714,12 +2714,12 @@ var o_header = {
     if (sessionStorage.getItem('token')) {
       var that = this;
       get('api/personOrders/processing').then(function (result) {
-        if (result.success && result.data.data.rsts) {
-          if (result.data.data.rsts.length > 5) {
-            that.orders = result.data.data.rsts.slice(0, 5);
+        if (result) {
+          if (result.rsts.length > 5) {
+            that.orders = result.rsts.slice(0, 5);
             return;
           }
-          that.orders = result.data.data.rsts;
+          that.orders = result.rsts;
         }
       });
     }

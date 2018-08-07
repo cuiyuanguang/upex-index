@@ -140,9 +140,9 @@ var allGoods = new Vue({
     getBindedCard: function() {
       var that = this;
       get('api/bankCard').then(function(result) {
-        if (result.data.data.length > 0) {
+        if (result.length > 0) {
           that.isCardBind = true;
-          that.cardInfo = result.data.data;
+          that.cardInfo = result;
         }
       });
     },
@@ -276,10 +276,9 @@ var allGoods = new Vue({
         totalPrice: this.buyData.buyAmount,
       };
       post('api/buyOrder', data).then(function(res) {
-        if (res.success) {
-          var sequence = res.data.data.sequence;
+        if (res) {
           that.isBuyDialogShow = false;
-          window.location.href = 'otc_pay.html?sequence=' + sequence;
+          window.location.href = 'otc_pay.html?sequence=' + res.sequence;
         }
       });
     },
@@ -301,8 +300,8 @@ var allGoods = new Vue({
         totalPrice: this.buyData.buyAmount,
       };
       post('api/sellOrder', data).then(function(res) {
-        if (res.success) {
-          var sequence = res.data.data.sequence;
+        if (res) {
+          var sequence = res.sequence;
           that.isBuyDialogShow = false;
           window.location.href = 'otc_wait_pay.html?sequence=' + sequence;
         }
@@ -337,26 +336,26 @@ var allGoods = new Vue({
       var that = this;
       // 获取市场价格
       get('api/rate').then(function(res) {
-        if (res.success) {
-          that.marketPrice.exchange_rate = res.data.data.exchange_rate;
-          that.marketPrice.exchange_buy_max = res.data.data.exchange_buy_max;
-          that.marketPrice.exchange_sell_min = res.data.data.exchange_sell_min;
-          that.marketPrice.trade_min_price = res.data.data.trade_min_price;
-          that.marketPrice.trade_max_price = res.data.data.trade_max_price;
-          that.postData.minTradeBUY = res.data.data.trade_min_price;
-          that.postData.minTradeSELL = res.data.data.trade_min_price;
-          that.postData.maxTradeBUY = res.data.data.trade_max_price;
-          that.postData.maxTradeSELL = res.data.data.trade_max_price;
+        if (res) {
+          that.marketPrice.exchange_rate = res.exchange_rate;
+          that.marketPrice.exchange_buy_max = res.exchange_buy_max;
+          that.marketPrice.exchange_sell_min = res.exchange_sell_min;
+          that.marketPrice.trade_min_price = res.trade_min_price;
+          that.marketPrice.trade_max_price = res.trade_max_price;
+          that.postData.minTradeBUY = res.trade_min_price;
+          that.postData.minTradeSELL = res.trade_min_price;
+          that.postData.maxTradeBUY = res.trade_max_price;
+          that.postData.maxTradeSELL = res.trade_max_price;
           // 获取用户余额
           get('api/finance/account_balance').then(function(res) {
-            if (res.success) {
-              that.balance = res.data.data.allCoinMap.USDT.normal_balance;
+            if (res) {
+              that.balance = res.allCoinMap.USDT.normal_balance;
             }
           });
           // 获取发单数量及类型
           get('api/personAdverts/cnt').then(function(res) {
-            var buyCount = res.data.data.BUY;
-            var sellCount = res.data.data.SELL;
+            var buyCount = res.BUY;
+            var sellCount = res.SELL;
             if (buyCount >= 2 && sellCount >= 2) {
               Toast.show(that.$t('dealOrderBeforeRelease'), { icon: 'warning' });
             } else if (buyCount >= 2 && sellCount < 2) {
@@ -498,7 +497,7 @@ var allGoods = new Vue({
       this.postData.minTrade = this.postData['minTrade' + tag];
       this.postData.maxTrade = this.postData['maxTrade' + tag];
       post('api/advert', this.postData).then(function(res) {
-        if (res.success) {
+        if (res) {
           that.isPendModalShow = false;
           that.clearPostModal();
           if (that.postOrderTag === 'BUY') {
@@ -515,7 +514,7 @@ var allGoods = new Vue({
       get('api/verifycode_sms', {
         type: 8,
       }).then(function(res) {
-        if (res.success) {
+        if (res) {
           that.sms = true;
           that.sendMsgCountDown();
         } else {
@@ -554,11 +553,11 @@ var allGoods = new Vue({
         side: 'SELL',
       };
       get('api/adverts', data).then(function(res) {
-        if (res.success) {
-          that.totalPage = Math.round(res.data.data.count / that.pageSize);
-          that.buylist = res.data.data.rsts || [];
+        if (res) {
+          that.totalPage = Math.round(res.count / that.pageSize);
+          that.buylist = res.rsts || [];
           that.buyCurrentPage = page;
-          that.buyTotal = res.data.data.count;
+          that.buyTotal = res.count;
         }
       });
     },
@@ -572,11 +571,11 @@ var allGoods = new Vue({
         side: 'BUY',
       };
       get('api/adverts', data).then(function(res) {
-        if (res.success) {
-          that.totalPage = Math.round(res.data.data.count / that.pageSize);
-          that.selllist = res.data.data.rsts || [];
+        if (res) {
+          that.totalPage = Math.round(res.count / that.pageSize);
+          that.selllist = res.rsts || [];
           that.sellCurrentPage = page;
-          that.sellTotal = res.data.data.count;
+          that.sellTotal = res.count;
         }
       });
     },
