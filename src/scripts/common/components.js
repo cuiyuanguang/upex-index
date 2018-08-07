@@ -1029,7 +1029,10 @@ var o_my_login = {
       alert(1);
     },
     runRegister() {
-      alert(2);
+      this.clear();
+      this.$parent.$emit('islogin', false);
+      this.$parent.$emit('isregister', true);
+      this.modal_loading = false;
     },
     mySubmit() {
       var that = this;
@@ -1126,7 +1129,7 @@ var o_my_loginNext = {
         <Input
           v-model="loginNextSmsCode"
           type="text"
-          placeholder="please enter Google verification code"
+          placeholder="please enter verification code"
           class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':' '">
           <span slot="append"
             class="my-slot-append"
@@ -1146,7 +1149,7 @@ var o_my_loginNext = {
         <Input
           v-model="loginNextSmsCode"
           type="text"
-          placeholder="please enter Google verification code"
+          placeholder="please enter verification code"
           class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':' '">
           <span slot="append"
             class="my-slot-append"
@@ -1600,6 +1603,8 @@ var o_my_register = {
     runSendSms(type) {
       const TIME_COUNT = 10;
       var that = this;
+      that.$parent.$emit('isregister', false);
+      that.$parent.$emit('isregisterGoogle', true);
       var data;
       if (type === 'phone') {
         if (!that.timerPhone) {
@@ -1795,7 +1800,6 @@ var o_my_register = {
       this.phoneVal = '';
       this.phoneValError = false;
       this.phoneValErrorText = '';
-      this.selectCountry = '';
       this.phoneSmsCode = '';
       this.phoneSmsCodeError = false;
       this.phoneSmsCodeErrorText = '';
@@ -1807,7 +1811,8 @@ var o_my_register = {
       this.phonePasswordAgainErrorText = '';
     },
     runLogin() {
-      alert(1)
+      this.$parent.$emit('islogin', true);
+      this.asyncCancel()
     }
   },
   mounted: function () {
@@ -1871,15 +1876,18 @@ var o_my_registerGoogle = {
                 type="password"
                 placeholder="Please enter log in password"
                 class="bindGoogle-input"
+                :class="bindGooglePasswordErrorText !== ''?'is-red':'is-gray'"
               >
               </Input>
+              <p class="my-login-error">{{bindGooglePasswordErrorText}}</p>
               <Input
                 v-model="bindGoogleCode"
                 type="text"
                 placeholder="Please input the google code."
-                class="bindGoogle-input"
+                class="bindGooglePasswordErrorText !== ''?'is-red':'is-gray'"
               >
               </Input>
+              <p class="my-login-error">{{bindGoogleCodeErrorText}}</p>
             </div>
           </div>
         </li>
@@ -1897,6 +1905,11 @@ var o_my_registerGoogle = {
       modal_loading: false,
       googleKey: '',
       googleImg: '',
+      bindGooglePasswordErrorText:'',
+      bindGoogleCodeErrorText:'',
+      error: {
+        null: '不能为空',
+      },
     };
   },
   props: ['registerGoogle','registerCookie'],
@@ -1927,18 +1940,29 @@ var o_my_registerGoogle = {
     },
     setGoogleInfo(){
       var that = this;
-      var data = {
-        'googleKey': that.googleKey,
-        'googleCode': that.bindGoogleCode,
-        'loginPwd': that.bindGooglePassword,
-      };
-      post('api/user/google_verify', JSON.stringify(data)).then(function (res) {
-        if (res.success) {
-          that.asyncCancel()
-        } else {
+      var data;
+      if(that.bindGooglePassword === ''){
+        that.bindGooglePasswordErrorText = that.error.null
+      }else if(that.bindGoogleCode === ''){
+        that.bindGoogleCodeErrorText = that.error.null
+      }else{
+        if(!that.modal_loading){
+          that.modal_loading = true;
+          data = {
+            'googleKey': that.googleKey,
+            'googleCode': that.bindGoogleCode,
+            'loginPwd': that.bindGooglePassword,
+          };
+          post('api/user/google_verify', JSON.stringify(data)).then(function (res) {
+            if (res.success) {
+              that.asyncCancel()
+            } else {
 
+            }
+            that.modal_loading = false;
+          });
         }
-      });
+      }
     },
     asyncCancel() {
       this.$parent.$emit('isregisterGoogle', false);
