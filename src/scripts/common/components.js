@@ -906,7 +906,7 @@ var o_my_login = {
   computed: {},
   methods: {
     onExpired() {
-
+      this.$refs.invisibleRecaptcha.reset()
     },
     onVerify(res) {
       console.log(res)
@@ -938,6 +938,7 @@ var o_my_login = {
                 that.modal_loading = false;
                 that.clear()
               } else {
+                that.$refs.invisibleRecaptcha.reset()
                 that.modal_loading = false;
               }
             });
@@ -961,11 +962,13 @@ var o_my_login = {
                 that.$parent.$emit('islogin', false);
                 that.clear()
               } else {
+                that.$refs.invisibleRecaptcha.reset()
                 that.modal_loading = false;
               }
             });
           }
         } else {
+          that.$refs.invisibleRecaptcha.reset()
           that.modal_loading = false;
         }
       });
@@ -1468,6 +1471,7 @@ var o_my_register = {
       countPhone: '',
       timerEmail: null,
       timerPhone: null,
+      isLogined:false
     };
   },
   components: {VueRecaptcha},
@@ -1475,18 +1479,18 @@ var o_my_register = {
   methods: {
 
     onExpired() {
-
+      this.$refs.invisibleRecaptcha.reset()
     },
     onVerify(res) {
       console.log(res)
       var that = this;
+      var data;
+      var dataUserInfo;
       var dataCaptcha = {
         'captcha': res
       };
       post('api/common/googleValidCode', JSON.stringify(dataCaptcha),false).then(function (res) {
-        console.log(res);
         if (res.success) {
-          var data;
           if (that.registerWrap === 'registerPhone') {
             const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
             data = {
@@ -1496,12 +1500,22 @@ var o_my_register = {
               "loginPword": that.phonePasswordAgain,
             };
             post('api/user/reg_mobile', JSON.stringify(data),false).then(function (res) {
-              console.log(res);
+              that.modal_loading = false;
               if (res.success) {
-                this.$parent.$emit('isregister', false);
-                this.$parent.$emit('isregisterGoogle', true);
+                sessionStorage.setItem('token', res.data.data);
+                that.$parent.$emit('isregisterCookie', res.data.data);
+                that.$parent.$emit('isregister', false);
+                that.$parent.$emit('isregisterGoogle', true);
+                get('api/userInfo').then(function(res) {
+                  that.isLogined = res.data.code === 0;
+                  dataUserInfo = res.data.data;
+                  if (that.isLogined) {
+                    that.$parent.$emit('logined', that.isLogined);
+                    localStorage.setItem('user', JSON.stringify(dataUserInfo));
+                  }
+                });
               } else {
-
+                that.$refs.invisibleRecaptcha.reset()
               }
             });
 
@@ -1512,17 +1526,28 @@ var o_my_register = {
               "emailAuthCode": that.emailSmsCode
             };
             post('api/user/reg_email', JSON.stringify(data),false).then(function (res) {
-              console.log(res);
+              that.modal_loading = false;
               if (res.success) {
-                this.$parent.$emit('isregister', false);
-                this.$parent.$emit('isregisterGoogle', true);
+                sessionStorage.setItem('token', res.data.data);
+                that.$parent.$emit('isregisterCookie', res.data.data);
+                that.$parent.$emit('isregister', false);
+                that.$parent.$emit('isregisterGoogle', true);
+                get('api/userInfo').then(function(res) {
+                  that.isLogined = res.data.code === '0';
+                  dataUserInfo = res.data.data;
+                  if (that.isLogined) {
+                    that.$parent.$emit('logined', that.isLogined);
+                    localStorage.setItem('user', JSON.stringify(dataUserInfo));
+                  }
+                });
               } else {
-
+                that.$refs.invisibleRecaptcha.reset()
               }
             });
           }
         } else {
-
+          that.$refs.invisibleRecaptcha.reset();
+          that.modal_loading = false;
         }
       });
     },
@@ -1577,6 +1602,7 @@ var o_my_register = {
     runSendSms(type) {
       const TIME_COUNT = 10;
       var that = this;
+      var data;
       if (type === 'phone') {
         if (!that.timerPhone) {
           if (that.phoneVal === '' || that.selectCountry === '') {
@@ -1819,7 +1845,9 @@ var o_my_registerGoogle = {
         </li>
         <li class="clear">
           <div class="li-title">
-            <div class="qr"></div>
+            <div class="qr">
+            <img :src="googleImg" alt="">
+</div>
             <div class="tip-img tip-img1"></div>
             <span class="list-num">2</span>
             <p style="width:158px">Use google authenticator to scan a barcode:</p>
@@ -1848,7 +1876,7 @@ var o_my_registerGoogle = {
               >
               </Input>
               <Input
-                v-model="bindGooglePassword"
+                v-model="bindGoogleCode"
                 type="text"
                 placeholder="Please input the google code."
                 class="bindGoogle-input"
@@ -1859,35 +1887,56 @@ var o_my_registerGoogle = {
         </li>
       </ul>
       <div slot="footer">
-        <Button type="primary" size="large" long :loading="modal_loading">Complete binding</Button>
+        <Button type="primary" size="large" long :loading="modal_loading" @click="setGoogleInfo">Complete binding</Button>
       </div>
     </Modal>
   `,
   data() {
     return {
+      isregisterToken:'',
       bindGooglePassword: '',
+      bindGoogleCode: '',
       modal_loading: false,
-      googleKey: '1231231',
+      googleKey: '',
       googleImg: '',
     };
   },
-  props: ['registerGoogle'],
+  props: ['registerGoogle','registerCookie'],
   methods: {
     doCopy: function () {
       this.$copyText(this.googleKey).then(function (e) {
         alert('复制成功')
       })
     },
+    getToken(){
+      var that=this
+      that.isregisterToken = sessionStorage.getItem('token') ? sessionStorage.getItem('token') : '';
+    },
     getGoogleInfo() {
       var that = this;
       var data = {
-        'exchange-token': '12312312'
+        'exchange-token': that.isregisterToken
       };
-      post('api/user/toopen_google_authenticator', JSON.stringify(data),false).then(function (res) {
+      post('api/user/toopen_google_authenticator', JSON.stringify(data)).then(function (res) {
         console.log(res);
         if (res.success) {
           that.googleKey = res.data.data.googleKey;
           that.googleImg = res.data.data.googleImg;
+        } else {
+
+        }
+      });
+    },
+    setGoogleInfo(){
+      var that = this;
+      var data = {
+        'googleKey': that.googleKey,
+        'googleCode': that.bindGoogleCode,
+        'loginPwd': that.bindGooglePassword,
+      };
+      post('api/user/google_verify', JSON.stringify(data)).then(function (res) {
+        if (res.success) {
+          that.asyncCancel()
         } else {
 
         }
@@ -1900,7 +1949,20 @@ var o_my_registerGoogle = {
     ok() {
       this.$Message.info('Clicked ok');
     },
+  }
+  ,
+  watch: {
+    registerCookie: function (a, b) {
+      this.isregisterToken = a;
+      this.getGoogleInfo();
+    },
   },
+  mounted(){
+    if(sessionStorage.getItem('token')){
+      this.getToken();
+      this.getGoogleInfo()
+    }
+  }
 };
 
 // header
@@ -2003,7 +2065,7 @@ var o_header = {
         :is-login-next-email="isLoginNextEmail"
       ></myloginnext>
       <myregister :register="isregister"></myregister>
-      <myregistergoogle :register-google="isRegisterGoogleShow"></myregistergoogle>
+      <myregistergoogle :register-google="isRegisterGoogleShow" :register-cookie="isregisterCookie"></myregistergoogle>
     </div>
   `,
   i18n: i18nComponents,
@@ -2017,6 +2079,7 @@ var o_header = {
       isregister: false,
       isLoginNextShow: false,
       isRegisterGoogleShow: false,
+      isregisterCookie: '',
       isLoginNextType: '',
       isLoginNextCookie: '',
       isLoginNextPhone: '',
@@ -2145,6 +2208,9 @@ var o_header = {
     });
     this.$on("isregister", function (i) {
       this.isregister = i;
+    });
+    this.$on("isregisterCookie", function (i) {
+      this.isregisterCookie = i;
     });
   },
 };
