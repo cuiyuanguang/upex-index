@@ -40,13 +40,9 @@ var waitPay = new Vue({
     };
   },
   computed: {
-    arrivalTime: function() {
-      var date = new Date(this.orderInfo.paymentTime);
-      return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-    },
     whatsAppLink: function() {
       var whatsAppStr = this.orderInfo.socialNumber;
-      return whatsAppStr.substr(whatsAppStr.indexOf(',') + 1);
+      return whatsAppStr.substr(whatsAppStr.indexOf('-') + 1);
     },
   },
   methods: {
@@ -138,7 +134,7 @@ var waitPay = new Vue({
         that.orderInfo.bankCard = data.paymentBanks;
         that.orderInfo.bankCardLastNum =
           data.description && JSON.parse(data.description).paymentBankCard;
-        that.orderInfo.socialNumber = data.buyer.userExtView.watchapp;
+        that.orderInfo.socialNumber = data.buyer.userExtView.watchapp.replace(/\s+/g, '');
         that.orderInfo.nickname = data.buyer.showNickName;
       });
     },

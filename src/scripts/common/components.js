@@ -116,9 +116,9 @@ var i18nComponentsMessages = {
     zh: '等待买家支付',
     en: 'wait for buyer to pay',
   },
-  waitForSellerConfirm: {
-    zh: '等待卖家确认收款',
-    en: 'wait for seller to confirm',
+  buyerHasPaid: {
+    zh: '买家已支付',
+    en: 'buyer has paid',
   },
   payInTime: {
     zh: '支付截止时间',
@@ -351,6 +351,8 @@ var o_bindcard = {
         this.cardNoError = this.$t('noEmpty');
       } else if (!this.cardInfo.ibanNo) {
         this.ibanNoError = this.$t('noEmpty');
+      } else if (this.bankNameError || this.nameError || this.cardNoError || this.ibanNoError) {
+        return;
       } else {
         this.bankNameError = '';
         this.nameError = '';
@@ -2032,7 +2034,7 @@ var o_header = {
                         </div>
                         <div v-else class="tip">
                           {{ item.status == 1 ? $t('waitForBuyerPay') : '' }}
-                          {{ item.status == 2 ? $t('waitForSellConfirm') : '' }}
+                          {{ item.status == 2 ? $t('buyerHasPaid') : '' }}
                           {{item.totalPrice}}SAR
                         </div>
                         <span v-if="item.buyer.id==userInfo.id">{{ $t('payInTime') }} {{item.ctime | date }}</span>

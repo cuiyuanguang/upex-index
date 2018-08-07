@@ -1,7 +1,9 @@
 var API_URL = '/';
 var $http = axios.create({
   baseURL: API_URL, // api域名及端口
-  timeout: 30000, // 超时自动取消请求
+  timeout: 1000, // 超时自动取消请求
+  retry: 3,
+  retryDelay: 500,
   responseType: 'json', // 返回数据格式
   withCredentials: true, // 是否允许带cookie等验证信息
   headers: {
@@ -15,16 +17,42 @@ $http.interceptors.request.use(
     if (sessionStorage.getItem('token')) {
       config.headers['exchange-token'] = sessionStorage.getItem('token');
     }
-    // if (config.method === 'post' || config.method === 'option') {
-    //   config.data = qs.stringify(config.data);
-    // }
     return config;
   },
   function(error) {
     return Promise.reject(error);
   }
 );
+// 响应超时处理
+$http.interceptors.response.use(undefined, function axiosRetryInterceptor(err) {
+  var config = err.config;
+  // If config does not exist or the retry option is not set, reject
+  if (!config || !config.retry) return Promise.reject(err);
 
+  // Set the variable for keeping track of the retry count
+  config.__retryCount = config.__retryCount || 0;
+
+  // Check if we've maxed out the total number of retries
+  if (config.__retryCount >= config.retry) {
+    // Reject with the error
+    return Promise.reject(err);
+  }
+
+  // Increase the retry count
+  config.__retryCount += 1;
+
+  // Create new promise to handle exponential backoff
+  var backoff = new Promise(function(resolve) {
+    setTimeout(function() {
+      resolve();
+    }, config.retryDelay || 1);
+  });
+
+  // Return the promise in which recalls axios to retry the request
+  return backoff.then(function() {
+    return $http(config);
+  });
+});
 // 添加响应拦截器
 $http.interceptors.response.use(
   function(response) {
@@ -43,14 +71,14 @@ $http.interceptors.response.use(
               sessionStorage.clear();
               location.href = 'otc_adverts.html';
             }
-          }
+          },
         });
         return {
           success: false,
           data: toastMsg[result.code][locale],
         };
       }
-      if (response.config.method === 'post' && response.config.showToast) {
+      if (response.config && response.config.method === 'post' && response.config.showToast) {
         // Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
         Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
       }
@@ -62,7 +90,9 @@ $http.interceptors.response.use(
   },
   function(error) {
     // http错误码判断
-    console.log(error.response.statusText);
+    if (error.code === 'ECONNABORTED') {
+      Toast.show('请求超时，请稍后再试', { icon: 'warn', duration: 2500 });
+    }
     // location.href = 'otc_error.html?code=' + error.response.status;
     // 返回 response 里的错误信息
     return Promise.reject(error.response.statusText);

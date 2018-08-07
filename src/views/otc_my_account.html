@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+
+<head>
+  <title>UPEX</title>
+  @@include('header.html')
+  <link rel="stylesheet" href="../styles/my_account.css?rev=@@hash">
+</head>
+
+<body>
+  <div id="account" v-cloak>
+    <o-header ref="header"></o-header>
+    <div class="banner">
+      {{ $t('myAccount') }}
+    </div>
+    <div class="container account">
+      <Row class="container-row">
+        <i-col span="12">
+          <dl class="account-card">
+            <dt>
+              <Row class="account-row">
+                <i-col span="12">
+                  <span class="account-row-title">账户信息</span>
+                  <Tag color="#ff4d4d">冻结</Tag>
+                </i-col>
+                <i-col span="12" class="text-right">
+                  <i-button type="text" size="small" @click="loginOut">退出</i-button>
+                </i-col>
+              </Row>
+            </dt>
+            <dd>
+              <Row>
+                <i-col span="8" class="text-secondary">
+                  <Icon type="person" color="#cfcfcf" size="16"></Icon>
+                  账号
+                </i-col>
+                <i-col span="8" class="text-strong">100010</i-col>
+              </Row>
+            </dd>
+            <dd>
+              <Row>
+                <i-col span="8" class="text-secondary">
+                  <Icon type="social-whatsapp" color="#cfcfcf" size="16"></Icon>
+                  WhatsApp
+                </i-col>
+                <i-col span="8" class="text-strong">+86-187****2342</i-col>
+                <i-col span="8" class="text-right">
+                  <i-button type="text" size="small">修改</i-button>
+                </i-col>
+              </Row>
+            </dd>
+            <dd>
+              <Row>
+                <i-col span="8" class="text-secondary">
+                  <Icon type="locked" color="#cfcfcf" size="16"></Icon>
+                  密码
+                </i-col>
+                <i-col span="8" class="text-strong">********</i-col>
+                <i-col span="8" class="text-right">
+                  <i-button type="text" size="small" @click="modalPassword = true">修改</i-button>
+                </i-col>
+              </Row>
+            </dd>
+          </dl>
+        </i-col>
+        <i-col span="12">
+          <dl class="account-card border-left">
+            <dt>
+              <Row class="account-row">
+                <i-col span="12">
+                  <span class="account-row-title">安全设置</span>
+                  <Badge count="Unsafe"></Badge>
+                </i-col>
+              </Row>
+            </dt>
+            <dd>
+              <Row>
+                <i-col span="8" class="text-secondary">
+                  <Icon type="social-google" color="#cfcfcf" size="16"></Icon>
+                  Google 身份验证
+                </i-col>
+                <i-col span="8" class="text-strong">未绑定</i-col>
+                <i-col span="8" class="text-right">
+                  <i-button type="error" size="small">绑定</i-button>
+                </i-col>
+              </Row>
+            </dd>
+            <dd>
+              <Row>
+                <i-col span="8" class="text-secondary">
+                  <Icon type="email" color="#cfcfcf" size="16"></Icon>
+                  邮箱
+                </i-col>
+                <i-col span="8" class="text-strong">未绑定</i-col>
+                <i-col span="8" class="text-right">
+                  <i-button type="error" size="small">绑定</i-button>
+                </i-col>
+              </Row>
+            </dd>
+            <dd>
+              <Row>
+                <i-col span="8" class="text-secondary">
+                  <Icon type="iphone" color="#cfcfcf" size="20"></Icon>
+                  手机验证
+                </i-col>
+                <i-col span="8" class="text-strong">+86-187****2342</i-col>
+                <i-col span="8" class="text-right">
+                  <i-button type="text" size="small">修改</i-button>
+                </i-col>
+              </Row>
+            </dd>
+          </dl>
+        </i-col>
+      </Row>
+      <Row class="container-row">
+        <i-col span="24">
+          <Row class="account-row">
+            <i-col span="12">
+              <span class="account-row-title">银行卡</span>
+              为了您的账户安全，请使用真实信息绑定银行卡
+            </i-col>
+            <i-col span="12" class="text-right">
+              <i-button type="text" size="small" icon="plus">添加银行卡</i-button>
+            </i-col>
+          </Row>
+          <i-table :columns="bankColumn" :data="bankData"></i-table>
+        </i-col>
+      </Row>
+      <div class="container-row" style="margin-top: 2px;">
+        <Tabs value="loginHistory">
+          <tab-pane label="登录历史" name="loginHistory">
+            <i-table :columns="loginColumn" :data="loginData"></i-table>
+            <Page :total="40" size="small" show-total></Page>
+          </tab-pane>
+          <tab-pane label="安全记录" name="securityHistory">
+            <i-table :columns="securityColumn" :data="securityData"></i-table>
+            <Page :total="40" size="small" show-total></Page>
+          </tab-pane>
+        </Tabs>
+      </div>
+    </div>
+    <Modal title="修改密码" v-model="modalPassword">
+      <i-form ref="formPassword" :model="formPassword" :rules="rulePassword" :label-position="top">
+        <form-item label="原密码" prop="passwd">
+          <i-input type="password" v-model="formPassword.passwd"></i-input>
+        </form-item>
+        <form-item label="新密码" prop="passwdNew">
+          <i-input type="password" v-model="formPassword.passwdNew"></i-input>
+        </form-item>
+        <form-item label="重复新密码" prop="passwdReNew">
+          <i-input type="text" v-model="formPassword.passwdReNew"></i-input>
+        </form-item>
+      </i-form>
+      <div slot="footer">
+        <i-button type="ghost" @click="handleReset('formPassword')" style="margin-left: 8px">取消</i-button>
+        <i-button type="primary" @click="handleSubmit('formPassword')">确定</i-button>
+      </div>
+    </Modal>
+  </div>
+  @@include('footer.html')
+  <script src="../scripts/locale/my_account.js?rev=@@hash"></script>
+  <script src="../scripts/my_account.js?rev=@@hash"></script>
+</body>
+
+</html>
