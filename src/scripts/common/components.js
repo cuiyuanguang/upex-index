@@ -45,7 +45,7 @@ var Toast = {
 
 Vue.use(VueI18n);
 
-Vue.filter('date', function(utc) {
+Vue.filter('date', function (utc) {
   var date = new Date(utc);
   var format = 'yyyy-MM-dd hh:mm:ss';
   var o = {
@@ -59,7 +59,7 @@ Vue.filter('date', function(utc) {
   };
   if (/(y+)/.test(format)) format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
   for (var k in o)
-  if (new RegExp("(" + k + ")").test(format)) format = format.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    if (new RegExp("(" + k + ")").test(format)) format = format.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
   return format;
 });
 
@@ -204,6 +204,26 @@ var i18nComponentsMessages = {
     zh: '继续交易',
     en: 'continue trade',
   },
+  copySuccess: {
+    zh: '复制成功',
+    en: 'Replicating success'
+  },
+  errorPhoneNum: {
+    zh: '请输入合法的电话号码',
+    en: 'Please enter a legitimate phone number'
+  },
+  errorEmailNum: {
+    zh: '请输入合法的邮件地址',
+    en: 'Please enter a legitimate email address'
+  },
+  errorNoSamePwd: {
+    zh: '密码不一致',
+    en: 'Inconsistency of ciphers'
+  },
+  errorPwdNum: {
+    zh: '以字母开头，长度在8-64之间，只能包含字符、数字',
+    en: 'Beginning with letters, length 8-64, can contain characters and numbers only.'
+  }
 };
 
 var i18nComponents = new VueI18n({
@@ -373,28 +393,28 @@ var o_bindcard = {
         this.$i18n.locale = newVal;
       }
     },
-    'cardInfo.bankName': function(val) {
+    'cardInfo.bankName': function (val) {
       if (val && !this.invalidCheck(val)) {
         this.bankNameError = this.$t('numericOrLetter');
       } else {
         this.bankNameError = '';
       }
     },
-    'cardInfo.name': function(val) {
+    'cardInfo.name': function (val) {
       if (val && !this.invalidCheck(val)) {
         this.nameError = this.$t('numericOrLetter');
       } else {
         this.nameError = '';
       }
     },
-    'cardInfo.cardNo': function(val) {
+    'cardInfo.cardNo': function (val) {
       if (val && !this.invalidCheck(val)) {
         this.cardNoError = this.$t('numericOrLetter');
       } else {
         this.cardNoError = '';
       }
     },
-    'cardInfo.ibanNo': function(val) {
+    'cardInfo.ibanNo': function (val) {
       if (val && !this.invalidCheck(val)) {
         this.ibanNoError = this.$t('numericOrLetter');
       } else {
@@ -717,7 +737,7 @@ var addContact = {
         var that = this;
         post('api/watchapp', this.selectCountry + '-' + this.wahtsApp).then(function (res) {
           if (res.success) {
-            get('api/userInfo').then(function(res) {
+            get('api/userInfo').then(function (res) {
               var data = res.data.data;
               that.wahtsApp = '';
               localStorage.setItem('user', JSON.stringify(data));
@@ -867,6 +887,7 @@ var o_my_login = {
       </div>
     </Modal>
   `,
+  i18n: i18nComponents,
   data() {
     return {
       //Email
@@ -895,7 +916,6 @@ var o_my_login = {
       login: false,
       loginWrap: '',
       error: {
-        null: '不能为空',
         phoneNum: '输入合法的电话号码',
         emailNum: '输入合法的邮箱地址',
       },
@@ -914,7 +934,7 @@ var o_my_login = {
       var dataCaptcha = {
         'captcha': res
       };
-      post('api/common/googleValidCode', JSON.stringify(dataCaptcha),false).then(function (res) {
+      post('api/common/googleValidCode', JSON.stringify(dataCaptcha), false).then(function (res) {
         if (res.success) {
           var data;
           if (that.loginWrap === 'loginPhone') {
@@ -923,7 +943,7 @@ var o_my_login = {
               mobileNumber: that.loginPhoneVal,
               loginPword: that.loginPhonePassword,
             };
-            post('api/user/login_in', JSON.stringify(data),false).then(function (res) {
+            post('api/user/login_in', JSON.stringify(data), false).then(function (res) {
               if (res.success) {
                 if (res.data.data.type === '2') {
                   that.$parent.$emit(
@@ -948,7 +968,7 @@ var o_my_login = {
               mobileNumber: that.loginEmailVal,
               loginPword: that.loginEmailPassword,
             };
-            post('api/user/login_in', JSON.stringify(data),false).then(function (res) {
+            post('api/user/login_in', JSON.stringify(data), false).then(function (res) {
               if (res.success) {
                 if (res.data.data.type === '3') {
                   that.$parent.$emit(
@@ -1008,19 +1028,18 @@ var o_my_login = {
       this.loginPasswordError = false;
     },
     clear() {
-
-      this.loginEmailVal='';
-        this.loginEmailError=false;
-        this.loginEmailErrorText='';
-        this.loginEmailPassword='';
-        this.loginEmailPasswordError=false;
-        this.loginEmailPasswordErrorText='';
-        this.loginPhoneVal='';
-        this.loginPhoneError=false;
-        this.loginPhoneErrorText='';
-        this.loginPhonePassword='';
-        this.loginPhonePasswordError=false;
-        this.loginPhonePasswordErrorText='';
+      this.loginEmailVal = '';
+      this.loginEmailError = false;
+      this.loginEmailErrorText = '';
+      this.loginEmailPassword = '';
+      this.loginEmailPasswordError = false;
+      this.loginEmailPasswordErrorText = '';
+      this.loginPhoneVal = '';
+      this.loginPhoneError = false;
+      this.loginPhoneErrorText = '';
+      this.loginPhonePassword = '';
+      this.loginPhonePasswordError = false;
+      this.loginPhonePasswordErrorText = '';
     },
     asyncCancel() {
       this.clear();
@@ -1028,7 +1047,8 @@ var o_my_login = {
       this.modal_loading = false;
     },
     runForgetPassword() {
-      alert(1);
+      this.asyncCancel();
+      this.$parent.$emit('isretrievePwdShow', true);
     },
     runRegister() {
       this.clear();
@@ -1046,15 +1066,15 @@ var o_my_login = {
           if (that.loginPhoneVal === '' || that.selectCountry === '') {
             that.modal_loading = false;
             that.loginPhoneError = true;
-            that.loginPhoneErrorText = that.error.null;
+            that.loginPhoneErrorText = this.$t('noEmpty');
           } else if (!that.phoneReg(that.loginPhoneVal)) {
             that.modal_loading = false;
             that.loginPhoneError = true;
-            that.loginPhoneErrorText = that.error.phoneNum;
+            that.loginPhoneErrorText = this.$t('errorPhoneNum');
           } else if (that.loginPhonePassword === '') {
             that.modal_loading = false;
             that.loginPhonePasswordError = true;
-            that.loginPhonePasswordErrorText = that.error.null;
+            that.loginPhonePasswordErrorText = this.$t('noEmpty');
           } else {
             this.$refs.invisibleRecaptcha.execute();
           }
@@ -1063,15 +1083,15 @@ var o_my_login = {
           if (that.loginEmailVal === '') {
             that.modal_loading = false;
             that.loginEmailError = true;
-            that.loginEmailErrorText = that.error.null;
+            that.loginEmailErrorText = this.$t('noEmpty');
           } else if (!that.emailReg(that.loginEmailVal)) {
             that.modal_loading = false;
             that.loginEmailError = true;
-            that.loginEmailErrorText = that.error.emailNum;
+            that.loginEmailErrorText = this.$t('errorEmailNum');
           } else if (that.loginEmailPassword === '') {
             that.modal_loading = false;
             that.loginEmailPasswordError = true;
-            that.loginEmailPasswordErrorText = that.error.null;
+            that.loginEmailPasswordErrorText = this.$t('noEmpty');
           } else {
             this.$refs.invisibleRecaptcha.execute();
 
@@ -1174,6 +1194,7 @@ var o_my_loginNext = {
       </div>
     </Modal>
   `,
+  i18n: i18nComponents,
   props: ['loginNext', 'isLoginNextType', 'isLoginNextCookie', 'isLoginNextPhone', 'isLoginNextEmail'],
   data() {
     return {
@@ -1209,14 +1230,14 @@ var o_my_loginNext = {
         if (this.loginNextSmsCode.length === 0) {
           this.loginNextError = true;
           that.modal_loading = false;
-          this.loginNextErrorText = '不能为空'
+          this.loginNextErrorText = this.$t('noEmpty')
         } else {
           post('api/user/confirm_login', JSON.stringify(data)).then(function (res) {
             if (res.success) {
               that.modal_loading = false;
               that.$parent.$emit('isLoginNext', false);
               sessionStorage.setItem('token', that.isLoginNextCookieNum);
-              get('api/userInfo').then(function(res) {
+              get('api/userInfo').then(function (res) {
                 that.isLogined = res.data.code === 0;
                 var data = res.data.data;
                 if (that.isLogined) {
@@ -1291,6 +1312,11 @@ var o_my_loginNext = {
   },
 
   watch: {
+    locale: function (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+      }
+    },
     isLoginNextType: function (a, b) {
       this.isLoginNextTypeNum = a;
     },
@@ -1459,13 +1485,6 @@ var o_my_register = {
       register: '',
       registerWrap: 'tabEmail',
       modal_loading: false,
-      error: {
-        null: '不能为空',
-        phoneNum: '输入合法的电话号码',
-        emailNum: '输入合法的邮箱地址',
-        noSame: '两次密码不一样',
-        password: '以字母开头，长度在8-64之间，只能包含字符、数字',
-      },
       sendSmsEmail: 'get verification code',
       sendSmsPhone: 'get verification code',
       showEmail: true,
@@ -1474,7 +1493,7 @@ var o_my_register = {
       countPhone: '',
       timerEmail: null,
       timerPhone: null,
-      isLogined:false
+      isLogined: false
     };
   },
   components: {VueRecaptcha},
@@ -1492,7 +1511,7 @@ var o_my_register = {
       var dataCaptcha = {
         'captcha': res
       };
-      post('api/common/googleValidCode', JSON.stringify(dataCaptcha),false).then(function (res) {
+      post('api/common/googleValidCode', JSON.stringify(dataCaptcha), false).then(function (res) {
         if (res.success) {
           if (that.registerWrap === 'registerPhone') {
             const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
@@ -1502,14 +1521,14 @@ var o_my_register = {
               "mobileNumber": that.phoneVal,
               "loginPword": that.phonePasswordAgain,
             };
-            post('api/user/reg_mobile', JSON.stringify(data),false).then(function (res) {
+            post('api/user/reg_mobile', JSON.stringify(data), false).then(function (res) {
               that.modal_loading = false;
               if (res.success) {
                 sessionStorage.setItem('token', res.data.data);
                 that.$parent.$emit('isregisterCookie', res.data.data);
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
-                get('api/userInfo').then(function(res) {
+                get('api/userInfo').then(function (res) {
                   that.isLogined = res.data.code === 0;
                   dataUserInfo = res.data.data;
                   if (that.isLogined) {
@@ -1528,14 +1547,14 @@ var o_my_register = {
               "loginPword": that.emailPasswordAgain,
               "emailAuthCode": that.emailSmsCode
             };
-            post('api/user/reg_email', JSON.stringify(data),false).then(function (res) {
+            post('api/user/reg_email', JSON.stringify(data), false).then(function (res) {
               that.modal_loading = false;
               if (res.success) {
                 sessionStorage.setItem('token', res.data.data);
                 that.$parent.$emit('isregisterCookie', res.data.data);
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
-                get('api/userInfo').then(function(res) {
+                get('api/userInfo').then(function (res) {
                   that.isLogined = res.data.code === '0';
                   dataUserInfo = res.data.data;
                   if (that.isLogined) {
@@ -1611,11 +1630,11 @@ var o_my_register = {
           if (that.phoneVal === '' || that.selectCountry === '') {
             that.modal_loading = false;
             that.phoneValError = true;
-            that.phoneValErrorText = that.error.null;
+            that.phoneValErrorText = this.$t('noEmpty');
           } else if (!that.phoneReg(that.phoneVal)) {
             that.modal_loading = false;
             that.phoneValError = true;
-            that.phoneValErrorText = that.error.phoneNum;
+            that.phoneValErrorText = this.$t('errorPhoneNum');
           } else {
             const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
             const isLoginNextPhoneNumPhone = that.phoneVal;
@@ -1652,11 +1671,11 @@ var o_my_register = {
           if (that.emailVal === '') {
             that.modal_loading = false;
             that.emailValError = true;
-            that.emailValErrorText = that.error.null;
+            that.emailValErrorText = this.$t('noEmpty');
           } else if (!that.emailReg(that.emailVal)) {
             that.modal_loading = false;
             that.emailValError = true;
-            that.emailValErrorText = that.error.emailNum;
+            that.emailValErrorText = this.$t('errorPhoneNum');
           } else {
             data = {
               email: that.emailVal,
@@ -1721,31 +1740,31 @@ var o_my_register = {
           if (that.phoneVal === '' || that.selectCountry === '') {
             that.modal_loading = false;
             that.phoneValError = true;
-            that.phoneValErrorText = that.error.null;
+            that.phoneValErrorText = this.$t('noEmpty');
           } else if (!that.phoneReg(that.phoneVal)) {
             that.modal_loading = false;
             that.phoneValError = true;
-            that.phoneValErrorText = that.error.phoneNum;
+            that.phoneValErrorText = this.$t('errorPhoneNum');
           } else if (that.phoneSmsCode === '') {
             that.modal_loading = false;
             that.phoneSmsCodeError = true;
-            that.phoneSmsCodeErrorText = that.error.null;
+            that.phoneSmsCodeErrorText = this.$t('noEmpty');
           } else if (that.phonePassword === '') {
             that.modal_loading = false;
             that.phonePasswordError = true;
-            that.phonePasswordErrorText = that.error.null;
+            that.phonePasswordErrorText = this.$t('noEmpty');
           } else if (!that.passwordReg(that.phonePassword)) {
             that.modal_loading = false;
             that.phonePasswordError = true;
-            that.phonePasswordErrorText = that.error.password;
+            that.phonePasswordErrorText = this.$t('errorPwdNum');
           } else if (that.phonePasswordAgain === '') {
             that.modal_loading = false;
             that.phonePasswordAgainError = true;
-            that.phonePasswordAgainErrorText = that.error.null;
+            that.phonePasswordAgainErrorText = this.$t('noEmpty');
           } else if (that.phonePassword !== that.phonePasswordAgain) {
             that.modal_loading = false;
             that.phonePasswordAgainError = true;
-            that.phonePasswordAgainErrorText = that.error.noSame;
+            that.phonePasswordAgainErrorText = this.$t('errorNoSamePwd');
           } else {
             this.$refs.invisibleRecaptcha.execute();
           }
@@ -1753,31 +1772,31 @@ var o_my_register = {
           if (that.emailVal === '') {
             that.modal_loading = false;
             that.emailValError = true;
-            that.emailValErrorText = that.error.null;
+            that.emailValErrorText = this.$t('noEmpty');
           } else if (!that.emailReg(that.emailVal)) {
             that.modal_loading = false;
             that.emailValError = true;
-            that.emailValErrorText = that.error.emailNum;
+            that.emailValErrorText = this.$t('errorPhoneNum');
           } else if (that.emailSmsCode === '') {
             that.modal_loading = false;
             that.emailSmsCodeError = true;
-            that.emailSmsCodeErrorText = that.error.null;
+            that.emailSmsCodeErrorText = this.$t('noEmpty');
           } else if (that.emailPassword === '') {
             that.modal_loading = false;
             that.emailPasswordError = true;
-            that.emailPasswordErrorText = that.error.null;
+            that.emailPasswordErrorText = this.$t('noEmpty');
           } else if (!that.passwordReg(that.emailPassword)) {
             that.modal_loading = false;
             that.emailPasswordError = true;
-            that.emailPasswordErrorText = that.error.password;
+            that.emailPasswordErrorText = this.$t('errorPwdNum');
           } else if (that.emailPasswordAgain === '') {
             that.modal_loading = false;
             that.emailPasswordAgainError = true;
-            that.emailPasswordAgainErrorText = that.error.null;
+            that.emailPasswordAgainErrorText = this.$t('noEmpty');
           } else if (that.emailPassword !== that.emailPasswordAgain) {
             that.modal_loading = false;
             that.emailPasswordAgainError = true;
-            that.emailPasswordAgainErrorText = that.error.noSame;
+            that.emailPasswordAgainErrorText = this.$t('errorNoSamePwd');
           } else {
             this.$refs.invisibleRecaptcha.execute();
           }
@@ -1818,6 +1837,13 @@ var o_my_register = {
   mounted: function () {
     this.getCountry();
   },
+  watch: {
+    locale: function (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+      }
+    },
+  }
 };
 var o_my_registerGoogle = {
   template: `
@@ -1902,28 +1928,26 @@ var o_my_registerGoogle = {
   `,
   data() {
     return {
-      isregisterToken:'',
+      isregisterToken: '',
       bindGooglePassword: '',
       bindGoogleCode: '',
       modal_loading: false,
       googleKey: '',
       googleImg: '',
-      bindGooglePasswordErrorText:'',
-      bindGoogleCodeErrorText:'',
-      error: {
-        null: '不能为空',
-      },
+      bindGooglePasswordErrorText: '',
+      bindGoogleCodeErrorText: '',
     };
   },
-  props: ['registerGoogle','registerCookie'],
+  i18n: i18nComponents,
+  props: ['registerGoogle', 'registerCookie'],
   methods: {
     doCopy: function () {
       this.$copyText(this.googleKey).then(function (e) {
-        alert('复制成功')
+        alert(this.$t('copySuccess'))
       })
     },
-    getToken(){
-      var that=this
+    getToken() {
+      var that = this
       that.isregisterToken = sessionStorage.getItem('token') ? sessionStorage.getItem('token') : '';
     },
     getGoogleInfo() {
@@ -1941,21 +1965,21 @@ var o_my_registerGoogle = {
         }
       });
     },
-    bindGooglePasswordFocus(){
+    bindGooglePasswordFocus() {
       this.bindGooglePasswordErrorText = '';
     },
-    bindGoogleCodeFocus(){
+    bindGoogleCodeFocus() {
       this.bindGoogleCodeErrorText = '';
     },
-    setGoogleInfo(){
+    setGoogleInfo() {
       var that = this;
       var data;
-      if(that.bindGooglePassword === ''){
-        that.bindGooglePasswordErrorText = that.error.null
-      }else if(that.bindGoogleCode === ''){
-        that.bindGoogleCodeErrorText = that.error.null
-      }else{
-        if(!that.modal_loading){
+      if (that.bindGooglePassword === '') {
+        that.bindGooglePasswordErrorText = this.$t('noEmpty')
+      } else if (that.bindGoogleCode === '') {
+        that.bindGoogleCodeErrorText = this.$t('noEmpty')
+      } else {
+        if (!that.modal_loading) {
           that.modal_loading = true;
           data = {
             'googleKey': that.googleKey,
@@ -1983,19 +2007,523 @@ var o_my_registerGoogle = {
   }
   ,
   watch: {
+    locale: function (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+      }
+    },
     registerCookie: function (a, b) {
       this.isregisterToken = a;
       this.getGoogleInfo();
     },
   },
-  mounted(){
-    if(sessionStorage.getItem('token')){
+  mounted() {
+    if (sessionStorage.getItem('token')) {
       this.getToken();
       this.getGoogleInfo()
     }
   }
 };
+var o_my_retrievePwd = {
+  template: `
+      <Modal
+      v-model="retrievePwd"
+      class-name="vertical-center-modal"
+      @on-cancel="asyncCancel" class="my-login my-register"
+      width="500"
+      title="Retrieve password"
+      >
+                  <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
+ @expired="onExpired" @verify="onVerify" sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi">
+            </vue-recaptcha>
+      <Tabs v-model="registerWrap" @on-click="tabChange">
+        <TabPane label="E-mail" name="tabEmail">
+          <Input
+            :class="emailValError?'is-red':'is-gray'"
+            v-model="emailVal"
+            placeholder="Enter your email"
+            class="iview-input"
+            @on-focus="emailValFocus"
+          ></Input>
+          <p class="my-login-error">{{emailValErrorText}}</p>
+          <Input
+          v-model="emailSmsCode"
+          type="text"
+          placeholder="E-mail verification code"
+          class="loginNext-input loginNext-sms-input" @on-focus="emailSmsCodeFocus" :class="emailSmsCodeError?'loginNext-input-red':' '">
+          <span slot="append"
+            class="my-slot-append"
+             @click="runSendSms('email')"
+            :class="timerEmail?'my-slot-append-gary':'my-slot-append'"
+          >
+            {{sendSmsEmail}}
+          </span>
+        </Input>
+        <p class="my-loginNext-error">{{emailSmsCodeErrorText}}</p>
+          <Input
+            :class="emailPasswordError?'is-red':'is-gray'"
+            v-model="emailPassword"
+            type="password"
+            placeholder="Enter your password"
+            class="iview-input"
+            @on-focus="emailPasswordFocus">
+          </Input>
+          <p class="my-login-error">{{emailPasswordErrorText}}</p>
+           <Input
+            :class="emailPasswordAgainError?'is-red':'is-gray'"
+            v-model="emailPasswordAgain"
+            type="password"
+            placeholder="Enter your password again"
+            class="iview-input"
+            @on-focus="emailPasswordAgainFocus">
+          </Input>
+          <p class="my-login-error">{{emailPasswordAgainErrorText}}</p>
+        </TabPane>
+        <TabPane label="Phone" name="registerPhone">
+          <Input
+            :class="phoneValError?'is-red':'is-gray'"
+            v-model="phoneVal"
+            placeholder="Enter your Phone number"
+            class="iview-input iview-input-countryPhone"
+            @on-focus="phoneValFocus"
+           >
+            <Select v-model="selectCountry" @on-change="phoneValFocus" filterable slot="prepend" style="width:86px">
+              <Option
+                v-for="(country, index) in countryArr"
+                :value="country.dialingCode"
+                :label="country.dialingCode"
+                :key="index"
+              >
+                <span class="">{{country.dialingCode}}</span>
+                <span class="iview-input-countryPhone-span">{{country.enName}}</span>
+              </Option>
+            </Select>
+            </Input>
+             <p class="my-loginNext-error">{{phoneValErrorText}}</p>
+               
+          <Input
+          v-model="phoneSmsCode"
+          type="text"
+          placeholder="E-mail verification code"
+          class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
+       
+          <span slot="append"
+            class="my-slot-append"
+            @click="runSendSms('phone')"
+            :class="timerPhone?'my-slot-append-gary':'my-slot-append'"
+          >
+            {{sendSmsPhone}}
+          </span>
+        </Input>
+        <p class="my-loginNext-error">{{phoneSmsCodeErrorText}}</p>
+          <Input
+            :class="phonePasswordError?'is-red':'is-gray'"
+            v-model="phonePassword"
+            type="password"
+            placeholder="Enter your password"
+            class="iview-input"
+            @on-focus="phonePasswordFocus">
+          </Input>
+          <p class="my-login-error">{{phonePasswordErrorText}}</p>
+           <Input
+            :class="phonePasswordAgainError?'is-red':'is-gray'"
+            v-model="phonePasswordAgain"
+            type="password"
+            placeholder="Enter your password again"
+            class="iview-input"
+            @on-focus="phonePasswordAgainFocus">
+          </Input>
+          <p class="my-login-error">{{phonePasswordAgainErrorText}}</p>
+        </TabPane>
+      </Tabs>
+      <div slot="footer">
+        <Button type="primary" size="large" long :loading="modal_loading" @click="mySubmit" >submit</Button>
+        <div class="login-footer-wrap">
+        </div>
+      </div>
+      </Modal>  
+    `,
+  data() {
+    return {
+      //email
+      emailVal: '',
+      emailValError: false,
+      emailValErrorText: '',
+      emailSmsCode: '',
+      emailSmsCodeError: false,
+      emailSmsCodeErrorText: '',
+      emailPassword: '',
+      emailPasswordError: false,
+      emailPasswordErrorText: '',
+      emailPasswordAgain: '',
+      emailPasswordAgainError: false,
+      emailPasswordAgainErrorText: '',
+      //phone
+      phoneVal: '',
+      phoneValError: false,
+      phoneValErrorText: '',
+      selectCountry: '+86',
+      countryArr: [],
+      phoneSmsCode: '',
+      phoneSmsCodeError: false,
+      phoneSmsCodeErrorText: '',
+      phonePassword: '',
+      phonePasswordError: false,
+      phonePasswordErrorText: '',
+      phonePasswordAgain: '',
+      phonePasswordAgainError: false,
+      phonePasswordAgainErrorText: '',
+      register: '',
+      registerWrap: 'tabEmail',
+      modal_loading: false,
+      sendSmsEmail: 'get verification code',
+      sendSmsPhone: 'get verification code',
+      showEmail: true,
+      showPhone: true,
+      countEmail: '',
+      countPhone: '',
+      timerEmail: null,
+      timerPhone: null,
+      isLogined: false
+    };
+  },
+  components: {VueRecaptcha},
+  i18n: i18nComponents,
+  props: ['retrievePwd'],
+  methods: {
 
+    onExpired() {
+      this.$refs.invisibleRecaptcha.reset()
+    },
+    onVerify(res) {
+      console.log(res)
+      var that = this;
+      var data;
+      var dataUserInfo;
+      var dataCaptcha = {
+        'captcha': res
+      };
+      post('api/common/googleValidCode', JSON.stringify(dataCaptcha), false).then(function (res) {
+        if (res.success) {
+          if (that.registerWrap === 'registerPhone') {
+            const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
+            data = {
+              "smsAuthCode": that.phoneSmsCode,
+              "countryCode": isLoginNextPhoneNumCountry,
+              "mobileNumber": that.phoneVal,
+              "loginPword": that.phonePasswordAgain,
+            };
+            post('api/user/reg_mobile', JSON.stringify(data), false).then(function (res) {
+              that.modal_loading = false;
+              if (res.success) {
+                this.$parent.$emit('isretrievePwdShow', false);
+                this.$parent.$emit('islogin', true);
+                this.clear();
+              } else {
+                that.$refs.invisibleRecaptcha.reset()
+              }
+            });
+
+          } else if (that.registerWrap === 'tabEmail') {
+            data = {
+              "email": that.emailVal,
+              "loginPword": that.emailPasswordAgain,
+              "emailAuthCode": that.emailSmsCode
+            };
+            post('api/user/reg_email', JSON.stringify(data), false).then(function (res) {
+              that.modal_loading = false;
+              if (res.success) {
+                sessionStorage.setItem('token', res.data.data);
+                that.$parent.$emit('isregisterCookie', res.data.data);
+                that.$parent.$emit('isregister', false);
+                that.$parent.$emit('isregisterGoogle', true);
+                get('api/userInfo').then(function (res) {
+                  that.isLogined = res.data.code === '0';
+                  dataUserInfo = res.data.data;
+                  if (that.isLogined) {
+                    that.$parent.$emit('logined', that.isLogined);
+                    localStorage.setItem('user', JSON.stringify(dataUserInfo));
+                  }
+                });
+              } else {
+                that.$refs.invisibleRecaptcha.reset()
+              }
+            });
+          }
+        } else {
+          that.$refs.invisibleRecaptcha.reset();
+          that.modal_loading = false;
+        }
+      });
+    },
+    //email
+    emailValFocus() {
+      this.emailValError = false;
+      this.emailValErrorText = '';
+    },
+    emailSmsCodeFocus() {
+      this.emailSmsCodeError = false;
+      this.emailSmsCodeErrorText = ''
+    },
+    emailPasswordFocus() {
+      this.emailPasswordError = false;
+      this.emailPasswordErrorText = '';
+      this.emailPasswordAgainError = false;
+      this.emailPasswordAgainErrorText = ''
+    },
+    emailPasswordAgainFocus() {
+      this.emailPasswordAgainError = false;
+      this.emailPasswordAgainErrorText = ''
+    },
+    //phone
+    phoneValFocus() {
+      this.phoneValError = false;
+      this.phoneValErrorText = '';
+    },
+    phoneSmsCodeFocus() {
+      this.phoneSmsCodeError = false;
+      this.phoneSmsCodeErrorText = ''
+    },
+    phonePasswordFocus() {
+      this.phonePasswordError = false;
+      this.phonePasswordErrorText = '';
+      this.phonePasswordAgainError = false;
+      this.phonePasswordAgainErrorText = ''
+    },
+    phonePasswordAgainFocus() {
+      this.phonePasswordAgainError = false;
+      this.phonePasswordAgainErrorText = ''
+    },
+    getCountry() {
+      var that = this;
+      get('api/country').then(function (res) {
+        if (res.success) {
+          that.countryArr = res.data.data;
+        } else {
+        }
+      });
+    },
+    //发送验证码
+    runSendSms(type) {
+      const TIME_COUNT = 10;
+      var that = this;
+      var data;
+      if (type === 'phone') {
+        if (!that.timerPhone) {
+          if (that.phoneVal === '' || that.selectCountry === '') {
+            that.modal_loading = false;
+            that.phoneValError = true;
+            that.phoneValErrorText = this.$t('noEmpty');
+          } else if (!that.phoneReg(that.phoneVal)) {
+            that.modal_loading = false;
+            that.phoneValError = true;
+            that.phoneValErrorText = this.$t('errorPhoneNum');
+          } else {
+            const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
+            const isLoginNextPhoneNumPhone = that.phoneVal;
+            data = {
+              countryCode: isLoginNextPhoneNumCountry,
+              mobile: isLoginNextPhoneNumPhone,
+              operationType: '1',
+            };
+            that.countPhone = TIME_COUNT;
+            that.sendSmsPhone = 'Resend after ' + that.countPhone + 's';
+            that.showPhone = false;
+            that.timerPhone = setInterval(() => {
+              if (that.countPhone > 0 && that.countPhone <= TIME_COUNT) {
+                that.countPhone--;
+                that.sendSmsPhone = 'Resend after ' + that.countPhone + ' s';
+              } else {
+                that.sendSmsPhone = 'Reacquire';
+                that.showPhone = true;
+                clearInterval(that.timerPhone);
+                that.timerPhone = null;
+              }
+            }, 1000);
+            post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
+              if (res.success) {
+
+              } else {
+
+              }
+            });
+          }
+        }
+      } else if (type === 'email') {
+        if (!that.timerEmail) {
+          if (that.emailVal === '') {
+            that.modal_loading = false;
+            that.emailValError = true;
+            that.emailValErrorText = this.$t('noEmpty');
+          } else if (!that.emailReg(that.emailVal)) {
+            that.modal_loading = false;
+            that.emailValError = true;
+            that.emailValErrorText = this.$t('errorEmailNum');
+          } else {
+            data = {
+              email: that.emailVal,
+              operationType: '1',
+            };
+            that.countEmail = TIME_COUNT;
+            that.sendSmsEmail = 'Resend after ' + that.countEmail + 's';
+            that.showEmail = false;
+            that.timerEmail = setInterval(() => {
+              if (that.countEmail > 0 && that.countEmail <= TIME_COUNT) {
+                that.countEmail--;
+                that.sendSmsEmail = 'Resend after ' + that.countEmail + ' s';
+              } else {
+                that.sendSmsEmail = 'Reacquire';
+                that.showEmail = true;
+                clearInterval(that.timerEmail);
+                that.timerEmail = null;
+              }
+            }, 1000);
+            post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
+              if (res.success) {
+
+              } else {
+
+              }
+            });
+          }
+        }
+      }
+
+    },
+    tabChange(name) {
+      this.registerWrap = name;
+    },
+    //密码正则
+    passwordReg(passwordVal) {
+      var reg1 = /(.+)?\d(.+)?/;
+      var reg2 = /.*[a-zA-Z]+.*/;
+      return !(passwordVal.length < 8 || passwordVal.length > 64 || !reg1.test(passwordVal) || !reg2.test(passwordVal))
+    },
+    //phone正则
+    phoneReg(phoneval) {
+      var mobileRegx = /^\d{1,}$/;
+      return mobileRegx.test(phoneval);
+    },
+    //email正则
+    emailReg(emailval) {
+      var emailRegx = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      return emailRegx.test(emailval);
+    },
+    asyncCancel() {
+      this.$parent.$emit('isretrievePwdShow', false);
+      this.clear();
+      this.modal_loading = false;
+    },
+    mySubmit() {
+      var that = this;
+      var data;
+      if (!that.modal_loading) {
+        that.modal_loading = true;
+        if (that.registerWrap === 'registerPhone') {
+          if (that.phoneVal === '' || that.selectCountry === '') {
+            that.modal_loading = false;
+            that.phoneValError = true;
+            that.phoneValErrorText = this.$t('noEmpty');
+          } else if (!that.phoneReg(that.phoneVal)) {
+            that.modal_loading = false;
+            that.phoneValError = true;
+            that.phoneValErrorText = this.$t('errorPhoneNum');
+          } else if (that.phoneSmsCode === '') {
+            that.modal_loading = false;
+            that.phoneSmsCodeError = true;
+            that.phoneSmsCodeErrorText = this.$t('noEmpty');
+          } else if (that.phonePassword === '') {
+            that.modal_loading = false;
+            that.phonePasswordError = true;
+            that.phonePasswordErrorText = this.$t('noEmpty');
+          } else if (!that.passwordReg(that.phonePassword)) {
+            that.modal_loading = false;
+            that.phonePasswordError = true;
+            that.phonePasswordErrorText = this.$t('errorPwdNum');
+          } else if (that.phonePasswordAgain === '') {
+            that.modal_loading = false;
+            that.phonePasswordAgainError = true;
+            that.phonePasswordAgainErrorText = this.$t('noEmpty');
+          } else if (that.phonePassword !== that.phonePasswordAgain) {
+            that.modal_loading = false;
+            that.phonePasswordAgainError = true;
+            that.phonePasswordAgainErrorText = this.$t('errorNoSamePwd');
+          } else {
+            this.$refs.invisibleRecaptcha.execute();
+          }
+        } else if (that.registerWrap === 'tabEmail') {
+          if (that.emailVal === '') {
+            that.modal_loading = false;
+            that.emailValError = true;
+            that.emailValErrorText = this.$t('noEmpty');
+          } else if (!that.emailReg(that.emailVal)) {
+            that.modal_loading = false;
+            that.emailValError = true;
+            that.emailValErrorText = this.$t('errorPhoneNum');
+          } else if (that.emailSmsCode === '') {
+            that.modal_loading = false;
+            that.emailSmsCodeError = true;
+            that.emailSmsCodeErrorText = this.$t('noEmpty');
+          } else if (that.emailPassword === '') {
+            that.modal_loading = false;
+            that.emailPasswordError = true;
+            that.emailPasswordErrorText = this.$t('noEmpty');
+          } else if (!that.passwordReg(that.emailPassword)) {
+            that.modal_loading = false;
+            that.emailPasswordError = true;
+            that.emailPasswordErrorText = this.$t('errorPwdNum');
+          } else if (that.emailPasswordAgain === '') {
+            that.modal_loading = false;
+            that.emailPasswordAgainError = true;
+            that.emailPasswordAgainErrorText = this.$t('noEmpty');
+          } else if (that.emailPassword !== that.emailPasswordAgain) {
+            that.modal_loading = false;
+            that.emailPasswordAgainError = true;
+            that.emailPasswordAgainErrorText = this.$t('errorNoSamePwd');
+          } else {
+            this.$refs.invisibleRecaptcha.execute();
+          }
+        }
+      }
+    },
+    clear() {
+      this.emailVal = '';
+      this.emailValError = false;
+      this.emailValErrorText = '';
+      this.emailSmsCode = '';
+      this.emailSmsCodeError = false;
+      this.emailSmsCodeErrorText = '';
+      this.emailPassword = '';
+      this.emailPasswordError = false;
+      this.emailPasswordErrorText = '';
+      this.emailPasswordAgain = '';
+      this.emailPasswordAgainError = false;
+      this.emailPasswordAgainErrorText = '';
+      this.phoneVal = '';
+      this.phoneValError = false;
+      this.phoneValErrorText = '';
+      this.phoneSmsCode = '';
+      this.phoneSmsCodeError = false;
+      this.phoneSmsCodeErrorText = '';
+      this.phonePassword = '';
+      this.phonePasswordError = false;
+      this.phonePasswordErrorText = '';
+      this.phonePasswordAgain = '';
+      this.phonePasswordAgainError = false;
+      this.phonePasswordAgainErrorText = '';
+    },
+  },
+  mounted: function () {
+    this.getCountry();
+  },
+  watch: {
+    locale: function (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+      }
+    },
+  }
+};
 // header
 
 var o_header = {
@@ -2097,6 +2625,7 @@ var o_header = {
       ></myloginnext>
       <myregister :register="isregister"></myregister>
       <myregistergoogle :register-google="isRegisterGoogleShow" :register-cookie="isregisterCookie"></myregistergoogle>
+      <myretrievepwd :retrieve-pwd="isretrievePwdShow"></myretrievepwd>
     </div>
   `,
   i18n: i18nComponents,
@@ -2110,6 +2639,7 @@ var o_header = {
       isregister: false,
       isLoginNextShow: false,
       isRegisterGoogleShow: false,
+      isretrievePwdShow: false,
       isregisterCookie: '',
       isLoginNextType: '',
       isLoginNextCookie: '',
@@ -2187,6 +2717,7 @@ var o_header = {
     myloginnext: o_my_loginNext,
     myregister: o_my_register,
     myregistergoogle: o_my_registerGoogle,
+    myretrievepwd: o_my_retrievePwd,
   },
   mounted() {
     // if (utils.getParam('auth') == 1) {
@@ -2242,6 +2773,9 @@ var o_header = {
     });
     this.$on("isregisterCookie", function (i) {
       this.isregisterCookie = i;
+    });
+    this.$on("isretrievePwdShow", function (i) {
+      this.isretrievePwdShow = i;
     });
   },
 };
