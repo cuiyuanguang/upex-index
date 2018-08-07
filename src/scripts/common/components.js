@@ -704,6 +704,7 @@ var addContact = {
       get('api/country').then(function (res) {
         if (res.success) {
           that.countryArr = res.data.data;
+          localStorage.setItem('country', JSON.stringify(res.data.data));
         }
       });
     },
@@ -729,7 +730,9 @@ var addContact = {
     },
   },
   mounted: function () {
-    this.getCountry();
+    if (!localStorage.getItem('country')) {
+      this.getCountry();
+    }
   },
   watch: {
     locale: function (newVal, oldVal) {
@@ -882,7 +885,7 @@ var o_my_login = {
       loginPhoneError: false,
       loginPhoneErrorText: '',
       //country
-      countryArr: [],
+      // countryArr: [],
       selectCountry: '+86',
       //password
       loginPhonePassword: '',
@@ -903,7 +906,11 @@ var o_my_login = {
   },
   components: {VueRecaptcha},
   props: ['login'],
-  computed: {},
+  computed: {
+    countryArr: function() {
+      return JSON.parse(localStorage.getItem('country'));
+    },
+  },
   methods: {
     onExpired() {
       this.$refs.invisibleRecaptcha.reset()
@@ -1077,21 +1084,9 @@ var o_my_login = {
       }
       //login
     },
-    getCountry() {
-      var that = this;
-      get('api/country').then(function (res) {
-        if (res.success) {
-          that.countryArr = res.data.data;
-        } else {
-        }
-      });
-    },
     loginEmailChange(name) {
       this.loginWrap = name;
     },
-  },
-  mounted: function () {
-    this.getCountry();
   },
   watch: {
     login: function (a, b) {
@@ -1443,7 +1438,7 @@ var o_my_register = {
       phoneValError: false,
       phoneValErrorText: '',
       selectCountry: '+86',
-      countryArr: [],
+      // countryArr: [],
       phoneSmsCode: '',
       phoneSmsCodeError: false,
       phoneSmsCodeErrorText: '',
@@ -1473,6 +1468,11 @@ var o_my_register = {
       timerPhone: null,
       isLogined:false
     };
+  },
+  computed: {
+    countryArr: function() {
+      return JSON.parse(localStorage.getItem('country'));
+    },
   },
   components: {VueRecaptcha},
   props: ['register'],
@@ -1588,15 +1588,6 @@ var o_my_register = {
     phonePasswordAgainFocus() {
       this.phonePasswordAgainError = false;
       this.phonePasswordAgainErrorText = ''
-    },
-    getCountry() {
-      var that = this;
-      get('api/country').then(function (res) {
-        if (res.success) {
-          that.countryArr = res.data.data;
-        } else {
-        }
-      });
     },
     //发送验证码
     runSendSms(type) {
@@ -1812,9 +1803,6 @@ var o_my_register = {
       alert(1)
     }
   },
-  mounted: function () {
-    this.getCountry();
-  },
 };
 var o_my_registerGoogle = {
   template: `
@@ -1917,8 +1905,7 @@ var o_my_registerGoogle = {
       var data = {
         'exchange-token': that.isregisterToken
       };
-      post('api/user/toopen_google_authenticator', JSON.stringify(data)).then(function (res) {
-        console.log(res);
+      post('api/user/toopen_google_authenticator', JSON.stringify(data), false).then(function (res) {
         if (res.success) {
           that.googleKey = res.data.data.googleKey;
           that.googleImg = res.data.data.googleImg;

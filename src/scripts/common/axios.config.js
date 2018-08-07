@@ -1,9 +1,9 @@
 var API_URL = '/';
 var $http = axios.create({
   baseURL: API_URL, // api域名及端口
-  timeout: 1000, // 超时自动取消请求
+  timeout: 30000, // 超时自动取消请求
   retry: 3,
-  retryDelay: 500,
+  retryDelay: 2000,
   responseType: 'json', // 返回数据格式
   withCredentials: true, // 是否允许带cookie等验证信息
   headers: {
@@ -67,7 +67,7 @@ $http.interceptors.response.use(
           icon: 'warning',
           callback: function() {
             if (result.code == 2048) {
-              localStorage.clear();
+              localStorage.removeItem('user');
               sessionStorage.clear();
               location.href = 'otc_adverts.html';
             }

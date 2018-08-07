@@ -140,7 +140,7 @@
                       <span class="input-tips">{{ $t('currentPrice') }} {{marketPrice.exchange_sell_min || marketPrice.exchange_rate }} SAR</span>
                     </div>
                     <div class="o-input-number">
-                      <div class="o-input-number-append">SAR</div>
+                      <div class="o-input-number-prepend">SAR</div>
                       <input-number
                         size="large"
                         v-model="postData.priceBUY"
@@ -158,7 +158,7 @@
                       <span class="input-tips">{{ $t('balance') }} {{balance}} USDT</span>
                     </div>
                     <div class="o-input-number">
-                        <div class="o-input-number-append">USDT</div>
+                        <div class="o-input-number-prepend">USDT</div>
                         <input-number
                           size="large"
                           v-model="postData.volumeBUY"
@@ -179,7 +179,7 @@
                       <Row>
                         <i-col span="11">
                           <div class="o-input-number">
-                            <div class="o-input-number-append">Min</div>
+                            <div class="o-input-number-prepend">Min</div>
                             <input-number
                               size="large"
                               v-model="postData.minTradeBUY"
@@ -192,7 +192,7 @@
                         <i-col class="o-to" span="2">-</i-col>
                         <i-col span="11">
                           <div class="o-input-number">
-                            <div class="o-input-number-append">Max</div>
+                            <div class="o-input-number-prepend">Max</div>
                             <input-number
                               size="large"
                               v-model="postData.maxTradeBUY"
@@ -219,7 +219,7 @@
                       <span class="input-tips">{{ $t('currentPrice') }} {{marketPrice.exchange_sell_min || marketPrice.exchange_rate }} SAR</span>
                     </div>
                     <div class="o-input-number">
-                      <div class="o-input-number-append">SAR</div>
+                      <div class="o-input-number-prepend">SAR</div>
                       <input-number
                         size="large"
                         v-model="postData.priceSELL"
@@ -237,7 +237,7 @@
                       <span class="input-tips">{{ $t('balance') }} {{balance}} USDT</span>
                     </div>
                     <div class="o-input-number">
-                      <div class="o-input-number-append">USDT</div>
+                      <div class="o-input-number-prepend">USDT</div>
                       <input-number
                         size="large"
                         v-model="postData.volumeSELL"
@@ -258,7 +258,7 @@
                       <Row>
                         <i-col span="11">
                           <div class="o-input-number">
-                            <div class="o-input-number-append">Min</div>
+                            <div class="o-input-number-prepend">Min</div>
                             <input-number
                               size="large"
                               v-model="postData.minTradeSELL"
@@ -271,7 +271,7 @@
                         <i-col class="o-to" span="2">-</i-col>
                         <i-col span="11">
                           <div class="o-input-number">
-                            <div class="o-input-number-append">Max</div>
+                            <div class="o-input-number-prepend">Max</div>
                             <input-number
                               size="large"
                               v-model="postData.maxTradeSELL"

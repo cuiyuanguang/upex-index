@@ -165,7 +165,7 @@ var pay = new Vue({
           // set  orderInfo;
           that.orderInfo = data;
           var whatsAppStr = data.seller.userExtView.watchapp;
-          that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf(',') + 1);
+          that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1);
         });
     }
     //------------------------------GET ORDER INFO END---------------------------------------//	
