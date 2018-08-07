@@ -22,6 +22,12 @@
   border-bottom: 1px solid #fafafa;
 }
 
+.ivu-btn-text {
+  color: #57a3f3;
+  border-bottom: 1px solid #57a3f3;
+  border-radius: 0;
+}
+
 .account {
   margin-top: -70px;
 }
@@ -53,11 +59,6 @@
 .account-card dd {
   padding: 0 40px;
   line-height: 40px;
-}
-
-.account .ivu-btn-text {
-  color: #57a3f3;
-  border-bottom: 1px solid #57a3f3;
 }
 
 .account .ivu-table-wrapper {
@@ -118,4 +119,41 @@
 
 .account .ivu-page {
   text-align: center;
+}
+
+.country-select {
+  width: 86px;
+}
+
+.country-select .ivu-select-input {
+  text-align: center !important;
+}
+
+.country-select .ivu-select-dropdown {
+  left: 0 !important;
+  width: 100% !important;
+}
+
+.country-select .ivu-select-item {
+  height: 26px;
+}
+
+.modal-notice .ivu-modal-body {
+  padding: 0;
+}
+
+.modal-notice .modal-notice-header {
+  padding: 20px 50px;
+}
+
+.modal-notice .modal-notice-header .ivu-row {
+  line-height: 32px;
+}
+
+.modal-notice.info .modal-notice-header {
+  background-color: #f4f4f4;
+}
+
+.modal-notice .modal-notice-footer {
+  padding: 20px 20px 0;
 }
