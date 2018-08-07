@@ -1605,8 +1605,6 @@ var o_my_register = {
     runSendSms(type) {
       const TIME_COUNT = 10;
       var that = this;
-      that.$parent.$emit('isregister', false);
-      that.$parent.$emit('isregisterGoogle', true);
       var data;
       if (type === 'phone') {
         if (!that.timerPhone) {
@@ -1867,7 +1865,7 @@ var o_my_registerGoogle = {
             </h6>
           </div>
         </li>
-        <li class="clear" style="margin-bottom: 20px">
+        <li class="clear" style="margin-bottom: 0">
           <div class="li-title">
             <span class="list-num">3</span>
             <div class="tip-img tip-img2"></div>
@@ -1879,17 +1877,20 @@ var o_my_registerGoogle = {
                 placeholder="Please enter log in password"
                 class="bindGoogle-input"
                 :class="bindGooglePasswordErrorText !== ''?'is-red':'is-gray'"
+                @on-focus="bindGooglePasswordFocus"
               >
               </Input>
-              <p class="my-login-error">{{bindGooglePasswordErrorText}}</p>
+              <div class="my-login-error" style="margin-left: 50px;">{{bindGooglePasswordErrorText}}</div>
               <Input
                 v-model="bindGoogleCode"
                 type="text"
                 placeholder="Please input the google code."
-                class="bindGooglePasswordErrorText !== ''?'is-red':'is-gray'"
+                 class="bindGoogle-input" style="margin-top: 0"
+                :class="bindGoogleCodeErrorText !== ''?'is-red':'is-gray'"
+                @on-focus="bindGoogleCodeFocus"
               >
               </Input>
-              <p class="my-login-error">{{bindGoogleCodeErrorText}}</p>
+              <div class="my-login-error" style="margin-left: 50px;">{{bindGoogleCodeErrorText}}</div>
             </div>
           </div>
         </li>
@@ -1939,6 +1940,12 @@ var o_my_registerGoogle = {
 
         }
       });
+    },
+    bindGooglePasswordFocus(){
+      this.bindGooglePasswordErrorText = '';
+    },
+    bindGoogleCodeFocus(){
+      this.bindGoogleCodeErrorText = '';
     },
     setGoogleInfo(){
       var that = this;
