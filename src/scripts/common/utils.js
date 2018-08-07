@@ -190,7 +190,7 @@
   
   function dateFormat(utc, format) {
     var date = new Date(utc);
-    format = format || 'yyyy-MM-dd HH:mm:ss';
+    format = format || 'yyyy-MM-dd hh:mm:ss';
     var o = {
       "M+": date.getMonth() + 1, //月份 
       "d+": date.getDate(), //日 

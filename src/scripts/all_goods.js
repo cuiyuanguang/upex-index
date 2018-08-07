@@ -194,6 +194,7 @@ var allGoods = new Vue({
     // sell USDT
     showSellUsdt: function(item) {
       // check if login
+      this.getUserInfo();
       if (!localStorage.getItem('user')) {
         this.$refs.header.showLogin();
         return;
@@ -236,6 +237,7 @@ var allGoods = new Vue({
     //buy USDT
     showBuyUsdt: function(item) {
       // check if login
+      this.getUserInfo();
       if (!localStorage.getItem('user')) {
         this.$refs.header.showLogin();
         return;
