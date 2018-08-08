@@ -79,7 +79,7 @@ $http.interceptors.response.use(
         // Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
         Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
       }
-      return result.data;
+      return result.data ? result.data : true;
     }
   },
   function(error) {
