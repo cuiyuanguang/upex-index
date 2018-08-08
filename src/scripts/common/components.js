@@ -540,7 +540,7 @@ var o_confirm = {
         checkType: this.tab,
         checkValue: this.tab == '1' ? this.gcode : this.ecode,
       }).then(function (res) {
-        if (res.data.message == 'otc.result.success') {
+        if (res) {
           that.$parent.$emit('isConfirmShow', false);
           that.$parent.$emit('isCardBinded', true);
           //if no watchup bind ,show bind watchup dialog
@@ -1233,11 +1233,10 @@ var o_my_loginNext = {
               that.$parent.$emit('isLoginNext', false);
               sessionStorage.setItem('token', that.isLoginNextCookieNum);
               get('api/userInfo').then(function (res) {
-                that.isLogined = res.data.code === 0;
-                var data = res;
-                if (that.isLogined) {
+                if (res) {
+                  that.isLogined = true;
                   that.$parent.$emit('logined', that.isLogined);
-                  localStorage.setItem('user', JSON.stringify(data));
+                  localStorage.setItem('user', JSON.stringify(res));
                 }
               });
             } else {
@@ -1504,10 +1503,8 @@ var o_my_register = {
       this.$refs.invisibleRecaptcha.reset()
     },
     onVerify(res) {
-      console.log(res)
       var that = this;
       var data;
-      var dataUserInfo;
       var dataCaptcha = {
         'captcha': res
       };
@@ -1529,11 +1526,10 @@ var o_my_register = {
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
                 get('api/userInfo').then(function (res) {
-                  that.isLogined = res.data.code === 0;
-                  dataUserInfo = res;
-                  if (that.isLogined) {
+                  if (res) {
+                    that.isLogined = true;
                     that.$parent.$emit('logined', that.isLogined);
-                    localStorage.setItem('user', JSON.stringify(dataUserInfo));
+                    localStorage.setItem('user', JSON.stringify(res));
                   }
                 });
               } else {
@@ -1555,11 +1551,10 @@ var o_my_register = {
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
                 get('api/userInfo').then(function (res) {
-                  that.isLogined = res.data.code === '0';
-                  dataUserInfo = res;
-                  if (that.isLogined) {
+                  if (res) {
+                    that.isLogined = true;
                     that.$parent.$emit('logined', that.isLogined);
-                    localStorage.setItem('user', JSON.stringify(dataUserInfo));
+                    localStorage.setItem('user', JSON.stringify(res));
                   }
                 });
               } else {
@@ -1857,7 +1852,7 @@ var o_my_registerGoogle = {
           <div class="li-title">
             <div class="qr">
             <img :src="googleImg" alt="">
-</div>
+            </div>
             <div class="tip-img tip-img1"></div>
             <span class="list-num">2</span>
             <p style="width:158px">Use google authenticator to scan a barcode:</p>
@@ -2179,7 +2174,6 @@ var o_my_retrievePwd = {
       console.log(res)
       var that = this;
       var data;
-      var dataUserInfo;
       var dataCaptcha = {
         'captcha': res
       };
@@ -2218,11 +2212,10 @@ var o_my_retrievePwd = {
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
                 get('api/userInfo').then(function (res) {
-                  that.isLogined = res.data.code === '0';
-                  dataUserInfo = res;
-                  if (that.isLogined) {
+                  if (res) {
+                    that.isLogined = true;
                     that.$parent.$emit('logined', that.isLogined);
-                    localStorage.setItem('user', JSON.stringify(dataUserInfo));
+                    localStorage.setItem('user', JSON.stringify(res));
                   }
                 });
               } else {
