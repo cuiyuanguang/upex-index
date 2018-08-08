@@ -15,17 +15,17 @@
     </div>
     <div class="container account">
       <!-- 账户与安全信息 -->
-      <Row class="container-row">
+      <Row class="container-row" v-show="user.id">
         <i-col span="12">
           <dl class="account-card">
             <dt>
               <Row class="account-row">
                 <i-col span="12">
-                  <span class="account-row-title">账户信息</span>
-                  <Tag color="#ff4d4d">冻结</Tag>
+                  <span class="account-row-title">{{ $t('accountInfo') }}</span>
+                  <Tag color="#ff4d4d">{{ $t('accountFrozen') }}</Tag>
                 </i-col>
                 <i-col span="12" class="text-right">
-                  <i-button type="text" size="small" @click="loginOut">退出</i-button>
+                  <i-button type="text" size="small" @click="loginOut">{{ $t('loginOut') }}</i-button>
                 </i-col>
               </Row>
             </dt>
@@ -33,7 +33,7 @@
               <Row>
                 <i-col span="8" class="text-secondary">
                   <Icon type="person" color="#cfcfcf" size="16"></Icon>
-                  账号
+                  {{ $t('accountNo') }}
                 </i-col>
                 <i-col span="8" class="text-strong">{{ user.id }}</i-col>
               </Row>
@@ -46,7 +46,7 @@
                 </i-col>
                 <i-col span="8" class="text-strong">{{ user.userExtView.watchapp }}</i-col>
                 <i-col span="8" class="text-right">
-                  <i-button type="text" size="small" @click="modifyWhatsApp">修改</i-button>
+                  <i-button type="text" size="small" @click="modifyWhatsApp">{{ $t('change') }}</i-button>
                 </i-col>
               </Row>
             </dd>
@@ -54,11 +54,11 @@
               <Row>
                 <i-col span="8" class="text-secondary">
                   <Icon type="locked" color="#cfcfcf" size="16"></Icon>
-                  密码
+                  {{ $t('password') }}
                 </i-col>
                 <i-col span="8" class="text-strong">********</i-col>
                 <i-col span="8" class="text-right">
-                  <i-button type="text" size="small" @click="modalPassword = true">修改</i-button>
+                  <i-button type="text" size="small" @click="modalPassword = true">{{ $t('change') }}</i-button>
                 </i-col>
               </Row>
             </dd>
@@ -69,8 +69,8 @@
             <dt>
               <Row class="account-row">
                 <i-col span="12">
-                  <span class="account-row-title">安全设置</span>
-                  <Badge count="Unsafe"></Badge>
+                  <span class="account-row-title">{{ $t('securitySet') }}</span>
+                  <Badge :count="$t('unsafe')"></Badge>
                 </i-col>
               </Row>
             </dt>
@@ -78,14 +78,17 @@
               <Row>
                 <i-col span="8" class="text-secondary">
                   <Icon type="social-google" color="#cfcfcf" size="16"></Icon>
-                  Google 身份验证
+                  {{ $t('googleAuth') }}
                 </i-col>
-                <i-col span="8" class="text-strong">{{ user.googleAuthenticatorStatus ? '已绑定' : '未绑定'}}</i-col>
+                <i-col span="8" class="text-strong">{{ user.googleAuthenticatorStatus ? $t('bound') : $t('unBound')}}</i-col>
                 <i-col span="8" class="text-right" v-if="user.googleAuthenticatorStatus">
-                  <i-switch :value="!!user.googleAuthenticatorStatus" @on-change="modifyGoogleStatus"></i-switch>
+                  <i-switch controllable size="large" v-model="googleStatus" @on-change="modifyGoogleStatus">
+                    <span slot="open">On</span>
+                    <span slot="close">Off</span>
+                  </i-switch>
                 </i-col>
                 <i-col span="8" class="text-right" v-else>
-                  <i-button type="error" size="small">绑定</i-button>
+                  <i-button type="error" size="small" @click="isRegisterGoogleShow = true">{{ $t('bind') }}</i-button>
                 </i-col>
               </Row>
             </dd>
@@ -93,14 +96,14 @@
               <Row>
                 <i-col span="8" class="text-secondary">
                   <Icon type="email" color="#cfcfcf" size="16"></Icon>
-                  邮箱
+                  Email
                 </i-col>
-                <i-col span="8" class="text-strong">{{ user.email ? user.email : '未绑定' }}</i-col>
+                <i-col span="8" class="text-strong">{{ user.email ? user.email : $t('unBound') }}</i-col>
                 <i-col span="8" class="text-right" v-if="user.email">
-                  <i-button type="text" size="small" @click="modifyEmail">修改</i-button>
+                  <i-button type="text" size="small" @click="modifyEmail">{{ $t('change') }}</i-button>
                 </i-col>
                 <i-col span="8" class="text-right" v-else>
-                  <i-button type="error" size="small" @click="modifyEmail">绑定</i-button>
+                  <i-button type="error" size="small" @click="modifyEmail">{{ $t('bind') }}</i-button>
                 </i-col>
               </Row>
             </dd>
@@ -108,11 +111,14 @@
               <Row>
                 <i-col span="8" class="text-secondary">
                   <Icon type="iphone" color="#cfcfcf" size="20"></Icon>
-                  手机验证
+                  {{ $t('phoneAuth') }}
                 </i-col>
-                <i-col span="8" class="text-strong">+86-187****2342</i-col>
-                <i-col span="8" class="text-right">
-                  <i-button type="text" size="small" @click="modalPhone = true">修改</i-button>
+                <i-col span="8" class="text-strong">{{ user.hideMobileNumber }}</i-col>
+                <i-col span="8" class="text-right" v-if="user.mobileAuthenticatorStatus">
+                  <i-button type="text" size="small" @click="modifyPhone">{{ $t('change') }}</i-button>
+                </i-col>
+                <i-col span="8" class="text-right" v-else>
+                  <i-button type="text" size="small" @click="modifyPhone">{{ $t('change') }}</i-button>
                 </i-col>
               </Row>
             </dd>
@@ -124,11 +130,11 @@
         <i-col span="24">
           <Row class="account-row">
             <i-col span="12">
-              <span class="account-row-title">银行卡</span>
-              为了您的账户安全，请使用真实信息绑定银行卡
+              <span class="account-row-title">{{ $t('bankCard') }}</span>
+              {{ $t('bankCardTips') }}
             </i-col>
             <i-col span="12" class="text-right">
-              <i-button type="text" size="small" icon="plus" @click="modifyBankInfo">添加银行卡</i-button>
+              <i-button type="text" size="small" icon="plus" @click="modifyBankInfo">{{ $t('addBankCard') }}</i-button>
             </i-col>
           </Row>
           <i-table :columns="bankColumn" :data="bankData"></i-table>
@@ -137,11 +143,11 @@
       <!-- 登录/操作历史 -->
       <div class="container-row" style="margin-top: 2px;">
         <Tabs v-model="tabLogActive">
-          <tab-pane label="登录历史" name="loginHistory">
+          <tab-pane :label="$t('loginHistory')" name="loginHistory">
             <i-table :columns="loginColumn" :data="loginData"></i-table>
             <Page :total="loginDataTotalCount" size="small" show-total @on-change="loginPageChange"></Page>
           </tab-pane>
-          <tab-pane label="安全记录" name="securityHistory">
+          <tab-pane :label="$t('securityHistory')" name="securityHistory">
             <i-table :columns="securityColumn" :data="securityData"></i-table>
             <Page :total="securityDataTotalCount" size="small" show-total @on-change="securityPageChange"></Page>
           </tab-pane>
@@ -180,37 +186,81 @@
     <!-- 修改密码 -->
     <Modal title="修改密码" v-model="modalPassword">
       <i-form ref="formPassword" :model="formPassword" :rules="rulePassword" :label-position="top">
-        <form-item label="原密码" prop="passwd">
-          <i-input type="password" v-model="formPassword.passwd"></i-input>
+        <form-item label="原密码" prop="password">
+          <i-input type="password" v-model="formPassword.password"></i-input>
         </form-item>
-        <form-item label="新密码" prop="passwdNew">
-          <i-input type="password" v-model="formPassword.passwdNew"></i-input>
+        <form-item label="新密码" prop="passwordNew">
+          <i-input type="password" v-model="formPassword.passwordNew"></i-input>
         </form-item>
-        <form-item label="重复新密码" prop="passwdReNew">
-          <i-input type="text" v-model="formPassword.passwdReNew"></i-input>
+        <form-item label="重复新密码" prop="passwordReNew">
+          <i-input type="password" v-model="formPassword.passwordReNew"></i-input>
         </form-item>
-        <form-item label="短信验证码" prop="verify">
-          <i-input type="text" v-model="formPassword.verify">
-            <i-button slot="append" @click="sendMessage" :disabled="sendDisabled">{{ sendPlaceholder }}</i-button>
-          </i-input>
-        </form-item>
+        <Tabs v-model="tabVerifyActive">
+          <tab-pane :label="$t('googleAuth')" name="1" v-if="user.googleAuthenticatorStatus">
+            <form-item label="" prop="google">
+              <i-input v-model="formPassword.google" maxlength="30" placeholder="Enter your account name"></i-input>
+            </form-item>
+          </tab-pane>
+          <tab-pane :label="$t('phoneAuth')" name="2" v-if="user.mobileAuthenticatorStatus">
+            <form-item label="" prop="phone">
+              <i-input v-model="formPassword.phone" maxlength="6" placeholder="Enter your phone number">
+                <i-button slot="append" @click="sendMessageSecurity('Password', 5)" :disabled="sendDisabledPassword">{{ sendPlaceholderPassword }}</i-button>
+              </i-input>
+            </form-item>
+          </tab-pane>
+        </Tabs>
       </i-form>
       <div slot="footer">
         <i-button type="text" @click="handleReset('formPassword')" style="margin-left: 8px">取消</i-button>
         <i-button type="primary" @click="handleSubmit('formPassword')">确定</i-button>
       </div>
     </Modal>
+    <!-- 修改谷歌 -->
+    <myregistergoogle :register-google="isRegisterGoogleShow" :register-cookie="isregisterCookie"></myregistergoogle>
+    <Modal title="关闭谷歌验证" v-model="modalGoogle">
+      <i-form ref="formGoogle" :model="formGoogle" :rules="rulePassword" :label-position="top">
+        <form-item label="短信验证" prop="phone">
+          <i-input v-model="formGoogle.phone" maxlength="6" placeholder="Enter your phone code">
+            <i-button slot="append" @click="sendMessageSecurity('Google', 30)" :disabled="sendDisabledGoogle">{{ sendPlaceholderGoogle }}</i-button>
+          </i-input>
+        </form-item>
+        <form-item :label="$t('googleAuth')" prop="google">
+          <i-input v-model="formGoogle.google" maxlength="6" placeholder="Enter your google code"></i-input>
+        </form-item>
+        <form-item label="登录密码" prop="password">
+          <i-input type="password" v-model="formGoogle.password" placeholder="Enter your password"></i-input>
+        </form-item>
+      </i-form>
+      <div slot="footer">
+        <i-button type="text" @click="handleReset('formGoogle')" style="margin-left: 8px">取消</i-button>
+        <i-button type="primary" @click="handleSubmit('formGoogle')">确定</i-button>
+      </div>
+    </Modal>
     <!-- 修改邮箱 -->
-    <Modal title="修改邮箱" class="modal-email" v-model="modalEmail">
+    <Modal title="修改邮箱" v-model="modalEmail">
       <i-form ref="formEmail" :model="formEmail" :rules="ruleEmail" :label-position="top">
         <form-item label="Email" prop="email">
           <i-input v-model="formEmail.email" maxlength="30" placeholder="Enter your Email number">
-            <i-button slot="append">发送验证码</i-button>
+            <i-button slot="append" @click="sendMessageSecurity('Email', 2)" :disabled="sendDisabledBindEmail">{{ sendPlaceholderBindEmail }}</i-button>
           </i-input>
         </form-item>
-        <form-item label="Verify" prop="verify">
+        <form-item label="邮箱验证码" prop="verify">
           <i-input v-model="formEmail.verify" maxlength="30" placeholder="Enter your Email number"></i-input>
         </form-item>
+        <Tabs v-model="tabVerifyActive">
+          <tab-pane :label="$t('googleAuth')" name="1" v-if="user.googleAuthenticatorStatus">
+            <form-item label="" prop="google">
+              <i-input v-model="formEmail.google" maxlength="30" placeholder="Enter your account name"></i-input>
+            </form-item>
+          </tab-pane>
+          <tab-pane :label="$t('phoneAuth')" name="2" v-if="user.mobileAuthenticatorStatus">
+            <form-item label="" prop="phone">
+              <i-input v-model="formEmail.phone" maxlength="6" placeholder="Enter your phone number">
+                <i-button slot="append" @click="sendMessage('Email', 8)" :disabled="sendDisabledEmail">{{ sendPlaceholderEmail }}</i-button>
+              </i-input>
+            </form-item>
+          </tab-pane>
+        </Tabs>
       </i-form>
       <div slot="footer">
         <i-button type="text" @click="handleReset('formEmail')" style="margin-left: 8px">取消</i-button>
@@ -218,14 +268,14 @@
       </div>
     </Modal>
     <!-- 修改手机 -->
-    <Modal title="修改手机" class="modal-whatsapp" v-model="modalPhone">
+    <Modal title="修改手机" v-model="modalPhone">
       <i-form ref="formPhone" :model="formPhone" :rules="rulePhone" :label-position="top">
-        <form-item label="Phone" prop="oldVerify">
-          <i-input v-model="formPhone.oldVerify" maxlength="30" placeholder="Enter your phone number">
-            <i-button slot="append">发送验证码</i-button>
+        <form-item :label="'原手机验证码(手机号' + user.hideMobileNumber + ')'" prop="oldVerify" v-if="user.mobileAuthenticatorStatus">
+          <i-input v-model="formPhone.oldVerify" maxlength="6" placeholder="Enter your phone number">
+            <i-button slot="append" @click="sendMessage('OldPhone', 3)" :disabled="sendDisabledOldPhone">{{ sendPlaceholderOldPhone }}</i-button>
           </i-input>
         </form-item>
-        <form-item label="Phone" prop="phone">
+        <form-item label="新手机号码" prop="phone">
           <i-input v-model="formPhone.phone" maxlength="30" placeholder="Enter your phone number">
             <i-select class="country-select" v-model="selectCountry" slot="prepend" filterable>
               <i-option
@@ -241,10 +291,13 @@
             </i-select>
           </i-input>
         </form-item>
-        <form-item label="Verify" prop="verify">
-          <i-input v-model="formPhone.verify" maxlength="30" placeholder="Enter your verify number">
-              <i-button slot="append">发送验证码</i-button>
+        <form-item label="新手机验证码" prop="verify">
+          <i-input v-model="formPhone.verify" maxlength="6" placeholder="Enter your verify number">
+            <i-button slot="append" @click="sendMessageSecurity('NewPhone', 2)" :disabled="sendDisabledNewPhone">{{ sendPlaceholderNewPhone }}</i-button>
           </i-input>
+        </form-item>
+        <form-item label="谷歌验证码" prop="google">
+          <i-input v-model="formPhone.google" maxlength="6" placeholder="Enter your account name"></i-input>
         </form-item>
       </i-form>
       <div slot="footer">
@@ -296,15 +349,15 @@
         <div class="modal-notice-footer">
           <i-form ref="formBankConfirm" :model="formBankConfirm" :rules="ruleBankConfirm" :label-position="top">
             <Tabs v-model="tabVerifyActive">
-              <tab-pane label="谷歌验证" name="1">
+              <tab-pane :label="$t('googleAuth')" name="1">
                 <form-item label="" prop="google">
                   <i-input v-model="formBankConfirm.google" maxlength="30" placeholder="Enter your account name"></i-input>
                 </form-item>
               </tab-pane>
-              <tab-pane label="手机验证" name="2">
+              <tab-pane :label="$t('phoneAuth')" name="2">
                 <form-item label="" prop="phone">
                   <i-input v-model="formBankConfirm.phone" maxlength="6" placeholder="Enter your phone number">
-                    <i-button slot="append">发送验证码</i-button>
+                    <i-button slot="append" @click="sendMessage('Bank', 3)" :disabled="sendDisabledBank">{{ sendPlaceholderBank }}</i-button>
                   </i-input>
                 </form-item>
               </tab-pane>
