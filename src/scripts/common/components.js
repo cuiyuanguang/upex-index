@@ -927,7 +927,7 @@ var o_my_login = {
   components: {VueRecaptcha},
   props: ['login'],
   computed: {
-    countryArr: function() {
+    countryArr: function () {
       return JSON.parse(localStorage.getItem('country'));
     },
   },
@@ -1491,7 +1491,7 @@ var o_my_register = {
     };
   },
   computed: {
-    countryArr: function() {
+    countryArr: function () {
       return JSON.parse(localStorage.getItem('country'));
     },
   },
@@ -2752,3 +2752,18 @@ var o_header = {
     });
   },
 };
+var row_my_assets = {
+  template: `
+     <div>
+        <Row class="expand-row">
+            <Col span="8">
+                <span class="expand-key">TXid: </span>
+                <span class="expand-value">{{ row.TXid }}</span>
+            </Col>
+        </Row>
+     </div>
+`,
+  props: {
+    row: Object
+  }
+}
