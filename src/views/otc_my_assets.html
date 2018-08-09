@@ -18,7 +18,7 @@
           <div class="order-wrap-top-li-top-wrap">
             <div class="left-wrap">
               <span class="order-wrap-top-title">Total:</span>
-              <span class="order-wrap-top-bold">2635.32 USDT</span>
+              <span class="order-wrap-top-bold">{{balance.USDT.total_balance}} USDT</span>
             </div>
             <div class="right-wrap">
               <div class="order-wrap-top-button">Deposit</div>
@@ -28,11 +28,11 @@
           <div class="order-wrap-top-li-bottom-wrap">
             <div class="left-wrap">
               <div class="order-wrap-top-title">Available:</div>
-              <div class="order-wrap-top-bold">2635.32 USDT</div>
+              <div class="order-wrap-top-bold">{{balance.USDT.normal_balance}} USDT</div>
             </div>
             <div class="right-wrap">
               <div class="order-wrap-top-title">Freeze:</div>
-              <div class="order-wrap-top-bold">0.00 USDT</div>
+              <div class="order-wrap-top-bold">{{balance.USDT.lock_balance}} USDT</div>
             </div>
           </div>
         </li>
@@ -40,7 +40,7 @@
           <div class="order-wrap-top-li-top-wrap">
             <div class="left-wrap">
               <span class="order-wrap-top-title">Total:</span>
-              <span class="order-wrap-top-bold">2635.32 BTC</span>
+              <span class="order-wrap-top-bold">{{balance.BTC.total_balance}} BTC</span>
             </div>
             <div class="right-wrap">
               <div class="order-wrap-top-button">Deposit</div>
@@ -50,11 +50,11 @@
           <div class="order-wrap-top-li-bottom-wrap">
             <div class="left-wrap">
               <div class="order-wrap-top-title">Available:</div>
-              <div class="order-wrap-top-bold">2635.32 BTC</div>
+              <div class="order-wrap-top-bold">{{balance.BTC.normal_balance}} BTC</div>
             </div>
             <div class="right-wrap">
               <div class="order-wrap-top-title">Freeze:</div>
-              <div class="order-wrap-top-bold">0.00 BTC</div>
+              <div class="order-wrap-top-bold">{{balance.BTC.lock_balance}} BTC</div>
             </div>
           </div>
         </li>
@@ -62,7 +62,7 @@
           <div class="order-wrap-top-li-top-wrap">
             <div class="left-wrap">
               <span class="order-wrap-top-title">Total:</span>
-              <span class="order-wrap-top-bold">2635.32 ETH</span>
+              <span class="order-wrap-top-bold">{{balance.ETH.total_balance}} ETH</span>
             </div>
             <div class="right-wrap">
               <div class="order-wrap-top-button">Deposit</div>
@@ -72,11 +72,11 @@
           <div class="order-wrap-top-li-bottom-wrap">
             <div class="left-wrap">
               <div class="order-wrap-top-title">Available:</div>
-              <div class="order-wrap-top-bold">2635.32 ETH</div>
+              <div class="order-wrap-top-bold">{{balance.ETH.normal_balance}} ETH</div>
             </div>
             <div class="right-wrap">
               <div class="order-wrap-top-title">Freeze:</div>
-              <div class="order-wrap-top-bold">0.00 ETH</div>
+              <div class="order-wrap-top-bold">{{balance.ETH.total_balance}} ETH</div>
             </div>
           </div>
         </li>
@@ -91,16 +91,22 @@
       <div class="order-table-wrap">
         <tabs value="name1" v-model="orderWrapTable">
           <tab-pane label="Recent record" name="name1">
-            <i-table :columns="columns1" :data="data1" size="small"></i-table>
+            <i-table :columns="columns1" :data="data1" size="small" no-data-text="没有数据" :loading="tableLoading"></i-table>
             <div style="margin: 10px;overflow: hidden">
               <div style="float: right;">
-                <Page :total="100" :current="1" @on-change=""></Page>
+                <Page :total="100" :current="1" @on-change="changePageAll"></Page>
               </div>
             </div>
           </tab-pane>
-          <tab-pane label="Deposit record" name="name2">标签2的内容</tab-pane>
-          <tab-pane label="Withdrawal record" name="name3">标签3的内容</tab-pane>
-          <tab-pane label="Other records" name="name4">标签4的内容</tab-pane>
+          <tab-pane label="Deposit record" name="name2">
+            <i-table :columns="columns2" :data="data2" size="small" no-data-text="没有数据"></i-table>
+          </tab-pane>
+          <tab-pane label="Withdrawal record" name="name3">
+            <i-table :columns="columns3" :data="data3" size="small" no-data-text="没有数据"></i-table>
+          </tab-pane>
+          <tab-pane label="Other records" name="name4">
+            <i-table :columns="columns4" :data="data4" size="small" no-data-text="没有数据"></i-table>
+          </tab-pane>
         </tabs>
       </div>
     </div>
