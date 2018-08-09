@@ -9,30 +9,79 @@ var account = new Vue({
   i18n: i18n,
   components: {
     oHeader: o_header,
+    myregistergoogle: o_my_registerGoogle,
   },
   data() {
     // 自定义表单验证
-    var validateGoogle = (rule, value, callback) => {
-      if (value === '' && this.formBankConfirm.phone === '') {
-        callback(new Error('Please enter your email'));
+    var validateGoogleSecurity = (rule, value, callback) => {
+      if (this.user.googleAuthenticatorStatus && value === '') {
+        callback(new Error(this.$t('canNotBeEmpty')));
       } else {
         callback();
       }
     };
-    var validatePhone = (rule, value, callback) => {
-      if (value === '' && this.formBankConfirm.google === '') {
-        callback(new Error('Please enter your phone'));
+    var validatePhoneSecurity = (rule, value, callback) => {
+      if (this.user.mobileAuthenticatorStatus && value === '') {
+        callback(new Error(this.$t('canNotBeEmpty')));
+      } else {
+        callback();
+      }
+    };
+    var validateGoogleBank = (rule, value, callback) => {
+      if (value === '' && this[rule.name].phone === '') {
+        callback(new Error(this.$t('canNotBeEmpty')));
+      } else {
+        callback();
+      }
+    };
+    var validatePhoneBank = (rule, value, callback) => {
+      if (value === '' && this[rule.name].google === '') {
+        callback(new Error(this.$t('canNotBeEmpty')));
+      } else {
+        callback();
+      }
+    };
+    var validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('canNotBeEmpty')));
+      } else {
+        if (this.formPassword.passwordNew !== '') {
+          // 对第二个密码框单独验证
+          this.$refs.formPassword.validateField('passwordReNew');
+        }
+        callback();
+      }
+    };
+    var validatePassCheck = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('canNotBeEmpty')));
+      } else if (value !== this.formPassword.passwordNew) {
+        callback(new Error(this.$t('notMatch')));
       } else {
         callback();
       }
     };
     return {
+      locale: 'zh',
       user: {
         usdtAmount: {},
         userExtView: {},
       },
-      sendPlaceholder: '发送验证码',
-      sendDisabled: false,
+      googleStatus: '',
+      sendPlaceholderPassword: '发送验证码',
+      sendDisabledPassword: false,
+      sendPlaceholderGoogle: '发送验证码',
+      sendDisabledGoogle: false,
+      sendPlaceholderBindEmail: '发送验证码',
+      sendDisabledBindEmail: false,
+      sendPlaceholderEmail: '发送验证码',
+      sendDisabledEmail: false,
+      sendPlaceholderOldPhone: '发送验证码',
+      sendDisabledOldPhone: false,
+      sendPlaceholderNewPhone: '发送验证码',
+      sendDisabledNewPhone: false,
+      sendPlaceholderBank: '发送验证码',
+      sendDisabledBank: false,
       // 修改WhatsApp
       modalWhatsApp: false,
       selectCountry: '+86',
@@ -40,41 +89,64 @@ var account = new Vue({
         number: '',
       },
       ruleWhatsApp: {
-        number: [{ required: true, message: 'The number cannot be empty', trigger: 'blur' }],
+        number: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
       },
       // 修改密码
       modalPassword: false,
       formPassword: {
-        passwd: '',
-        passwdNew: '',
-        passwdReNew: '',
-        verify: '',
+        password: '',
+        passwordNew: '',
+        passwordReNew: '',
+        google: '',
+        phone: '',
       },
       rulePassword: {
-        passwd: [{ required: true, message: 'The name cannot be empty', trigger: 'blur' }],
-        passwdNew: [{ required: true, message: 'The name cannot be empty', trigger: 'blur' }],
-        passwdReNew: [{ required: true, message: 'The name cannot be empty', trigger: 'blur' }],
-        verify: [{ required: true, message: 'The name cannot be empty', trigger: 'blur' }],
+        password: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
+        passwordNew: [{ required: true, validator: validatePass, trigger: 'blur' }],
+        passwordReNew: [{ required: true, validator: validatePassCheck, trigger: 'blur' }],
+        google: [{ name: 'formPassword', validator: validateGoogleSecurity, trigger: 'blur' }],
+        phone: [{ name: 'formPassword', validator: validatePhoneSecurity, trigger: 'blur' }],
+      },
+      // 绑定修改谷歌验证
+      isRegisterGoogleShow: false,
+      modalGoogle: false,
+      formGoogle: {
+        google: '',
+        phone: '',
+        password: '',
+      },
+      ruleGoogle: {
+        google: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
+        phone: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
+        password: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
       },
       // 绑定/修改邮箱
       modalEmail: false,
       formEmail: {
         email: '',
         verify: '',
+        google: '',
+        phone: '',
       },
       ruleEmail: {
-        email: [{ required: true, message: 'The email cannot be empty', trigger: 'blur' }],
-        verify: [{ required: true, message: 'The verify cannot be empty', trigger: 'blur' }],
+        email: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
+        verify: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
+        google: [{ name: 'formEmail', validator: validateGoogleSecurity, trigger: 'blur' }],
+        phone: [{ name: 'formEmail', validator: validatePhoneSecurity, trigger: 'blur' }],
       },
       // 绑定/修改手机号
       modalPhone: false,
       formPhone: {
+        oldVerify: '',
         phone: '',
         verify: '',
+        google: '',
       },
       rulePhone: {
-        phone: [{ required: true, message: 'The phone cannot be empty', trigger: 'blur' }],
-        verify: [{ required: true, message: 'The verify cannot be empty', trigger: 'blur' }],
+        oldVerify: [{ validator: validatePhoneSecurity, trigger: 'blur' }],
+        phone: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
+        verify: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
+        google: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
       },
       // 添加/修改银行卡
       modalBankInfo: false,
@@ -85,10 +157,10 @@ var account = new Vue({
         ibanNo: '',
       },
       ruleBankInfo: {
-        bankName: [{ required: true, message: 'The phone cannot be empty', trigger: 'blur' }],
-        name: [{ required: true, message: 'The verify cannot be empty', trigger: 'blur' }],
-        cardNo: [{ required: true, message: 'The verify cannot be empty', trigger: 'blur' }],
-        ibanNo: [{ required: true, message: 'The verify cannot be empty', trigger: 'blur' }],
+        bankName: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
+        name: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
+        cardNo: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
+        ibanNo: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
       },
       modalBankConfirm: false,
       tabVerifyActive: '1',
@@ -97,29 +169,29 @@ var account = new Vue({
         google: '',
       },
       ruleBankConfirm: {
-        phone: [{ validator: validatePhone, trigger: 'blur' }],
-        google: [{ validator: validateGoogle, trigger: 'blur' }],
+        phone: [{ name: 'formBankConfirm', validator: validatePhoneBank, trigger: 'blur' }],
+        google: [{ name: 'formBankConfirm', validator: validateGoogleBank, trigger: 'blur' }],
       },
       // 银行表格
       bankColumn: [
         {
-          title: '银行名称',
+          title: this.$t('bankName'),
           key: 'bankName',
           align: 'center',
         },
         {
-          title: '账户名称',
+          title: this.$t('accountName'),
           key: 'name',
           align: 'center',
           minWidth: 150,
         },
         {
-          title: '卡号',
+          title: this.$t('cardNo'),
           key: 'cardNo',
           align: 'center',
         },
         {
-          title: '操作',
+          title: this.$t('operation'),
           key: 'operation',
           align: 'center',
           render: (h, params) => {
@@ -136,25 +208,30 @@ var account = new Vue({
                   },
                 },
               },
-              '修改'
+              this.$t('修改')
             );
           },
         },
         {
-          title: '启用',
+          title: this.$t('enable'),
           key: 'switch',
           align: 'center',
           render: (h, params) => {
             return h('i-switch', {
               props: {
+                controllable: true,
+                size: 'large',
                 value: params.row.status === 1,
               },
               on: {
-                'on-change': value => {
-                  this.modifyBankStatus(params.row, value);
+                'on-change': () => {
+                  this.modifyBankStatus(params.row);
                 },
               },
-            });
+            }, [
+              h('span', { slot: 'open' }, 'YES'),
+              h('span', { slot: 'close' }, 'NO'),
+            ]);
           },
         },
       ],
@@ -186,26 +263,26 @@ var account = new Vue({
       // 登录历史表格
       loginColumn: [
         {
-          title: '登录时间',
+          title: this.$t('loginTime'),
           key: 'formatLgInTime',
           align: 'center',
         },
         {
-          title: '登录平台',
+          title: this.$t('loginPlat'),
           key: 'lgPlatform',
           align: 'center',
         },
         {
-          title: 'IP地址',
+          title: this.$t('ipAddress'),
           key: 'lgIp',
           align: 'center',
         },
         {
-          title: '登录状态',
+          title: this.$t('status'),
           key: 'lgStatus',
           align: 'center',
           render: (h, params) => {
-            return h('span', params.row.lgStatus === 1 ? '成功' : '失败');
+            return h('span', params.row.lgStatus === 1 ? this.$t('success') : this.$t('fail'));
           },
         },
       ],
@@ -233,7 +310,7 @@ var account = new Vue({
       // 操作记录表格
       securityColumn: [
         {
-          title: '操作时间',
+          title: this.$t('operationTime'),
           key: 'time',
           align: 'center',
           render: (h, params) => {
@@ -241,26 +318,26 @@ var account = new Vue({
           },
         },
         {
-          title: '操作平台',
+          title: this.$t('operationPlat'),
           key: 'platform',
           align: 'center',
         },
         {
-          title: 'IP地址',
+          title: this.$t('ipAddress'),
           key: 'ipAddress',
           align: 'center',
         },
         {
-          title: '操作名称',
+          title: this.$t('operationName'),
           key: 'operation',
           align: 'center',
         },
         {
-          title: '操作状态',
+          title: this.$t('status'),
           key: 'status',
           align: 'center',
           render: (h, params) => {
-            return h('span', params.row.status === 1 ? '成功' : '失败');
+            return h('span', params.row.status === 1 ? this.$t('success') : this.$t('fail'));
           },
         },
       ],
@@ -294,12 +371,16 @@ var account = new Vue({
     countryArr() {
       return JSON.parse(localStorage.getItem('country'));
     },
+    isregisterCookie() {
+      return sessionStorage.getItem('token');
+    },
   },
   methods: {
     getUserInfo() {
       var that = this;
       get('api/userInfo').then(function(res) {
         that.user = res;
+        that.googleStatus = !!res.googleAuthenticatorStatus;
       });
     },
     loginOut() {
@@ -320,8 +401,8 @@ var account = new Vue({
       this.formWhatsApp.number = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1);
       this.modalWhatsApp = true;
     },
-    modifyGoogleStatus(value) {
-      console.log(this.user.id, value);
+    modifyGoogleStatus() {
+      this.modalGoogle = true;
     },
     modifyEmail() {
       if (this.user.email) {
@@ -329,17 +410,21 @@ var account = new Vue({
       }
       this.modalEmail = true;
     },
+    modifyPhone() {
+      this.modalPhone = true;
+    },
     handleSubmit(name) {
       var that = this;
       this.$refs[name].validate(function(valid) {
         if (valid) {
           if (name === 'formWhatsApp') {
-            post('api/watchapp', that.selectCountry + '-' + that.formWhatsApp.number).then(function (res) {
-              if (res) {
-                that.modalWhatsApp = false;
-                that.getUserInfo();
-              }
-            });
+            post('api/watchapp', that.selectCountry + '-' + that.formWhatsApp.number)
+              .then(function(res) {
+                if (res) {
+                  that.modalWhatsApp = false;
+                  that.getUserInfo();
+                }
+              });
           }
           if (name === 'formBankInfo') {
             that.modalBankInfo = false;
@@ -354,9 +439,13 @@ var account = new Vue({
                 cardNo: that.formBankInfo.cardNo,
                 ibanNo: that.formBankInfo.ibanNo,
                 checkType: that.tabVerifyActive,
-                checkValue: that.tabVerifyActive == '1' ? that.formBankConfirm.google : that.formBankConfirm.phone,
-              }).then(function (res) {
+                checkValue:
+                  that.tabVerifyActive == '1'
+                    ? that.formBankConfirm.google
+                    : that.formBankConfirm.phone,
+              }).then(function(res) {
                 that.modalBankConfirm = false;
+                that.tabVerifyActive = 1;
                 that.getAllCard();
               });
             }
@@ -368,12 +457,71 @@ var account = new Vue({
                 cardNo: that.formBankInfo.cardNo,
                 ibanNo: that.formBankInfo.ibanNo,
                 checkType: that.tabVerifyActive,
-                checkValue: that.tabVerifyActive == '1' ? that.formBankConfirm.google : that.formBankConfirm.phone,
-              }).then(function (res) {
+                checkValue:
+                  that.tabVerifyActive == '1'
+                    ? that.formBankConfirm.google
+                    : that.formBankConfirm.phone,
+              }).then(function(res) {
                 that.modalBankConfirm = false;
+                that.tabVerifyActive = 1;
                 that.getAllCard();
               });
             }
+          }
+          if (name === 'formPassword') {
+            post('api/user/password_update', {
+              smsAuthCode: that.formPassword.phone,
+              googleCode: that.formPassword.google,
+              loginPword: that.formPassword.password,
+              newLoginPword: that.formPassword.passwordReNew,
+            }).then(function(res) {
+              if (res) {
+                that.tabVerifyActive = 1;
+                that.modalPassword = false;
+              }
+            });
+          }
+          if (name === 'formGoogle') {
+            post('api/user/close_google_verify', {
+              googleCode: that.formGoogle.google,
+              smsValidCode: that.formGoogle.phone,
+              loginPwd: that.formGoogle.password,
+            }).then(function(res) {
+              if (res) {
+                that.modalGoogle = false;
+                that.googleStatus = false;
+              }
+            });
+          }
+          if (name === 'formEmail') {
+            var emailApi = that.user.email ? 'api/user/email_update' : 'api/user/email_bind_save';
+            post(emailApi, {
+              email: that.formEmail.email,
+              emailValidCode: that.formEmail.verify,
+              smsValidCode: that.formEmail.phone,
+              googleCode: that.formEmail.google,
+            }).then(function(res) {
+              if (res) {
+                that.modalEmail = false;
+                that.getUserInfo();
+              }
+            });
+          }
+          if (name === 'formPhone') {
+            var phoneApi = that.user.mobileAuthenticatorStatus
+              ? 'api/user/mobile_update'
+              : 'api/user/mobile_bind_save';
+            post(phoneApi, {
+              countryCode: that.selectCountry,
+              mobileNumber: that.formPhone.phone,
+              smsAuthCode: that.formPhone.verify,
+              authenticationCode: that.formPhone.google,
+            }).then(function(res) {
+              if (res) {
+                that.modalPhone = false;
+                that.getUserInfo();
+              }
+            });
           }
         } else {
           this.$Message.error('Fail!');
@@ -399,57 +547,112 @@ var account = new Vue({
       }
       this.modalBankInfo = true;
     },
-    modifyBankStatus(data, value) {
-      post('api/switchBankCard', { id: data.id }).then(function(res){
+    modifyBankStatus(data) {
+      var that = this;
+      post('api/switchBankCard', { id: data.id }).then(function(res) {
+        if (res) {
+          that.getAllCard();
+        }
       });
     },
     getLoginData(page) {
       var that = this;
-      post('api/security/login_history', { pageNum: page, pageSize: 10 }, false).then(function(res) {
-        that.loginData = res.historyLoginList;
-        that.loginDataTotalCount = res.count;
-      });
+      post('api/security/login_history', { pageNum: page, pageSize: 10 }, false)
+        .then(function(res) {
+          that.loginData = res.historyLoginList;
+          that.loginDataTotalCount = res.count;
+        });
     },
     loginPageChange(page) {
       this.getLoginData(page);
     },
     getSecurityData(page) {
       var that = this;
-      post('api/security/setting_history', { pageNum: page, pageSize: 10 }, false).then(function(res) {
-        that.securityData = res.historySettingList;
-        that.securityDataTotalCount = res.count;
-      });
+      post('api/security/setting_history', { pageNum: page, pageSize: 10 }, false)
+        .then(function(res) {
+          that.securityData = res.historySettingList;
+          that.securityDataTotalCount = res.count;
+        });
     },
     securityPageChange(page) {
       this.getSecurityData(page);
     },
-    sendMessage: function () {
+    sendMessage: function(name, type) {
       var that = this;
-      that.sendDisabled = true;
-      get('api/verifycode_sms', { type: 8 }).then(function (res) {
+      that['sendDisabled' + name] = true;
+      get('api/verifycode_sms', { type: type }).then(function(res) {
         if (res) {
-          that.countDown();
+          that.countDown(name);
         }
       });
     },
-    countDown: function () {
+    sendMessageSecurity: function(name, type) {
+      if (name === 'Email' && !this.formEmail.email) return;
+      if (name === 'NewPhone' && !this.formPhone.phone) return;
       var that = this;
-      var counter = 10;
-      that.sendPlaceholder = counter + 's';
-      var timer = setInterval(function () {
+      that['sendDisabled' + name] = true;
+      that['sendDisabledBind' + name] = true;
+      var api = {
+        Google: 'api/common/smsValidCode',
+        Email: 'api/common/emailValidCode',
+        NewPhone: 'api/common/emailValidCode',
+      };
+      post(
+        api[name],
+        {
+          email: that.formEmail.email || '',
+          countryCode: that.selectCountry || '',
+          mobile: that.user.hideMobileNumber || '',
+          operationType: type,
+        },
+        false
+      ).then(function(res) {
+        if (res) {
+          that.countDown(name);
+        }
+      });
+    },
+    countDown(name) {
+      var that = this;
+      var counter = 60;
+      that['sendPlaceholder' + name] = counter + 's';
+      that['sendPlaceholderBind' + name] = counter + 's';
+      var timer = setInterval(function() {
         counter -= 1;
-        that.sendPlaceholder = counter + 's';
-        if (that.sendPlaceholder == 0) {
-          that.sendDisabled = false;
+        that['sendPlaceholder' + name] = counter + 's';
+        that['sendPlaceholderBind' + name] = counter + 's';
+        if (counter == 0) {
+          that['sendDisabled' + name] = false;
+          that['sendDisabledBind' + name] = false;
+          that['sendPlaceholder' + name] = '重新发送';
+          that['sendPlaceholderBind' + name] = '重新发送';
           clearInterval(timer);
         }
       }, 1000);
     },
   },
   mounted() {
+    var locale = localStorage.getItem('locale');
+    if (locale) {
+      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
+      this.$i18n.locale = locale;
+    }
+    this.$on('locale', function(i) {
+      this.locale = i;
+    });
+    this.$on('isregisterGoogle', function(i) {
+      this.isRegisterGoogleShow = i;
+    });
     this.getUserInfo();
     this.getAllCard();
     this.getLoginData(1);
     this.getSecurityData(1);
+  },
+  watch: {
+    locale: function(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+      }
+    },
   },
 });
