@@ -24,7 +24,8 @@ var pay = new Vue({
       //left time for pay
       leftTime: 0,
       //create time
-      ctime: 0,
+      payLimit: 0,
+      confirmLimit: 0,
       card: '',
       cardErrorTips: '',
       recard: '',
@@ -61,17 +62,17 @@ var pay = new Vue({
       this.isPayDialogShow = true;
     },
     cancelPay() {
-      var _this = this;
+      var that = this;
       this.$Modal.confirm({
-        title: _this.$t('cancelOrder'),
-        content: '<p><span class="error">' + _this.$t('paidAndNoCancel') + '</span><br>' + _this.$t('helpTipsFourth') + '</p>',
+        title: that.$t('cancelOrder'),
+        content: '<p><span class="error">' + that.$t('paidAndNoCancel') + '</span><br>' + that.$t('helpTipsFourth') + '</p>',
         onOk: function () {
-          post('api/cancelOrder', _this.sequence).then(function (res) {
+          post('api/cancelOrder', that.sequence).then(function (res) {
             location.reload();
           });
         },
         onCancel: function () {
-          _this.$Modal.remove();
+          that.$Modal.remove();
         },
       });
     },
@@ -79,30 +80,6 @@ var pay = new Vue({
       this.isPayDialogShow = false;
       this.isPayInfoDialogShow = true;
     },
-    //------------end-----------------
-    //Countdown
-    payCountdown: function (createTime, limitTime) {
-      var that = this
-      setInterval(function () {
-        var now = new Date().getTime();
-        var expiredTime;
-        // if time is seconds 
-        if (limitTime > 1000) {
-          expiredTime = limitTime;
-        }
-        //if time is million seconds
-        else {
-          expiredTime = createTime + limitTime * 60 * 1000;
-        }
-        if ((expiredTime - now) < 0) {
-          that.leftTime = that.$t('orderExpired');
-        } else {
-          that.leftTime = utils.MillisecondToDate(expiredTime - now);
-        }
-      }, 1000)
-    },
-
-    //pay info modal methods----------
     close: function () {
       this.isPayInfoDialogShow = false;
     },
@@ -130,21 +107,18 @@ var pay = new Vue({
         }
       });
     },
-    //------------end-----------------
     copy: function (e) {
       e.target.select();
       document.execCommand('copy');
       Toast.show(e.target.name + this.$t('copied'), { icon: 'ok', duration: 1500 });
     },
-    //next step ----------------------
     next() {
       this.step += 1;
     },
-    //-------------------------GET ORDER INFO-----------------------------------------------//
     getOrderInfo: function (sequence) {
       var that = this;
       var user = JSON.parse(localStorage.getItem('user'));
-      get('api/orderDetail', { sequence: sequence }, )
+      get('api/orderDetail', { sequence: sequence })
         .then(function (res) {
           var data = res.data.data;
           if (data.buyerId != user.id) {
@@ -153,22 +127,28 @@ var pay = new Vue({
           }
           //to make sure the status of the order
           that.step = data.status;
-          //create time of the order
-          var payTime;
-          if (data.status == 2) {
-            payTime = data.limitTime;
-          } else {
-            payTime = data.advert.limitTime;
-          }
-          //start Countdown 
-          that.payCountdown(data.ctime, payTime);
-          // set  orderInfo;
           that.orderInfo = data;
           var whatsAppStr = data.seller.userExtView.watchapp;
-          that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1);
+          that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1).replace(/\s+/g, '');
+          var expiredTime = data.countDownTime + Date.now();
+          var timer = setInterval(function () {
+            var now = Date.now();
+            if ((expiredTime - now) <= 0) {
+              that.leftTime = 0;
+              clearInterval(timer);
+            } else {
+              that.leftTime = utils.MillisecondToDate(expiredTime - now);
+            }
+          }, 1000);
         });
-    }
-    //------------------------------GET ORDER INFO END---------------------------------------//	
+    },
+    getTimeLimit: function() {
+      var that = this;
+      get('/api/rate').then(function(res) {
+        that.payLimit = res.data.data.payment_limit_time;
+        that.confirmLimit = res.data.data.trade_limit_time;
+      });
+    },
   },
   mounted: function () {
     var locale = localStorage.getItem('locale');
@@ -182,6 +162,7 @@ var pay = new Vue({
     var sequence = utils.getParam('sequence');
     this.sequence = sequence;
     this.getOrderInfo(sequence);
+    this.getTimeLimit();
   },
   watch: {
     locale: function(newVal, oldVal) {

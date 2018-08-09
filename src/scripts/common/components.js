@@ -25,9 +25,9 @@ var Toast = {
       document.body.appendChild(toast);
     }
     if (duration > 100) {
-      var _this = this;
+      var that = this;
       var timer = setTimeout(function () {
-        _this.hide();
+        that.hide();
         if (typeof callback === 'function') {
           callback();
         }
@@ -108,9 +108,9 @@ var i18nComponentsMessages = {
     zh: '查看',
     en: 'view',
   },
-  paidToSeller: {
-    zh: '已向卖家支付',
-    en: 'already paid to seller',
+  waitForSellerReceive: {
+    zh: '等待卖家确认收款',
+    en: 'wait for seller to confirm',
   },
   waitForBuyerPay: {
     zh: '等待买家支付',
@@ -2544,7 +2544,7 @@ var o_header = {
                       <i-col span="18" class="text-left" style="padding-left:6px;">
                         <div v-if="item.buyer.id==userInfo.id" class="tip">
                           {{ item.status == 1 ? $t('waitForBuyerPay') : '' }}
-                          {{ item.status == 2 ? $t('paidToSeller') : '' }}
+                          {{ item.status == 2 ? $t('waitForSellerReceive') : '' }}
                           {{item.totalPrice}}SAR
                         </div>
                         <div v-else class="tip">

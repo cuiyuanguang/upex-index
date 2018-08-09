@@ -75,12 +75,6 @@
                     <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalVolume}} USDT</i-col>
                   </Row>
                 </li>
-                <!-- <li class="info-items">
-                  <Row>
-                    <i-col span="6" class="info-key">{{ $t('timeOfArrival') }} :</i-col>
-                    <i-col span="18" class="info-value">{{ arrivalTime }}</i-col>
-                  </Row>
-                </li> -->
               </ul>
             </i-col>
             <i-col span="12">
@@ -130,11 +124,14 @@
           </p>
         </div>
         <div class="pay-status" v-if="step == 2" v-cloak>
-          <p class="pay-notice">
+          <p class="pay-notice" v-if="leftTime != 0">
             {{ $t('lastFourNumber') }} {{ orderInfo.bankCardLastNum }}, {{ $t('payYou') }}
             <span class="text-warn"> {{orderInfo.totalPrice}}</span> SAR , {{ $t('receiveAll') }}<br>
             {{ $t('notReceiveAndWait') }}<br>
-            {{ $t('restTime') }}: <span class="text-error"> {{ leftTime != 0 ? leftTime : $t('orderExpired') }}</span>
+            {{ $t('restTime') }}: <span class="text-error"> {{ leftTime }}</span>
+          </p>
+          <p class="pay-notice" v-else>
+            <span class="text-error"> {{ $t('orderExpired') }}</span>
           </p>
           <div class="pay-action" v-if="leftTime != 0">
             <button @click="confirmOrder" class="pay-action-btn">{{ $t('confirm') }}</button>
