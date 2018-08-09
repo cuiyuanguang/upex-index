@@ -89,9 +89,18 @@ var myAssets = new Vue({
       }
     ]
   },
-  methods: {},
-  mounted() {
+  methods: {
+    getUserBalance(){
 
+      post('api/finance/account_balance',{}, false).then(function(res){
+        if(res){
+
+        }
+      })
+    },
+  },
+  mounted() {
+    this.getUserBalance()
   },
   filters: {},
   watch: {
