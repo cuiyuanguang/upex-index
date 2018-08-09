@@ -719,15 +719,6 @@ var addContact = {
     close() {
       this.$parent.$emit('isContactShow', false);
     },
-    getCountry() {
-      var that = this;
-      get('api/country').then(function (res) {
-        if (res) {
-          that.countryArr = res;
-          localStorage.setItem('country', JSON.stringify(res));
-        }
-      });
-    },
     bind() {
       if (!this.wahtsApp) {
         this.accountErrorTips = 'whatsApp' + this.$t('noEmpty');
@@ -748,11 +739,6 @@ var addContact = {
         });
       }
     },
-  },
-  mounted: function () {
-    if (!localStorage.getItem('country')) {
-      this.getCountry();
-    }
   },
   watch: {
     locale: function (newVal, oldVal) {
@@ -2684,6 +2670,15 @@ var o_header = {
         }
       });
     },
+    getCountry() {
+      var that = this;
+      get('api/country').then(function (res) {
+        if (res) {
+          that.countryArr = res;
+          localStorage.setItem('country', JSON.stringify(res));
+        }
+      });
+    },
   },
   components: {
     mylogin: o_my_login,
@@ -2693,10 +2688,9 @@ var o_header = {
     myretrievepwd: o_my_retrievePwd,
   },
   mounted() {
-    // if (utils.getParam('auth') == 1) {
-    //   this.isLoginShow = true;
-    //   return;
-    // }
+    if (!localStorage.getItem('country')) {
+      this.getCountry();
+    }
     this.userInfo = JSON.parse(localStorage.getItem('user'));
     var locale = localStorage.getItem('locale');
     if (locale) {

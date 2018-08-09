@@ -137,18 +137,18 @@
               <i-button type="text" size="small" icon="plus" @click="modifyBankInfo">{{ $t('addBankCard') }}</i-button>
             </i-col>
           </Row>
-          <i-table :columns="bankColumn" :data="bankData"></i-table>
+          <i-table size="small" :columns="bankColumn" :data="bankData"></i-table>
         </i-col>
       </Row>
       <!-- 登录/操作历史 -->
       <div class="container-row" style="margin-top: 2px;">
         <Tabs v-model="tabLogActive">
           <tab-pane :label="$t('loginHistory')" name="loginHistory">
-            <i-table :columns="loginColumn" :data="loginData"></i-table>
+            <i-table size="small" :columns="loginColumn" :data="loginData"></i-table>
             <Page :total="loginDataTotalCount" size="small" show-total @on-change="loginPageChange"></Page>
           </tab-pane>
           <tab-pane :label="$t('securityHistory')" name="securityHistory">
-            <i-table :columns="securityColumn" :data="securityData"></i-table>
+            <i-table size="small" :columns="securityColumn" :data="securityData"></i-table>
             <Page :total="securityDataTotalCount" size="small" show-total @on-change="securityPageChange"></Page>
           </tab-pane>
         </Tabs>
