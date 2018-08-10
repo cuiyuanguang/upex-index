@@ -1,10 +1,40 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!DOCTYPE HTML>
+<html lang="zh-cn">
 
+<head>
+  <title>UPEX</title>
+  @@include('header.html')
+  <link rel="stylesheet" href="../styles/my_assets_withdrawal.css?rev=@@hash">
+</head>
+
+<body>
+<div id="app" v-cloak>
+  <o-header ref="header"></o-header>
+  <div class="container">
+    <div class="bg-white">
+      <h1 class="h1-text">Withdrawal</h1>
+      <breadcrumb separator=">">
+        <breadcrumb-item to="otc_my_assets.html">My assets</breadcrumb-item>
+        <breadcrumb-item>Components</breadcrumb-item>
+      </breadcrumb>
+      <div class="wrap-gray"></div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="bg-white">
+      <h1 class="h1-text" style="margin-bottom: 30px">Withdrawal recording</h1>
+      <i-table :columns="columns3" :data="data3" size="small" no-data-text="没有数据" :loading="tableLoading3"></i-table>
+      <div style="margin: 10px;overflow: hidden" v-show="data3Page > 10">
+        <div style="float: right;">
+          <Page :total="data3Page" @on-change="changeWithDraw"></Page>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+@@include('footer.html')
+<script src="../scripts/locale/my_assets_withdrawal.js?rev=@@hash"></script>
+<script src="../scripts/my_assets_withdrawal.js?rev=@@hash"></script>
 </body>
+
 </html>

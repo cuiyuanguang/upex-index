@@ -796,3 +796,7 @@ input::-webkit-inner-spin-button {
   max-width: 40px;
   max-height: 40px;
 }
+
+.expand-row{
+  margin:8px 0;
+}
