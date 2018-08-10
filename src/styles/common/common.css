@@ -57,6 +57,10 @@ body[dir='rtl'] .ivu-col-span-9 {
   text-align: right;
 }
 
+.text-center {
+  text-align: center;
+}
+
 body[dir='rtl'] .text-left {
   text-align: right;
 }

@@ -12,7 +12,8 @@ var recharge = new Vue({
   },
   data() {
     return {
-      rechargeAddress: '0x1cc0a84c0c0888059d9aac2c32ec125e4dc4221b',
+      rechargeAddressQR: '',
+      rechargeAddressString: '',
       rechargeColumn: [
         {
           title: this.$t('time'),
@@ -44,7 +45,7 @@ var recharge = new Vue({
             h('span', params.row.status === 1 ? this.$t('success') : this.$t('fail')),
         },
         {
-          title: this.$t('operating'),
+          title: this.$t('operation'),
           type: 'expand',
           render: (h, params) => {
             return h('p', [
@@ -89,34 +90,54 @@ var recharge = new Vue({
           TXid: '12312312312312312312312313123',
         },
       ],
+      rechargeTotalCount: '',
     };
   },
   methods: {
     copyAddress() {
       var that = this;
-      this.$copyText(this.rechargeAddress).then(function (e) {
+      this.$copyText(this.rechargeAddressString).then(function (e) {
         Toast.show(that.$t('copySucceed'), { icon: 'ok' });
       }, function (e) {
         Toast.show(that.$t('copyFailed'), { icon: 'warn' });
       });
     },
+    getRechargeInfo() {
+      var that = this;
+      post('api/finance/get_charge_address', { symbol: 'USDT' }, false).then(function(res) {
+        if (res) {
+          that.rechargeAddressQR = res.addressQRCode;
+          that.rechargeAddressString = res.addressStr;
+        }
+      });
+    },
     getRechargeData(page) {
-      console.log(typeof page);
+      var that = this;
+      post('api/record/deposit_list',{
+        pageNum: page,
+        coinSymbol: 'USDT',
+      }, false).then(function(res) {
+        if (res) {
+          that.rechargeData = res.financeList;
+          that.rechargeTotalCount = res.count;
+        }
+      });
     },
     rechargePageChange(page) {
       this.getRechargeData(page);
     },
   },
   mounted() {
-    var that = this;
-    new QRCode(document.getElementById('rechargeQR'), {
-      text: that.rechargeAddress,
-      width: 96,
-      height: 96,
-      colorDark : '#000000',
-      colorLight : '#ffffff',
-      correctLevel : QRCode.CorrectLevel.H,
-    });
+    this.getRechargeInfo();
+    // var that = this;
+    // new QRCode(document.getElementById('rechargeQR'), {
+    //   text: that.rechargeAddress,
+    //   width: 96,
+    //   height: 96,
+    //   colorDark : '#000000',
+    //   colorLight : '#ffffff',
+    //   correctLevel : QRCode.CorrectLevel.H,
+    // });
     this.getRechargeData(1);
   },
 });

@@ -77,7 +77,7 @@
 }
 
 .recharge-info-qr > img {
-  display: inline-block !important;
+  max-width: 100%;
   vertical-align: middle;
 }
 

@@ -28,10 +28,12 @@
               <h3 class="recharge-info-title">USDT {{ $t('rechargeAddress') }}</h3>
               <Row>
                 <i-col span="6">
-                  <div class="recharge-info-qr" id="rechargeQR"></div>
+                  <div class="recharge-info-qr" id="rechargeQR">
+                    <img :src="rechargeAddressQR">
+                  </div>
                 </i-col>
                 <i-col span="18">
-                  <p class="recharge-info-id text-secondary">{{ rechargeAddress }}</p>
+                  <p class="recharge-info-id text-secondary">{{ rechargeAddressString }}</p>
                   <i-button icon="ios-copy-outline" type="primary" size="large" @click="copyAddress">{{ $t('copy') }}</i-button>
                 </i-col>
               </Row>
@@ -59,14 +61,13 @@
         </i-col>
       </Row>
       <i-table :columns="rechargeColumn" :data="rechargeData" size="small"></i-table>
-      <div style="margin: 10px;overflow: hidden">
-        <Page :total="100" :current="1" @on-change="rechargePageChange"></Page>
+      <div style="padding: 10px 0;">
+        <Page class="text-center" :total="rechargeTotalCount" size="small" show-total @on-change="rechargePageChange"></Page>
       </div>
     </div>
   </div>
 </div>
 @@include('footer.html')
-<script src="../lib/qrcode.min.js"></script>
 <script src="../scripts/locale/my_assets_recharge.js?rev=@@hash"></script>
 <script src="../scripts/my_assets_recharge.js?rev=@@hash"></script>
 </body>
