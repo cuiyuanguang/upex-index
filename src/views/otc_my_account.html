@@ -195,20 +195,14 @@
         <form-item label="重复新密码" prop="passwordReNew">
           <i-input type="password" v-model="formPassword.passwordReNew"></i-input>
         </form-item>
-        <Tabs v-model="tabVerifyActive">
-          <tab-pane :label="$t('googleAuth')" name="1" v-if="user.googleAuthenticatorStatus">
-            <form-item label="" prop="google">
-              <i-input v-model="formPassword.google" maxlength="30" placeholder="Enter your account name"></i-input>
-            </form-item>
-          </tab-pane>
-          <tab-pane :label="$t('phoneAuth')" name="2" v-if="user.mobileAuthenticatorStatus">
-            <form-item label="" prop="phone">
-              <i-input v-model="formPassword.phone" maxlength="6" placeholder="Enter your phone number">
-                <i-button slot="append" @click="sendMessageSecurity('Password', 5)" :disabled="sendDisabledPassword">{{ sendPlaceholderPassword }}</i-button>
-              </i-input>
-            </form-item>
-          </tab-pane>
-        </Tabs>
+        <form-item :label="$t('phoneAuth')" prop="phone" v-if="user.mobileAuthenticatorStatus">
+          <i-input v-model="formPassword.phone" maxlength="6" placeholder="Enter your phone number">
+            <i-button slot="append" @click="sendMessageSecurity('Password', 5)" :disabled="sendDisabledPassword">{{ sendPlaceholderPassword }}</i-button>
+          </i-input>
+        </form-item>
+        <form-item :label="$t('googleAuth')" prop="google" v-if="user.googleAuthenticatorStatus">
+          <i-input v-model="formPassword.google" maxlength="30" placeholder="Enter your account name"></i-input>
+        </form-item>
       </i-form>
       <div slot="footer">
         <i-button type="text" @click="handleReset('formPassword')" style="margin-left: 8px">取消</i-button>
@@ -247,20 +241,14 @@
         <form-item label="邮箱验证码" prop="verify">
           <i-input v-model="formEmail.verify" maxlength="30" placeholder="Enter your Email number"></i-input>
         </form-item>
-        <Tabs v-model="tabVerifyActive">
-          <tab-pane :label="$t('googleAuth')" name="1" v-if="user.googleAuthenticatorStatus">
-            <form-item label="" prop="google">
-              <i-input v-model="formEmail.google" maxlength="30" placeholder="Enter your account name"></i-input>
-            </form-item>
-          </tab-pane>
-          <tab-pane :label="$t('phoneAuth')" name="2" v-if="user.mobileAuthenticatorStatus">
-            <form-item label="" prop="phone">
-              <i-input v-model="formEmail.phone" maxlength="6" placeholder="Enter your phone number">
-                <i-button slot="append" @click="sendMessage('Email', 8)" :disabled="sendDisabledEmail">{{ sendPlaceholderEmail }}</i-button>
-              </i-input>
-            </form-item>
-          </tab-pane>
-        </Tabs>
+        <form-item :label="$t('phoneAuth')" prop="phone" v-if="user.mobileAuthenticatorStatus">
+          <i-input v-model="formEmail.phone" maxlength="6" placeholder="Enter your phone number">
+            <i-button slot="append" @click="sendMessage('Email', 8)" :disabled="sendDisabledEmail">{{ sendPlaceholderEmail }}</i-button>
+          </i-input>
+        </form-item>
+        <form-item :label="$t('googleAuth')" prop="google" v-if="user.googleAuthenticatorStatus">
+          <i-input v-model="formEmail.google" maxlength="30" placeholder="Enter your account name"></i-input>
+        </form-item>
       </i-form>
       <div slot="footer">
         <i-button type="text" @click="handleReset('formEmail')" style="margin-left: 8px">取消</i-button>
