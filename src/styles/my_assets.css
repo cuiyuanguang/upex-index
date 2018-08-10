@@ -5,6 +5,7 @@
 .order-wrap-bg {
   background: #fff;
   margin-top: 20px;
+  margin-bottom: 20px;
   padding-bottom: 20px;
 }
 
@@ -74,11 +75,12 @@
 
 .order-wrap-top-li-bottom-wrap .left-wrap {
   width:134px;
+  margin-right: 12px;
   float: left;
 }
 
 .order-wrap-top-li-bottom-wrap .right-wrap {
-  width:134px;
+  width:150px;
   float: left;
 }
 

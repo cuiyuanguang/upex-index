@@ -22,7 +22,7 @@
             </div>
             <div class="right-wrap">
               <div class="order-wrap-top-button">Deposit</div>
-              <div class="order-wrap-top-button">Withdrawal</div>
+              <div class="order-wrap-top-button" @click="runWithdrawal">Withdrawal</div>
             </div>
           </div>
           <div class="order-wrap-top-li-bottom-wrap">
@@ -44,7 +44,7 @@
             </div>
             <div class="right-wrap">
               <div class="order-wrap-top-button">Deposit</div>
-              <div class="order-wrap-top-button">Withdrawal</div>
+              <div class="order-wrap-top-button"  @click="runWithdrawal">Withdrawal</div>
             </div>
           </div>
           <div class="order-wrap-top-li-bottom-wrap">
@@ -66,7 +66,7 @@
             </div>
             <div class="right-wrap">
               <div class="order-wrap-top-button">Deposit</div>
-              <div class="order-wrap-top-button">Withdrawal</div>
+              <div class="order-wrap-top-button"  @click="runWithdrawal">Withdrawal</div>
             </div>
           </div>
           <div class="order-wrap-top-li-bottom-wrap">
@@ -83,7 +83,7 @@
       </ul>
       <h2 class="order-wrap-h2">
         <span class="order-wrap-h2-gray">Asset folding</span>
-        <span class="order-wrap-h2-black">{{AssetFoldingBTC}} ≈ 12000.36 SAR</span>
+        <span class="order-wrap-h2-black" v-show="getBTCToSAR">{{AssetFoldingBTCText}}</span>
       </h2>
     </div>
     <div class="order-wrap-bg">
@@ -91,21 +91,36 @@
       <div class="order-table-wrap">
         <tabs value="name1" v-model="orderWrapTable">
           <tab-pane label="Recent record" name="name1">
-            <i-table :columns="columns1" :data="data1" size="small" no-data-text="没有数据" :loading="tableLoading"></i-table>
-            <div style="margin: 10px;overflow: hidden">
+            <i-table :columns="columns1" :data="data1" size="small" no-data-text="没有数据" :loading="tableLoading1"></i-table>
+            <div style="margin: 10px;overflow: hidden" v-show ="data1Page > 10">
               <div style="float: right;">
-                <Page :total="100" :current="1" @on-change="changePageAll"></Page>
+                <Page :total="data1Page" @on-change="changePageAll"></Page>
               </div>
             </div>
           </tab-pane>
           <tab-pane label="Deposit record" name="name2">
-            <i-table :columns="columns2" :data="data2" size="small" no-data-text="没有数据"></i-table>
+            <i-table :columns="columns2" :data="data2" size="small" no-data-text="没有数据" :loading="tableLoading2"></i-table>
+            <div style="margin: 10px;overflow: hidden" v-show ="data2Page > 10">
+              <div style="float: right;">
+                <Page :total="data2Page" @on-change="changePageDeposit"></Page>
+              </div>
+            </div>
           </tab-pane>
           <tab-pane label="Withdrawal record" name="name3">
-            <i-table :columns="columns3" :data="data3" size="small" no-data-text="没有数据"></i-table>
+            <i-table :columns="columns3" :data="data3" size="small" no-data-text="没有数据" :loading="tableLoading3"></i-table>
+            <div style="margin: 10px;overflow: hidden" v-show ="data3Page > 10">
+              <div style="float: right;">
+                <Page :total="data3Page" @on-change="changeWithDraw"></Page>
+              </div>
+            </div>
           </tab-pane>
           <tab-pane label="Other records" name="name4">
-            <i-table :columns="columns4" :data="data4" size="small" no-data-text="没有数据"></i-table>
+            <i-table :columns="columns4" :data="data4" size="small" no-data-text="没有数据" :loading="tableLoading4"></i-table>
+            <div style="margin: 10px;overflow: hidden" v-show ="data4Page > 10">
+              <div style="float: right;">
+                <Page :total="data4Page" @on-change="changeOtherTransfer"></Page>
+              </div>
+            </div>
           </tab-pane>
         </tabs>
       </div>

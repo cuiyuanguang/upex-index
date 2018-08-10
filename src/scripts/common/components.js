@@ -3090,10 +3090,10 @@ var o_header = {
 var row_my_assets = {
   template: `
      <div>
-        <Row class="expand-row">
-            <Col span="8">
+        <Row>
+            <Col >
                 <span class="expand-key">TXid: </span>
-                <span class="expand-value">{{ row.TXid }}</span>
+                <span class="expand-value">{{ row.txid }}</span>
             </Col>
         </Row>
      </div>
@@ -3101,4 +3101,31 @@ var row_my_assets = {
   props: {
     row: Object
   }
-}
+};
+var row_my_assets_with = {
+  template: `
+     <div>
+        <Row class="expand-row">
+            <Col >
+                <span class="expand-key">Withdrawal address: </span>
+                <span class="expand-value">{{ row.addressTo }}</span>
+            </Col>
+        </Row>
+         <Row class="expand-row">
+            <Col >
+                <span class="expand-key">Fees : </span>
+                <span class="expand-value">{{ row.amount }}</span>
+            </Col>
+        </Row>
+         <Row class="expand-row">
+            <Col >
+                <span class="expand-key">TXid: </span>
+                <span class="expand-value">{{ row.txid }}</span>
+            </Col>
+        </Row>
+     </div>
+`,
+  props: {
+    row: Object
+  }
+};

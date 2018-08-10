@@ -9,22 +9,23 @@ var myAssets = new Vue({
   i18n: i18n,
   components: {
     oHeader: o_header,
-    row_my_assets
+    row_my_assets,
+    row_my_assets_with
   },
   data: {
-    tableLoading: true,
     balance: {
       BTC: {},
       ETH: {},
       USDT: {},
     },
-    PageAll: 1,
-    AssetFoldingBTC: '0.156346',
+    AssetFoldingBTC: 0,
+    AssetFoldingBTCText:'',
+    getBTCToSARLoding:false,
     orderWrapTable: '',
     columns1: [
       {
         title: 'Time',
-        key: 'time',
+        key: 'createdAt',
         align: 'center'
       },
       {
@@ -42,33 +43,28 @@ var myAssets = new Vue({
         key: 'amount',
         align: 'center'
       },
-      {
-        title: 'Status',
-        key: 'status',
-        align: 'center'
-      },
-      {
-        title: 'Operating',
-        type: 'expand',
-        render: (h, params) => {
-          return h(row_my_assets, {
-            props: {
-              row: params.row,
-            }
-          })
-        },
-        align: 'center'
-      },
+      // {
+      //   title: 'Operating',
+      //   type: 'expand',
+      //   render: (h, params) => {
+      //     return h(row_my_assets, {
+      //       props: {
+      //         row: params.row,
+      //       }
+      //     })
+      //   },
+      //   align: 'center'
+      // },
     ],
     columns2: [
       {
         title: 'Time',
-        key: 'time',
+        key: 'createdAt',
         align: 'center'
       },
       {
         title: 'Currency',
-        key: 'currency',
+        key: 'symbol',
         align: 'center'
       },
       {
@@ -102,12 +98,12 @@ var myAssets = new Vue({
     columns3: [
       {
         title: 'Time',
-        key: 'time',
+        key: 'createdAt',
         align: 'center'
       },
       {
         title: 'Currency',
-        key: 'currency',
+        key: 'symbol',
         align: 'center'
       },
       {
@@ -129,7 +125,7 @@ var myAssets = new Vue({
         title: 'Operating',
         type: 'expand',
         render: (h, params) => {
-          return h(row_my_assets, {
+          return h(row_my_assets_with, {
             props: {
               row: params.row,
             }
@@ -141,7 +137,7 @@ var myAssets = new Vue({
     columns4: [
       {
         title: 'Time',
-        key: 'time',
+        key: 'createdAt',
         align: 'center'
       },
       {
@@ -159,68 +155,44 @@ var myAssets = new Vue({
         key: 'amount',
         align: 'center'
       },
-      {
-        title: 'Status',
-        key: 'status',
-        align: 'center'
-      },
-      {
-        title: 'Operating',
-        type: 'expand',
-        render: (h, params) => {
-          return h(row_my_assets, {
-            props: {
-              row: params.row,
-            }
-          })
-        },
-        align: 'center'
-      },
+      // {
+      //   title: 'Operating',
+      //   type: 'expand',
+      //   render: (h, params) => {
+      //     return h(row_my_assets, {
+      //       props: {
+      //         row: params.row,
+      //       }
+      //     })
+      //   },
+      //   align: 'center'
+      // },
     ],
-    data1: [
-      {
-        time: 'John Brown',
-        currency: 18,
-        type: 'New York No. 1 Lake Park',
-        amount: 'Data engineer',
-        status: 'badminton',
-        TXid: '12312312312312312312312313123',
-      },
-      {
-        time: 'John Brown',
-        currency: 13128,
-        type: 'New York No. 1 Lake Park',
-        amount: 'Data engineer',
-        status: 'badminton',
-        TXid: '12312312312312312312312313123',
-      },
-      {
-        time: 'John Brown',
-        currency: 11238,
-        type: 'New York No. 1 Lake Park',
-        amount: 'Data engineer',
-        status: 'badminton',
-        TXid: '12312312312312312312312313123',
-      },
-      {
-        time: 'John Brown',
-        currency: 11328,
-        type: 'New York No. 1 Lake Park',
-        amount: 'Data engineer',
-        status: 'badminton',
-        TXid: '12312312312312312312312313123',
-      }
-    ],
+    data1: [],
     data2: [],
     data3: [],
     data4: [],
+    data1Page: 1,
+    data2Page: 1,
+    data3Page: 1,
+    data4Page: 1,
+    tableLoading1: true,
+    tableLoading2: true,
+    tableLoading3: true,
+    tableLoading4: true,
+    BTCToSAR:''
   },
   methods: {
+    //跳转With
+    runWithdrawal(){
+      window.location.href= "otc_my_assets_withdrawal.html"
+    },
+
+    //获取头部数据
     getUserBalance() {
       var that = this;
       post('api/finance/account_balance', {}, false).then((res) => {
         if (res) {
-          that.tableLoading = false;
           for (const i in res.allCoinMap) {
             if (i === 'BTC') {
               that.$set(that.balance.BTC, 'total_balance', res.allCoinMap[i].total_balance)
@@ -236,51 +208,128 @@ var myAssets = new Vue({
               that.$set(that.balance.USDT, 'normal_balance', res.allCoinMap[i].normal_balance)
             }
           }
+          that.getBTCToSAR()
         }
+      })
+    },
+    //获取btc--sar汇率
+    getBTCToSAR(){
+      var that = this;
+      post('api/common/rate', {}, false).then((res) => {
+        that.getBTCToSARLoding = true;
+        that.BTCToSAR = res.rate.BTC2SAR;
+        that.AssetFoldingBTC =(that.balance.BTC.total_balance / res.rate.BTC2SAR).toFixed(2);
+        that.AssetFoldingBTCText = that.balance.BTC.total_balance+ 'BTC ≈ '+that.AssetFoldingBTC+'SAR';
       })
     },
     //全部
     getUserAllList(page) {
       var that = this;
-      that.tableLoading = true;
+      that.tableLoading1 = true;
       var data;
       data = {
         pageSize: 10,
-        page: page
+        page: page || 1
       };
-      post('api/record/deposit_list', JSON.stringify(data), false).then((res) => {
-        that.tableLoading = false;
+      post('api/record/record_list', JSON.stringify(data), false).then((res) => {
+        that.tableLoading1 = false;
+        that.data1 = res.financeList;
+        that.data1Page = res.count;
       })
     },
     changePageAll(page) {
-      this.pageAll = page;
-      this.getUserAllList(this.pageAll)
+      this.getUserAllList(page)
     },
     //充值
-    getUserDepositList() {
+    getUserDepositList(page) {
       var that = this;
-      post('api/record/deposit_list', {}, false).then((res) => {
-        console.log(res)
+      that.tableLoading2 = true;
+      var data;
+      data = {
+        pageSize: 10,
+        page: page || 1
+      };
+      post('api/record/deposit_list', JSON.stringify(data), false).then((res) => {
+        that.tableLoading2 = false;
+        that.data2 = res.financeList;
+        that.data2Page = res.count;
+        for (var i = 0; i < res.financeList.length; i++) {
+          if(res.financeList[i].status === 0){
+            that.$set(that.data2[i], 'status', '未确认')
+          }else if(res.financeList[i].status === 1){
+            that.$set(that.data2[i], 'status', '已完成')
+          }else if(res.financeList[i].status === 2){
+            that.$set(that.data2[i], 'status', '异常')
+          }
+          that.$set(that.data2[i], 'type', 'deposit')
+        }
       })
+    },
+    changePageDeposit(page) {
+      this.getUserDepositList(page)
     },
     //提现
-    getUserWithDrawList() {
+    getUserWithDrawList(page) {
       var that = this;
-      post('api/record/withDraw_list', {}, false).then((res) => {
-        console.log(res)
+      that.tableLoading3 = true;
+      var data;
+      data = {
+        pageSize: 10,
+        page: page || 1
+      };
+      post('api/record/withdraw_list', JSON.stringify(data), false).then((res) => {
+        that.data3 = res.financeList;
+        that.tableLoading3 = false;
+        that.data3Page = res.count;
+        for (var i = 0; i < res.financeList.length; i++) {
+          if(res.financeList[i].status === 0){
+            that.$set(that.data3[i], 'status', '未审核')
+          }else if(res.financeList[i].status === 1){
+            that.$set(that.data3[i], 'status', '审核通过')
+          }else if(res.financeList[i].status === 2){
+            that.$set(that.data3[i], 'status', '审核拒绝')
+          }else if(res.financeList[i].status === 3){
+            that.$set(that.data3[i], 'status', '支付中已经打币')
+          }else if(res.financeList[i].status === 4){
+            that.$set(that.data3[i], 'status', '支付失败')
+          }else if(res.financeList[i].status === 5){
+            that.$set(that.data3[i], 'status', '已完成')
+          }else if(res.financeList[i].status === 6){
+            that.$set(that.data3[i], 'status', '已撤销')
+          }
+          that.$set(that.data3[i], 'type', 'Withdrawal')
+        }
       })
     },
+    changeWithDraw(page) {
+      this.getUserWithDrawList(page)
+    },
     //其他
-    getUserOtherTransferList() {
+    getUserOtherTransferList(page) {
       var that = this;
-      post('api/record/other_transfer_list', {}, false).then((res) => {
-        console.log(res)
+      that.tableLoading4 = true;
+      var data;
+      data = {
+        pageSize: 10,
+        page: page || 1
+      };
+      post('api/record/other_transfer_list', JSON.stringify(data), false).then((res) => {
+        that.data4 = res.financeList;
+        that.tableLoading4 = false;
+        that.data4Page = res.count;
       })
+    },
+    changeOtherTransfer(page) {
+      this.getUserOtherTransferList(page)
     },
   },
   mounted() {
     this.getUserBalance();
-    this.getUserAllList()
+    this.getUserAllList();
+    this.getUserDepositList();
+    this.getUserWithDrawList();
+    this.getUserOtherTransferList();
+
   },
   filters: {},
   watch: {
