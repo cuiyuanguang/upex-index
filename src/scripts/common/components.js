@@ -2483,8 +2483,346 @@ var o_my_retrievePwd = {
     },
   }
 };
-// header
 
+var o_find_password = {
+  template: `
+    <div class="authority">
+      <Form ref="formFind" :model="formFind" :rules="ruleFind" v-show="current === 0">
+        <Tabs v-model="findType" :class="spread ? 'spreaded' : ''">
+          <TabPane label="E-mail" name="email">
+            <FormItem prop="email">
+              <Input
+                type="text"
+                size="large"
+                :maxlength="30"
+                v-model="formFind.email"
+                placeholder="请输入邮箱地址"
+              >
+              </Input>
+            </FormItem>
+          </TabPane>
+          <TabPane label="Phone" name="phone">
+            <FormItem prop="phone">
+              <Input
+                type="text"
+                size="large"
+                number
+                :maxlength="16"
+                v-model="formFind.phone"
+                placeholder="请输入手机号码"
+              >
+                <Select
+                  slot="prepend"
+                  class="country-select"
+                  v-model="countryPrefix"
+                  filterable
+                  @on-open-change="changeSelect"
+                >
+                  <Option
+                    v-for="(item, index) in country"
+                    :value="item.dialingCode"
+                    :label="item.dialingCode"
+                    :key="index"
+                  >
+                    <Row>
+                      <Col span="12" class="text-left">{{item.dialingCode}}</Col>
+                      <Col span="12" class="text-right">{{item.enName}}</Col>
+                    </Row>
+                  </Option>
+                </Select>
+              </Input>
+            </FormItem>
+            </FormItem>
+          </TabPane>
+        </Tabs>
+        <Button type="primary" size="large" long @click="handleSubmit('formFind')">下一步</Button>
+      </Form>
+      <Form ref="formReset" :model="formReset" :rules="ruleReset" v-show="current === 1">
+        <FormItem label="新密码" prop="password">
+          <Input
+            type="password"
+            size="large"
+            v-model="formReset.password"
+            placeholder="请输入新密码"
+          >
+          </Input>
+        </FormItem>
+        <FormItem label="重复密码" prop="passwordAgain">
+          <Input
+            type="password"
+            size="large"
+            v-model="formReset.passwordAgain"
+            placeholder="请再次输入新密码"
+          >
+          </Input>
+        </FormItem>
+        <FormItem label="邮箱验证" prop="verifyEmail" v-if="findType === 'email'">
+          <Input
+            type="text"
+            size="large"
+            :maxlength="6"
+            v-model="formReset.verifyEmail"
+            placeholder="请输入邮箱验证码"
+          >
+            <Button slot="append" :disabled="sendDisabledEmail" @click="sendMessageSecurity('Email', 24)">
+              {{ sendPlaceholderEmail }}
+            </Button>
+          </Input>
+        </FormItem>
+        <FormItem label="手机验证" prop="verifyPhone" v-if="findType === 'phone'">
+          <Input
+            type="text"
+            size="large"
+            number
+            :maxlength="6"
+            v-model="formReset.verifyPhone"
+            placeholder="请输入短信验证码"
+          >
+            <Button slot="append" :disabled="sendDisabledPhone" @click="sendMessageSecurity('Phone', 24)">
+              {{ sendPlaceholderPhone }}
+            </Button>
+          </Input>
+        </FormItem>
+        <FormItem label="谷歌验证" prop="verifyGoogle" v-if="googleAuthored">
+          <Input
+            type="text"
+            size="large"
+            number
+            :maxlength="6"
+            v-model="formReset.verifyGoogle"
+            placeholder="请输入谷歌验证码"
+          >
+          </Input>
+        </FormItem>
+        <Button type="primary" size="large" long @click="handleSubmit('formReset')">提交</Button>
+      </Form>
+    </div>
+  `,
+  props: {
+    show: {
+      type: Boolean,
+      default: false,
+    }
+  },
+  data() {
+    const validateEmail = (rule, value, callback) => {
+      const valueTrim = value.trim();
+      // eslint-disable-next-line
+      const reg = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
+      if (this.formFind.phone === '') {
+        if (valueTrim === '') {
+          callback(new Error('邮箱地址不能为空'));
+        } else if (!reg.test(valueTrim)) {
+          callback(new Error('邮箱地址格式不正确'));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
+    const validatePhone = (rule, value, callback) => {
+      if (this.formFind.email.trim() === '') {
+        if (value === '') {
+          callback(new Error('手机号码不能为空'));
+        } else if (!/\d+$/g.test(value)) {
+          callback(new Error('手机号码格式不正确'));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
+    const validatePassword = (rule, value, callback) => {
+      if (value.trim() === '') {
+        callback(new Error('密码不能为空'));
+      } else {
+        if (this.formReset.password !== '') {
+          // 对第二个密码框单独验证
+          this.$refs.formReset.validateField('passwordAgain');
+        }
+        callback();
+      }
+    };
+    const validatePasswordAgain = (rule, value, callback) => {
+      if (value.trim() === '') {
+        callback(new Error('请再次输入密码'));
+      } else if (value !== this.formReset.password) {
+        callback(new Error('输入与上次不匹配'));
+      } else {
+        callback();
+      }
+    };
+    const validateVerifyEmail = (rule, value, callback) => {
+      if (this.findType === 'email' && value === '') {
+        callback(new Error('邮箱验证码不能为空'));
+      } else {
+        callback();
+      }
+    };
+    const validateVerifyPhone = (rule, value, callback) => {
+      if (this.findType === 'phone' && value === '') {
+        callback(new Error('手机验证码不能为空'));
+      } else {
+        callback();
+      }
+    };
+    const validateVerifyGoogle = (rule, value, callback) => {
+      if (this.googleAuthored && value === '') {
+        callback(new Error('谷歌验证码不能为空'));
+      } else {
+        callback();
+      }
+    };
+    return {
+      current: 0,
+      findType: 'email',
+      countryPrefix: '+86',
+      spread: false,
+      googleAuthored: false,
+      token: '',
+      formFind: {
+        email: '',
+        phone: '',
+      },
+      ruleFind: {
+        email: [{ validator: validateEmail, trigger: 'blur' }],
+        phone: [{ validator: validatePhone, trigger: 'blur' }],
+      },
+      sendPlaceholderEmail: '发送验证码',
+      sendDisabledEmail: false,
+      sendPlaceholderPhone: '发送验证码',
+      sendDisabledPhone: false,
+      formReset: {
+        password: '',
+        passwordAgain: '',
+        verifyEmail: '',
+        verifyPhone: '',
+        verifyGoogle: '',
+      },
+      ruleReset: {
+        password: [{ validator: validatePassword, trigger: 'blur' }],
+        passwordAgain: [{ validator: validatePasswordAgain, trigger: 'blur' }],
+        verifyEmail: [
+          { validator: validateVerifyEmail, trigger: 'blur' },
+          { type: 'number', message: '必须输入数字', trigger: 'blur' },
+        ],
+        verifyPhone: [
+          { validator: validateVerifyPhone, trigger: 'blur' },
+          { type: 'number', message: '必须输入数字', trigger: 'blur' },
+        ],
+        verifyGoogle: [
+          { validator: validateVerifyGoogle, trigger: 'blur' },
+          { type: 'number', message: '必须输入数字', trigger: 'blur' },
+        ],
+      },
+    };
+  },
+  computed: {
+    country() {
+      return JSON.parse(localStorage.getItem('country'));
+    },
+  },
+  methods: {
+    changeSelect(value) {
+      this.spread = value;
+    },
+    handleSubmit(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          if (name === 'formFind') {
+            post('api/user/reset_password_step_one', {
+              countryCode: this.countryPrefix,
+              mobileNumber: this.formFind.phone || '',
+              email: this.formFind.email || '',
+            }, false).then(res => {
+              console.log(res);
+              if (res) {
+                this.googleAuthored = res.isGoogleAuth == 1;
+                this.token = res.token;
+                this.current += 1;
+              }
+            });
+          }
+          if (name === 'formReset') {
+            post('api/user/reset_password_step_two', {
+              token: this.token,
+              certificateNumber: '',
+              googleCode: this.formReset.verifyGoogle || '',
+            }, false).then(res => {
+              if (res) {
+                post('api/user/reset_password_step_three', {
+                  token: this.token,
+                  loginPword: this.formReset.password,
+                }).then(data => {
+                  console.log(data);
+                  if (data) {
+                    this.$parent.$emit('isretrievePwdShow', false);
+                    this.$parent.$emit('islogin', true);
+                  }
+                });
+              }
+            });
+          }
+        }
+      });
+    },
+    sendMessageSecurity: function(name, type) {
+      if (name === 'Email' && !this.formFind.email) return;
+      if (name === 'Phone' && !this.formFind.phone) return;
+      var that = this;
+      that['sendDisabled' + name] = true;
+      that['sendDisabledBind' + name] = true;
+      var api = {
+        Email: 'api/common/emailValidCode',
+        Phone: 'api/common/smsValidCode',
+      };
+      post(
+        api[name],
+        {
+          email: that.formFind.email || '',
+          countryCode: that.countryPrefix || '',
+          mobile: that.formFind.phone || '',
+          operationType: type,
+        },
+        false
+      ).then(function(res) {
+        if (res) {
+          that.countDown(name);
+        }
+      });
+    },
+    countDown(name) {
+      var that = this;
+      var counter = 60;
+      that['sendPlaceholder' + name] = counter + 's';
+      that['sendPlaceholderBind' + name] = counter + 's';
+      var timer = setInterval(function() {
+        counter -= 1;
+        that['sendPlaceholder' + name] = counter + 's';
+        that['sendPlaceholderBind' + name] = counter + 's';
+        if (counter == 0) {
+          that['sendDisabled' + name] = false;
+          that['sendDisabledBind' + name] = false;
+          that['sendPlaceholder' + name] = '重新发送';
+          that['sendPlaceholderBind' + name] = '重新发送';
+          clearInterval(timer);
+        }
+      }, 1000);
+    },
+  },
+  watch: {
+    show(newVal) {
+      if (!newVal) {
+        this.$refs['formFind'].resetFields();
+        this.$refs['formReset'].resetFields();
+        this.current = 0;
+      }
+    }
+  },
+};
+// header
 var o_header = {
   template: `
     <div id="header" class="om-header">
@@ -2584,7 +2922,9 @@ var o_header = {
       ></myloginnext>
       <myregister :register="isregister"></myregister>
       <myregistergoogle :register-google="isRegisterGoogleShow" :register-cookie="isregisterCookie"></myregistergoogle>
-      <myretrievepwd :retrieve-pwd="isretrievePwdShow"></myretrievepwd>
+      <Modal title="找回密码" v-model="isretrievePwdShow" width="500" footer-hide>
+        <my-find-password :show="isretrievePwdShow"></my-find-password>
+      </Modal>
     </div>
   `,
   i18n: i18nComponents,
@@ -2685,7 +3025,8 @@ var o_header = {
     myloginnext: o_my_loginNext,
     myregister: o_my_register,
     myregistergoogle: o_my_registerGoogle,
-    myretrievepwd: o_my_retrievePwd,
+    // myretrievepwd: o_my_retrievePwd,
+    myFindPassword: o_find_password,
   },
   mounted() {
     if (!localStorage.getItem('country')) {
