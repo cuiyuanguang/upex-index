@@ -1,20 +1,157 @@
-.container{
-  width:1200px;
+.container {
+  width: 1200px;
   margin: 20px auto;
 }
-.bg-white{
+
+.bg-white {
   background: #fff;
-  padding:40px;
+  padding: 40px;
 }
-.h1-text{
+
+.h1-text {
   line-height: 26px;
-  font-size:22px;
+  font-size: 22px;
   margin: 10px 0;
 }
-.wrap-gray{
-  width:100%;
+
+.wrap-gray {
+  width: 100%;
   background: #F8F8F8;
-  padding:40px;
+  padding: 40px;
   border-radius: 5px;
   margin-top: 30px;
+}
+
+.row-wrap {
+  font-size: 0;
+  margin-bottom: 30px;
+}
+
+.row-wrap:last-child {
+  margin-bottom: 0;
+}
+
+.row-wrap .row-left, .row-wrap .row-right {
+  display: inline-block;
+}
+
+.row-wrap .row-left {
+  font-size: 14px;
+  color: #333;
+  margin-right: 20px;
+  width: 130px;
+  line-height: 40px;
+  vertical-align: top;
+}
+
+.row-wrap .row-right {
+  font-size: 14px;
+}
+
+.ivu-select-large.ivu-select-single .ivu-select-selection {
+  height: 40px;
+}
+
+.ivu-select-large.ivu-select-single .ivu-select-selection .ivu-select-placeholder, .ivu-select-large.ivu-select-single .ivu-select-selection .ivu-select-selected-value {
+  height: 38px;
+  line-height: 38px;
+}
+.address{
+  color:#666;
+}
+.address-select {
+  height: 40px;
+}
+
+.address-none {
+  color: #5C95EA;
+  text-align: center;
+  width: 400px;
+  height: 40px;
+  line-height: 40px;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 1px solid #D1E1FA;
+  background: #EDF4FF;
+}
+
+.ivu-input-large {
+  height: 40px;
+}
+
+.amount-p {
+  font-size: 14px;
+  color: #666;
+  line-height: 30px;
+}
+
+.amount-error-p {
+  color: red;
+}
+
+.amount-p-title {
+  color: #999;
+}
+
+.withdrawal-button {
+  width: 170px;
+  cursor: pointer;
+  text-align: center;
+  background: #5C95EA;
+  border-radius: 4px;
+  color: #fff;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+}
+.ivu-select-large .ivu-select-item{
+  position: relative;
+}
+.address-select-wrap.ivu-select-large .ivu-select-item:last-child{
+  padding:0
+}
+.address{
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  background: #fff;
+}
+.my-select-address {
+  color: #ccc;
+}
+.ivu-modal-header{
+  padding: 20px 30px;
+}
+.ivu-modal-close{
+  right: 24px;
+  top: 14px;
+}
+.ivu-modal-body{
+  padding:30px 50px 0;
+}
+.modal-title{
+  font-size:14px;
+  line-height: 16px;
+  margin-bottom: 12px;
+}
+.modal-input .ivu-input{
+  background: #fafafa;
+}
+.WithdrawalAddressn-error{
+  height:30px;
+  line-height:30px;
+  color:red;
+  font-size:14px;
+}
+.ivu-modal-footer{
+  border-top:none;
+  padding:0 50px 50px;
+}
+.vertical-center-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ivu-modal{
+  top: 0;
 }
