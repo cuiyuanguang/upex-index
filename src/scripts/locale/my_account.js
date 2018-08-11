@@ -56,6 +56,10 @@ var messages = {
     zh: '绑定',
     en: 'Bind',
   },
+  unbind: {
+    zh: '解除绑定',
+    en: 'UnBind'
+  },
   change: {
     zh: '修改',
     en: 'Change',

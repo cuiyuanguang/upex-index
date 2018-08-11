@@ -13,16 +13,38 @@ var account = new Vue({
   },
   data() {
     // 自定义表单验证
+    var validateEmailSecurity = (rule, value, callback) => {
+      const valueTrim = value.trim();
+      // eslint-disable-next-line
+      const reg = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
+      if (this.user.email) {
+        if (valueTrim === '') {
+          callback(new Error(this.$t('canNotBeEmpty')));
+        } else if (!reg.test(valueTrim)) {
+          callback(new Error('邮箱地址格式不正确'));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
     var validateGoogleSecurity = (rule, value, callback) => {
-      if (this.user.googleAuthenticatorStatus && value === '') {
+      if (this.user.googleStatus && value === '') {
         callback(new Error(this.$t('canNotBeEmpty')));
       } else {
         callback();
       }
     };
     var validatePhoneSecurity = (rule, value, callback) => {
-      if (this.user.mobileAuthenticatorStatus && value === '') {
-        callback(new Error(this.$t('canNotBeEmpty')));
+      if (this.user.mobileNumber) {
+        if (value === '') {
+          callback(new Error(this.$t('canNotBeEmpty')));
+        } else if (!/\d+$/g.test(value)) {
+          callback(new Error('手机号码格式不正确'));
+        } else {
+          callback();
+        }
       } else {
         callback();
       }
@@ -42,8 +64,11 @@ var account = new Vue({
       }
     };
     var validatePass = (rule, value, callback) => {
-      if (value === '') {
+      const valueTrim = value.trim();
+      if (valueTrim === '') {
         callback(new Error(this.$t('canNotBeEmpty')));
+      } else if (valueTrim.length > 18 || valueTrim.length < 6) {
+        callback(new Error('请输入6到18位长度的密码'));
       } else {
         if (this.formPassword.passwordNew !== '') {
           // 对第二个密码框单独验证
@@ -63,10 +88,7 @@ var account = new Vue({
     };
     return {
       locale: 'zh',
-      user: {
-        usdtAmount: {},
-        userExtView: {},
-      },
+      user: {},
       googleStatus: '',
       sendPlaceholderPassword: '发送验证码',
       sendDisabledPassword: false,
@@ -74,6 +96,8 @@ var account = new Vue({
       sendDisabledGoogle: false,
       sendPlaceholderBindEmail: '发送验证码',
       sendDisabledBindEmail: false,
+      sendPlaceholderOldEmail: '发送验证码',
+      sendDisabledOldEmail: false,
       sendPlaceholderEmail: '发送验证码',
       sendDisabledEmail: false,
       sendPlaceholderOldPhone: '发送验证码',
@@ -97,6 +121,7 @@ var account = new Vue({
         password: '',
         passwordNew: '',
         passwordReNew: '',
+        email: '',
         google: '',
         phone: '',
       },
@@ -104,6 +129,7 @@ var account = new Vue({
         password: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
         passwordNew: [{ required: true, validator: validatePass, trigger: 'blur' }],
         passwordReNew: [{ required: true, validator: validatePassCheck, trigger: 'blur' }],
+        email: [{ validator: validateEmailSecurity, trigger: 'blur' }],
         google: [{ name: 'formPassword', validator: validateGoogleSecurity, trigger: 'blur' }],
         phone: [{ name: 'formPassword', validator: validatePhoneSecurity, trigger: 'blur' }],
       },
@@ -123,12 +149,14 @@ var account = new Vue({
       // 绑定/修改邮箱
       modalEmail: false,
       formEmail: {
+        oldEmail: '',
         email: '',
         verify: '',
         google: '',
         phone: '',
       },
       ruleEmail: {
+        oldEmail: [{ name: 'formEmail', validator: validateEmailSecurity, trigger: 'blur' }],
         email: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
         verify: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
         google: [{ name: 'formEmail', validator: validateGoogleSecurity, trigger: 'blur' }],
@@ -378,9 +406,8 @@ var account = new Vue({
   methods: {
     getUserInfo() {
       var that = this;
-      get('api/userInfo').then(function(res) {
+      post('api/common/user_info', '', false).then(function(res) {
         that.user = res;
-        that.googleStatus = !!res.googleAuthenticatorStatus;
       });
     },
     loginOut() {
@@ -397,7 +424,7 @@ var account = new Vue({
       });
     },
     modifyWhatsApp() {
-      var whatsAppStr = this.user.userExtView.watchapp;
+      var whatsAppStr = this.user.watchapp;
       this.formWhatsApp.number = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1);
       this.modalWhatsApp = true;
     },
@@ -405,9 +432,9 @@ var account = new Vue({
       this.modalGoogle = true;
     },
     modifyEmail() {
-      if (this.user.email) {
-        this.formEmail.email = data;
-      }
+      // if (this.user.email) {
+      //   this.formEmail.email = this.user.email;
+      // }
       this.modalEmail = true;
     },
     modifyPhone() {
@@ -489,15 +516,16 @@ var account = new Vue({
             }).then(function(res) {
               if (res) {
                 that.modalGoogle = false;
-                that.googleStatus = false;
+                that.getUserInfo();
               }
             });
           }
           if (name === 'formEmail') {
             var emailApi = that.user.email ? 'api/user/email_update' : 'api/user/email_bind_save';
             post(emailApi, {
+              emailOldValidCode: that.formEmail.oldEmail,
               email: that.formEmail.email,
-              emailValidCode: that.formEmail.verify,
+              emailNewValidCode: that.formEmail.verify,
               smsValidCode: that.formEmail.phone,
               googleCode: that.formEmail.google,
             }).then(function(res) {
@@ -508,14 +536,15 @@ var account = new Vue({
             });
           }
           if (name === 'formPhone') {
-            var phoneApi = that.user.mobileAuthenticatorStatus
+            var phoneApi = that.user.mobileNumber
               ? 'api/user/mobile_update'
               : 'api/user/mobile_bind_save';
             post(phoneApi, {
+              authenticationCode: that.formPhone.oldVerify,
               countryCode: that.selectCountry,
               mobileNumber: that.formPhone.phone,
               smsAuthCode: that.formPhone.verify,
-              authenticationCode: that.formPhone.google,
+              googleCode: that.formPhone.google,
             }).then(function(res) {
               if (res) {
                 that.modalPhone = false;
@@ -583,6 +612,8 @@ var account = new Vue({
       get('api/verifycode_sms', { type: type }).then(function(res) {
         if (res) {
           that.countDown(name);
+        } else {
+          that['sendDisabled' + name] = false;
         }
       });
     },
@@ -591,18 +622,16 @@ var account = new Vue({
       if (name === 'NewPhone' && !this.formPhone.phone) return;
       var that = this;
       that['sendDisabled' + name] = true;
-      that['sendDisabledBind' + name] = true;
-      var api = {
-        Google: 'api/common/smsValidCode',
-        Email: 'api/common/emailValidCode',
-        NewPhone: 'api/common/emailValidCode',
-      };
+      var api = 'api/common/smsValidCode';
+      if (name.indexOf('Email') !== -1) {
+        api = 'api/common/emailValidCode';
+      }
       post(
-        api[name],
+        api,
         {
           email: that.formEmail.email || '',
           countryCode: that.selectCountry || '',
-          mobile: that.user.hideMobileNumber || '',
+          mobile: that.formPhone.phone || '',
           operationType: type,
         },
         false
@@ -616,16 +645,12 @@ var account = new Vue({
       var that = this;
       var counter = 60;
       that['sendPlaceholder' + name] = counter + 's';
-      that['sendPlaceholderBind' + name] = counter + 's';
       var timer = setInterval(function() {
         counter -= 1;
         that['sendPlaceholder' + name] = counter + 's';
-        that['sendPlaceholderBind' + name] = counter + 's';
         if (counter == 0) {
           that['sendDisabled' + name] = false;
-          that['sendDisabledBind' + name] = false;
           that['sendPlaceholder' + name] = '重新发送';
-          that['sendPlaceholderBind' + name] = '重新发送';
           clearInterval(timer);
         }
       }, 1000);
