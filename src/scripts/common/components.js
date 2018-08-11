@@ -2486,117 +2486,120 @@ var o_my_retrievePwd = {
 
 var o_find_password = {
   template: `
-    <div class="authority">
-      <Form ref="formFind" :model="formFind" :rules="ruleFind" v-show="current === 0">
-        <Tabs v-model="findType" :class="spread ? 'spreaded' : ''">
-          <TabPane label="E-mail" name="email">
-            <FormItem prop="email">
-              <Input
-                type="text"
-                size="large"
-                :maxlength="30"
-                v-model="formFind.email"
-                placeholder="请输入邮箱地址"
-              >
-              </Input>
-            </FormItem>
-          </TabPane>
-          <TabPane label="Phone" name="phone">
-            <FormItem prop="phone">
-              <Input
-                type="text"
-                size="large"
-                number
-                :maxlength="16"
-                v-model="formFind.phone"
-                placeholder="请输入手机号码"
-              >
-                <Select
-                  slot="prepend"
-                  class="country-select"
-                  v-model="countryPrefix"
-                  filterable
-                  @on-open-change="changeSelect"
+    <Modal title="找回密码" v-model="show" width="500" footer-hide>
+      <div class="authority">
+        <Form ref="formFind" :model="formFind" :rules="ruleFind" v-show="current === 0">
+          <Tabs v-model="findType" :class="spread ? 'spreaded' : ''">
+            <TabPane label="E-mail" name="email">
+              <FormItem prop="email">
+                <Input
+                  type="text"
+                  size="large"
+                  :maxlength="30"
+                  v-model="formFind.email"
+                  placeholder="请输入邮箱地址"
                 >
-                  <Option
-                    v-for="(item, index) in country"
-                    :value="item.dialingCode"
-                    :label="item.dialingCode"
-                    :key="index"
+                </Input>
+              </FormItem>
+            </TabPane>
+            <TabPane label="Phone" name="phone">
+              <FormItem prop="phone">
+                <Input
+                  type="text"
+                  size="large"
+                  number
+                  :maxlength="16"
+                  v-model="formFind.phone"
+                  placeholder="请输入手机号码"
+                >
+                  <Select
+                    slot="prepend"
+                    class="country-select"
+                    v-model="countryPrefix"
+                    filterable
+                    @on-open-change="changeSelect"
                   >
-                    <Row>
-                      <Col span="12" class="text-left">{{item.dialingCode}}</Col>
-                      <Col span="12" class="text-right">{{item.enName}}</Col>
-                    </Row>
-                  </Option>
-                </Select>
-              </Input>
-            </FormItem>
-            </FormItem>
-          </TabPane>
-        </Tabs>
-        <Button type="primary" size="large" long @click="handleSubmit('formFind')">下一步</Button>
-      </Form>
-      <Form ref="formReset" :model="formReset" :rules="ruleReset" v-show="current === 1">
-        <FormItem label="新密码" prop="password">
-          <Input
-            type="password"
-            size="large"
-            v-model="formReset.password"
-            placeholder="请输入新密码"
-          >
-          </Input>
-        </FormItem>
-        <FormItem label="重复密码" prop="passwordAgain">
-          <Input
-            type="password"
-            size="large"
-            v-model="formReset.passwordAgain"
-            placeholder="请再次输入新密码"
-          >
-          </Input>
-        </FormItem>
-        <FormItem label="邮箱验证" prop="verifyEmail" v-if="findType === 'email'">
-          <Input
-            type="text"
-            size="large"
-            :maxlength="6"
-            v-model="formReset.verifyEmail"
-            placeholder="请输入邮箱验证码"
-          >
-            <Button slot="append" :disabled="sendDisabledEmail" @click="sendMessageSecurity('Email', 24)">
-              {{ sendPlaceholderEmail }}
-            </Button>
-          </Input>
-        </FormItem>
-        <FormItem label="手机验证" prop="verifyPhone" v-if="findType === 'phone'">
-          <Input
-            type="text"
-            size="large"
-            number
-            :maxlength="6"
-            v-model="formReset.verifyPhone"
-            placeholder="请输入短信验证码"
-          >
-            <Button slot="append" :disabled="sendDisabledPhone" @click="sendMessageSecurity('Phone', 24)">
-              {{ sendPlaceholderPhone }}
-            </Button>
-          </Input>
-        </FormItem>
-        <FormItem label="谷歌验证" prop="verifyGoogle" v-if="googleAuthored">
-          <Input
-            type="text"
-            size="large"
-            number
-            :maxlength="6"
-            v-model="formReset.verifyGoogle"
-            placeholder="请输入谷歌验证码"
-          >
-          </Input>
-        </FormItem>
-        <Button type="primary" size="large" long @click="handleSubmit('formReset')">提交</Button>
-      </Form>
-    </div>
+                    <Option
+                      v-for="(item, index) in country"
+                      :value="item.dialingCode"
+                      :label="item.dialingCode"
+                      :key="index"
+                    >
+                      <Row>
+                        <Col span="12" class="text-left">{{item.dialingCode}}</Col>
+                        <Col span="12" class="text-right">{{item.enName}}</Col>
+                      </Row>
+                    </Option>
+                  </Select>
+                </Input>
+              </FormItem>
+              </FormItem>
+            </TabPane>
+          </Tabs>
+          <Button type="primary" size="large" long @click="handleSubmit('formFind')">下一步</Button>
+        </Form>
+        <Form ref="formReset" :model="formReset" :rules="ruleReset" v-show="current === 1">
+          <FormItem label="新密码" prop="password">
+            <Input
+              type="password"
+              size="large"
+              v-model="formReset.password"
+              placeholder="请输入新密码"
+            >
+            </Input>
+          </FormItem>
+          <FormItem label="重复密码" prop="passwordAgain">
+            <Input
+              type="password"
+              size="large"
+              v-model="formReset.passwordAgain"
+              placeholder="请再次输入新密码"
+            >
+            </Input>
+          </FormItem>
+          <FormItem label="邮箱验证" prop="verifyEmail" v-if="findType === 'email'">
+            <Input
+              type="text"
+              size="large"
+              number
+              :maxlength="6"
+              v-model="formReset.verifyEmail"
+              placeholder="请输入邮箱验证码"
+            >
+              <Button slot="append" :disabled="sendDisabledEmail" @click="sendMessageSecurity('Email', 24)">
+                {{ sendPlaceholderEmail }}
+              </Button>
+            </Input>
+          </FormItem>
+          <FormItem label="手机验证" prop="verifyPhone" v-if="findType === 'phone'">
+            <Input
+              type="text"
+              size="large"
+              number
+              :maxlength="6"
+              v-model="formReset.verifyPhone"
+              placeholder="请输入短信验证码"
+            >
+              <Button slot="append" :disabled="sendDisabledPhone" @click="sendMessageSecurity('Phone', 24)">
+                {{ sendPlaceholderPhone }}
+              </Button>
+            </Input>
+          </FormItem>
+          <FormItem label="谷歌验证" prop="verifyGoogle" v-if="googleAuthored">
+            <Input
+              type="text"
+              size="large"
+              number
+              :maxlength="6"
+              v-model="formReset.verifyGoogle"
+              placeholder="请输入谷歌验证码"
+            >
+            </Input>
+          </FormItem>
+          <Button type="primary" size="large" long @click="handleSubmit('formReset')">提交</Button>
+        </Form>
+      </div>
+    </Modal>
   `,
   props: {
     show: {
@@ -2635,8 +2638,11 @@ var o_find_password = {
       }
     };
     const validatePassword = (rule, value, callback) => {
-      if (value.trim() === '') {
+      const valueTrim = value.trim();
+      if (valueTrim === '') {
         callback(new Error('密码不能为空'));
+      } else if (valueTrim.length > 18 || valueTrim.length < 6) {
+        callback(new Error('请输入6到18位长度的密码'));
       } else {
         if (this.formReset.password !== '') {
           // 对第二个密码框单独验证
@@ -2750,13 +2756,14 @@ var o_find_password = {
               token: this.token,
               certificateNumber: '',
               googleCode: this.formReset.verifyGoogle || '',
+              smsCode: this.formReset.verifyPhone || '',
+              emailCode: this.formReset.verifyEmail || '',
             }, false).then(res => {
               if (res) {
                 post('api/user/reset_password_step_three', {
                   token: this.token,
                   loginPword: this.formReset.password,
                 }).then(data => {
-                  console.log(data);
                   if (data) {
                     this.$parent.$emit('isretrievePwdShow', false);
                     this.$parent.$emit('islogin', true);
@@ -2783,8 +2790,9 @@ var o_find_password = {
         {
           email: that.formFind.email || '',
           countryCode: that.countryPrefix || '',
-          mobile: that.formFind.phone || '',
+          mobile: '',
           operationType: type,
+          token: that.token,
         },
         false
       ).then(function(res) {
@@ -2818,6 +2826,7 @@ var o_find_password = {
         this.$refs['formFind'].resetFields();
         this.$refs['formReset'].resetFields();
         this.current = 0;
+        this.$parent.$emit('isretrievePwdShow', false);
       }
     }
   },
@@ -2922,9 +2931,7 @@ var o_header = {
       ></myloginnext>
       <myregister :register="isregister"></myregister>
       <myregistergoogle :register-google="isRegisterGoogleShow" :register-cookie="isregisterCookie"></myregistergoogle>
-      <Modal title="找回密码" v-model="isretrievePwdShow" width="500" footer-hide>
-        <my-find-password :show="isretrievePwdShow"></my-find-password>
-      </Modal>
+      <my-find-password :show="isretrievePwdShow"></my-find-password>
     </div>
   `,
   i18n: i18nComponents,
@@ -3002,7 +3009,8 @@ var o_header = {
       var that = this;
       post('api/user/login_out').then(function (res) {
         if (res) {
-          localStorage.clear();
+          localStorage.removeItem('user');
+          sessionStorage.clear();
           that.logined = false;
           if (location.pathname !== '/views/otc_adverts.html') {
             location.href = 'otc_adverts.html';
@@ -3040,6 +3048,7 @@ var o_header = {
     }
 
     if (sessionStorage.getItem('token')) {
+      this.logined = true;
       var that = this;
       get('api/personOrders/processing').then(function (result) {
         if (result) {
@@ -3050,6 +3059,8 @@ var o_header = {
           that.orders = result.rsts;
         }
       });
+    } else {
+      this.logined = false;
     }
     this.$on('logined', function (i) {
       this.logined = i;
