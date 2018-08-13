@@ -66,22 +66,26 @@ var myAssetsWithdrawal = new Vue({
         value: 'ETH'
       },
     ],
-    currencyListUSDT:[],
-    currencyListBTC:[],
-    currencyListETH:[],
+    currencyListUSDT: [],
+    currencyListBTC: [],
+    currencyListETH: [],
     valueAmount: '',
     modelAddress: '',
-    addressList: [
-
-    ],
-    addressModel:false,
+    addressList: [],
+    delStatus: true,
+    addressModel: false,
     modal_loading: false,
-    WithdrawalAddressError:false,
-    WithdrawalAddress:'',
-    WithdrawalAddressErrorText:'',
-    AddressTagError:false,
-    AddressTag:'',
-    AddressTagErrorText:'',
+    WithdrawalAddressError: false,
+    WithdrawalAddress: '',
+    WithdrawalAddressErrorText: '',
+    AddressTagError: false,
+    AddressTag: '',
+    AddressTagErrorText: '',
+    withdrawalErrorText: '',
+    balance:{},
+    balanceExtractable:'',
+    balanceLimit:'',
+    loading:false,
   },
   methods: {
     //提现
@@ -121,96 +125,138 @@ var myAssetsWithdrawal = new Vue({
       this.getUserWithDrawList(page)
     },
     //添加地址
-    addressChange(val){
-      if(this.addressList.length && val === 'Add address'){
+    addressChange(val) {
+      if (this.addressList.length && val === 'Add address') {
         this.modelAddress = this.addressList[0].val
       }
     },
     //切换第一个select
-    currencyChange(val){
-      console.log(val)
-      if(val === 'USDT'){
+    currencyChange(val) {
+      this.valueAmount = '';
+      if (val === 'USDT') {
         this.addressList = this.currencyListUSDT
-      }else if(val === 'BTC'){
+      } else if (val === 'BTC') {
         this.addressList = this.currencyListBTC
-        console.log(this.addressList)
-      }else if(val === 'ETH'){
-        console.log(this.currencyListETH)
+      } else if (val === 'ETH') {
         this.addressList = this.currencyListETH
       }
+      this.balanceExtractable = this.balance[val].normal_balance + ' ' + val
+      this.balanceLimit = this.balance[val].withdraw_min + ' ' + val
     },
     //打开添加地址页面
-    addressClick(){
+    addressClick() {
       this.addressModel = true;
     },
     //获取地址
-    getAddress(val){
+    getAddress(val) {
       var data;
       var that = this;
-      data={
-        "coinSymbol":val
+      data = {
+        "coinSymbol": val
       };
       post('api/addr/address_list', JSON.stringify(data), false).then((res) => {
-        if(val === 'USDT'){
-          that.currencyListUSDT = res.addressList;
-        }else if(val === 'BTC'){
-          that.currencyListBTC = res.addressList;
-          that.addressList = that.currencyListBTC
-          console.log(that.addressList)
-        }else if(val === 'ETH'){
-          that.currencyListETH = res.addressList;
+        if (res) {
+          if (val === 'USDT') {
+            that.currencyListUSDT = res.addressList;
+          } else if (val === 'BTC') {
+            that.currencyListBTC = res.addressList;
+          } else if (val === 'ETH') {
+            that.currencyListETH = res.addressList;
+          }
+          that.getUserBalance()
         }
       })
     },
     //删除地址
     delAddress(val) {
       var that = this;
-      for (var i = 0; i < that.addressList.length; i++) {
-        if(val === that.addressList[i].val){
-          that.addressList.splice(i,1)
+      var data;
+      if (that.delStatus) {
+        that.delStatus = false;
+        for (var i = 0; i < that.addressList.length; i++) {
+          if (val === that.addressList[i].address) {
+            data = {
+              ids: [that.addressList[i].id]
+            };
+            post('api/addr/delete_withdraw_addr', JSON.stringify(data), false).then((res) => {
+              if (res) {
+                that.addressList.splice(i - 1, 1);
+                that.modelAddress = ''
+              }
+              that.delStatus = true;
+            })
+          }
         }
       }
-      that.modelAddress = ''
+
     },
     //model
-    asyncCancel(){
+    asyncCancel() {
       this.modal_loading = false;
       this.addressModel = false;
+      this.clear()
     },
-    withdrawalAddressFocus(){
-      this.WithdrawalAddressError=false
+    //clear
+    clear() {
+      this.WithdrawalAddress = '';
+      this.AddressTag = '';
+    },
+    withdrawalAddressFocus() {
+      this.WithdrawalAddressError = false
     },
     //添加地址
-    addressFun(){
-      var that =this;
+    addressFun() {
+      var that = this;
       this.modal_loading = true;
       var data;
       data = {
-        "coinSymbol" : that.modelCurrency,
+        "coinSymbol": that.modelCurrency,
         "address": that.WithdrawalAddress,
-        "label":that.AddressTag
+        "label": that.AddressTag
       };
       post('api/addr/add_withdraw_addr', JSON.stringify(data), false).then((res) => {
-        if(res){
+        if (res) {
           that.asyncCancel();
-          this.getAddress('USDT');
-          this.getAddress('ETH');
-          this.getAddress('BTC')
+          this.getAddress(that.modelCurrency);
+        } else {
+          this.modal_loading = false;
         }
       })
     },
-    AddressTagFocus(){
-      this.AddressTagError=false
+    AddressTagFocus() {
+      this.AddressTagError = false
     },
-    AddressTagFun(){
+    AddressTagFun() {
       this.modal_loading = true;
+    },
+    withdrawal() {
+      if(this.loading){
+        if(this.valueAmount === ''|| this.valueAmount === null){
+          this.withdrawalErrorText = '不能为空'
+        }else if(isNaN(this.valueAmount) || Number(this.valueAmount) < Number(this.balance[this.modelCurrency].withdraw_min) || Number(this.valueAmount) > Number(this.balance[this.modelCurrency].normal_balance)){
+          this.withdrawalErrorText = '请输入合法的区间范围'
+        }else{
+
+        }
+      }
+    },
+    //获取用户数据
+    getUserBalance() {
+      var that = this;
+      post('api/finance/account_balance', {}, false).then((res) => {
+        if (res) {
+          that.loading = true;
+          that.balance = res.allCoinMap
+          that.currencyChange(that.modelCurrency)
+        }
+      })
     },
   },
   mounted() {
     this.getUserWithDrawList();
-    this.getAddress('USDT')
-    this.getAddress('ETH')
-    this.getAddress('BTC')
+    this.getAddress('USDT');
+    this.getAddress('ETH');
+    this.getAddress('BTC');
   },
   filters: {},
   watch: {
