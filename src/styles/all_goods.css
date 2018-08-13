@@ -104,7 +104,7 @@
   position: relative;
 }
 
-.list .buylist .seller {
+.list .buylist .avatar {
   display: inline-block;
   color: rgba(51, 51, 51, 1);
   font-size: 11px;
@@ -114,6 +114,10 @@
   border: 1px solid rgba(237, 237, 237, 1);
   text-align: center;
   border-radius: 50%;
+}
+.list .buylist .avatar.mine {
+  background-color: #EDF4FF;
+  border-color: #AEC4F2;
 }
 
 .list .buylist .price {
@@ -547,39 +551,6 @@
 }
 
 /*******************end of pending order*************************************************/
-
-.ivu-tabs-bar {
-  margin-bottom: 0;
-}
-
-.ivu-table-wrapper {
-  border: none;
-}
-
-.o-sar::before {
-  content: 'SAR';
-}
-
-.o-usdt::before {
-  content: 'USDT';
-}
-
-.o-min::before {
-  content: 'Min';
-}
-
-.o-max::before {
-  content: 'Max';
-}
-
-.ivu-modal-footer {
-  border: none;
-}
-
-.ivu-modal-body {
-  padding: 0;
-}
-
 .i-modify {
   width: 220px;
   display: inline-block;

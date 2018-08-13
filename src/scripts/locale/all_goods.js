@@ -23,6 +23,14 @@ var messages = {
     zh: '买单发布已达上限，只能发布卖单',
     en: 'buy order is up to limit, you can only release sell order',
   },
+  bindGoogleAuthMsg: {
+    zh: '为了您的账户安全，我们强烈推荐您进行谷歌验证',
+    en: 'For your account security, we strongly recommend that you turn on second verification',
+  },
+  googleAuthBtn: {
+    zh: '身份验证',
+    en: 'Google Authenticator',
+  },
   sell: {
     zh: '卖出',
     en: 'Sell',
@@ -38,6 +46,10 @@ var messages = {
   buyer: {
     zh: '买家',
     en: 'Buyer',
+  },
+  mine: {
+    zh: '我的',
+    en: 'Mine',
   },
   amount: {
     zh: '数量',
@@ -62,6 +74,46 @@ var messages = {
   operation: {
     zh: '操作',
     en: 'Operation',
+  },
+  confirm: {
+    zh: '确认',
+    en: 'Confirm',
+  },
+  cancel: {
+    zh: '取消',
+    en: 'Cancel',
+  },
+  start: {
+    zh: '开始接单',
+    en: 'Start'
+  },
+  pause: {
+    zh: '暂停接单',
+    en: 'Pause'
+  },
+  thisOrder: {
+    zh: '此订单',
+    en: 'this order',
+  },
+  unremovable: {
+    zh: '暂时不能移除',
+    en: 'Temporarily unable to remove'
+  },
+  unremovableTips: {
+    zh: '进行中的订单处理之后才能下线',
+    en: 'Pending orders, after processing, you can go offline'
+  },
+  unremovableOperation: {
+    zh: '立即处理',
+    en: 'Immediate treatment',
+  },
+  removable: {
+    zh: '移除订单',
+    en: 'Remove order'
+  },
+  removableTips: {
+    zh: '确认移除订单',
+    en: 'Confirm remove this order',
   },
   currentPrice: {
     zh: '当前市场价',
