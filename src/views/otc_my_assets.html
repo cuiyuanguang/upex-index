@@ -17,13 +17,15 @@
         <li class="li-usdt-wrap">
           <div class="order-wrap-top-li-top-wrap">
             <div class="left-wrap">
-              <span class="order-wrap-top-title">Total:</span>
-              <span class="order-wrap-top-bold">{{balance.USDT.total_balance}} USDT</span>
+              <span class="order-wrap-top-bold">USDT</span>
             </div>
             <div class="right-wrap">
               <div class="order-wrap-top-button">Deposit</div>
               <div class="order-wrap-top-button" @click="runWithdrawal">Withdrawal</div>
             </div>
+          </div>
+          <div class="order-wrap-total">
+            <span>Total</span>{{balance.BTC.total_balance}} USDT
           </div>
           <div class="order-wrap-top-li-bottom-wrap">
             <div class="left-wrap">
@@ -39,13 +41,15 @@
         <li class="li-btc-wrap">
           <div class="order-wrap-top-li-top-wrap">
             <div class="left-wrap">
-              <span class="order-wrap-top-title">Total:</span>
-              <span class="order-wrap-top-bold">{{balance.BTC.total_balance}} BTC</span>
+              <span class="order-wrap-top-bold">BTC</span>
             </div>
             <div class="right-wrap">
               <div class="order-wrap-top-button">Deposit</div>
               <div class="order-wrap-top-button"  @click="runWithdrawal">Withdrawal</div>
             </div>
+          </div>
+          <div class="order-wrap-total">
+            <span>Total</span>{{balance.BTC.total_balance}} BTC
           </div>
           <div class="order-wrap-top-li-bottom-wrap">
             <div class="left-wrap">
@@ -61,13 +65,15 @@
         <li class="li-eth-wrap">
           <div class="order-wrap-top-li-top-wrap">
             <div class="left-wrap">
-              <span class="order-wrap-top-title">Total:</span>
               <span class="order-wrap-top-bold">{{balance.ETH.total_balance}} ETH</span>
             </div>
             <div class="right-wrap">
               <div class="order-wrap-top-button">Deposit</div>
               <div class="order-wrap-top-button"  @click="runWithdrawal">Withdrawal</div>
             </div>
+          </div>
+          <div class="order-wrap-total">
+            <span>Total</span>{{balance.BTC.total_balance}} ETH
           </div>
           <div class="order-wrap-top-li-bottom-wrap">
             <div class="left-wrap">

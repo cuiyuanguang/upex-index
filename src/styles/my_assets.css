@@ -17,24 +17,40 @@
   padding: 0 40px;
 }
 
+.order-wrap-total {
+  font-size: 16px;
+  margin-top: 23px;
+  color:#fff;
+  font-weight: bold;
+  line-height: 19px;
+}
+.order-wrap-total span{
+  font-weight: normal;
+  font-size:12px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
 .order-wrap-top-ul {
   padding: 0 25px;
-  height: 121px;
+  height: 160px;
 }
 
 .order-wrap-top-ul li {
   margin-right: 20px;
-  height: 121px;
+  height: 160px;
   width: 370px;
-  padding: 23px 10px 15px 62px;
+  padding: 17px 14px 0 14px;
   float: left;
 }
+
 .order-wrap-top-ul li:last-child {
   margin-right: 0;
 }
+
 .order-wrap-top-li-top-wrap {
   height: 24px;
   line-height: 24px;
+  padding-left: 36px;
 }
 
 .order-wrap-top-li-top-wrap .left-wrap {
@@ -69,57 +85,67 @@
 }
 
 .order-wrap-top-li-bottom-wrap {
+  overflow: hidden;
   margin-top: 17px;
   color: #F2F6FF;
 }
 
 .order-wrap-top-li-bottom-wrap .left-wrap {
-  width:134px;
+  width: 134px;
   margin-right: 12px;
   float: left;
 }
 
 .order-wrap-top-li-bottom-wrap .right-wrap {
-  width:150px;
+  width: 150px;
   float: left;
 }
 
 .li-usdt-wrap {
   background-image: url("../images/assest-usdt.png");
 }
-.li-btc-wrap{
+
+.li-btc-wrap {
   background-image: url("../images/assest-btc.png");
 }
-.li-eth-wrap{
+
+.li-eth-wrap {
   background-image: url("../images/assest-eth.png");
 }
 
-.order-wrap-h2{
-  height:30px;
-  line-height:30px;
+.order-wrap-h2 {
+  height: 30px;
+  line-height: 30px;
   margin-top: 30px;
   margin-bottom: 10px;
-  padding:0 40px;
+  padding: 0 40px;
 }
-.order-wrap-h2-gray{
-  font-size:16px;
-  color:#999;
+
+.order-wrap-h2-gray {
+  font-size: 16px;
+  color: #999;
 }
-.order-wrap-h2-black{
-  font-size:24px;
-  color:#333;
+
+.order-wrap-h2-black {
+  font-size: 24px;
+  color: #333;
   vertical-align: middle;
 }
-.order-table-wrap{
-  padding:0 40px;
+
+.order-table-wrap {
+  padding: 0 40px;
 }
-.ivu-tabs-bar{
+
+.ivu-tabs-bar {
   border-bottom: none;
 }
-.ivu-tabs-nav .ivu-tabs-tab{
-  padding:9px 0;
+
+.ivu-tabs-nav .ivu-tabs-tab {
+  padding: 9px 0;
 }
-td.ivu-table-expanded-cell{
-  padding:20px 80px;
-  color:#667386;
+
+td.ivu-table-expanded-cell {
+  padding: 20px 80px;
+  color: #667386;
 }
+

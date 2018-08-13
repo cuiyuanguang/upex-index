@@ -11,7 +11,10 @@
         "build": "gulp build",
         "clean": "gulp clean"
     },
-    "dependencies": {},
+    "dependencies": {
+        "vue-clipboard2": "^0.2.1",
+        "vue-recaptcha": "^1.1.1"
+    },
     "devDependencies": {
         "autoprefixer": "^9.0.0",
         "babel-core": "^6.26.3",
