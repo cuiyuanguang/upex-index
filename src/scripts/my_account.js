@@ -21,7 +21,7 @@ var account = new Vue({
         if (valueTrim === '') {
           callback(new Error(this.$t('canNotBeEmpty')));
         } else if (!reg.test(valueTrim)) {
-          callback(new Error('邮箱地址格式不正确'));
+          callback(new Error('Email ' + this.$t('formatError')));
         } else {
           callback();
         }
@@ -41,7 +41,7 @@ var account = new Vue({
         if (value === '') {
           callback(new Error(this.$t('canNotBeEmpty')));
         } else if (!/\d+$/g.test(value)) {
-          callback(new Error('手机号码格式不正确'));
+          callback(new Error(this.$t('phone') + ' ' + this.$t('formatError')));
         } else {
           callback();
         }
@@ -68,7 +68,7 @@ var account = new Vue({
       if (valueTrim === '') {
         callback(new Error(this.$t('canNotBeEmpty')));
       } else if (valueTrim.length > 18 || valueTrim.length < 6) {
-        callback(new Error('请输入6到18位长度的密码'));
+        callback(new Error(this.$t('six2eighteen')));
       } else {
         if (this.formPassword.passwordNew !== '') {
           // 对第二个密码框单独验证
@@ -90,21 +90,19 @@ var account = new Vue({
       locale: 'zh',
       user: {},
       googleStatus: '',
-      sendPlaceholderPassword: '发送验证码',
+      sendPlaceholderPassword: this.$t('sendVerify'),
       sendDisabledPassword: false,
-      sendPlaceholderGoogle: '发送验证码',
+      sendPlaceholderGoogle: this.$t('sendVerify'),
       sendDisabledGoogle: false,
-      sendPlaceholderBindEmail: '发送验证码',
-      sendDisabledBindEmail: false,
-      sendPlaceholderOldEmail: '发送验证码',
+      sendPlaceholderOldEmail: this.$t('sendVerify'),
       sendDisabledOldEmail: false,
-      sendPlaceholderEmail: '发送验证码',
+      sendPlaceholderEmail: this.$t('sendVerify'),
       sendDisabledEmail: false,
-      sendPlaceholderOldPhone: '发送验证码',
+      sendPlaceholderOldPhone: this.$t('sendVerify'),
       sendDisabledOldPhone: false,
-      sendPlaceholderNewPhone: '发送验证码',
+      sendPlaceholderNewPhone: this.$t('sendVerify'),
       sendDisabledNewPhone: false,
-      sendPlaceholderBank: '发送验证码',
+      sendPlaceholderBank: this.$t('sendVerify'),
       sendDisabledBank: false,
       // 修改WhatsApp
       modalWhatsApp: false,
@@ -134,7 +132,6 @@ var account = new Vue({
         phone: [{ name: 'formPassword', validator: validatePhoneSecurity, trigger: 'blur' }],
       },
       // 绑定修改谷歌验证
-      isRegisterGoogleShow: false,
       modalGoogle: false,
       formGoogle: {
         google: '',
@@ -339,25 +336,22 @@ var account = new Vue({
       securityColumn: [
         {
           title: this.$t('operationTime'),
-          key: 'time',
+          key: 'formatCtime',
           align: 'center',
-          render: (h, params) => {
-            return h('span', utils.dateFormat(params.row.time));
-          },
         },
         {
           title: this.$t('operationPlat'),
-          key: 'platform',
+          key: 'networkWhere',
           align: 'center',
         },
         {
           title: this.$t('ipAddress'),
-          key: 'ipAddress',
+          key: 'optIp',
           align: 'center',
         },
         {
           title: this.$t('operationName'),
-          key: 'operation',
+          key: 'networkOperator',
           align: 'center',
         },
         {
@@ -365,32 +359,32 @@ var account = new Vue({
           key: 'status',
           align: 'center',
           render: (h, params) => {
-            return h('span', params.row.status === 1 ? this.$t('success') : this.$t('fail'));
+            return h('span', params.row.optType === 1 ? this.$t('success') : this.$t('fail'));
           },
         },
       ],
       securityData: [
-        {
-          time: 1533549358281,
-          platform: 'Web',
-          ipAddress: '192.223.12.143',
-          operation: '修改密码',
-          status: 1,
-        },
-        {
-          time: 1533106474000,
-          platform: 'iOS',
-          ipAddress: '82.231.112.134',
-          operation: '绑定银行卡',
-          status: 1,
-        },
-        {
-          time: 1532593464005,
-          platform: 'Android',
-          ipAddress: '92.123.122.34',
-          operation: '修改WahtsApp',
-          status: 0,
-        },
+        // {
+        //   time: 1533549358281,
+        //   platform: 'Web',
+        //   ipAddress: '192.223.12.143',
+        //   operation: '修改密码',
+        //   status: 1,
+        // },
+        // {
+        //   time: 1533106474000,
+        //   platform: 'iOS',
+        //   ipAddress: '82.231.112.134',
+        //   operation: '绑定银行卡',
+        //   status: 1,
+        // },
+        // {
+        //   time: 1532593464005,
+        //   platform: 'Android',
+        //   ipAddress: '92.123.122.34',
+        //   operation: '修改WahtsApp',
+        //   status: 0,
+        // },
       ],
       securityDataTotalCount: 0,
     };
@@ -413,9 +407,9 @@ var account = new Vue({
     loginOut() {
       this.$Modal.confirm({
         title: '',
-        content: '您确认要退出登录吗？',
+        content: this.$t('confirmLogOut'),
         onOk() {
-          post('api/user/login_out').then(function(res) {
+          post('api/user/login_out', '', false).then(function(res) {
             localStorage.removeItem('user');
             localStorage.removeItem('token');
             location.href = 'otc_adverts.html';
@@ -431,10 +425,10 @@ var account = new Vue({
     modifyGoogleStatus() {
       this.modalGoogle = true;
     },
+    bindGoogle() {
+      this.$refs.header.$data.isRegisterGoogleShow = true;
+    },
     modifyEmail() {
-      // if (this.user.email) {
-      //   this.formEmail.email = this.user.email;
-      // }
       this.modalEmail = true;
     },
     modifyPhone() {
@@ -578,7 +572,7 @@ var account = new Vue({
     },
     modifyBankStatus(data) {
       var that = this;
-      post('api/switchBankCard', { id: data.id }).then(function(res) {
+      post('api/switchBankCard', { id: data.id }, false).then(function(res) {
         if (res) {
           that.getAllCard();
         }
@@ -586,7 +580,7 @@ var account = new Vue({
     },
     getLoginData(page) {
       var that = this;
-      post('api/security/login_history', { pageNum: page, pageSize: 10 }, false)
+      post('api/security/login_history', { page: page, pageSize: 10 }, false)
         .then(function(res) {
           that.loginData = res.historyLoginList;
           that.loginDataTotalCount = res.count;
@@ -597,7 +591,7 @@ var account = new Vue({
     },
     getSecurityData(page) {
       var that = this;
-      post('api/security/setting_history', { pageNum: page, pageSize: 10 }, false)
+      post('api/security/setting_history', { page: page, pageSize: 10 }, false)
         .then(function(res) {
           that.securityData = res.historySettingList;
           that.securityDataTotalCount = res.count;
@@ -650,7 +644,7 @@ var account = new Vue({
         that['sendPlaceholder' + name] = counter + 's';
         if (counter == 0) {
           that['sendDisabled' + name] = false;
-          that['sendPlaceholder' + name] = '重新发送';
+          that['sendPlaceholder' + name] = $t('sendAgain');
           clearInterval(timer);
         }
       }, 1000);
@@ -664,9 +658,6 @@ var account = new Vue({
     }
     this.$on('locale', function(i) {
       this.locale = i;
-    });
-    this.$on('isregisterGoogle', function(i) {
-      this.isRegisterGoogleShow = i;
     });
     this.getUserInfo();
     this.getAllCard();
