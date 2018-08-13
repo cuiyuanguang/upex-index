@@ -55,7 +55,7 @@ var waitPay = new Vue({
             sequence: that.sequence,
           };
           post('api/confirmOrder', data).then(function(res) {
-            if (res.success) {
+            if (res) {
               that.step = 3;
               that.getOrderInfo(that.sequence);
             }
@@ -78,7 +78,7 @@ var waitPay = new Vue({
       var that = this;
       var user = JSON.parse(localStorage.getItem('user'));
       get('api/orderDetail', { sequence: sequence }, ).then(function (res) {
-        var data = res.data.data;
+        var data = res;
         if (data.sellerId != user.id) {
           location.href = 'otc_pay.html?sequence=' + sequence;
           return;

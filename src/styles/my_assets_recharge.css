@@ -1,0 +1,154 @@
+.ivu-row::before {
+  clear: both;
+}
+
+.text-secondary {
+  color: #666666;
+}
+
+.text-strong {
+  font-weight: bold;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 0;
+  width: 1200px;
+  min-height: 600px;
+}
+
+.container-row {
+  background-color: #fff;
+  border-bottom: 1px solid #fafafa;
+}
+
+.ivu-btn-text {
+  color: #57a3f3;
+  border-bottom: 1px solid #57a3f3;
+  border-radius: 0;
+}
+
+.breadcrumb {
+  margin-top: 10px;
+}
+
+.breadcrumb > .ivu-icon{
+  margin: 0 4px;
+}
+
+.recharge {
+  margin-top: 30px;
+  padding-bottom: 30px;
+}
+
+.recharge-row {
+  padding: 20px 40px;
+}
+
+.recharge-row-title {
+  padding-right: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.recharge-info {
+  margin-top: 30px;
+  padding: 30px 40px 40px;
+  background-color: #F8F8F8;
+  border-radius: 5px;
+}
+
+.recharge-info-title {
+  padding-bottom: 20px;
+  line-height: 30px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.recharge-info-qr {
+  margin-right: 20px;
+  width: 110px;
+  height: 110px;
+  text-align: center;
+  line-height: 110px;
+  background-color: #fff;
+}
+
+.recharge-info-qr > img {
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.recharge-info-id {
+  margin-top: 16px;
+  padding-bottom: 10px;
+  line-height: 24px;
+}
+
+.recharge-info-notice {
+  padding-left: 1em;
+}
+
+.recharge-info-notice li {
+  line-height: 30px;
+  color: #999999;
+  list-style-type: disc;
+}
+
+.recharge .ivu-table-wrapper {
+  margin-top: 20px;
+  border: none;
+}
+
+.recharge .ivu-table {
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.recharge .ivu-table:before {
+  background-color: #f5f5f5;
+}
+
+.recharge .ivu-table:after {
+  background-color: transparent;
+}
+
+.recharge .ivu-table .ivu-table-row:after {
+  content: '';
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  background-color: #f5f5f5;
+  z-index: 1;
+}
+
+.recharge .ivu-table th {
+  background-color: #ffffff;
+  font-size: 14px;
+}
+
+.recharge .ivu-table td,
+.recharge .ivu-table th {
+  border-bottom-color: transparent;
+}
+
+.recharge .ivu-tabs {
+  padding-bottom: 20px;
+}
+
+.recharge .ivu-tabs-bar {
+  margin-bottom: 0;
+}
+
+.recharge .ivu-tabs-nav {
+  margin-left: 40px;
+}
+
+.recharge .ivu-tabs-nav .ivu-tabs-tab {
+  height: 60px;
+  line-height: 40px;
+  font-weight: bold;
+}

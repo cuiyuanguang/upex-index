@@ -39,6 +39,8 @@
 
 .account-row-title {
   padding-right: 10px;
+  display: inline-block;
+  vertical-align: middle;
   font-size: 18px;
   font-weight: bold;
 }

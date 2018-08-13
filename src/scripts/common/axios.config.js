@@ -73,19 +73,13 @@ $http.interceptors.response.use(
             }
           },
         });
-        return {
-          success: false,
-          data: toastMsg[result.code][locale],
-        };
+        return false;
       }
       if (response.config && response.config.method === 'post' && response.config.showToast) {
         // Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
         Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
       }
-      return {
-        success: true,
-        data: result,
-      };
+      return result.data ? result.data : true;
     }
   },
   function(error) {
@@ -101,14 +95,15 @@ $http.interceptors.response.use(
 
 function post(url, data, showToast) {
   var show = typeof showToast === 'undefined' ? true : showToast;
-  return $http.post(url, data, { showToast: show }).then(function(response) {
-    return response;
-  });
+  return $http.post(url, data, { showToast: show });
+}
+
+function put(url, data, showToast) {
+  var show = typeof showToast === 'undefined' ? true : showToast;
+  return $http.put(url, data, { showToast: show });
 }
 
 function get(url, params, showToast) {
   var show = typeof showToast === 'undefined' ? true : showToast;
-  return $http.get(url, { params: params, showToast: show }).then(function(response) {
-    return response;
-  });
+  return $http.get(url, { params: params, showToast: show });
 }

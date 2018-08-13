@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+
+<head>
+  <title>UPEX</title>
+  @@include('header.html')
+  <link rel="stylesheet" href="../styles/my_assets_withdrawal.css?rev=@@hash">
+</head>
+
+<body>
+<div id="app" v-cloak>
+  <o-header ref="header"></o-header>
+  <div class="container">
+    <div class="bg-white">
+      <h1 class="h1-text">Withdrawal</h1>
+      <breadcrumb separator=">">
+        <breadcrumb-item to="otc_my_assets.html">My assets</breadcrumb-item>
+        <breadcrumb-item>Components</breadcrumb-item>
+      </breadcrumb>
+      <div class="wrap-gray">
+        <div class="row-wrap">
+          <div class="row-left">Currency</div>
+          <div class="row-right currency-select">
+            <i-select v-model="modelCurrency" @on-change="currencyChange(modelCurrency)" style="width:200px" size="large">
+              <i-option v-for="currency in currencyList" :value="currency.value" >{{ currency.value }}</i-option>
+            </i-select>
+          </div>
+        </div>
+        <div class="row-wrap">
+          <div class="row-left">Withdrawal Address</div>
+          <div class="row-right address-select">
+            <div class="address-none" v-show="addressList.length === 0" @click="addressClick">
+              Add address
+            </div>
+            <i-select  v-show="addressList.length" class="address-select-wrap" @on-change="addressChange(modelAddress)"  v-model="modelAddress" style="width:400px"
+                      size="large">
+              <i-option v-for="address in addressList" :value="address.address" :label="address.symbol + address.address">
+                <div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 350px;margin: 0;">
+                  <span>{{address.symbol}}</span>
+                  <span class="my-select-address">{{address.address}}</span></div>
+                  <span style="position: absolute;right: 15px;top: 8px;" @click.stop="delAddress(address.address)">1</span>
+              </i-option>
+              <i-option style="font-size: 14px" :value="'Add address'">
+                <div class="address" @click="addressClick">Add address</div>
+              </i-option>
+            </i-select>
+          </div>
+        </div>
+        <div class="row-wrap" style="margin-bottom: 10px">
+          <div class="row-left">Amount</div>
+          <div class="row-right amount-input">
+            <i-input style="width: 400px" v-model="valueAmount" size="large"
+                     placeholder="The minimum withdrawal amount is 0.2 USDT"></i-input>
+            <p class="amount-p">
+              <span class="amount-p-title">Extractable:</span><span>980.23173829 USDT</span>
+              <span class="amount-p-title" style="margin-left: 20px">Extractable:</span><span>980.23173829 USDT</span>
+            </p>
+            <p class="amount-p amount-error-p">不能为空</p>
+          </div>
+        </div>
+        <div class="row-wrap">
+          <div class="row-left"></div>
+          <div class="row-right withdrawal-button">Withdrawal</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="bg-white">
+      <h1 class="h1-text" style="margin-bottom: 30px">Withdrawal recording</h1>
+      <i-table :columns="columns3" :data="data3" size="small" no-data-text="没有数据" :loading="tableLoading3"></i-table>
+      <div style="margin: 10px;overflow: hidden" v-show="data3Page > 10">
+        <div style="float: right;">
+          <Page :total="data3Page" @on-change="changeWithDraw"></Page>
+        </div>
+      </div>
+    </div>
+  </div>
+  <modal
+    v-model="addressModel"
+    title="Add a withdrawal address"
+    @on-cancel="asyncCancel"
+    class-name="vertical-center-modal"
+    width="500"
+  >
+    <p class="modal-title">Withdrawal address</p>
+    <i-input
+      size="large"
+      :class="WithdrawalAddressError?'is-red':'is-gray'"
+      v-model="WithdrawalAddress"
+      type="text"
+      placeholder="Enter your withdrawal address"
+      class="modal-input"
+      @on-focus="withdrawalAddressFocus"
+    >
+    </i-input>
+    <p class="WithdrawalAddressn-error">{{WithdrawalAddressErrorText}}</p>
+    <p class="modal-title">Address tag</p>
+    <i-input
+      size="large"
+      :class="AddressTagError?'is-red':'is-gray'"
+      v-model="AddressTag"
+      type="text"
+      placeholder="Example：Binance"
+      class="modal-input"
+      @on-focus="AddressTagFocus"
+    >
+    </i-input>
+    <p class="WithdrawalAddressn-error">{{AddressTagErrorText}}</p>
+    <div slot="footer">
+      <i-button type="primary" size="large" long :loading="modal_loading" @click="addressFun">Log in</i-button>
+    </div>
+  </modal>
+</div>
+@@include('footer.html')
+<script src="../scripts/locale/my_assets_withdrawal.js?rev=@@hash"></script>
+<script src="../scripts/my_assets_withdrawal.js?rev=@@hash"></script>
+</body>
+
+</html>

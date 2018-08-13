@@ -57,6 +57,10 @@ body[dir='rtl'] .ivu-col-span-9 {
   text-align: right;
 }
 
+.text-center {
+  text-align: center;
+}
+
 body[dir='rtl'] .text-left {
   text-align: right;
 }
@@ -92,6 +96,42 @@ body[dir='rtl'] .float-right {
   color: #ed3f14;
 }
 
+.ivu-tabs.spreaded {
+  height: 300px;
+  transition: ease 500ms;
+}
+
+.authority {
+  padding: 30px 50px 50px;
+}
+.authority .ivu-tabs {
+  margin-bottom: 30px;
+}
+.authority .ivu-tabs-bar,
+.authority .ivu-form-item {
+  margin-bottom: 30px;
+}
+.authority-tips {
+  padding-top: 10px;
+}
+.authority-footer {
+  padding-top: 30px;
+}
+
+.country-select {
+  min-width: 86px;
+}
+.country-select .ivu-select-input {
+  text-align: center !important;
+}
+.country-select .ivu-select-dropdown {
+  left: 1px !important;
+  width: 100% !important;
+  overflow-x: hidden;
+}
+.country-select .ivu-select-item {
+  height: 26px;
+}
 
 div,
 ul {
@@ -791,4 +831,8 @@ input::-webkit-inner-spin-button {
   vertical-align: middle;
   max-width: 40px;
   max-height: 40px;
+}
+
+.expand-row{
+  margin:8px 0;
 }

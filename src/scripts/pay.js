@@ -101,7 +101,7 @@ var pay = new Vue({
       }
       var that = this;
       post("api/orderPayed", data).then(function (res) {
-        if (res.success) {
+        if (res) {
           that.isPayInfoDialogShow = false;
           that.getOrderInfo(that.sequence);
         }
@@ -120,7 +120,7 @@ var pay = new Vue({
       var user = JSON.parse(localStorage.getItem('user'));
       get('api/orderDetail', { sequence: sequence })
         .then(function (res) {
-          var data = res.data.data;
+          var data = res;
           if (data.buyerId != user.id) {
             location.href = 'otc_wait_pay.html?sequence=' + sequence;
             return;

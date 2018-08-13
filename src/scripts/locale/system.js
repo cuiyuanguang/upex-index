@@ -12,7 +12,7 @@ var toastMsg = {
   '4': {
     zh: '没有权限访问',
     en: 'do not have permission to access',
-    sa: 'ليس لديك تصريح الزيارة',
+    sa: 'ليس لديك إذن الزيارة',
   },
   '5': {
     zh: '参数错误',
@@ -28,11 +28,6 @@ var toastMsg = {
     zh: '用户未登录',
     en: 'User not logged in',
     sa: 'لم يتم تسجيل دخول المستخدم',
-  },
-  '10003': {
-    zh: '谷歌验证不通过',
-    en: 'Google verification failed',
-    sa: 'فشل التحقق من Google',
   },
   '10004': {
     zh: '短信发送失败',
@@ -62,7 +57,7 @@ var toastMsg = {
   '10009': {
     zh: '短信验证码或邮箱验证码不正确',
     en: 'SMS or Email verification code is incorrect',
-    sa: 'رمز التحقق الرسالة أو رمز التحقق البريد الإلكتروني غير صحيح',
+    sa: 'رمز التحقق من الرسالة أو من البريد  غير صحيح',
   },
   '1001': {
     zh: '交易类型错误',
@@ -107,7 +102,7 @@ var toastMsg = {
   '10017': {
     zh: '用户登陆锁定',
     en: 'User login locked',
-    sa: 'قفل تسجيل دخول المستخدم',
+    sa: 'تم قفل تسجيل دخول المستخدم',
   },
   '10018': {
     zh: '用户被冻结',
@@ -117,7 +112,7 @@ var toastMsg = {
   '10019': {
     zh: '用户名或密码错误',
     en: 'wrong user name or password',
-    sa: 'اسم المستخدم أو كلمة السر غير صحيحة',
+    sa: 'اسم المستخدم أو كلمة السر غير صحيح',
   },
   '1002': {
     zh: '支付方式错误',
@@ -132,7 +127,7 @@ var toastMsg = {
   '10021': {
     zh: '无效token',
     en: 'Invalid token',
-    sa: 'رمز غير صالح',
+    sa: 'token غير صالح',
   },
   '10022': {
     zh: '验证码错误',
@@ -172,22 +167,22 @@ var toastMsg = {
   '2007': {
     zh: '挂单信息不存在',
     en: 'pending order information does not exist',
-    sa: 'معلومات الأمر المعلق غير موجود',
+    sa: 'معلومات الطلب غير موجود',
   },
   '2008': {
     zh: '挂单发布者信息不存在',
     en: 'Pending order publisher information does not exist',
-    sa: 'معلومات ناشر الأمر المعلق غير موجود',
+    sa: 'معلومات ناشر الطلب غير موجود',
   },
   '2009': {
     zh: '您不是挂单的发布者无法关闭挂单',
     en: 'You are not the pending order publisher, so you can not close it',
-    sa: 'أنت لست ناشر الأمر المعلق ، لذا لا يمكنك إغلاقه',
+    sa: 'أنت لست ناشر الطلب ، لذا لا يمكنك إغلاقه',
   },
   '2010': {
     zh: '只有发布中的挂单才能关闭',
     en: 'You can only close published pending orders',
-    sa: 'يمكنك فقط إغلاق الأوامر المعلقة المنشورة',
+    sa: ' يمكنك إغلاق الطلبات المنشورة فقط',
   },
   '2011': {
     zh: '账户余额不足',
@@ -212,12 +207,12 @@ var toastMsg = {
   '2015': {
     zh: '购买数量大于实际可出售数量',
     en: 'buying quantity more than the actual selling quantity',
-    sa: 'كمية الشراء أكثر من الكمية القابلة للبيع',
+    sa: 'كمية الشراء أكبر من الكمية القابلة للبيع',
   },
   '2016': {
     zh: '出售数量大于挂单剩余数量',
     en: 'selling quantity is much than the remaining quantity of the pending order',
-    sa: 'الكمية المباعة أكبر من الكمية المتبقية من الأوامر المعلقة',
+    sa: 'الكمية المباعة أكبر من الكمية المتبقية من الطلب',
   },
   '2017': {
     zh: '价格浮动，总价格错误 ',
@@ -226,28 +221,28 @@ var toastMsg = {
   },
   '2018': {
     zh: '交易金额不在该挂单的单笔交易范围之内 ',
-    en: 'Transaction amount is not within the range of this pending order',
-    sa: 'مبلغ الصفقة ليس من ضمن إطار هذا الأمر المعلق',
+    en: ' transaction amount is not within the range of the single transaction',
+    sa: 'مبلغ الصفقة ليس من ضمن نطاق الصفقة الواحدة للطلب',
   },
   '2019': {
     zh: '此挂单是出售类型挂单，无法买入',
     en: 'This order is a sell type pending order,unable to buy',
-    sa: 'هذا الطلب من نوع الأمر المعلقة للبيع لا يمكن الشراء',
+    sa: 'هذا النوع من الطلب هو طلب بيع لا يمكن شراءه',
   },
   '2020': {
     zh: '此挂单是购买类型挂单，无法卖出',
-    en: 'This order is a buy type pending order,unable to sell',
-    sa: 'هذا الطلب من نوع الأمر المعلقة للشراء لا يمكن البيع',
+    en: 'This pending order is a buy type pending order,unable to sell',
+    sa: 'هذا النوع من الطلب هو طلب شراء لا يمكن بيعه',
   },
   '2021': {
     zh: '您无法跟自己发布的挂单交易',
     en: "You can't make a transaction with your own published pending order",
-    sa: 'لا يمكنك إجراء صفقة للأمر المعلق المنشور من قبلك',
+    sa: 'لا يمكنك إجراء صفقة مع الطلب المنشور الخاص بك',
   },
   '2022': {
     zh: '该挂单在交易中或已关闭，无法继续交易',
     en: 'this pending order is in the transaction or closed,so you cannot continue the transaction',
-    sa: 'هذا الأمر المعلق جاري صفقته أو مغلق، لذا لا يمكنك  الاستمرار في الصفقة ',
+    sa: 'هذا الطلب جاري صفقته أو مغلق، لذا لا يمكنك  الاستمرار في الصفقة ',
   },
   '2028': {
     zh: '购买者信息不存在',
@@ -277,7 +272,7 @@ var toastMsg = {
   '2033': {
     zh: '只有已支付的订单才能执行该操作',
     en: 'Only orders that have already been paid can perform this operation',
-    sa: 'يمكن إجراء هذه العملية فقط للطلبات التي تم دفعها بالفعل ',
+    sa: 'يمكن تنفيذ هذه العملية فقط للطلبات التي تم دفعها بالفعل ',
   },
   '2034': {
     zh: '操作失败',
@@ -297,7 +292,7 @@ var toastMsg = {
   '2039': {
     zh: '自己的挂单不能交易',
     en: 'cannot make a transaction with your own pending order ',
-    sa: 'لا يمكن إجراء صفقة مع الأمر المعلق الخاص بك',
+    sa: 'لا يمكنك إجراء صفقة مع الطلب الخاص بك',
   },
   '2043': {
     zh: '单笔最小交易额错误',
@@ -312,12 +307,12 @@ var toastMsg = {
   '2045': {
     zh: '单笔交易额范围错误',
     en: 'Single transaction amount range error',
-    sa: 'خطأ في إطار مبلغ الصفقة الواحدة',
+    sa: 'خطأ في مبلغ الصفقة الواحدة',
   },
   '2046': {
     zh: '当前挂单无法进行交易',
     en: 'Current pending order cannot be traded',
-    sa: 'لا يمكن تداول هذا الأمر المعلق ',
+    sa: 'لا يمكن صفقة الطلب الحالي ',
   },
   '2047': {
     zh: '交易次数限制设置错误',
@@ -332,52 +327,52 @@ var toastMsg = {
   '2050': {
     zh: '请填写正确的价格',
     en: 'Please fill in the correct price',
-    sa: 'يرجى ملء السعر الصحيح',
+    sa: 'يرجى كتابة السعر الصحيح',
   },
   '2051': {
     zh: '您没有可供使用的银行卡，请先绑定',
     en: "You don't have a bank card to use, please bind first",
-    sa: 'ليس لديك بطاقة مصرفية لاستخدامها ، يرجى الربط أولاً',
+    sa: 'لم تقم بربط بطاقة مصرفية لاستخدامها  ، يرجى الربط أولاً',
   },
   '2053': {
     zh: '存在未完成的订单，无法关闭挂单',
     en: 'There is uncompleted order, so you can not close the pending order',
-    sa: 'هناك طلب غير مكتمل ، لذا لا يمكنك إغلاق الأمر المعلق',
+    sa: 'هناك طلب غير مكتمل ، لذا لا يمكنك إغلاق الطلب',
   },
   '2054': {
     zh: '手机验证码错误',
     en: 'Phone verification code error',
-    sa: 'خطأ في رمز التحقق الهاتف',
+    sa: 'خطأ في رمز التحقق من الهاتف',
   },
   '2055': {
     zh: '谷歌验证码错误',
     en: 'Google verification code error',
-    sa: 'خطأ في رمز التحقق الجوجل',
+    sa: 'خطأ في رمز التحقق من الجوجل',
   },
   '2056': {
     zh: '当前挂单不可以暂停',
     en: 'Current pending order cannot be suspended',
-    sa: 'لا يمكن إيقاف الأمر المعلق الحالي',
+    sa: 'لا يمكن إيقاف الطلب الحالي',
   },
   '2057': {
     zh: '您不是挂单的发布者，无法暂停挂单',
     en: 'You are not the publisher of the pending order, so you cannot suspended',
-    sa: 'أنت لست ناشر الأمر المعلق، لذا لا يمكنك توقيفه',
+    sa: 'أنت لست ناشر الطلب، لذا لا يمكنك توقيفه',
   },
   '2058': {
     zh: '当前挂单不可以开始',
     en: 'Cannot start the current pending order',
-    sa: 'لا يمكن بدء الأمر المعلق الحالي',
+    sa: 'لا يمكن تفعيل الطلب الحالي',
   },
   '2059': {
     zh: '您不是挂单的发布者，无法开始挂单',
     en: 'You are not the publisher of the pending order, so you cannot start it',
-    sa: 'أنت لست ناشر الأمر المعلق، لذا لا يمكنك تفعيله',
+    sa: 'أنت لست ناشر الطلب، لذا لا يمكنك تفعيله',
   },
   '2060': {
     zh: '发布挂单的数量超出限制',
     en: 'The number of published pending orders exceeded the limit',
-    sa: 'تجاوزت عدد الأوامر المعلقة المنشورة الحد المسموح ',
+    sa: 'تجاوزت عدد الطلبات المنشورة الحد المسموح ',
   },
   '2061': {
     zh: '请打开谷歌验证',

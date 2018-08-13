@@ -513,7 +513,7 @@ var o_confirm = {
       get('api/verifycode_sms', {
         type: 8,
       }).then(function (res) {
-        if (res.success) {
+        if (res) {
           that.sms = true;
           that.sendMsgCountDown();
         }
@@ -540,7 +540,7 @@ var o_confirm = {
         checkType: this.tab,
         checkValue: this.tab == '1' ? this.gcode : this.ecode,
       }).then(function (res) {
-        if (res.data.message == 'otc.result.success') {
+        if (res) {
           that.$parent.$emit('isConfirmShow', false);
           that.$parent.$emit('isCardBinded', true);
           //if no watchup bind ,show bind watchup dialog
@@ -719,15 +719,6 @@ var addContact = {
     close() {
       this.$parent.$emit('isContactShow', false);
     },
-    getCountry() {
-      var that = this;
-      get('api/country').then(function (res) {
-        if (res.success) {
-          that.countryArr = res.data.data;
-          localStorage.setItem('country', JSON.stringify(res.data.data));
-        }
-      });
-    },
     bind() {
       if (!this.wahtsApp) {
         this.accountErrorTips = 'whatsApp' + this.$t('noEmpty');
@@ -737,9 +728,9 @@ var addContact = {
         this.accountErrorTips = '';
         var that = this;
         post('api/watchapp', this.selectCountry + '-' + this.wahtsApp).then(function (res) {
-          if (res.success) {
+          if (res) {
             get('api/userInfo').then(function (res) {
-              var data = res.data.data;
+              var data = res;
               that.wahtsApp = '';
               localStorage.setItem('user', JSON.stringify(data));
               that.$parent.$emit('isAddContactShow', false);
@@ -748,11 +739,6 @@ var addContact = {
         });
       }
     },
-  },
-  mounted: function () {
-    if (!localStorage.getItem('country')) {
-      this.getCountry();
-    }
   },
   watch: {
     locale: function (newVal, oldVal) {
@@ -927,7 +913,7 @@ var o_my_login = {
   components: {VueRecaptcha},
   props: ['login'],
   computed: {
-    countryArr: function() {
+    countryArr: function () {
       return JSON.parse(localStorage.getItem('country'));
     },
   },
@@ -942,7 +928,7 @@ var o_my_login = {
         'captcha': res
       };
       post('api/common/googleValidCode', JSON.stringify(dataCaptcha), false).then(function (res) {
-        if (res.success) {
+        if (res) {
           var data;
           if (that.loginWrap === 'loginPhone') {
             data = {
@@ -951,16 +937,16 @@ var o_my_login = {
               loginPword: that.loginPhonePassword,
             };
             post('api/user/login_in', JSON.stringify(data), false).then(function (res) {
-              if (res.success) {
-                if (res.data.data.type === '2') {
+              if (res) {
+                if (res.type === '2') {
                   that.$parent.$emit(
                     'isLoginNextPhone',
                     that.selectCountry + ' ' + that.loginPhoneVal
                   );
                 }
                 that.$parent.$emit('isLoginNext', true);
-                that.$parent.$emit('isLoginNextType', res.data.data.type);
-                that.$parent.$emit('isLoginNextCookie', res.data.data.token);
+                that.$parent.$emit('isLoginNextType', res.type);
+                that.$parent.$emit('isLoginNextCookie', res.token);
                 that.$parent.$emit('islogin', false);
                 that.modal_loading = false;
                 that.clear()
@@ -976,16 +962,16 @@ var o_my_login = {
               loginPword: that.loginEmailPassword,
             };
             post('api/user/login_in', JSON.stringify(data), false).then(function (res) {
-              if (res.success) {
-                if (res.data.data.type === '3') {
+              if (res) {
+                if (res.type === '3') {
                   that.$parent.$emit(
                     'isLoginNextEmail',
                     that.loginPhoneVal
                   );
                 }
                 that.$parent.$emit('isLoginNext', true);
-                that.$parent.$emit('isLoginNextType', res.data.data.type);
-                that.$parent.$emit('isLoginNextCookie', res.data.data.token);
+                that.$parent.$emit('isLoginNextType', res.type);
+                that.$parent.$emit('isLoginNextCookie', res.token);
                 that.$parent.$emit('islogin', false);
                 that.clear()
               } else {
@@ -1228,16 +1214,15 @@ var o_my_loginNext = {
           this.loginNextErrorText = this.$t('noEmpty')
         } else {
           post('api/user/confirm_login', JSON.stringify(data)).then(function (res) {
-            if (res.success) {
+            if (res) {
               that.modal_loading = false;
               that.$parent.$emit('isLoginNext', false);
               sessionStorage.setItem('token', that.isLoginNextCookieNum);
               get('api/userInfo').then(function (res) {
-                that.isLogined = res.data.code === 0;
-                var data = res.data.data;
-                if (that.isLogined) {
+                if (res) {
+                  that.isLogined = true;
                   that.$parent.$emit('logined', that.isLogined);
-                  localStorage.setItem('user', JSON.stringify(data));
+                  localStorage.setItem('user', JSON.stringify(res));
                 }
               });
             } else {
@@ -1263,7 +1248,7 @@ var o_my_loginNext = {
             token: this.isLoginNextCookieNum,
           };
           post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
-            if (res.success) {
+            if (res) {
             } else {
             }
           });
@@ -1274,7 +1259,7 @@ var o_my_loginNext = {
             token: this.isLoginNextCookieNum,
           };
           post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
-            if (res.success) {
+            if (res) {
 
             } else {
 
@@ -1492,7 +1477,7 @@ var o_my_register = {
     };
   },
   computed: {
-    countryArr: function() {
+    countryArr: function () {
       return JSON.parse(localStorage.getItem('country'));
     },
   },
@@ -1504,15 +1489,13 @@ var o_my_register = {
       this.$refs.invisibleRecaptcha.reset()
     },
     onVerify(res) {
-      console.log(res)
       var that = this;
       var data;
-      var dataUserInfo;
       var dataCaptcha = {
         'captcha': res
       };
       post('api/common/googleValidCode', JSON.stringify(dataCaptcha), false).then(function (res) {
-        if (res.success) {
+        if (res) {
           if (that.registerWrap === 'registerPhone') {
             const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
             data = {
@@ -1523,17 +1506,16 @@ var o_my_register = {
             };
             post('api/user/reg_mobile', JSON.stringify(data), false).then(function (res) {
               that.modal_loading = false;
-              if (res.success) {
-                sessionStorage.setItem('token', res.data.data);
-                that.$parent.$emit('isregisterCookie', res.data.data);
+              if (res) {
+                sessionStorage.setItem('token', res);
+                that.$parent.$emit('isregisterCookie', res);
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
                 get('api/userInfo').then(function (res) {
-                  that.isLogined = res.data.code === 0;
-                  dataUserInfo = res.data.data;
-                  if (that.isLogined) {
+                  if (res) {
+                    that.isLogined = true;
                     that.$parent.$emit('logined', that.isLogined);
-                    localStorage.setItem('user', JSON.stringify(dataUserInfo));
+                    localStorage.setItem('user', JSON.stringify(res));
                   }
                 });
               } else {
@@ -1549,17 +1531,16 @@ var o_my_register = {
             };
             post('api/user/reg_email', JSON.stringify(data), false).then(function (res) {
               that.modal_loading = false;
-              if (res.success) {
-                sessionStorage.setItem('token', res.data.data);
-                that.$parent.$emit('isregisterCookie', res.data.data);
+              if (res) {
+                sessionStorage.setItem('token', res);
+                that.$parent.$emit('isregisterCookie', res);
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
                 get('api/userInfo').then(function (res) {
-                  that.isLogined = res.data.code === '0';
-                  dataUserInfo = res.data.data;
-                  if (that.isLogined) {
+                  if (res) {
+                    that.isLogined = true;
                     that.$parent.$emit('logined', that.isLogined);
-                    localStorage.setItem('user', JSON.stringify(dataUserInfo));
+                    localStorage.setItem('user', JSON.stringify(res));
                   }
                 });
               } else {
@@ -1649,7 +1630,7 @@ var o_my_register = {
               }
             }, 1000);
             post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
-              if (res.success) {
+              if (res) {
 
               } else {
 
@@ -1687,7 +1668,7 @@ var o_my_register = {
               }
             }, 1000);
             post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
-              if (res.success) {
+              if (res) {
 
               } else {
 
@@ -1857,7 +1838,7 @@ var o_my_registerGoogle = {
           <div class="li-title">
             <div class="qr">
             <img :src="googleImg" alt="">
-</div>
+            </div>
             <div class="tip-img tip-img1"></div>
             <span class="list-num">2</span>
             <p style="width:158px">Use google authenticator to scan a barcode:</p>
@@ -1937,9 +1918,9 @@ var o_my_registerGoogle = {
         'exchange-token': that.isregisterToken
       };
       post('api/user/toopen_google_authenticator', JSON.stringify(data), false).then(function (res) {
-        if (res.success) {
-          that.googleKey = res.data.data.googleKey;
-          that.googleImg = res.data.data.googleImg;
+        if (res) {
+          that.googleKey = res.googleKey;
+          that.googleImg = res.googleImg;
         } else {
 
         }
@@ -1967,7 +1948,7 @@ var o_my_registerGoogle = {
             'loginPwd': that.bindGooglePassword,
           };
           post('api/user/google_verify', JSON.stringify(data)).then(function (res) {
-            if (res.success) {
+            if (res) {
               that.asyncCancel()
             } else {
 
@@ -2179,12 +2160,11 @@ var o_my_retrievePwd = {
       console.log(res)
       var that = this;
       var data;
-      var dataUserInfo;
       var dataCaptcha = {
         'captcha': res
       };
       post('api/common/googleValidCode', JSON.stringify(dataCaptcha), false).then(function (res) {
-        if (res.success) {
+        if (res) {
           if (that.registerWrap === 'registerPhone') {
             const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
             data = {
@@ -2195,7 +2175,7 @@ var o_my_retrievePwd = {
             };
             post('api/user/reg_mobile', JSON.stringify(data), false).then(function (res) {
               that.modal_loading = false;
-              if (res.success) {
+              if (res) {
                 this.$parent.$emit('isretrievePwdShow', false);
                 this.$parent.$emit('islogin', true);
                 this.clear();
@@ -2212,17 +2192,16 @@ var o_my_retrievePwd = {
             };
             post('api/user/reg_email', JSON.stringify(data), false).then(function (res) {
               that.modal_loading = false;
-              if (res.success) {
-                sessionStorage.setItem('token', res.data.data);
-                that.$parent.$emit('isregisterCookie', res.data.data);
+              if (res) {
+                sessionStorage.setItem('token', res);
+                that.$parent.$emit('isregisterCookie', res);
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
                 get('api/userInfo').then(function (res) {
-                  that.isLogined = res.data.code === '0';
-                  dataUserInfo = res.data.data;
-                  if (that.isLogined) {
+                  if (res) {
+                    that.isLogined = true;
                     that.$parent.$emit('logined', that.isLogined);
-                    localStorage.setItem('user', JSON.stringify(dataUserInfo));
+                    localStorage.setItem('user', JSON.stringify(res));
                   }
                 });
               } else {
@@ -2277,8 +2256,8 @@ var o_my_retrievePwd = {
     getCountry() {
       var that = this;
       get('api/country').then(function (res) {
-        if (res.success) {
-          that.countryArr = res.data.data;
+        if (res) {
+          that.countryArr = res;
         } else {
         }
       });
@@ -2321,7 +2300,7 @@ var o_my_retrievePwd = {
               }
             }, 1000);
             post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
-              if (res.success) {
+              if (res) {
 
               } else {
 
@@ -2359,7 +2338,7 @@ var o_my_retrievePwd = {
               }
             }, 1000);
             post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
-              if (res.success) {
+              if (res) {
 
               } else {
 
@@ -2504,8 +2483,355 @@ var o_my_retrievePwd = {
     },
   }
 };
-// header
 
+var o_find_password = {
+  template: `
+    <Modal title="找回密码" v-model="show" width="500" footer-hide>
+      <div class="authority">
+        <Form ref="formFind" :model="formFind" :rules="ruleFind" v-show="current === 0">
+          <Tabs v-model="findType" :class="spread ? 'spreaded' : ''">
+            <TabPane label="E-mail" name="email">
+              <FormItem prop="email">
+                <Input
+                  type="text"
+                  size="large"
+                  :maxlength="30"
+                  v-model="formFind.email"
+                  placeholder="请输入邮箱地址"
+                >
+                </Input>
+              </FormItem>
+            </TabPane>
+            <TabPane label="Phone" name="phone">
+              <FormItem prop="phone">
+                <Input
+                  type="text"
+                  size="large"
+                  number
+                  :maxlength="16"
+                  v-model="formFind.phone"
+                  placeholder="请输入手机号码"
+                >
+                  <Select
+                    slot="prepend"
+                    class="country-select"
+                    v-model="countryPrefix"
+                    filterable
+                    @on-open-change="changeSelect"
+                  >
+                    <Option
+                      v-for="(item, index) in country"
+                      :value="item.dialingCode"
+                      :label="item.dialingCode"
+                      :key="index"
+                    >
+                      <Row>
+                        <Col span="12" class="text-left">{{item.dialingCode}}</Col>
+                        <Col span="12" class="text-right">{{item.enName}}</Col>
+                      </Row>
+                    </Option>
+                  </Select>
+                </Input>
+              </FormItem>
+              </FormItem>
+            </TabPane>
+          </Tabs>
+          <Button type="primary" size="large" long @click="handleSubmit('formFind')">下一步</Button>
+        </Form>
+        <Form ref="formReset" :model="formReset" :rules="ruleReset" v-show="current === 1">
+          <FormItem label="新密码" prop="password">
+            <Input
+              type="password"
+              size="large"
+              v-model="formReset.password"
+              placeholder="请输入新密码"
+            >
+            </Input>
+          </FormItem>
+          <FormItem label="重复密码" prop="passwordAgain">
+            <Input
+              type="password"
+              size="large"
+              v-model="formReset.passwordAgain"
+              placeholder="请再次输入新密码"
+            >
+            </Input>
+          </FormItem>
+          <FormItem label="邮箱验证" prop="verifyEmail" v-if="findType === 'email'">
+            <Input
+              type="text"
+              size="large"
+              number
+              :maxlength="6"
+              v-model="formReset.verifyEmail"
+              placeholder="请输入邮箱验证码"
+            >
+              <Button slot="append" :disabled="sendDisabledEmail" @click="sendMessageSecurity('Email', 24)">
+                {{ sendPlaceholderEmail }}
+              </Button>
+            </Input>
+          </FormItem>
+          <FormItem label="手机验证" prop="verifyPhone" v-if="findType === 'phone'">
+            <Input
+              type="text"
+              size="large"
+              number
+              :maxlength="6"
+              v-model="formReset.verifyPhone"
+              placeholder="请输入短信验证码"
+            >
+              <Button slot="append" :disabled="sendDisabledPhone" @click="sendMessageSecurity('Phone', 24)">
+                {{ sendPlaceholderPhone }}
+              </Button>
+            </Input>
+          </FormItem>
+          <FormItem label="谷歌验证" prop="verifyGoogle" v-if="googleAuthored">
+            <Input
+              type="text"
+              size="large"
+              number
+              :maxlength="6"
+              v-model="formReset.verifyGoogle"
+              placeholder="请输入谷歌验证码"
+            >
+            </Input>
+          </FormItem>
+          <Button type="primary" size="large" long @click="handleSubmit('formReset')">提交</Button>
+        </Form>
+      </div>
+    </Modal>
+  `,
+  props: {
+    show: {
+      type: Boolean,
+      default: false,
+    }
+  },
+  data() {
+    const validateEmail = (rule, value, callback) => {
+      const valueTrim = value.trim();
+      // eslint-disable-next-line
+      const reg = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
+      if (this.formFind.phone === '') {
+        if (valueTrim === '') {
+          callback(new Error('邮箱地址不能为空'));
+        } else if (!reg.test(valueTrim)) {
+          callback(new Error('邮箱地址格式不正确'));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
+    const validatePhone = (rule, value, callback) => {
+      if (this.formFind.email.trim() === '') {
+        if (value === '') {
+          callback(new Error('手机号码不能为空'));
+        } else if (!/\d+$/g.test(value)) {
+          callback(new Error('手机号码格式不正确'));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
+    const validatePassword = (rule, value, callback) => {
+      const valueTrim = value.trim();
+      if (valueTrim === '') {
+        callback(new Error('密码不能为空'));
+      } else if (valueTrim.length > 18 || valueTrim.length < 6) {
+        callback(new Error('请输入6到18位长度的密码'));
+      } else {
+        if (this.formReset.password !== '') {
+          // 对第二个密码框单独验证
+          this.$refs.formReset.validateField('passwordAgain');
+        }
+        callback();
+      }
+    };
+    const validatePasswordAgain = (rule, value, callback) => {
+      if (value.trim() === '') {
+        callback(new Error('请再次输入密码'));
+      } else if (value !== this.formReset.password) {
+        callback(new Error('输入与上次不匹配'));
+      } else {
+        callback();
+      }
+    };
+    const validateVerifyEmail = (rule, value, callback) => {
+      if (this.findType === 'email' && value === '') {
+        callback(new Error('邮箱验证码不能为空'));
+      } else {
+        callback();
+      }
+    };
+    const validateVerifyPhone = (rule, value, callback) => {
+      if (this.findType === 'phone' && value === '') {
+        callback(new Error('手机验证码不能为空'));
+      } else {
+        callback();
+      }
+    };
+    const validateVerifyGoogle = (rule, value, callback) => {
+      if (this.googleAuthored && value === '') {
+        callback(new Error('谷歌验证码不能为空'));
+      } else {
+        callback();
+      }
+    };
+    return {
+      current: 0,
+      findType: 'email',
+      countryPrefix: '+86',
+      spread: false,
+      googleAuthored: false,
+      token: '',
+      formFind: {
+        email: '',
+        phone: '',
+      },
+      ruleFind: {
+        email: [{ validator: validateEmail, trigger: 'blur' }],
+        phone: [{ validator: validatePhone, trigger: 'blur' }],
+      },
+      sendPlaceholderEmail: '发送验证码',
+      sendDisabledEmail: false,
+      sendPlaceholderPhone: '发送验证码',
+      sendDisabledPhone: false,
+      formReset: {
+        password: '',
+        passwordAgain: '',
+        verifyEmail: '',
+        verifyPhone: '',
+        verifyGoogle: '',
+      },
+      ruleReset: {
+        password: [{ validator: validatePassword, trigger: 'blur' }],
+        passwordAgain: [{ validator: validatePasswordAgain, trigger: 'blur' }],
+        verifyEmail: [
+          { validator: validateVerifyEmail, trigger: 'blur' },
+          { type: 'number', message: '必须输入数字', trigger: 'blur' },
+        ],
+        verifyPhone: [
+          { validator: validateVerifyPhone, trigger: 'blur' },
+          { type: 'number', message: '必须输入数字', trigger: 'blur' },
+        ],
+        verifyGoogle: [
+          { validator: validateVerifyGoogle, trigger: 'blur' },
+          { type: 'number', message: '必须输入数字', trigger: 'blur' },
+        ],
+      },
+    };
+  },
+  computed: {
+    country() {
+      return JSON.parse(localStorage.getItem('country'));
+    },
+  },
+  methods: {
+    changeSelect(value) {
+      this.spread = value;
+    },
+    handleSubmit(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          if (name === 'formFind') {
+            post('api/user/reset_password_step_one', {
+              countryCode: this.countryPrefix,
+              mobileNumber: this.formFind.phone || '',
+              email: this.formFind.email || '',
+            }, false).then(res => {
+              console.log(res);
+              if (res) {
+                this.googleAuthored = res.isGoogleAuth == 1;
+                this.token = res.token;
+                this.current += 1;
+              }
+            });
+          }
+          if (name === 'formReset') {
+            post('api/user/reset_password_step_two', {
+              token: this.token,
+              certificateNumber: '',
+              googleCode: this.formReset.verifyGoogle || '',
+              smsCode: this.formReset.verifyPhone || '',
+              emailCode: this.formReset.verifyEmail || '',
+            }, false).then(res => {
+              if (res) {
+                post('api/user/reset_password_step_three', {
+                  token: this.token,
+                  loginPword: this.formReset.password,
+                }).then(data => {
+                  if (data) {
+                    this.$parent.$emit('isretrievePwdShow', false);
+                    this.$parent.$emit('islogin', true);
+                  }
+                });
+              }
+            });
+          }
+        }
+      });
+    },
+    sendMessageSecurity: function(name, type) {
+      if (name === 'Email' && !this.formFind.email) return;
+      if (name === 'Phone' && !this.formFind.phone) return;
+      var that = this;
+      that['sendDisabled' + name] = true;
+      that['sendDisabledBind' + name] = true;
+      var api = {
+        Email: 'api/common/emailValidCode',
+        Phone: 'api/common/smsValidCode',
+      };
+      post(
+        api[name],
+        {
+          email: that.formFind.email || '',
+          countryCode: that.countryPrefix || '',
+          mobile: '',
+          operationType: type,
+          token: that.token,
+        },
+        false
+      ).then(function(res) {
+        if (res) {
+          that.countDown(name);
+        }
+      });
+    },
+    countDown(name) {
+      var that = this;
+      var counter = 60;
+      that['sendPlaceholder' + name] = counter + 's';
+      that['sendPlaceholderBind' + name] = counter + 's';
+      var timer = setInterval(function() {
+        counter -= 1;
+        that['sendPlaceholder' + name] = counter + 's';
+        that['sendPlaceholderBind' + name] = counter + 's';
+        if (counter == 0) {
+          that['sendDisabled' + name] = false;
+          that['sendDisabledBind' + name] = false;
+          that['sendPlaceholder' + name] = '重新发送';
+          that['sendPlaceholderBind' + name] = '重新发送';
+          clearInterval(timer);
+        }
+      }, 1000);
+    },
+  },
+  watch: {
+    show(newVal) {
+      if (!newVal) {
+        this.$refs['formFind'].resetFields();
+        this.$refs['formReset'].resetFields();
+        this.current = 0;
+        this.$parent.$emit('isretrievePwdShow', false);
+      }
+    }
+  },
+};
+// header
 var o_header = {
   template: `
     <div id="header" class="om-header">
@@ -2605,7 +2931,7 @@ var o_header = {
       ></myloginnext>
       <myregister :register="isregister"></myregister>
       <myregistergoogle :register-google="isRegisterGoogleShow" :register-cookie="isregisterCookie"></myregistergoogle>
-      <myretrievepwd :retrieve-pwd="isretrievePwdShow"></myretrievepwd>
+      <my-find-password :show="isretrievePwdShow"></my-find-password>
     </div>
   `,
   i18n: i18nComponents,
@@ -2682,12 +3008,22 @@ var o_header = {
     loginOut() {
       var that = this;
       post('api/user/login_out').then(function (res) {
-        if (res.success) {
-          localStorage.clear();
+        if (res) {
+          localStorage.removeItem('user');
+          sessionStorage.clear();
           that.logined = false;
           if (location.pathname !== '/views/otc_adverts.html') {
             location.href = 'otc_adverts.html';
           }
+        }
+      });
+    },
+    getCountry() {
+      var that = this;
+      get('api/country').then(function (res) {
+        if (res) {
+          that.countryArr = res;
+          localStorage.setItem('country', JSON.stringify(res));
         }
       });
     },
@@ -2697,13 +3033,13 @@ var o_header = {
     myloginnext: o_my_loginNext,
     myregister: o_my_register,
     myregistergoogle: o_my_registerGoogle,
-    myretrievepwd: o_my_retrievePwd,
+    // myretrievepwd: o_my_retrievePwd,
+    myFindPassword: o_find_password,
   },
   mounted() {
-    // if (utils.getParam('auth') == 1) {
-    //   this.isLoginShow = true;
-    //   return;
-    // }
+    if (!localStorage.getItem('country')) {
+      this.getCountry();
+    }
     this.userInfo = JSON.parse(localStorage.getItem('user'));
     var locale = localStorage.getItem('locale');
     if (locale) {
@@ -2712,16 +3048,19 @@ var o_header = {
     }
 
     if (sessionStorage.getItem('token')) {
+      this.logined = true;
       var that = this;
       get('api/personOrders/processing').then(function (result) {
-        if (result.success && result.data.data.rsts) {
-          if (result.data.data.rsts.length > 5) {
-            that.orders = result.data.data.rsts.slice(0, 5);
+        if (result) {
+          if (result.rsts.length > 5) {
+            that.orders = result.rsts.slice(0, 5);
             return;
           }
-          that.orders = result.data.data.rsts;
+          that.orders = result.rsts;
         }
       });
+    } else {
+      this.logined = false;
     }
     this.$on('logined', function (i) {
       this.logined = i;
@@ -2758,4 +3097,46 @@ var o_header = {
       this.isretrievePwdShow = i;
     });
   },
+};
+var row_my_assets = {
+  template: `
+     <div>
+        <Row>
+            <Col >
+                <span class="expand-key">TXid: </span>
+                <span class="expand-value">{{ row.txid }}</span>
+            </Col>
+        </Row>
+     </div>
+`,
+  props: {
+    row: Object
+  }
+};
+var row_my_assets_with = {
+  template: `
+     <div>
+        <Row class="expand-row">
+            <Col >
+                <span class="expand-key">Withdrawal address: </span>
+                <span class="expand-value">{{ row.addressTo }}</span>
+            </Col>
+        </Row>
+         <Row class="expand-row">
+            <Col >
+                <span class="expand-key">Fees : </span>
+                <span class="expand-value">{{ row.amount }}</span>
+            </Col>
+        </Row>
+         <Row class="expand-row">
+            <Col >
+                <span class="expand-key">TXid: </span>
+                <span class="expand-value">{{ row.txid }}</span>
+            </Col>
+        </Row>
+     </div>
+`,
+  props: {
+    row: Object
+  }
 };
