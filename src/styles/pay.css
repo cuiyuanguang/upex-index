@@ -184,12 +184,13 @@
 }
 
 .pay .input-copy {
+  margin-right: 10px;
   position: relative;
 	outline: none;
 	border: none;
 	color: #495060;
 	cursor: pointer;
-	width: 120px;
+	min-width: 120px;
 }
 
 .pay .input-copy::selection {
