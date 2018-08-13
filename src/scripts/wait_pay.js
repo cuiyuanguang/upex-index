@@ -25,9 +25,8 @@ var waitPay = new Vue({
       //left time for pay
       leftTime: 0,
       //pay time
-      payTime: 0,
-      //create time
-      ctime: 0,
+      payLimit: 0,
+      confirmLimit: 0,
       //-----------order info-----------------//
       orderInfo: {
         totalPrice: 0,
@@ -67,37 +66,14 @@ var waitPay = new Vue({
         },
       });
     },
-    //------------end-----------------
     copy: function(e) {
       e.target.select();
       document.execCommand('copy');
       Toast.show(e.target.name + this.$t('copied'), { icon: 'ok', duration: 1500 });
     },
-    //Countdown
-    payCountdown: function(createTime, limitTime) {
-      var that = this;
-      setInterval(function() {
-        var now = new Date().getTime();
-        var expiredTime;
-        // if time is seconds
-        if (limitTime > 1000) {
-          expiredTime = limitTime;
-        } else {
-          expiredTime = createTime + limitTime * 60 * 1000;
-        }
-        if (expiredTime - now <= 0) {
-          that.leftTime = 0;
-        } else {
-          that.leftTime = utils.MillisecondToDate(expiredTime - now);
-        }
-      }, 1000);
-    },
-    //------------end-----------------
-    //next step ----------------------
     next: function() {
       this.step += 1;
     },
-    //-------------------------GET ORDER INFO-----------------------------------------------//
     getOrderInfo: function(sequence) {
       var that = this;
       var user = JSON.parse(localStorage.getItem('user'));
@@ -114,18 +90,6 @@ var waitPay = new Vue({
           that.isTradeSuccess = true;
         }
         //create time of the order
-        //limit time of pay
-        //if order  paid
-        var payTime;
-        if (data.status == 2) {
-          payTime = data.limitTime;
-        }
-        //if order not paid
-        else {
-          payTime = data.advert.limitTime;
-        }
-        //start Countdown
-        that.payCountdown(data.ctime, payTime);
         // set  orderInfo;
         that.orderInfo.totalPrice = data.totalPrice;
         that.orderInfo.totalVolume = data.volume;
@@ -136,9 +100,25 @@ var waitPay = new Vue({
           data.description && JSON.parse(data.description).paymentBankCard;
         that.orderInfo.socialNumber = data.buyer.userExtView.watchapp.replace(/\s+/g, '');
         that.orderInfo.nickname = data.buyer.showNickName;
+        var expiredTime = data.countDownTime + Date.now();
+        var timer = setInterval(function () {
+          var now = Date.now();
+          if ((expiredTime - now) <= 0) {
+            that.leftTime = 0;
+            clearInterval(timer);
+          } else {
+            that.leftTime = utils.MillisecondToDate(expiredTime - now);
+          }
+        }, 1000);
       });
     },
-    //------------------------------GET ORDER INFO END---------------------------------------//
+    getTimeLimit: function() {
+      var that = this;
+      get('/api/rate').then(function(res) {
+        that.payLimit = res.payment_limit_time;
+        that.confirmLimit = res.trade_limit_time;
+      });
+    },
   },
   mounted: function() {
     var locale = localStorage.getItem('locale');
@@ -153,6 +133,7 @@ var waitPay = new Vue({
     var sequence = utils.getParam('sequence');
     this.sequence = sequence;
     this.getOrderInfo(sequence);
+    this.getTimeLimit();
   },
   watch: {
     locale: function(newVal, oldVal) {

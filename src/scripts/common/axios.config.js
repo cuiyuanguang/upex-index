@@ -14,8 +14,8 @@ var $http = axios.create({
 $http.interceptors.request.use(
   function(config) {
     // 统一修改请求地址参数
-    if (sessionStorage.getItem('token')) {
-      config.headers['exchange-token'] = sessionStorage.getItem('token');
+    if (localStorage.getItem('token')) {
+      config.headers['exchange-token'] = localStorage.getItem('token');
     }
     return config;
   },
@@ -68,7 +68,7 @@ $http.interceptors.response.use(
           callback: function() {
             if (result.code == 2048) {
               localStorage.removeItem('user');
-              sessionStorage.clear();
+              localStorage.removeItem('token');
               location.href = 'otc_adverts.html';
             }
           },

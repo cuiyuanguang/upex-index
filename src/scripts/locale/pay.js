@@ -136,7 +136,7 @@ var messages = {
     en: 'Transaction complete',
   },
   backToHome: {
-    zh: '返回主页',
+    zh: '返回首页',
     en: 'back to homepage',
   },
   helpTipsFirst: {
@@ -224,7 +224,7 @@ var messages = {
     en: 'has been copied',
   },
   noEmpty: {
-    zh: '不能这空',
+    zh: '不能为空',
     en: 'can not be empty',
   },
   twiceNotEqual: {
@@ -232,7 +232,7 @@ var messages = {
     en: 'twice input is not equal the first',
   },
   numericOrLetter: {
-    zh: '请输出数字或字母',
+    zh: '请输入数字或字母',
     en: 'type numeric or letter here please',
   },
   lengthshouldBe4: {

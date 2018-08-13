@@ -152,9 +152,12 @@
           <i-button type="text" size="large" class="cancel-order" @click.native="cancelPay">{{ $t('cancelOrder') }}</i-button>
         </div>
         <div class="pay-status" v-if="step==2">
-          <p class="pay-notice">
-            {{ $t('sellerNotConfirmIn') }}<span class="text-success">{{ limitTime }}</span> {{ $t('hour') }}<br>
+          <p class="pay-notice" v-if="limitTime > 0">
+            {{ $t('sellerNotConfirmIn') }}<span class="text-success">{{ (confirmLimit / 60).toFixed(2) }}</span> {{ $t('hour') }}<br>
             {{ $t('restTime') }}<span class="text-error">{{leftTime}}</span>
+          </p>
+          <p class="pay-notice" v-else>
+            <span class="text-error">{{leftTime}}</span>
           </p>
         </div>
         <div class="pay-status" v-if="step==3">
@@ -229,7 +232,7 @@
       <div class="content">
         <div class="content-wrapper" style="width:500px; height: 424px ;">
           <div class="p-i-header">
-            My transfer information
+            {{ $t('myTransferInfo') }}
             <Icon @click="close" type="close" class="close"></Icon>
           </div>
           <div class="p-i-content">
@@ -250,9 +253,9 @@
               </li>
               <li>
                 <button @click="confirm" class="confirm">{{ $t('confirm') }}</button>
-                <p>
-                  {{ $t('transferTips') }}
-                </p>
+              </li>
+              <li>
+                <p> {{ $t('transferTips') }} </p>
                 <p class="error" v-if="infoError">{{ infoError }}</p>
               </li>
             </ul>

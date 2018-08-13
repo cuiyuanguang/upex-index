@@ -25,9 +25,9 @@ var Toast = {
       document.body.appendChild(toast);
     }
     if (duration > 100) {
-      var _this = this;
+      var that = this;
       var timer = setTimeout(function () {
-        _this.hide();
+        that.hide();
         if (typeof callback === 'function') {
           callback();
         }
@@ -88,6 +88,14 @@ var i18nComponentsMessages = {
     zh: '我的订单',
     en: 'my orders',
   },
+  myAccount: {
+    zh: '个人中心',
+    en: 'my account',
+  },
+  myAssets: {
+    zh: '个人资产',
+    en: 'my assets',
+  },
   buy: {
     zh: '买入',
     en: 'Buy',
@@ -108,9 +116,9 @@ var i18nComponentsMessages = {
     zh: '查看',
     en: 'view',
   },
-  paidToSeller: {
-    zh: '已向卖家支付',
-    en: 'already paid to seller',
+  waitForSellerReceive: {
+    zh: '等待卖家确认收款',
+    en: 'wait for seller to confirm',
   },
   waitForBuyerPay: {
     zh: '等待买家支付',
@@ -1217,7 +1225,7 @@ var o_my_loginNext = {
             if (res) {
               that.modal_loading = false;
               that.$parent.$emit('isLoginNext', false);
-              sessionStorage.setItem('token', that.isLoginNextCookieNum);
+              localStorage.setItem('token', that.isLoginNextCookieNum);
               get('api/userInfo').then(function (res) {
                 if (res) {
                   that.isLogined = true;
@@ -1507,7 +1515,7 @@ var o_my_register = {
             post('api/user/reg_mobile', JSON.stringify(data), false).then(function (res) {
               that.modal_loading = false;
               if (res) {
-                sessionStorage.setItem('token', res);
+                localStorage.setItem('token', res);
                 that.$parent.$emit('isregisterCookie', res);
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
@@ -1532,7 +1540,7 @@ var o_my_register = {
             post('api/user/reg_email', JSON.stringify(data), false).then(function (res) {
               that.modal_loading = false;
               if (res) {
-                sessionStorage.setItem('token', res);
+                localStorage.setItem('token', res);
                 that.$parent.$emit('isregisterCookie', res);
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
@@ -1910,7 +1918,7 @@ var o_my_registerGoogle = {
     },
     getToken() {
       var that = this
-      that.isregisterToken = sessionStorage.getItem('token') ? sessionStorage.getItem('token') : '';
+      that.isregisterToken = localStorage.getItem('token') ? localStorage.getItem('token') : '';
     },
     getGoogleInfo() {
       var that = this;
@@ -1979,7 +1987,7 @@ var o_my_registerGoogle = {
     },
   },
   mounted() {
-    if (sessionStorage.getItem('token')) {
+    if (localStorage.getItem('token')) {
       this.getToken();
       this.getGoogleInfo()
     }
@@ -1994,9 +2002,9 @@ var o_my_retrievePwd = {
       width="500"
       title="Retrieve password"
       >
-                  <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
- @expired="onExpired" @verify="onVerify" sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi">
-            </vue-recaptcha>
+        <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
+          @expired="onExpired" @verify="onVerify" sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi">
+        </vue-recaptcha>
       <Tabs v-model="registerWrap" @on-click="tabChange">
         <TabPane label="E-mail" name="tabEmail">
           <Input
@@ -2193,7 +2201,7 @@ var o_my_retrievePwd = {
             post('api/user/reg_email', JSON.stringify(data), false).then(function (res) {
               that.modal_loading = false;
               if (res) {
-                sessionStorage.setItem('token', res);
+                localStorage.setItem('token', res);
                 that.$parent.$emit('isregisterCookie', res);
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
@@ -2870,7 +2878,7 @@ var o_header = {
                       <i-col span="18" class="text-left" style="padding-left:6px;">
                         <div v-if="item.buyer.id==userInfo.id" class="tip">
                           {{ item.status == 1 ? $t('waitForBuyerPay') : '' }}
-                          {{ item.status == 2 ? $t('paidToSeller') : '' }}
+                          {{ item.status == 2 ? $t('waitForSellerReceive') : '' }}
                           {{item.totalPrice}}SAR
                         </div>
                         <div v-else class="tip">
@@ -2897,13 +2905,26 @@ var o_header = {
               <a href="otc_my_advert.html">{{ $t('pendingOrder') }}</a>
             </li>
             <li class="items" v-if="logined">
-              <a type="primary" @click="loginOut">{{ $t('loginout') }}</a>
+              <Dropdown>
+                <a href="javascript:void(0)">
+                  {{ userInfo.showNickName }}
+                  <Icon type="arrow-down-b"></Icon>
+                </a>
+                <DropdownMenu slot="list">
+                  <DropdownItem name="account">
+                    <a href="otc_my_account.html">{{ $t('myAccount') }}</a>
+                  </DropdownItem>
+                  <DropdownItem name="account">
+                    <a href="otc_my_assets.html">{{ $t('myAssets') }}</a>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
             </li>
             <li class="items" v-if="!logined">
-              <a type="primary" @click="showLogin()">{{ $t('login') }}</a>
+              <a @click="showLogin()">{{ $t('login') }}</a>
             </li>
             <li class="items" v-if="!logined">
-              <a type="primary" @click="showRegister()">{{ $t('register') }}</a>
+              <a @click="showRegister()">{{ $t('register') }}</a>
             </li>
             <li class="items">
               <Dropdown @on-click="toggleLanguage">
@@ -2939,7 +2960,6 @@ var o_header = {
     return {
       orders: [],
       ws: null,
-      userInfo: {},
       logined: false,
       isLoginShow: false,
       isregister: false,
@@ -2954,9 +2974,9 @@ var o_header = {
     };
   },
   computed: {
-    uid: function () {
-      return localStorage.getItem('uid');
-    },
+    userInfo: function() {
+      return JSON.parse(localStorage.getItem('user')) || {};
+    }
   },
   methods: {
     //login
@@ -3010,7 +3030,7 @@ var o_header = {
       post('api/user/login_out').then(function (res) {
         if (res) {
           localStorage.removeItem('user');
-          sessionStorage.clear();
+          localStorage.removeItem('token');
           that.logined = false;
           if (location.pathname !== '/views/otc_adverts.html') {
             location.href = 'otc_adverts.html';
@@ -3019,10 +3039,8 @@ var o_header = {
       });
     },
     getCountry() {
-      var that = this;
       get('api/country').then(function (res) {
         if (res) {
-          that.countryArr = res;
           localStorage.setItem('country', JSON.stringify(res));
         }
       });
@@ -3040,14 +3058,13 @@ var o_header = {
     if (!localStorage.getItem('country')) {
       this.getCountry();
     }
-    this.userInfo = JSON.parse(localStorage.getItem('user'));
     var locale = localStorage.getItem('locale');
     if (locale) {
       document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
       this.$i18n.locale = locale;
     }
 
-    if (sessionStorage.getItem('token')) {
+    if (localStorage.getItem('token')) {
       this.logined = true;
       var that = this;
       get('api/personOrders/processing').then(function (result) {

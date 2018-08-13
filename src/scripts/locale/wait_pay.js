@@ -88,7 +88,7 @@ var messages = {
     en: 'contact buyer',
   },
   backToHome: {
-    zh: '返回主页',
+    zh: '返回首页',
     en: 'back to homepage',
   },
   helpTipsFirst: {
