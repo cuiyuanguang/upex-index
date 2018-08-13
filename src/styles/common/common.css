@@ -356,8 +356,12 @@ input::-webkit-inner-spin-button {
   line-height: 50px;
 }
 
-.om-header .ivu-dropdown a {
+.om-header .ivu-dropdown-rel a {
   color: #adadad;
+}
+
+.om-header .ivu-dropdown-menu a {
+  color: #495060;
 }
 
 .om-header .arrow {

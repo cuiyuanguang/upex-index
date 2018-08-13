@@ -145,8 +145,8 @@ var pay = new Vue({
     getTimeLimit: function() {
       var that = this;
       get('/api/rate').then(function(res) {
-        that.payLimit = res.data.data.payment_limit_time;
-        that.confirmLimit = res.data.data.trade_limit_time;
+        that.payLimit = res.payment_limit_time;
+        that.confirmLimit = res.trade_limit_time;
       });
     },
   },

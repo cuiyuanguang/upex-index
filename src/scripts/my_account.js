@@ -400,7 +400,7 @@ var account = new Vue({
       return JSON.parse(localStorage.getItem('country'));
     },
     isregisterCookie() {
-      return sessionStorage.getItem('token');
+      return localStorage.getItem('token');
     },
   },
   methods: {
@@ -417,7 +417,7 @@ var account = new Vue({
         onOk() {
           post('api/user/login_out').then(function(res) {
             localStorage.removeItem('user');
-            sessionStorage.clear();
+            localStorage.removeItem('token');
             location.href = 'otc_adverts.html';
           });
         },

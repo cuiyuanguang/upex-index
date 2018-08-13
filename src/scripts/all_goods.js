@@ -617,7 +617,7 @@ var allGoods = new Vue({
     this.$on('isSelectCardShow', function(i) {
       that.isSelectCardShow = i;
     });
-    if (sessionStorage.getItem('token')) {
+    if (localStorage.getItem('token')) {
       this.getUserInfo();
       this.getBindedCard();
     }
