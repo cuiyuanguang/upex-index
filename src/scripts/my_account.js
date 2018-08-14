@@ -65,9 +65,10 @@ var account = new Vue({
     };
     var validatePass = (rule, value, callback) => {
       const valueTrim = value.trim();
+      const reg = /^(?=.*[a-z])(?=.*\d)[\s\S]{6,18}$/g;
       if (valueTrim === '') {
         callback(new Error(this.$t('canNotBeEmpty')));
-      } else if (valueTrim.length > 18 || valueTrim.length < 6) {
+      } else if (!reg.test(valueTrim)) {
         callback(new Error(this.$t('six2eighteen')));
       } else {
         if (this.formPassword.passwordNew !== '') {
@@ -104,6 +105,7 @@ var account = new Vue({
       sendDisabledNewPhone: false,
       sendPlaceholderBank: this.$t('sendVerify'),
       sendDisabledBank: false,
+      timers: {},
       // 修改WhatsApp
       modalWhatsApp: false,
       selectCountry: '+86',
@@ -111,7 +113,7 @@ var account = new Vue({
         number: '',
       },
       ruleWhatsApp: {
-        number: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
+        number: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
       },
       // 修改密码
       modalPassword: false,
@@ -124,12 +126,12 @@ var account = new Vue({
         phone: '',
       },
       rulePassword: {
-        password: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
-        passwordNew: [{ required: true, validator: validatePass, trigger: 'blur' }],
-        passwordReNew: [{ required: true, validator: validatePassCheck, trigger: 'blur' }],
-        email: [{ validator: validateEmailSecurity, trigger: 'blur' }],
-        google: [{ name: 'formPassword', validator: validateGoogleSecurity, trigger: 'blur' }],
-        phone: [{ name: 'formPassword', validator: validatePhoneSecurity, trigger: 'blur' }],
+        password: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        passwordNew: [{ required: true, validator: validatePass, trigger: 'change' }],
+        passwordReNew: [{ required: true, validator: validatePassCheck, trigger: 'change' }],
+        email: [{ validator: validateEmailSecurity, trigger: 'change' }],
+        google: [{ name: 'formPassword', validator: validateGoogleSecurity, trigger: 'change' }],
+        phone: [{ name: 'formPassword', validator: validatePhoneSecurity, trigger: 'change' }],
       },
       // 绑定修改谷歌验证
       modalGoogle: false,
@@ -139,9 +141,9 @@ var account = new Vue({
         password: '',
       },
       ruleGoogle: {
-        google: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
-        phone: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
-        password: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
+        google: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        phone: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        password: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
       },
       // 绑定/修改邮箱
       modalEmail: false,
@@ -153,11 +155,11 @@ var account = new Vue({
         phone: '',
       },
       ruleEmail: {
-        oldEmail: [{ name: 'formEmail', validator: validateEmailSecurity, trigger: 'blur' }],
-        email: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
-        verify: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
-        google: [{ name: 'formEmail', validator: validateGoogleSecurity, trigger: 'blur' }],
-        phone: [{ name: 'formEmail', validator: validatePhoneSecurity, trigger: 'blur' }],
+        oldEmail: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        email: [{ name: 'formEmail', validator: validateEmailSecurity, trigger: 'change' }],
+        verify: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        google: [{ name: 'formEmail', validator: validateGoogleSecurity, trigger: 'change' }],
+        phone: [{ name: 'formEmail', validator: validatePhoneSecurity, trigger: 'change' }],
       },
       // 绑定/修改手机号
       modalPhone: false,
@@ -168,10 +170,10 @@ var account = new Vue({
         google: '',
       },
       rulePhone: {
-        oldVerify: [{ validator: validatePhoneSecurity, trigger: 'blur' }],
-        phone: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
-        verify: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
-        google: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
+        oldVerify: [{ validator: validatePhoneSecurity, trigger: 'change' }],
+        phone: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        verify: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        google: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
       },
       // 添加/修改银行卡
       modalBankInfo: false,
@@ -182,11 +184,12 @@ var account = new Vue({
         ibanNo: '',
       },
       ruleBankInfo: {
-        bankName: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
-        name: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
-        cardNo: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
-        ibanNo: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'blur' }],
+        bankName: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        name: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        cardNo: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        ibanNo: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
       },
+      bankCardAction: '',
       modalBankConfirm: false,
       tabVerifyActive: '1',
       formBankConfirm: {
@@ -194,31 +197,35 @@ var account = new Vue({
         google: '',
       },
       ruleBankConfirm: {
-        phone: [{ name: 'formBankConfirm', validator: validatePhoneBank, trigger: 'blur' }],
-        google: [{ name: 'formBankConfirm', validator: validateGoogleBank, trigger: 'blur' }],
+        phone: [{ name: 'formBankConfirm', validator: validatePhoneBank, trigger: 'change' }],
+        google: [{ name: 'formBankConfirm', validator: validateGoogleBank, trigger: 'change' }],
       },
       // 银行表格
       bankColumn: [
         {
-          title: this.$t('bankName'),
+          title: '',
           key: 'bankName',
           align: 'center',
+          renderHeader: (h) => h('span', this.$t('bankName')),
         },
         {
-          title: this.$t('accountName'),
+          title: '',
           key: 'name',
           align: 'center',
           minWidth: 150,
+          renderHeader: (h) => h('span', this.$t('accountName')),
         },
         {
-          title: this.$t('cardNo'),
+          title: '',
           key: 'cardNo',
           align: 'center',
+          renderHeader: (h) => h('span', this.$t('cardNo')),
         },
         {
-          title: this.$t('operation'),
+          title: '',
           key: 'operation',
           align: 'center',
+          renderHeader: (h) => h('span', this.$t('operation')),
           render: (h, params) => {
             return h(
               'Button',
@@ -233,14 +240,15 @@ var account = new Vue({
                   },
                 },
               },
-              this.$t('修改')
+              this.$t('delete')
             );
           },
         },
         {
-          title: this.$t('enable'),
+          title: '',
           key: 'switch',
           align: 'center',
+          renderHeader: (h) => h('span', this.$t('enable')),
           render: (h, params) => {
             return h('i-switch', {
               props: {
@@ -288,24 +296,28 @@ var account = new Vue({
       // 登录历史表格
       loginColumn: [
         {
-          title: this.$t('loginTime'),
+          title: '',
           key: 'formatLgInTime',
           align: 'center',
+          renderHeader: (h) => h('span', this.$t('loginTime')),
         },
         {
-          title: this.$t('loginPlat'),
+          title: '',
           key: 'lgPlatform',
           align: 'center',
+          renderHeader: (h) => h('span', this.$t('loginPlat')),
         },
         {
-          title: this.$t('ipAddress'),
+          title: '',
           key: 'lgIp',
           align: 'center',
+          renderHeader: (h) => h('span', this.$t('ipAddress')),
         },
         {
-          title: this.$t('status'),
+          title: '',
           key: 'lgStatus',
           align: 'center',
+          renderHeader: (h) => h('span', this.$t('status')),
           render: (h, params) => {
             return h('span', params.row.lgStatus === 1 ? this.$t('success') : this.$t('fail'));
           },
@@ -335,29 +347,34 @@ var account = new Vue({
       // 操作记录表格
       securityColumn: [
         {
-          title: this.$t('operationTime'),
+          title: '',
           key: 'formatCtime',
           align: 'center',
+          renderHeader: (h) => h('span', this.$t('operationTime')),
         },
         {
-          title: this.$t('operationPlat'),
+          title: '',
           key: 'networkWhere',
           align: 'center',
+          renderHeader: (h) => h('span', this.$t('operationPlat')),
         },
         {
-          title: this.$t('ipAddress'),
+          title: '',
           key: 'optIp',
           align: 'center',
+          renderHeader: (h) => h('span', this.$t('ipAddress')),
         },
         {
-          title: this.$t('operationName'),
+          title: '',
           key: 'networkOperator',
           align: 'center',
+          renderHeader: (h) => h('span', this.$t('operationName')),
         },
         {
-          title: this.$t('status'),
+          title: '',
           key: 'status',
           align: 'center',
+          renderHeader: (h) => h('span', this.$t('status')),
           render: (h, params) => {
             return h('span', params.row.optType === 1 ? this.$t('success') : this.$t('fail'));
           },
@@ -429,9 +446,17 @@ var account = new Vue({
       this.$refs.header.$data.isRegisterGoogleShow = true;
     },
     modifyEmail() {
+      if (!this.user.mobileNumber && !this.user.googleStatus) {
+        Toast.show('请先绑定手机或谷歌验证', { icon: 'warn' });
+        return;
+      }
       this.modalEmail = true;
     },
     modifyPhone() {
+      if (!this.user.email && !this.user.googleStatus) {
+        Toast.show('请先绑定手机或谷歌验证', { icon: 'warn' });
+        return;
+      }
       this.modalPhone = true;
     },
     handleSubmit(name) {
@@ -442,6 +467,7 @@ var account = new Vue({
             post('api/watchapp', that.selectCountry + '-' + that.formWhatsApp.number)
               .then(function(res) {
                 if (res) {
+                  that.$refs[name].resetFields();
                   that.modalWhatsApp = false;
                   that.getUserInfo();
                 }
@@ -452,7 +478,7 @@ var account = new Vue({
             that.modalBankConfirm = true;
           }
           if (name === 'formBankConfirm') {
-            if (that.formBankInfo.id) {
+            /* if (that.formBankInfo.id) {
               put('api/bankCard', {
                 id: that.formBankInfo.id,
                 bankName: that.formBankInfo.bankName,
@@ -469,25 +495,25 @@ var account = new Vue({
                 that.tabVerifyActive = 1;
                 that.getAllCard();
               });
-            }
-            if (!that.formBankInfo.id) {
-              post('api/bankCard', {
-                id: that.formBankInfo.id,
-                bankName: that.formBankInfo.bankName,
-                name: that.formBankInfo.name,
-                cardNo: that.formBankInfo.cardNo,
-                ibanNo: that.formBankInfo.ibanNo,
-                checkType: that.tabVerifyActive,
-                checkValue:
-                  that.tabVerifyActive == '1'
-                    ? that.formBankConfirm.google
-                    : that.formBankConfirm.phone,
-              }).then(function(res) {
-                that.modalBankConfirm = false;
-                that.tabVerifyActive = 1;
-                that.getAllCard();
-              });
-            }
+            } */
+            var api = that.formBankInfo.id ? 'api/deleteBankCard' : 'api/bankCard';
+            post(api, {
+              id: that.formBankInfo.id,
+              bankName: that.formBankInfo.bankName,
+              name: that.formBankInfo.name,
+              cardNo: that.formBankInfo.cardNo,
+              ibanNo: that.formBankInfo.ibanNo,
+              checkType: that.tabVerifyActive,
+              checkValue:
+                that.tabVerifyActive == '1'
+                  ? that.formBankConfirm.google
+                  : that.formBankConfirm.phone,
+            }).then(function(res) {
+              that.modalBankConfirm = false;
+              that.tabVerifyActive = 1;
+              that.$refs[name].resetFields();
+              that.getAllCard();
+            });
           }
           if (name === 'formPassword') {
             post('api/user/password_update', {
@@ -499,6 +525,7 @@ var account = new Vue({
               if (res) {
                 that.tabVerifyActive = 1;
                 that.modalPassword = false;
+                that.$refs[name].resetFields();
               }
             });
           }
@@ -510,6 +537,7 @@ var account = new Vue({
             }).then(function(res) {
               if (res) {
                 that.modalGoogle = false;
+                that.$refs[name].resetFields();
                 that.getUserInfo();
               }
             });
@@ -525,6 +553,7 @@ var account = new Vue({
             }).then(function(res) {
               if (res) {
                 that.modalEmail = false;
+                that.$refs[name].resetFields();
                 that.getUserInfo();
               }
             });
@@ -542,6 +571,7 @@ var account = new Vue({
             }).then(function(res) {
               if (res) {
                 that.modalPhone = false;
+                that.$refs[name].resetFields();
                 that.getUserInfo();
               }
             });
@@ -552,9 +582,32 @@ var account = new Vue({
       });
     },
     handleReset(name) {
-      var sufix = name.substr(4);
+      if (name === 'formBankConfirm' && !this.formBankInfo.id) {
+        this.modalBankConfirm = false;
+        this.modalBankInfo = true;
+      } else {
+        var sufix = name.substr(4);
+        this['modal' + sufix] = false;
+      }
+      this.sendPlaceholderPassword = this.$t('sendVerify');
+      this.sendDisabledPassword = false;
+      this.sendPlaceholderGoogle = this.$t('sendVerify');
+      this.sendDisabledGoogle = false;
+      this.sendPlaceholderOldEmail = this.$t('sendVerify');
+      this.sendDisabledOldEmail = false;
+      this.sendPlaceholderEmail = this.$t('sendVerify');
+      this.sendDisabledEmail = false;
+      this.sendPlaceholderOldPhone = this.$t('sendVerify');
+      this.sendDisabledOldPhone = false;
+      this.sendPlaceholderNewPhone = this.$t('sendVerify');
+      this.sendDisabledNewPhone = false;
+      this.sendPlaceholderBank = this.$t('sendVerify');
+      this.sendDisabledBank = false;
+      for (var key in this.timers) {
+        clearInterval(this.timers[key]);
+        delete this.timers[key];
+      }
       this.$refs[name].resetFields();
-      this['modal' + sufix] = false;
     },
     getAllCard: function() {
       var that = this;
@@ -565,10 +618,17 @@ var account = new Vue({
       });
     },
     modifyBankInfo(data) {
+      if (!this.user.mobileNumber && !this.user.googleStatus) {
+        Toast.show('请先绑定手机或谷歌验证', { icon: 'warn' });
+        return;
+      }
+      this.bankCardAction = data ? this.$t('delete') + this.$t('bankCard') : this.$t('confirm') + this.$t('bind');
       if (data) {
         this.formBankInfo = JSON.parse(JSON.stringify(data));
+        this.modalBankConfirm = true;
+      } else {
+        this.modalBankInfo = true;
       }
-      this.modalBankInfo = true;
     },
     modifyBankStatus(data) {
       var that = this;
@@ -637,15 +697,15 @@ var account = new Vue({
     },
     countDown(name) {
       var that = this;
-      var counter = 60;
+      var counter = 90;
       that['sendPlaceholder' + name] = counter + 's';
-      var timer = setInterval(function() {
+      that.timers[name] = setInterval(function() {
         counter -= 1;
         that['sendPlaceholder' + name] = counter + 's';
-        if (counter == 0) {
+        if (counter <= 0) {
           that['sendDisabled' + name] = false;
-          that['sendPlaceholder' + name] = $t('sendAgain');
-          clearInterval(timer);
+          that['sendPlaceholder' + name] = that.$t('sendAgain');
+          clearInterval(that.timers[name]);
         }
       }, 1000);
     },
