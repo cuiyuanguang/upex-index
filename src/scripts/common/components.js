@@ -1395,13 +1395,13 @@ var o_my_register = {
             </Select>
             </Input>
              <p class="my-loginNext-error">{{phoneValErrorText}}</p>
-               
+
           <Input
           v-model="phoneSmsCode"
           type="text"
           placeholder="phone verification code"
           class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
-       
+
           <span slot="append"
             class="my-slot-append"
             @click="runSendSms('phone')"
@@ -1438,8 +1438,9 @@ var o_my_register = {
           <span class="blue" @click="runLogin">log in</span>
         </div>
       </div>
-      </Modal>  
+      </Modal>
     `,
+  i18n: i18nComponents,
   data() {
     return {
       //email
@@ -2061,13 +2062,13 @@ var o_my_retrievePwd = {
             </Select>
             </Input>
              <p class="my-loginNext-error">{{phoneValErrorText}}</p>
-               
+
           <Input
           v-model="phoneSmsCode"
           type="text"
           placeholder="E-mail verification code"
           class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
-       
+
           <span slot="append"
             class="my-slot-append"
             @click="runSendSms('phone')"
@@ -2102,7 +2103,7 @@ var o_my_retrievePwd = {
         <div class="login-footer-wrap">
         </div>
       </div>
-      </Modal>  
+      </Modal>
     `,
   data() {
     return {
