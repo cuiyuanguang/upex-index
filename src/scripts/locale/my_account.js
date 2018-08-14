@@ -40,6 +40,10 @@ var messages = {
     zh: '谷歌验证',
     en: 'Google Authenticator',
   },
+  phone: {
+    zh: '手机',
+    en: 'Phone',
+  },
   phoneAuth: {
     zh: '手机验证',
     en: 'Phone verification',
@@ -87,6 +91,10 @@ var messages = {
   cardNo: {
     zh: '银行卡号',
     en: 'Card number',
+  },
+  number: {
+    zh: '号码',
+    en: 'number',
   },
   operation: {
     zh: '操作',
@@ -147,5 +155,101 @@ var messages = {
   notMatch: {
     zh: '重复输入密码不一致',
     en: 'The two input passwords do not match!'
-  }
+  },
+  change: {
+    zh: '修改',
+    en: 'change',
+  },
+  cancel: {
+    zh: '取消',
+    en: 'Cance',
+  },
+  confirm: {
+    zh: '确定',
+    en: 'Confirm',
+  },
+  origin: {
+    zh: '原始',
+    en: 'origin',
+  },
+  new: {
+    zh: '新',
+    en: 'new',
+  },
+  repeat: {
+    zh: '重复',
+    en: 'repeat',
+  },
+  verify: {
+    zh: '验证',
+    en: 'verification',
+  },
+  sms: {
+    zh: '短信',
+    en: 'SMS',
+  },
+  close: {
+    zh: '关闭',
+    en: 'close',
+  },
+  phoneHolder: {
+    zh: '请输入手机号码',
+    en: 'Enter phone number here',
+  },
+  phoneAuthHolder: {
+    zh: '请输入短信验证码',
+    en: 'Enter SMS verification code here',
+  },
+  emailHolder: {
+    zh: '请输入邮箱号码',
+    en: 'Enter email number here',
+  },
+  emailAuthHolder: {
+    zh: '请输入邮箱验证码',
+    en: 'Enter email verification code here',
+  },
+  googleAuthHolder: {
+    zh: '请输入谷歌验证码',
+    en: 'Enter Google verification code here',
+  },
+  passwordHolder: {
+    zh: '请输入登录密码',
+    en: 'Enter login password here',
+  },
+  bankNameHolder: {
+    zh: '请输入银行名称',
+    en: 'Enter bank name here',
+  },
+  accountNameHolder: {
+    zh: '请输入账户名称',
+    en: 'Enter account name here',
+  },
+  cardNoHolder: {
+    zh: '请输入银行卡号',
+    en: 'Enter card number here',
+  },
+  ibanNoHolder: {
+    zh: '请输入iban号码',
+    en: 'Enter iban number here',
+  },
+  formatError: {
+    zh: '格式错误',
+    en: 'format error',
+  },
+  six2eighteen: {
+    zh: '请输入长度在6到18位之间的字符',
+    en: 'Enter 6 to 18 characters here',
+  },
+  sendVerify: {
+    zh: '发送验证码',
+    en: 'send',
+  },
+  sendAgain: {
+    zh: '重新发送',
+    en: 'send again',
+  },
+  confirmLogOut: {
+    zh: '您确认要退出登录吗？',
+    en: 'Do you confirm to log out ?',
+  },
 };

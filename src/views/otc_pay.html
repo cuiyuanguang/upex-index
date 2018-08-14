@@ -157,7 +157,7 @@
             {{ $t('restTime') }}<span class="text-error">{{leftTime}}</span>
           </p>
           <p class="pay-notice" v-else>
-            <span class="text-error">{{leftTime}}</span>
+            <span class="text-error"> {{ $t('orderExpired') }}</span>
           </p>
         </div>
         <div class="pay-status" v-if="step==3">

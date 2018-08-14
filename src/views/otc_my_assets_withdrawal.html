@@ -22,7 +22,7 @@
           <div class="row-left">Currency</div>
           <div class="row-right currency-select">
             <i-select v-model="modelCurrency" @on-change="currencyChange(modelCurrency)" style="width:200px" size="large">
-              <i-option v-for="currency in currencyList" :value="currency.value" >{{ currency.value }}</i-option>
+              <i-option v-for="currency in currencyList" :value="currency.value">{{ currency.value }}</i-option>
             </i-select>
           </div>
         </div>
@@ -30,18 +30,20 @@
           <div class="row-left">Withdrawal Address</div>
           <div class="row-right address-select">
             <div class="address-none" v-show="addressList.length === 0" @click="addressClick">
-              Add address
+              <span class="font_family">&#xe629;</span>Add address
             </div>
-            <i-select  v-show="addressList.length" class="address-select-wrap" @on-change="addressChange(modelAddress)"  v-model="modelAddress" style="width:400px"
+            <i-select v-show="addressList.length" class="address-select-wrap" @on-change="addressChange(modelAddress)"
+                      v-model="modelAddress" style="width:400px"
                       size="large">
-              <i-option v-for="address in addressList" :value="address.address" :label="address.symbol + address.address">
+              <i-option v-for="address in addressList" :value="address.address" :label="address.label + ' ' + address.address">
                 <div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 350px;margin: 0;">
-                  <span>{{address.symbol}}</span>
+                  <span>{{address.label}}</span>
                   <span class="my-select-address">{{address.address}}</span></div>
-                  <span style="position: absolute;right: 15px;top: 8px;" @click.stop="delAddress(address.address)">1</span>
+                <span @click.stop="delAddress(address.address)" class="my-select-address-del font_family" :class="!delStatus?'delColor':''">
+                    &#xe62a;</span>
               </i-option>
               <i-option style="font-size: 14px" :value="'Add address'">
-                <div class="address" @click="addressClick">Add address</div>
+                <div class="address" @click.stop="addressClick"><span class="font_family">&#xe629;</span>Add address</div>
               </i-option>
             </i-select>
           </div>
@@ -50,17 +52,20 @@
           <div class="row-left">Amount</div>
           <div class="row-right amount-input">
             <i-input style="width: 400px" v-model="valueAmount" size="large"
-                     placeholder="The minimum withdrawal amount is 0.2 USDT"></i-input>
+                     placeholder="The minimum withdrawal amount is 0.2 USDT"
+                     :class="withdrawalErrorText != ''?'red':''"
+                     @on-focus="withdrawalErrorText = ''"
+            ></i-input>
             <p class="amount-p">
-              <span class="amount-p-title">Extractable:</span><span>980.23173829 USDT</span>
-              <span class="amount-p-title" style="margin-left: 20px">Extractable:</span><span>980.23173829 USDT</span>
+              <span class="amount-p-title">Extractable:</span><span>{{balanceExtractable}}</span>
+              <span class="amount-p-title" style="margin-left: 20px">Daily limit:</span><span>{{balanceLimit}}</span>
             </p>
-            <p class="amount-p amount-error-p">不能为空</p>
+            <p class="amount-p amount-error-p">{{withdrawalErrorText}}</p>
           </div>
         </div>
         <div class="row-wrap">
           <div class="row-left"></div>
-          <div class="row-right withdrawal-button">Withdrawal</div>
+          <div class="row-right withdrawal-button" @click="withdrawal">Withdrawal</div>
         </div>
       </div>
     </div>

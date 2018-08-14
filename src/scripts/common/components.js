@@ -1820,9 +1820,9 @@ var o_my_registerGoogle = {
   template: `
     <Modal
       v-model="registerGoogle"
-      @on-ok="ok"
       class-name="vertical-center-modal"
-      @on-cancel="asyncCancel" class="my-login my-loginGoogle"
+      @on-cancel="asyncCancel"
+      class="my-login my-loginGoogle"
       width="672"
     >
       <div class="loginGoogle-title">
@@ -1914,12 +1914,11 @@ var o_my_registerGoogle = {
   methods: {
     doCopy: function () {
       this.$copyText(this.googleKey).then(function (e) {
-        alert(this.$t('copySuccess'))
-      })
+        Toast.show(this.$t('copySuccess'), { icon: 'ok' });
+      });
     },
     getToken() {
-      var that = this
-      that.isregisterToken = localStorage.getItem('token') ? localStorage.getItem('token') : '';
+      this.isregisterToken = localStorage.getItem('token') ? localStorage.getItem('token') : '';
     },
     getGoogleInfo() {
       var that = this;
@@ -1930,8 +1929,6 @@ var o_my_registerGoogle = {
         if (res) {
           that.googleKey = res.googleKey;
           that.googleImg = res.googleImg;
-        } else {
-
         }
       });
     },
@@ -1958,9 +1955,7 @@ var o_my_registerGoogle = {
           };
           post('api/user/google_verify', JSON.stringify(data)).then(function (res) {
             if (res) {
-              that.asyncCancel()
-            } else {
-
+              that.asyncCancel();
             }
             that.modal_loading = false;
           });
@@ -1971,9 +1966,6 @@ var o_my_registerGoogle = {
       this.$parent.$emit('isregisterGoogle', false);
       this.modal_loading = false;
     },
-    ok() {
-      this.$Message.info('Clicked ok');
-    },
   }
   ,
   watch: {
@@ -1982,17 +1974,17 @@ var o_my_registerGoogle = {
         this.$i18n.locale = newVal;
       }
     },
-    registerCookie: function (a, b) {
-      this.isregisterToken = a;
-      this.getGoogleInfo();
+    registerGoogle: function(newVal) {
+      if (newVal) {
+        this.getToken();
+        this.getGoogleInfo()
+      }
     },
+    // registerCookie: function (a, b) {
+    //   this.isregisterToken = a;
+    //   this.getGoogleInfo();
+    // },
   },
-  mounted() {
-    if (localStorage.getItem('token')) {
-      this.getToken();
-      this.getGoogleInfo()
-    }
-  }
 };
 var o_my_retrievePwd = {
   template: `
@@ -2903,15 +2895,15 @@ var o_header = {
               </div>
             </li>
             <li class="items" v-if="logined">
-              <a href="otc_my_advert.html">{{ $t('pendingOrder') }}</a>
-            </li>
-            <li class="items" v-if="logined">
               <Dropdown>
                 <a href="javascript:void(0)">
                   {{ userInfo.showNickName }}
                   <Icon type="arrow-down-b"></Icon>
                 </a>
                 <DropdownMenu slot="list">
+                  <DropdownItem name="pendingOrder">
+                    <a href="otc_my_advert.html">{{ $t('pendingOrder') }}</a>
+                  </DropdownItem>
                   <DropdownItem name="account">
                     <a href="otc_my_account.html">{{ $t('myAccount') }}</a>
                   </DropdownItem>

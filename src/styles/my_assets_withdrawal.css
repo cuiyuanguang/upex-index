@@ -56,9 +56,15 @@
   height: 38px;
   line-height: 38px;
 }
-.address{
-  color:#666;
+
+.address {
+  color: #666;
+  transition: color .3s;
 }
+.address:hover{
+  color: #5C95EA;
+}
+
 .address-select {
   height: 40px;
 }
@@ -74,7 +80,15 @@
   border: 1px solid #D1E1FA;
   background: #EDF4FF;
 }
-
+.address-none .font_family{
+  font-size:12px;
+  margin-right: 4px;
+}
+.address .font_family{
+  font-size:12px;
+  color: #5C95EA;
+  margin-right: 4px;
+}
 .ivu-input-large {
   height: 40px;
 }
@@ -87,8 +101,12 @@
 
 .amount-error-p {
   color: red;
+  height:30px;
+  line-height:30px;
 }
-
+.red .ivu-input{
+  border-color:red;
+}
 .amount-p-title {
   color: #999;
 }
@@ -104,54 +122,91 @@
   line-height: 40px;
   font-size: 14px;
 }
-.ivu-select-large .ivu-select-item{
+
+.ivu-select-large .ivu-select-item {
   position: relative;
 }
-.address-select-wrap.ivu-select-large .ivu-select-item:last-child{
-  padding:0
+
+.address-select-wrap.ivu-select-large .ivu-select-item:last-child {
+  padding: 0
 }
-.address{
+
+.ivu-select-item-selected.ivu-select-item-focus {
+  background: #4297F1;
+}
+
+.ivu-select-item-selected.ivu-select-item-focus .my-select-address {
+  color: #fff;
+}
+
+.address {
   height: 30px;
   line-height: 30px;
   text-align: center;
   background: #fff;
 }
+
 .my-select-address {
   color: #ccc;
 }
-.ivu-modal-header{
+
+.ivu-modal-header {
   padding: 20px 30px;
 }
-.ivu-modal-close{
+
+.ivu-modal-close {
   right: 24px;
   top: 14px;
 }
-.ivu-modal-body{
-  padding:30px 50px 0;
+
+.ivu-modal-body {
+  padding: 30px 50px 0;
 }
-.modal-title{
-  font-size:14px;
+
+.modal-title {
+  font-size: 14px;
   line-height: 16px;
   margin-bottom: 12px;
 }
-.modal-input .ivu-input{
+
+.modal-input .ivu-input {
   background: #fafafa;
 }
-.WithdrawalAddressn-error{
-  height:30px;
-  line-height:30px;
-  color:red;
-  font-size:14px;
+
+.WithdrawalAddressn-error {
+  height: 30px;
+  line-height: 30px;
+  color: red;
+  font-size: 14px;
 }
-.ivu-modal-footer{
-  border-top:none;
-  padding:0 50px 50px;
+
+.ivu-modal-footer {
+  border-top: none;
+  padding: 0 50px 50px;
 }
+
 .vertical-center-modal {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.ivu-modal{
+
+.ivu-modal {
   top: 0;
+}
+
+.my-select-address-del {
+  position: absolute;
+  right: 15px;
+  top: 8px;
+  font-size: 12px;
+  transition: all .3s;
+  transform:scale(.7);
+  color:#999;
+}
+.my-select-address-del.delColor{
+  color:#ddd;
+}
+.my-select-address-del:hover {
+  color: #5C95EA;
 }

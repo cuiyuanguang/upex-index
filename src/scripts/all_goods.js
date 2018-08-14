@@ -51,6 +51,7 @@ var allGoods = new Vue({
       },
       //END挂单相关数据
       //user info
+      userId: '',
       isGoogleBind: false,
       isCardBind: false,
       isWatchAppBind: false,
@@ -105,6 +106,17 @@ var allGoods = new Vue({
       sellCurrentPage: 1,
       selllist: [],
       buylist: [],
+      modalOperationOrder: false,
+      cancelable: false,
+      pauseable: false,
+      modalMsg: {
+        title: '',
+        desc: '',
+        confirmText: '确认',
+      },
+      action: '',
+      advertId: '',
+      sequence: '',
     };
   },
   computed: {
@@ -132,10 +144,98 @@ var allGoods = new Vue({
   methods: {
     getUserInfo: function() {
       var user = JSON.parse(localStorage.getItem('user'));
+      this.userId = user && user.id;
       this.whatsApp = user && user.userExtView.watchapp;
       this.balance = user && user.usdtAmount.balance;
       this.isGoogleBind = user && user.googleAuthenticatorStatus === 1;
       this.isWatchAppBind = user && user.userExtView.watchapp;
+      this.getBindedCard();
+    },
+    // sell page handle
+    toSellPage: function(page) {
+      var that = this;
+      var data = {
+        coin: 'USDT',
+        page: page || 1,
+        pageSize: that.pageSize,
+        side: 'SELL',
+      };
+      get('api/adverts', data).then(function(res) {
+        if (res) {
+          that.totalPage = Math.round(res.count / that.pageSize);
+          that.buylist = res.rsts || [];
+          that.buyCurrentPage = page;
+          that.buyTotal = res.count;
+        }
+      });
+    },
+    // buy page handle
+    toBuyPage: function(page) {
+      var that = this;
+      var data = {
+        coin: 'USDT',
+        page: page || 1,
+        pageSize: that.pageSize,
+        side: 'BUY',
+      };
+      get('api/adverts', data).then(function(res) {
+        if (res) {
+          that.totalPage = Math.round(res.count / that.pageSize);
+          that.selllist = res.rsts || [];
+          that.sellCurrentPage = page;
+          that.sellTotal = res.count;
+        }
+      });
+    },
+    pause: function(item) {
+      this.action = item.status === 6 ? 'start' : 'pause';
+      this.advertId = item.id;
+      this.modalMsg = {
+        title: item.status === 6 ? this.$t('start') : this.$t('pause'),
+        desc: this.$t('confirm') + this.$t(this.action) + this.$t('thisOrder'),
+        confirmText: this.$t('confirm'),
+      };
+      this.modalOperationOrder = true;
+    },
+    cancel: function(item) {
+      if (item.status === 5 || item.status === 6) {
+        this.modalMsg = {
+          title: this.$t('unremovable'),
+          desc: this.$t('unremovableTips'),
+          confirmText: this.$t('unremovableOperation'),
+        };
+      } else {
+        this.modalMsg = {
+          title: this.$t('removable'),
+          desc: this.$t('removableTips'),
+          confirmText: this.$t('confirm'),
+        };
+        this.cancelable = true;
+        this.advertId = item.id;
+        this.sequence = item.sequence;
+      }
+      this.modalOperationOrder = true;
+      this.action = 'cancel';
+    },
+    manualAction: function() {
+      var that = this;
+      var api = {
+        pause: 'api/suspendAdvert',
+        start: 'api/openAdvert',
+        cancel: 'api/closeAdvert',
+      };
+      if (
+        (that.cancelable && that.action === 'cancel') ||
+        that.action === 'pause' ||
+        that.action === 'start'
+      ) {
+        post(api[that.action], that.advertId).then(function(res) {
+          if (res) {
+            that.showListTag === 'BUY' ? that.toBuyPage(1) : that.toSellPage(1);
+          }
+          that.modalOperationOrder = false;
+        });
+      }
     },
     getBindedCard: function() {
       var that = this;
@@ -214,11 +314,6 @@ var allGoods = new Vue({
         this.isContactShow = true;
         return;
       }
-      //check if card selected
-      // if(this.tradeCard.length<1){
-      // 	this.isSelectCardShow=true;
-      // 	return;
-      // }
       this.isBuyDialogShow = true;
       this.buyData.id = item.id;
       this.buyData.price = item.price;
@@ -385,6 +480,10 @@ var allGoods = new Vue({
         }
       });
     },
+    toGoogeAuth: function() {
+      this.isGoogleAuthShow = false;
+      this.$refs.header.$data.isRegisterGoogleShow = true;
+    },
     //post order
     postOrder: function() {
       var tag = this.postOrderTag;
@@ -543,42 +642,6 @@ var allGoods = new Vue({
       this.clearPostModal();
       this.isPostDialogShow = false;
     },
-    // sell page handle
-    toSellPage: function(page) {
-      var that = this;
-      var data = {
-        coin: 'USDT',
-        page: page || 1,
-        pageSize: that.pageSize,
-        side: 'SELL',
-      };
-      get('api/adverts', data).then(function(res) {
-        if (res) {
-          that.totalPage = Math.round(res.count / that.pageSize);
-          that.buylist = res.rsts || [];
-          that.buyCurrentPage = page;
-          that.buyTotal = res.count;
-        }
-      });
-    },
-    // buy page handle
-    toBuyPage: function(page) {
-      var that = this;
-      var data = {
-        coin: 'USDT',
-        page: page || 1,
-        pageSize: that.pageSize,
-        side: 'BUY',
-      };
-      get('api/adverts', data).then(function(res) {
-        if (res) {
-          that.totalPage = Math.round(res.count / that.pageSize);
-          that.selllist = res.rsts || [];
-          that.sellCurrentPage = page;
-          that.sellTotal = res.count;
-        }
-      });
-    },
   },
   mounted: function() {
     var that = this;
@@ -619,7 +682,6 @@ var allGoods = new Vue({
     });
     if (localStorage.getItem('token')) {
       this.getUserInfo();
-      this.getBindedCard();
     }
     this.toBuyPage();
     this.toSellPage();
