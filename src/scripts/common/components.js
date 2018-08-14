@@ -1399,7 +1399,7 @@ var o_my_register = {
           <Input
           v-model="phoneSmsCode"
           type="text"
-          placeholder="E-mail verification code"
+          placeholder="phone verification code"
           class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
        
           <span slot="append"
@@ -1602,7 +1602,7 @@ var o_my_register = {
     },
     //发送验证码
     runSendSms(type) {
-      const TIME_COUNT = 10;
+      const TIME_COUNT = 90;
       var that = this;
       var data;
       if (type === 'phone') {
@@ -2264,7 +2264,7 @@ var o_my_retrievePwd = {
     },
     //发送验证码
     runSendSms(type) {
-      const TIME_COUNT = 10;
+      const TIME_COUNT = 90;
       var that = this;
       var data;
       if (type === 'phone') {
