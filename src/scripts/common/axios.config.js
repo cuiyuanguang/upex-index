@@ -66,7 +66,7 @@ $http.interceptors.response.use(
         Toast.show(toastMsg[result.code][locale], {
           icon: 'warning',
           callback: function() {
-            if (result.code == 2048) {
+            if (result.code == 2048 || result.code == 10002) {
               localStorage.removeItem('user');
               localStorage.removeItem('token');
               location.href = 'otc_adverts.html';

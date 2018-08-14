@@ -210,3 +210,106 @@
 .my-select-address-del:hover {
   color: #5C95EA;
 }
+.withdrawal-container .ivu-modal-body{
+  padding:0;
+}
+.withdrawal-wrap{
+background: #f4f4f4;
+  padding:30px 30px 14px;
+  overflow: hidden;
+  font-size:14px;
+}
+.withdrawal-container .ivu-modal-header{
+  border-bottom: none;
+}
+.withdrawal-container .ivu-modal-footer{
+  padding:0 30px 30px;
+}
+.gray-left{
+  width:140px;
+  color:#666;
+  float: left;
+}
+.gray-right{
+  float: left;
+  color:#333;
+}
+.withdrawal-wrap p{
+  margin-bottom: 16px;
+}
+.withdrawal-container .ivu-tabs{
+  overflow: inherit;
+}
+.ivu-tabs-nav .ivu-tabs-tab{
+  padding: 8px 0;
+}
+.ivu-tabs-bar{
+  border-bottom: none;
+}
+.tabs-wrap{
+  padding:10px 30px;
+}
+.withdrawal-container .loginNext-input{
+  text-align: left;
+  margin: 0;
+}
+
+.withdrawal-container .loginNext-input .ivu-input{
+  width:100%;
+  height: 40px;
+  background: #fafafa;
+
+}
+.withdrawal-container .loginNext-input .ivu-input-group-append{
+  z-index: 2;
+  top: 1px;
+  width: auto;
+  right: 1px;
+  border-radius: 0;
+  border: 0;
+  height: 38px;
+  background: #fafafa;
+  line-height: 30px;
+  cursor: pointer;
+}
+.withdrawal-container .my-loginNext-error{
+  margin: 0;
+}
+.tabs-wrap-h1{
+  font-weight: bold;
+  color:#434343;
+  font-size:14px;
+  margin-bottom: 12px;
+}
+.withdrawalTrue-title{
+  padding:50px;
+}
+.withdrawalTrue-icon{
+  float: left;
+  width:50px;
+  height:50px;
+  background-image: url("../images/withdrawalTrue-icon.png");
+}
+.withdrawalTrue-title p{
+  margin-left: 75px;
+  color:#333;
+  line-height:27px;
+  font-size:18px;
+  font-weight: bold;
+}
+.withdrawalTrue-text-wrap{
+  padding:0 50px 40px;
+  overflow: hidden;
+}
+.withdrawalTrue-text-wrap p {
+  margin-bottom: 18px;
+  word-break: break-all;
+}
+.withdrawalTrue-text-left{
+  float: left;
+  width:160px;
+}
+.withdrawalTrue-text-right{
+  float: left;
+  width: 240px;
+}

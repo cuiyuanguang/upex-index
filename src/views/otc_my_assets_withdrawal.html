@@ -116,6 +116,108 @@
       <i-button type="primary" size="large" long :loading="modal_loading" @click="addressFun">Log in</i-button>
     </div>
   </modal>
+  <modal
+    v-model="withdrawalModel"
+    title="Please comfirm withdrawal info"
+    @on-cancel="withdrawalCancel"
+    class-name="vertical-center-modal withdrawal-container"
+    width="500"
+    :loading="withdrawalLoading"
+  >
+    <div class="withdrawal-wrap">
+      <div class="gray-left">
+        <p>Withdrawal amount:</p>
+        <p>Fees :</p>
+        <p>Actual arrival:</p>
+      </div>
+      <div class="gray-right">
+        <p>{{valueAmount}} {{changeCoin}}</p>
+        <p>{{balanceDefaultFee}} {{changeCoin}}</p>
+        <p>{{valueAmountCalc}} {{changeCoin}}</p>
+      </div>
+    </div>
+    <div class="tabs-wrap">
+      <tabs v-model="tabsName" @on-click="tabChange">
+        <tab-pane label="E-mail verification" name="loginEmail" disabled='disabledEmail'>
+          <i-input
+            v-model="emailSmsCode"
+            type="text"
+            placeholder="E-mail verification code"
+            class="loginNext-input loginNext-sms-input" @on-focus="emailSmsCodeFocus" :class="emailSmsCodeError?'loginNext-input-red':' '">
+          <span slot="append"
+                class="my-slot-append"
+                @click="runSendSms('email')"
+                :class="timerEmail?'my-slot-append-gary':'my-slot-append'"
+          >
+            {{sendSmsEmail}}
+          </span>
+          </i-input>
+          <p class="my-loginNext-error">{{emailSmsCodeErrorText}}</p>
+
+        </tab-pane>
+        <tab-pane label="SMS verification" name="loginPhone">
+          <i-input
+            v-model="phoneSmsCode"
+            type="text"
+            placeholder="phone verification code"
+            class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
+
+          <span slot="append"
+                class="my-slot-append"
+                @click="runSendSms('phone')"
+                :class="timerPhone?'my-slot-append-gary':'my-slot-append'"
+          >
+            {{sendSmsPhone}}
+          </span>
+          </i-input>
+          <p class="my-loginNext-error">{{phoneSmsCodeErrorText}}</p>
+        </tab-pane>
+      </tabs>
+      <h1 class="tabs-wrap-h1">Google verification</h1>
+      <i-input
+        v-model="googleCode"
+        type="text"
+        placeholder="phone verification code"
+        class="loginNext-input loginNext-sms-input" @on-focus="googleCodeFocus" :class="googleCodeError?'loginNext-input-red':' '">
+          </span>
+      </i-input>
+      <p class="my-loginNext-error">{{googleCodeErrorText}}</p>
+    </div>
+    <div slot="footer">
+      <i-button type="primary" size="large" long :loading="withdrawalLoading" @click="okWithdrawal">Complete binding</i-button>
+    </div>
+  </modal>
+  <modal
+    v-model="withdrawalModelTrue"
+    title=""
+    @on-cancel="withdrawalCancelTrue"
+    class-name="vertical-center-modal withdrawal-container"
+    width="500"
+    :loading="withdrawalLoadingTrue"
+  >
+    <div class="withdrawalTrue-title">
+      <div class="withdrawalTrue-icon"></div>
+      <p>The coin application has been submitted please be patient</p>
+
+    </div>
+    <div class="withdrawalTrue-text-wrap">
+      <div class="withdrawalTrue-text-left">
+        <p>Number of arrivals:</p>
+        <p>Fees :</p>
+        <p>Application time:</p>
+        <p>Withdrawal address:</p>
+      </div>
+      <div class="withdrawalTrue-text-right">
+        <p style="color:#5C95EA">{{valueAmountCalc}} {{changeCoin}}</p>
+        <p>{{balanceDefaultFee}} {{changeCoin}}</p>
+        <p>{{withdrawalTime}}</p>
+        <p>{{withdrawalAddress}}</p>
+      </div>
+    </div>
+    <div slot="footer">
+      <i-button type="primary" size="large" long :loading="withdrawalLoading" @click="withdrawalCancelTrue">ok</i-button>
+    </div>
+  </modal>
 </div>
 @@include('footer.html')
 <script src="../scripts/locale/my_assets_withdrawal.js?rev=@@hash"></script>
