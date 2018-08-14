@@ -160,13 +160,12 @@
 .pay-action-btn {
   width: 170px;
   height: 44px;
-  background: rgba(255, 237, 0, 1);
+  background: #5C95EA;
   border-radius: 5px;
   outline: none;
   border: none;
   font-size: 16px;
-  font-family: SanFranciscoDisplay-Medium;
-  color: rgba(51, 51, 51, 1);
+  color: #fff;
 }
 
 .pay-tips {
@@ -211,7 +210,8 @@
   height: 38px;
   line-height: 38px;
   text-align: center;
-  background: rgba(251, 246, 184, 1);
+  background: #DAE9FF;
+  color: #526682;
   border-radius: 5px;
 }
 
@@ -241,7 +241,7 @@
 #app .pay-modal .content-wrapper .pay-modal-content .paid {
   width: 251px;
   height: 44px;
-  background: rgba(255, 237, 0, 1);
+  background: #5C95EA;
   border: 0;
   border-radius: 5px;
   line-height: 44px;
@@ -293,7 +293,7 @@
   border: none;
   width: 400px;
   height: 44px;
-  background: rgba(255, 237, 0, 1);
+  background: #5C95EA;
   border-radius: 5px;
   font-size: 16px;
   color: rgba(51, 51, 51, 1);
