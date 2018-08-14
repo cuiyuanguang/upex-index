@@ -10,8 +10,8 @@
 <body>
   <div id="app" v-cloak>
     <o-header ref="header"></o-header>
-    <div class="wrapper" style="margin-bottom: 70px;margin-top:30px;" v-show="orderInfo.orderId">
-      <div class="pay">
+    <div class="wrapper" style="margin-bottom: 70px;margin-top:30px;" v-show="orderInfo.sequence">
+      <div class="pay" v-if="step < 4">
         <div class="pay-header">
           <h3 v-if="step == 1">
             {{ $t('waitForBuyer') }}
@@ -40,13 +40,13 @@
                 <li class="info-items">
                   <Row>
                     <i-col span="6" class="info-key">{{ $t('orderNo') }} :</i-col>
-                    <i-col span="18" class="info-value">{{orderInfo.orderId}}</i-col>
+                    <i-col span="18" class="info-value">{{orderInfo.sequence}}</i-col>
                   </Row>
                 </li>
                 <li class="info-items">
                   <Row>
                     <i-col span="6" class="info-key">{{ $t('totalPurchase') }} :</i-col>
-                    <i-col span="18" class="info-value">{{orderInfo.totalVolume}} USDT</i-col>
+                    <i-col span="18" class="info-value">{{orderInfo.volume}} USDT</i-col>
                   </Row>
                 </li>
                 <li class="info-items">
@@ -86,7 +86,7 @@
                     {{ $t('buyName') }}
                   </i-col>
                   <i-col span="15">
-                    {{orderInfo.nickname}}
+                    {{orderInfo.buyer.showNickName}}
                   </i-col>
                 </Row>
                 <Row>
@@ -95,7 +95,7 @@
                     {{ $t('phone') }}
                   </i-col>
                   <i-col span="15">
-                    {{orderInfo.phone}}
+                    {{orderInfo.buyer.hideMobileNumber}}
                   </i-col>
                 </Row>
                 <Row>
@@ -149,6 +149,33 @@
           <p class="pay-tips">
             <a href="otc_adverts.html">{{ $t('backToHome') }}</a>
           </p>
+        </div>
+      </div>
+      <div v-if="step==4 || step==7" class="wrapper">
+        <div class="expired">
+          <h2 style="color:red;">{{ step == 4 ? $t('orderCanceledTips') : $t('orderExpiredTips') }}</h2>
+          <ul>
+            <li>
+              <span>{{ $t('reasonForFailure') }} :</span>
+              <span v-if="step == 4">{{ $t('orderCanceled') }}</span>
+              <span v-if="step == 7">{{ orderInfo.paymentTime ? $t('outOfTimeToConfirm') : $t('outOfTimeToPay') }}</span>
+            </li>
+            <li>
+              <span>{{ $t('orderNo') }} :</span>
+              <span>{{ orderInfo.sequence }}</span>
+            </li>
+            <li>
+              <span>{{ $t('totalPurchase') }} :</span>
+              <span>{{ orderInfo.volume }} USDT</span>
+            </li>
+            <li>
+              <span>{{ $t('totalPrice') }} :</span>
+              <span>{{ orderInfo.totalPrice }} SAR</span>
+            </li>
+          </ul>
+          <div class="return">
+            <a href="otc_adverts.html">{{ $t('backToHome') }}</a>
+          </div>
         </div>
       </div>
     </div>

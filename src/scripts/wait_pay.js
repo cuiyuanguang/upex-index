@@ -19,7 +19,6 @@ var waitPay = new Vue({
       isPayDialogShow: false,
       //trigger of pay info modal
       //trigger of trade success
-      isTradeSuccess: false,
       //step of pay
       step: 1,
       //left time for pay
@@ -29,20 +28,17 @@ var waitPay = new Vue({
       confirmLimit: 0,
       //-----------order info-----------------//
       orderInfo: {
-        totalPrice: 0,
-        totalVolume: 0,
-        orderId: 0,
-        bankCard: [],
-        phone: '',
-        socialNumber: '',
+        advert: {},
+        buyer: {
+          userExtView: {},
+        },
+        seller: {
+          userExtView: {},
+        },
+        user: {},
       },
+      whatsAppLink: '',
     };
-  },
-  computed: {
-    whatsAppLink: function() {
-      var whatsAppStr = this.orderInfo.socialNumber;
-      return whatsAppStr.substr(whatsAppStr.indexOf('-') + 1);
-    },
   },
   methods: {
     confirmOrder: function() {
@@ -84,22 +80,13 @@ var waitPay = new Vue({
           return;
         }
         //to make sure the status of the order
+        that.orderInfo = data;
         that.step = data.status;
-        //if trade success ,show the notice of  usdt arrival
-        if (data.status == 3) {
-          that.isTradeSuccess = true;
-        }
-        //create time of the order
-        // set  orderInfo;
-        that.orderInfo.totalPrice = data.totalPrice;
-        that.orderInfo.totalVolume = data.volume;
-        that.orderInfo.orderId = data.sequence;
-        that.orderInfo.phone = data.buyer.hideMobileNumber;
-        that.orderInfo.bankCard = data.paymentBanks;
         that.orderInfo.bankCardLastNum =
           data.description && JSON.parse(data.description).paymentBankCard;
-        that.orderInfo.socialNumber = data.buyer.userExtView.watchapp.replace(/\s+/g, '');
-        that.orderInfo.nickname = data.buyer.showNickName;
+        //to make sure the status of the order
+        var whatsAppStr = data.seller.userExtView.watchapp;
+        that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1).replace(/\s+/g, '');
         var expiredTime = data.countDownTime + Date.now();
         var timer = setInterval(function () {
           var now = Date.now();
