@@ -54,6 +54,11 @@ var messages = {
     en: 'Phone',
     ar: 'الهاتف',
   },
+  newPhone: {
+    zh: '新手机',
+    en: 'New Phone',
+    ar: 'هاتف جديد',
+  },
   phoneAuth: {
     zh: '手机验证',
     en: 'Phone verification',
@@ -128,6 +133,11 @@ var messages = {
     zh: '启用',
     en: 'Enable',
     ar: 'تمكين',
+  },
+  delete: {
+    zh: '删除',
+    en: 'Delete',
+    ar: 'حذف',
   },
   loginHistory: {
     zh: '登录历史',
@@ -209,25 +219,25 @@ var messages = {
     en: 'Confirm',
     ar: 'تأكيد',
   },
-  origin: {
+  originPassword: {
     zh: '旧密码',
     en: 'Old password',
     ar: 'كلمة السر القديمة',
   },
-  new: {
+  newPassword: {
     zh: '新密码',
     en: 'New password',
     ar: 'كلمة السر الجديدة',
   },
-  repeat: {
+  repeatPassword: {
     zh: '确认密码',
     en: 'confirm password',
     ar: 'تأكيد كلمة السر',
   },
   verify: {
-    zh: '短信验证',
-    en: 'SMS verification',
-    ar: 'التحقق من الرسالة',
+    zh: '验证',
+    en: 'verification',
+    ar: 'التحقق',
   },
   sms: {
     zh: '短信',

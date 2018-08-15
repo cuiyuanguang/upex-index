@@ -122,23 +122,3 @@
 .account .ivu-page {
   text-align: center;
 }
-
-.modal-notice .ivu-modal-body {
-  padding: 0;
-}
-
-.modal-notice .modal-notice-header {
-  padding: 20px 50px;
-}
-
-.modal-notice .modal-notice-header .ivu-row {
-  line-height: 32px;
-}
-
-.modal-notice.info .modal-notice-header {
-  background-color: #f4f4f4;
-}
-
-.modal-notice .modal-notice-footer {
-  padding: 20px 20px 0;
-}

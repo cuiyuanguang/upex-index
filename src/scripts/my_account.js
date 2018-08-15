@@ -189,7 +189,8 @@ var account = new Vue({
         cardNo: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
         ibanNo: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
       },
-      bankCardAction: '',
+      modalBankConfirmTitle: '',
+      modalBankConfirmCancel: '',
       modalBankConfirm: false,
       tabVerifyActive: '1',
       formBankConfirm: {
@@ -497,22 +498,32 @@ var account = new Vue({
               });
             } */
             var api = that.formBankInfo.id ? 'api/deleteBankCard' : 'api/bankCard';
+            var checkType;
+            if (that.user.mobileNumber && that.user.googleStatus) {
+              checkType = that.tabVerifyActive;
+            } else if (that.user.mobileNumber && !that.user.googleStatus) {
+              checkType = 2;
+            } else {
+              checkType = 1;
+            }
             post(api, {
               id: that.formBankInfo.id,
               bankName: that.formBankInfo.bankName,
               name: that.formBankInfo.name,
               cardNo: that.formBankInfo.cardNo,
               ibanNo: that.formBankInfo.ibanNo,
-              checkType: that.tabVerifyActive,
+              checkType: checkType,
               checkValue:
-                that.tabVerifyActive == '1'
+                checkType == 1
                   ? that.formBankConfirm.google
                   : that.formBankConfirm.phone,
             }).then(function(res) {
-              that.modalBankConfirm = false;
-              that.tabVerifyActive = 1;
-              that.$refs[name].resetFields();
-              that.getAllCard();
+              if (res) {
+                that.modalBankConfirm = false;
+                that.tabVerifyActive = 1;
+                that.$refs[name].resetFields();
+                that.getAllCard();
+              }
             });
           }
           if (name === 'formPassword') {
@@ -548,8 +559,8 @@ var account = new Vue({
               emailOldValidCode: that.formEmail.oldEmail,
               email: that.formEmail.email,
               emailNewValidCode: that.formEmail.verify,
-              smsValidCode: that.formEmail.phone,
-              googleCode: that.formEmail.google,
+              smsValidCode: that.formEmail.phone || '',
+              googleCode: that.formEmail.google || '',
             }).then(function(res) {
               if (res) {
                 that.modalEmail = false;
@@ -622,11 +633,16 @@ var account = new Vue({
         Toast.show('请先绑定手机或谷歌验证', { icon: 'warn' });
         return;
       }
-      this.bankCardAction = data ? this.$t('delete') + this.$t('bankCard') : this.$t('confirm') + this.$t('bind');
+      this.modalBankConfirmTitle = data ? this.$t('delete') + this.$t('bankCard') : this.$t('confirm') + this.$t('bind');
+      this.modalBankConfirmCancel = data ? this.$t('cancel') : this.$t('change');
       if (data) {
         this.formBankInfo = JSON.parse(JSON.stringify(data));
         this.modalBankConfirm = true;
       } else {
+        this.$refs['formBankInfo'].resetFields();
+        for (var key in this.formBankInfo) {
+          this.formBankInfo[key] = '';
+        }
         this.modalBankInfo = true;
       }
     },
