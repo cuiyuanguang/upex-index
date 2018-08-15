@@ -49,6 +49,11 @@ var messages = {
     en: 'Buyer',
     ar: 'المشتري',
   },
+  mine: {
+    zh: '我的',
+    en: 'Mine',
+    ar: 'الخاص بي',
+  },
   amount: {
     zh: '数量',
     en: 'Amount',
@@ -78,6 +83,21 @@ var messages = {
     zh: '操作',
     en: 'Operation',
     ar: 'إجراء العملية',
+  },
+  cancel: {
+    zh: '取消',
+    en: 'Cancel',
+    ar: 'إلغاء',
+  },
+  start: {
+    zh: '开始接单',
+    en: 'Start receiving orders',
+    ar: 'بدء باستقبال الطلبات',
+  },
+  pause: {
+    zh: '暂停接单',
+    en: 'suspend receiving orders',
+    ar: 'وقف استقبال الطلبات',
   },
   currentPrice: {
     zh: '当前市场价',

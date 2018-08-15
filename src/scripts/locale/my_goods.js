@@ -54,19 +54,16 @@ var messages = {
     en: 'Cancel',
     ar: 'إلغاء',
   },
-
   start: {
     zh: '开始接单',
     en: 'Start receiving orders',
     ar: 'بدء باستقبال الطلبات',
   },
-
   pause: {
     zh: '暂停接单',
     en: 'suspend receiving orders',
     ar: 'وقف استقبال الطلبات',
   },
-
   thisOrder: {
     zh: '此订单',
     en: 'this order',
