@@ -159,6 +159,11 @@ var toastMsg = {
     en: 'Resetting password failed, please try again later',
     ar: 'تعذّر إعادة تعيين كلمة السر ، يرجى إعادة المحاولة لاحقًا',
   },
+  '10054': {
+    zh: '新手机号与原手机号相同',
+    en: 'The new mobile phone number is the same as the original mobile phone number',
+    ar: 'رقم الهاتف المحمول الجديد هو نفس رقم الهاتف المحمول الأصلي',
+  },
   '2': {
     zh: '未登录',
     en: 'not signed in',
@@ -400,13 +405,13 @@ var toastMsg = {
     ar: 'أضف ما يصل إلى 5 بطاقات مصرفية',
   },
   '2063': {
-    zh: '发布挂单的数量被限制,当日取消订单数量超过3次',
-    en: 'The number of pending orders is limited, and the number of cancelled orders on the same day exceeds 3 times.',
+    zh: '操作被限制,当日取消订单数量超过3次',
+    en: 'The operation is limited, and the number of cancelled orders on the same day exceeds 3 times.',
     ar: 'عدد الطلبات المعلقة محدود ، وعدد الطلبات الملغاة في نفس اليوم يتجاوز 3 مرات.',
   },
   '2066': {
-    zh: '发布挂单的数量被限制,当日进行中的订单数量超过3笔',
-    en: 'The number of pending orders is limited, and the number of orders in progress on the day exceeds 3',
+    zh: '操作被限制,当日进行中的订单数量超过3笔',
+    en: 'The operation is limited, and the number of orders in progress on the day exceeds 3',
     ar: 'عدد الطلبات المعلقة محدود ، وعدد الطلبات قيد التقدم في اليوم يتجاوز 3',
   },
 };

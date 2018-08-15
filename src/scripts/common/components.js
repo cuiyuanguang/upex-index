@@ -669,83 +669,80 @@ var selectCard = {
 //------------------------add contact----------------------------------------------------
 var addContact = {
   template: `
-    <div class="o-modal add-contact-modal" :class="show?'is-show':'is-not-show'">
-      <div class="content">
-        <div class="content-wrapper">
-          <div class="o-header">
-            {{ $t('addContact') }}
-            <Icon @click="close" type="close" class="close"></Icon>
-          </div>
-          <div class="o-body">
-            <div class="tp">
-              <div><img src="../images/whatup.png" /></div>
-              <p>{{ $t('addContactTips') }}</p>
-            </div>
-            <ul class="bt">
-              <li>
-                <p>WhatsApp {{ $t('account') }}</p>
-                <Input
-                  v-model="wahtsApp"
-                  maxlength="30"
-                  placeholder="Enter your WhatsApp number"
-                >
-                  <Select v-model="selectCountry" slot="prepend" filterable style="width:86px;">
-                    <Option
-                      v-for="(country, index) in countryArr"
-                      :key="index"
-                      :value="country.dialingCode"
-                      :label="country.dialingCode"
-                      style="width:100%;"
-                    >
-                      <span class="float-left">{{country.dialingCode}}</span>
-                      <span class="float-right" style="color:#aaaaaa;">{{country.enName}}</span>
-                    </Option>
-                  </Select>
-                </Input>
-                <span class="error" v-if="accountErrorTips">{{ accountErrorTips }}</spam>
-              </li>
-              <li>
-                <button @click="bind">{{ $t('submit') }}</button>
-              </li>
-            </ul>
-          </div>
-        </div>
+    <Modal :title="$t('addContact')" class="modal-notice info" v-model="show" @on-cancel="">
+      <div class="modal-notice-header">
+        <div class="text-center"><img src="../images/whatup.png" /></div>
+        <p class="text-center">{{ $t('addContactTips') }}</p>
       </div>
-    </div>
+      <div class="modal-notice-footer">
+        <i-form ref="formWhatsApp" :model="formWhatsApp" :rules="ruleWhatsApp" label-position="top">
+          <form-item label="WhatsApp" prop="number">
+            <i-input
+              v-model="formWhatsApp.number"
+              maxlength="30"
+              :placeholder="$t('whatsAppHolder')"
+            >
+              <i-select class="country-select" v-model="selectCountry" slot="prepend" filterable>
+                <i-option
+                  v-for="(country, index) in countryArr"
+                  :key="index"
+                  :value="country.dialingCode"
+                  :label="country.dialingCode"
+                  style="width:100%;"
+                >
+                  <span class="float-left">{{country.dialingCode}}</span>
+                  <span class="float-right" style="color:#aaaaaa;">{{country.enName}}</span>
+                </i-option>
+              </i-select>
+            </i-input>
+          </form-item>
+        </i-form>
+      </div>
+      <div slot="footer">
+        <i-button type="primary" long @click="handleSubmit('formWhatsApp')">{{ $t('confirm') }}</i-button>
+      </div>
+    </Modal>
   `,
   i18n: i18nComponents,
   data() {
     return {
-      wahtsApp: '',
-      countryArr: [],
+      formWhatsApp: {
+        number: '',
+      },
+      ruleWhatsApp: {
+        number: [
+          { required: true, pattern: /(\d|\w)+$/, message: this.$t('numericOrLetter'), trigger: 'change' },
+        ],
+      },
       selectCountry: '+86',
-      accountErrorTips: '',
     };
   },
   props: ['show', 'locale'],
-  methods: {
-    close() {
-      this.$parent.$emit('isContactShow', false);
+  computed: {
+    countryArr: function() {
+      return JSON.parse(localStorage.getItem('country'));
     },
-    bind() {
-      if (!this.wahtsApp) {
-        this.accountErrorTips = 'whatsApp' + this.$t('noEmpty');
-      } else if (!/(\d|\w)+$/.test(this.wahtsApp)) {
-        this.accountErrorTips = this.$t('numericOrLetter');
-      } else {
-        this.accountErrorTips = '';
-        var that = this;
-        post('api/watchapp', this.selectCountry + '-' + this.wahtsApp).then(function (res) {
-          if (res) {
-            get('api/userInfo').then(function (res) {
-              var data = res;
-              that.wahtsApp = '';
-              localStorage.setItem('user', JSON.stringify(data));
-              that.$parent.$emit('isAddContactShow', false);
-            });
-          }
-        });
-      }
+  },
+  methods: {
+    handleSubmit(name) {
+      var that = this;
+      this.$refs[name].validate(function(valid){
+        if (valid) {
+          post('api/watchapp', that.selectCountry + '-' + that.wahtsApp).then(function (res) {
+            if (res) {
+              get('api/userInfo').then(function (result) {
+                localStorage.setItem('user', JSON.stringify(result));
+                that.handleClose();
+              });
+            }
+          });
+        }
+      });
+    },
+    handleClose() {
+      this.$refs[name].resetFields();
+      this.$parent.$emit('isContactShow', false);
+      this.$parent.$emit('isAddContactShow', false);
     },
   },
   watch: {
@@ -2981,7 +2978,9 @@ var o_header = {
     },
     toggleLanguage(name) {
       this.$i18n.locale = name;
+      document.documentElement.lang = name;
       document.body.dir = name === 'zh' ? 'ltr' : 'rtl';
+      document.body.style.fontSize = name === 'zh' ? '14px' : '12px';
       localStorage.setItem('locale', name);
       this.$parent.$emit('locale', name);
     },

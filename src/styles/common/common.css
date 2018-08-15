@@ -3,22 +3,22 @@
   direction: inherit;
 }
 
-*[dir='ltr'] {
-  direction: ltr;
-  unicode-bidi: embed;
-}
-
-*[dir='rtl'] {
-  direction: rtl;
-  unicode-bidi: embed;
-}
-
 body[dir='rtl'] * {
   direction: rtl;
+  unicode-bidi: normal;
 }
 
 body[dir='ltr'] * {
   direction: ltr;
+  unicode-bidi: normal;
+}
+
+*[dir='ltr'] {
+  direction: ltr;
+}
+
+*[dir='rtl'] {
+  direction: rtl;
 }
 
 body[dir='rtl'] .ivu-col-span-1,
@@ -109,6 +109,10 @@ body[dir='rtl'] .ivu-tabs .ivu-tabs-content-animated {
   direction: ltr;
 }
 
+.ivu-tabs .ivu-tabs-tabpane {
+  display: block !important;
+}
+
 .text-left {
   text-align: left;
 }
@@ -192,6 +196,29 @@ body[dir='rtl'] .float-right {
 .country-select .ivu-select-item {
   height: 26px;
 }
+
+
+.modal-notice .ivu-modal-body {
+  padding: 0;
+}
+
+.modal-notice .modal-notice-header {
+  padding: 20px 50px;
+}
+
+.modal-notice .modal-notice-header .ivu-row {
+  line-height: 32px;
+}
+
+.modal-notice.info .modal-notice-header {
+  background-color: #f4f4f4;
+}
+
+.modal-notice .modal-notice-footer {
+  padding: 20px 20px 0;
+}
+
+/* 下面是原来的样式 */
 
 div,
 ul {
