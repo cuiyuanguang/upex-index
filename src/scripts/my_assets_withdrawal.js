@@ -82,10 +82,41 @@ var myAssetsWithdrawal = new Vue({
     AddressTag: '',
     AddressTagErrorText: '',
     withdrawalErrorText: '',
-    balance:{},
-    balanceExtractable:'',
-    balanceLimit:'',
-    loading:false,
+    balance: {},
+    balanceExtractable: '',
+    balanceLimit: '',
+    loading: false,
+    withdrawalModel: false,
+    phoneSmsCode: '',
+    phoneSmsCodeError: false,
+    phoneSmsCodeErrorText: '',
+    emailSmsCode: '',
+    emailSmsCodeError: false,
+    emailSmsCodeErrorText: '',
+    sendSmsEmail: 'get verification code',
+    sendSmsPhone: 'get verification code',
+    showEmail: true,
+    showPhone: true,
+    countEmail: '',
+    countPhone: '',
+    timerEmail: null,
+    timerPhone: null,
+    googleCode: '',
+    googleCodeError: false,
+    googleCodeErrorText: '',
+    disabledEmail: true,
+    tabsName: 'loginPhone',
+    changeCoin: '',
+    balanceDefaultFee: '',
+    balanceDefaultFeeCalc: '',
+    valueAmountCalc: '',
+    addressListID: '',
+    withdrawalLoading:false,
+    withdrawalModelTrue:false,
+    withdrawalLoadingTrue:false,
+    withdrawalTime:'',
+    withdrawalAddress:'',
+
   },
   methods: {
     //提现
@@ -127,8 +158,14 @@ var myAssetsWithdrawal = new Vue({
     //添加地址
     addressChange(val) {
       if (this.addressList.length && val === 'Add address') {
-        this.modelAddress = this.addressList[0].val
+        this.modelAddress = this.addressList[0].address
       }
+      for(var i=0;i<this.addressList.length;i++){
+        if(val === this.addressList[i].address){
+          this.addressListID = this.addressList[i].id
+        }
+      }
+      console.log(this.addressListID);
     },
     //切换第一个select
     currencyChange(val) {
@@ -140,8 +177,10 @@ var myAssetsWithdrawal = new Vue({
       } else if (val === 'ETH') {
         this.addressList = this.currencyListETH
       }
-      this.balanceExtractable = this.balance[val].normal_balance + ' ' + val
-      this.balanceLimit = this.balance[val].withdraw_min + ' ' + val
+      this.changeCoin = val;
+      this.balanceExtractable = this.balance[val].normal_balance + ' ' + val;
+      this.balanceLimit = this.balance[val].withdraw_min + ' ' + val;
+      this.balanceDefaultFee = this.balance[val].defaultFee;
     },
     //打开添加地址页面
     addressClick() {
@@ -164,6 +203,7 @@ var myAssetsWithdrawal = new Vue({
             that.currencyListETH = res.addressList;
           }
           that.getUserBalance()
+          that.delStatus = true;
         }
       })
     },
@@ -180,10 +220,12 @@ var myAssetsWithdrawal = new Vue({
             };
             post('api/addr/delete_withdraw_addr', JSON.stringify(data), false).then((res) => {
               if (res) {
-                that.addressList.splice(i - 1, 1);
+                that.getAddress(that.modelCurrency);
                 that.modelAddress = ''
+              }else{
+                that.delStatus = true;
               }
-              that.delStatus = true;
+
             })
           }
         }
@@ -223,6 +265,7 @@ var myAssetsWithdrawal = new Vue({
         }
       })
     },
+
     AddressTagFocus() {
       this.AddressTagError = false
     },
@@ -230,14 +273,31 @@ var myAssetsWithdrawal = new Vue({
       this.modal_loading = true;
     },
     withdrawal() {
-      if(this.loading){
-        if(this.valueAmount === ''|| this.valueAmount === null){
+      if (this.loading) {
+        if (this.valueAmount === '' || this.valueAmount === null) {
           this.withdrawalErrorText = '不能为空'
-        }else if(isNaN(this.valueAmount) || Number(this.valueAmount) < Number(this.balance[this.modelCurrency].withdraw_min) || Number(this.valueAmount) > Number(this.balance[this.modelCurrency].normal_balance)){
+        } else if (isNaN(this.valueAmount) || Number(this.valueAmount) < Number(this.balance[this.modelCurrency].withdraw_min) || Number(this.valueAmount) > Number(this.balance[this.modelCurrency].normal_balance)) {
           this.withdrawalErrorText = '请输入合法的区间范围'
-        }else{
-
+        } else  {
+          this.withdrawalModel = true;
+          this.valueAmount = this.returnFloat(Number(this.valueAmount));
+          this.valueAmountCalc = this.returnFloat(Number(this.valueAmount) - Number(this.balanceDefaultFee))
         }
+      }
+    },
+    //保留2位小数
+    returnFloat(value) {
+      var value = Math.round(parseFloat(value) * 100000000) / 100000000;
+      var xsd = value.toString().split(".");
+      if (xsd.length == 1) {
+        value = value.toString() + ".00";
+        return value;
+      }
+      if (xsd.length > 1) {
+        if (xsd[1].length < 2) {
+          value = value.toString() + "0";
+        }
+        return value;
       }
     },
     //获取用户数据
@@ -246,10 +306,125 @@ var myAssetsWithdrawal = new Vue({
       post('api/finance/account_balance', {}, false).then((res) => {
         if (res) {
           that.loading = true;
-          that.balance = res.allCoinMap
+          that.balance = res.allCoinMap;
           that.currencyChange(that.modelCurrency)
         }
       })
+    },
+    //添加地址弹框
+    //取消
+    withdrawalCancel() {
+      this.modal_loading = false;
+      this.clearAdd();
+    },
+    clearAdd() {
+
+    },
+    //发送验证码
+    runSendSms(type) {
+      const TIME_COUNT = 90;
+      var that = this;
+      var data;
+      if (type === 'phone') {
+        if (!that.timerPhone) {
+          data = {
+            operationType: '13',
+          };
+          that.countPhone = TIME_COUNT;
+          that.sendSmsPhone = 'Resend after ' + that.countPhone + 's';
+          that.showPhone = false;
+          that.timerPhone = setInterval(() => {
+            if (that.countPhone > 0 && that.countPhone <= TIME_COUNT) {
+              that.countPhone--;
+              that.sendSmsPhone = 'Resend after ' + that.countPhone + ' s';
+            } else {
+              that.sendSmsPhone = 'Reacquire';
+              that.showPhone = true;
+              clearInterval(that.timerPhone);
+              that.timerPhone = null;
+            }
+          }, 1000);
+          post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
+            if (res) {
+
+            } else {
+
+            }
+          });
+        }
+      } else if (type === 'email') {
+        if (!that.timerEmail) {
+          data = {
+            email: that.emailVal,
+            operationType: '1',
+          };
+          that.countEmail = TIME_COUNT;
+          that.sendSmsEmail = 'Resend after ' + that.countEmail + 's';
+          that.showEmail = false;
+          that.timerEmail = setInterval(() => {
+            if (that.countEmail > 0 && that.countEmail <= TIME_COUNT) {
+              that.countEmail--;
+              that.sendSmsEmail = 'Resend after ' + that.countEmail + ' s';
+            } else {
+              that.sendSmsEmail = 'Reacquire';
+              that.showEmail = true;
+              clearInterval(that.timerEmail);
+              that.timerEmail = null;
+            }
+          }, 1000);
+          post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
+            if (res) {
+
+            } else {
+            }
+          });
+        }
+      }
+
+    },
+    //email
+    emailSmsCodeFocus() {
+      this.emailSmsCodeError = false;
+      this.emailSmsCodeErrorText = ''
+    },
+    //phone
+    phoneSmsCodeFocus() {
+      this.phoneSmsCodeError = false;
+      this.phoneSmsCodeErrorText = ''
+    },
+    //google
+    googleCodeFocus() {
+      this.googleCodeError = false;
+      this.googleCodeErrorText = '';
+    },
+    tabChange(name) {
+      console.log(name)
+    },
+    okWithdrawal() {
+      var data;
+      var that = this;
+      that.withdrawalLoading = true;
+      data = {
+        symbol: this.changeCoin,
+        addressId: this.addressListID,
+        amount: this.valueAmount,
+        fee: this.balanceDefaultFee,
+        smsAuthCode: this.phoneSmsCode,
+        googleCode: this.googleCode,
+      };
+      post('api/finance/do_withdraw', JSON.stringify(data)).then((res) => {
+        that.withdrawalLoading = false;
+        if(res){
+          that.withdrawalModelTrue = true;
+          that.withdrawalModel = false;
+          that.withdrawalTime = res.applyTime;
+          that.withdrawalAddress = res.address
+        }
+      })
+    },
+    //提现确认框
+    withdrawalCancelTrue(){
+      this.withdrawalModelTrue= false;
     },
   },
   mounted() {

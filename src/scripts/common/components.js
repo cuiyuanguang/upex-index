@@ -271,7 +271,7 @@ var om_notice = {
               height: 44px;
               line-height: 44px;
               text-align: center;
-              background: rgba(255, 237, 0, 1);
+              background: #5C95EA;
               border-radius: 5px;
               font-size: 16px;
               color: rgba(51, 51, 51, 1);
@@ -1231,6 +1231,7 @@ var o_my_loginNext = {
                   that.isLogined = true;
                   that.$parent.$emit('logined', that.isLogined);
                   localStorage.setItem('user', JSON.stringify(res));
+                  location.reload();
                 }
               });
             } else {
@@ -1399,7 +1400,7 @@ var o_my_register = {
           <Input
           v-model="phoneSmsCode"
           type="text"
-          placeholder="E-mail verification code"
+          placeholder="phone verification code"
           class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
 
           <span slot="append"
@@ -1603,7 +1604,7 @@ var o_my_register = {
     },
     //发送验证码
     runSendSms(type) {
-      const TIME_COUNT = 10;
+      const TIME_COUNT = 90;
       var that = this;
       var data;
       if (type === 'phone') {
@@ -2266,7 +2267,7 @@ var o_my_retrievePwd = {
     },
     //发送验证码
     runSendSms(type) {
-      const TIME_COUNT = 10;
+      const TIME_COUNT = 90;
       var that = this;
       var data;
       if (type === 'phone') {
@@ -2695,8 +2696,8 @@ var o_find_password = {
         phone: '',
       },
       ruleFind: {
-        email: [{ validator: validateEmail, trigger: 'blur' }],
-        phone: [{ validator: validatePhone, trigger: 'blur' }],
+        email: [{ validator: validateEmail, trigger: 'change' }],
+        phone: [{ validator: validatePhone, trigger: 'change' }],
       },
       sendPlaceholderEmail: '发送验证码',
       sendDisabledEmail: false,
@@ -2710,19 +2711,19 @@ var o_find_password = {
         verifyGoogle: '',
       },
       ruleReset: {
-        password: [{ validator: validatePassword, trigger: 'blur' }],
-        passwordAgain: [{ validator: validatePasswordAgain, trigger: 'blur' }],
+        password: [{ validator: validatePassword, trigger: 'change' }],
+        passwordAgain: [{ validator: validatePasswordAgain, trigger: 'change' }],
         verifyEmail: [
-          { validator: validateVerifyEmail, trigger: 'blur' },
-          { type: 'number', message: '必须输入数字', trigger: 'blur' },
+          { validator: validateVerifyEmail, trigger: 'change' },
+          { type: 'number', message: '必须输入数字', trigger: 'change' },
         ],
         verifyPhone: [
-          { validator: validateVerifyPhone, trigger: 'blur' },
-          { type: 'number', message: '必须输入数字', trigger: 'blur' },
+          { validator: validateVerifyPhone, trigger: 'change' },
+          { type: 'number', message: '必须输入数字', trigger: 'change' },
         ],
         verifyGoogle: [
-          { validator: validateVerifyGoogle, trigger: 'blur' },
-          { type: 'number', message: '必须输入数字', trigger: 'blur' },
+          { validator: validateVerifyGoogle, trigger: 'change' },
+          { type: 'number', message: '必须输入数字', trigger: 'change' },
         ],
       },
     };
@@ -2896,15 +2897,15 @@ var o_header = {
               </div>
             </li>
             <li class="items" v-if="logined">
+              <a href="otc_my_advert.html">{{ $t('pendingOrder') }}</a>
+            </li>
+            <li class="items" v-if="logined">
               <Dropdown>
                 <a href="javascript:void(0)">
                   {{ userInfo.showNickName }}
                   <Icon type="arrow-down-b"></Icon>
                 </a>
                 <DropdownMenu slot="list">
-                  <DropdownItem name="pendingOrder">
-                    <a href="otc_my_advert.html">{{ $t('pendingOrder') }}</a>
-                  </DropdownItem>
                   <DropdownItem name="account">
                     <a href="otc_my_account.html">{{ $t('myAccount') }}</a>
                   </DropdownItem>
@@ -2929,7 +2930,7 @@ var o_header = {
                 <DropdownMenu slot="list">
                   <DropdownItem name="zh">ZH</DropdownItem>
                   <DropdownItem name="en">EN</DropdownItem>
-                  <DropdownItem name="sa">SA</DropdownItem>
+                  <DropdownItem name="ar">AR</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </li>

@@ -149,7 +149,6 @@ var allGoods = new Vue({
       this.balance = user && user.usdtAmount.balance;
       this.isGoogleBind = user && user.googleAuthenticatorStatus === 1;
       this.isWatchAppBind = user && user.userExtView.watchapp;
-      this.getBindedCard();
     },
     // sell page handle
     toSellPage: function(page) {
@@ -294,7 +293,7 @@ var allGoods = new Vue({
     // sell USDT
     showSellUsdt: function(item) {
       // check if login
-      this.getUserInfo();
+      // this.getUserInfo();
       if (!localStorage.getItem('user')) {
         this.$refs.header.showLogin();
         return;
@@ -332,7 +331,7 @@ var allGoods = new Vue({
     //buy USDT
     showBuyUsdt: function(item) {
       // check if login
-      this.getUserInfo();
+      // this.getUserInfo();
       if (!localStorage.getItem('user')) {
         this.$refs.header.showLogin();
         return;
@@ -682,6 +681,7 @@ var allGoods = new Vue({
     });
     if (localStorage.getItem('token')) {
       this.getUserInfo();
+      this.getBindedCard();
     }
     this.toBuyPage();
     this.toSellPage();

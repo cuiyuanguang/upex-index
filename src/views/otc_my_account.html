@@ -15,7 +15,7 @@
     </div>
     <div class="container account">
       <!-- 账户与安全信息 -->
-      <Row class="container-row" v-show="user.id">
+      <Row class="container-row" v-show="user.lastLoginTime">
         <i-col span="12">
           <dl class="account-card">
             <dt>
@@ -29,15 +29,6 @@
                 </i-col>
               </Row>
             </dt>
-            <dd>
-              <Row>
-                <i-col span="6" class="text-secondary">
-                  <Icon type="person" color="#cfcfcf" size="16"></Icon>
-                  {{ $t('accountNo') }}
-                </i-col>
-                <i-col span="18" class="text-strong">{{ user.id }}</i-col>
-              </Row>
-            </dd>
             <dd>
               <Row>
                 <i-col span="6" class="text-secondary">
@@ -131,7 +122,7 @@
               {{ $t('bankCardTips') }}
             </i-col>
             <i-col span="12" class="text-right">
-              <i-button type="text" size="small" icon="plus" @click="modifyBankInfo">{{ $t('addBankCard') }}</i-button>
+              <i-button type="text" size="small" icon="plus" @click="modifyBankInfo('')">{{ $t('addBankCard') }}</i-button>
             </i-col>
           </Row>
           <i-table size="small" :columns="bankColumn" :data="bankData"></i-table>
@@ -152,7 +143,7 @@
       </div>
     </div>
     <!-- 修改WhatsApp -->
-    <Modal :title="$t('change') + 'WhatsApp'" v-model="modalWhatsApp">
+    <Modal :title="$t('change') + 'WhatsApp'" v-model="modalWhatsApp" @on-cancel="handleReset('formWhatsApp')">
       <i-form ref="formWhatsApp" :model="formWhatsApp" :rules="ruleWhatsApp" :label-position="top">
         <form-item :label="'WhatsApp: ' + user.watchapp" prop="number">
           <i-input
@@ -181,15 +172,15 @@
       </div>
     </Modal>
     <!-- 修改密码 -->
-    <Modal :title="$t('change') + $t('password')" v-model="modalPassword">
+    <Modal :title="$t('change') + $t('password')" v-model="modalPassword" @on-cancel="handleReset('formPassword')">
       <i-form ref="formPassword" :model="formPassword" :rules="rulePassword" :label-position="top">
-        <form-item :label="$t('origin') + $t('password')" prop="password">
+        <form-item :label="$t('origin')" prop="password">
           <i-input type="password" v-model="formPassword.password"></i-input>
         </form-item>
-        <form-item :label="$t('new') + $t('password')" prop="passwordNew">
+        <form-item :label="$t('new')" prop="passwordNew">
           <i-input type="password" v-model="formPassword.passwordNew"></i-input>
         </form-item>
-        <form-item :label="$t('repeat') + $t('new') + $t('password')" prop="passwordReNew">
+        <form-item :label="$t('repeat')" prop="passwordReNew">
           <i-input type="password" v-model="formPassword.passwordReNew"></i-input>
         </form-item>
         <form-item :label="$t('phoneAuth')" prop="phone" v-if="user.mobileNumber">
@@ -198,7 +189,7 @@
           </i-input>
         </form-item>
         <form-item label="Email" prop="email" v-else-if="user.email">
-          <i-input v-model="formPassword.email" maxlength="6" :placeholder="emailAuthHolder">
+          <i-input v-model="formPassword.email" maxlength="6" :placeholder="$t('emailAuthHolder')">
             <i-button slot="append" @click="sendMessageSecurity('Email', 15)" :disabled="sendDisabledEmail">{{ sendPlaceholderEmail }}</i-button>
           </i-input>
         </form-item>
@@ -212,7 +203,7 @@
       </div>
     </Modal>
     <!-- 修改谷歌 -->
-    <Modal :title="$t('close') + 'Google' + $t('verify')" v-model="modalGoogle">
+    <Modal :title="$t('close') + 'Google' + $t('verify')" v-model="modalGoogle" @on-cancel="handleReset('formGoogle')">
       <i-form ref="formGoogle" :model="formGoogle" :rules="rulePassword" :label-position="top">
         <form-item :label="$t('sms') + $t('verify')" prop="phone">
           <i-input v-model="formGoogle.phone" maxlength="6" :placeholder="$t('phoneAuthHolder')">
@@ -232,7 +223,7 @@
       </div>
     </Modal>
     <!-- 修改邮箱 -->
-    <Modal :title="$t('change') + 'Email'" v-model="modalEmail">
+    <Modal :title="$t('change') + 'Email'" v-model="modalEmail" @on-cancel="handleReset('formEmail')">
       <i-form ref="formEmail" :model="formEmail" :rules="ruleEmail" :label-position="top">
         <form-item :label="$t('origin') + 'Email:' + user.email" prop="oldEmail" v-show="user.email">
           <i-input v-model="formEmail.oldEmail" maxlength="6" :placeholder="$t('emailAuthHolder')">
@@ -262,7 +253,7 @@
       </div>
     </Modal>
     <!-- 修改手机 -->
-    <Modal :title="$t('change') + $t('phone')" v-model="modalPhone">
+    <Modal :title="$t('change') + $t('phone')" v-model="modalPhone" @on-cancel="handleReset('formPhone')">
       <i-form ref="formPhone" :model="formPhone" :rules="rulePhone" :label-position="top">
         <form-item :label="$t('origin') + $t('phone') + $t('verify') + '(' + $t('phone') + user.mobileNumber + ')'" prop="oldVerify" v-show="user.mobileNumber">
           <i-input v-model="formPhone.oldVerify" maxlength="6" :placeholder="$t('phoneAuthHolder')">
@@ -306,7 +297,7 @@
     </Modal>
     <!-- 添加/修改银行卡 -->
     <div>
-      <Modal :title="$t('change') + $t('bankCard')" v-model="modalBankInfo">
+      <Modal :title="$t('change') + $t('bankCard')" v-model="modalBankInfo" @on-cancel="handleReset('formBankInfo')">
         <i-form ref="formBankInfo" :model="formBankInfo" :rules="ruleBankInfo" :label-position="top">
           <form-item :label="$t('bankName')" prop="bankName">
             <i-input v-model="formBankInfo.bankName" maxlength="30" :placeholder="$t('bankNameHolder')"></i-input>
@@ -326,7 +317,7 @@
           <i-button type="primary" @click="handleSubmit('formBankInfo')">{{ $t('confirm') }}</i-button>
         </div>
       </Modal>
-      <Modal :title="$t('confirm') + $t('bind')" class="modal-notice info" v-model="modalBankConfirm">
+      <Modal :title="bankCardAction" class="modal-notice info" v-model="modalBankConfirm">
         <div class="modal-notice-header">
           <Row>
             <i-col span="8" class="text-secondary">{{ $t('bankName') }}</i-col>
@@ -346,14 +337,14 @@
           </Row>
         </div>
         <div class="modal-notice-footer">
-          <i-form ref="formBankConfirm" :model="formBankConfirm" :rules="ruleBankConfirm" :label-position="top">
+          <i-form ref="formBankConfirm" :model="formBankConfirm" :rules="ruleBankConfirm" label-position="top">
             <Tabs v-model="tabVerifyActive">
-              <tab-pane :label="$t('googleAuth')" name="1">
+              <tab-pane :label="$t('googleAuth')" name="1" v-show="user.mobileNumber">
                 <form-item label="" prop="google">
                   <i-input v-model="formBankConfirm.google" maxlength="30" :placeholder="$t('googleAuthHolder')"></i-input>
                 </form-item>
               </tab-pane>
-              <tab-pane :label="$t('phoneAuth')" name="2">
+              <tab-pane :label="$t('phoneAuth')" name="2" v-show="user.googleStatus">
                 <form-item label="" prop="phone">
                   <i-input v-model="formBankConfirm.phone" maxlength="6" :placeholder="$t('phoneAuthHolder')">
                     <i-button slot="append" @click="sendMessage('Bank', 3)" :disabled="sendDisabledBank">{{ sendPlaceholderBank }}</i-button>
@@ -364,7 +355,7 @@
           </i-form>
         </div>
         <div slot="footer">
-          <i-button type="text" @click="handleReset('formBankConfirm')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
+          <i-button type="text" @click="handleReset('formBankConfirm')" style="margin-left: 8px">{{ $t('change') }}</i-button>
           <i-button type="primary" @click="handleSubmit('formBankConfirm')">{{ $t('confirm') }}</i-button>
         </div>
       </Modal>

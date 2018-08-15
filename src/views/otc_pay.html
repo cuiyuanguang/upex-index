@@ -183,7 +183,8 @@
         <ul>
           <li>
             <span>{{ $t('reasonForFailure') }} :</span>
-            <span>{{ step == 4 ? $t('orderCanceled') : $t('orderExpired') }}</span>
+            <span v-if="step == 4">{{ $t('orderCanceled') }}</span>
+            <span v-if="step == 7">{{ orderInfo.paymentTime ? $t('outOfTimeToConfirm') : $t('outOfTimeToPay') }}</span>
           </li>
           <li>
             <span>{{ $t('orderNo') }} :</span>
