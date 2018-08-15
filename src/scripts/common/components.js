@@ -1911,8 +1911,9 @@ var o_my_registerGoogle = {
   props: ['registerGoogle', 'registerCookie'],
   methods: {
     doCopy: function () {
+      var that = this;
       this.$copyText(this.googleKey).then(function (e) {
-        Toast.show(this.$t('copySuccess'), { icon: 'ok' });
+        Toast.show(that.$t('copySuccess'), { icon: 'ok' });
       });
     },
     getToken() {
