@@ -12,6 +12,7 @@ var myAssetsWithdrawal = new Vue({
     row_my_assets_with
   },
   data: {
+    userInfo: {},
     data3: [],
     columns3: [
       {
@@ -54,7 +55,7 @@ var myAssetsWithdrawal = new Vue({
     ],
     data3Page: 1,
     tableLoading3: true,
-    modelCurrency: 'USDT',
+    modelCurrency: '',
     currencyList: [
       {
         value: 'USDT'
@@ -104,8 +105,7 @@ var myAssetsWithdrawal = new Vue({
     googleCode: '',
     googleCodeError: false,
     googleCodeErrorText: '',
-    disabledEmail: true,
-    tabsName: 'loginPhone',
+    tabsName: 'loginEmail',
     changeCoin: '',
     balanceDefaultFee: '',
     balanceDefaultFeeCalc: '',
@@ -116,7 +116,8 @@ var myAssetsWithdrawal = new Vue({
     withdrawalLoadingTrue:false,
     withdrawalTime:'',
     withdrawalAddress:'',
-
+    disabledEmail: false,
+    disabledPhone: false,
   },
   methods: {
     //提现
@@ -398,12 +399,38 @@ var myAssetsWithdrawal = new Vue({
       this.googleCodeErrorText = '';
     },
     tabChange(name) {
-      console.log(name)
+      if(name === 'loginPhone'){
+        this.emailSmsCode = '';
+        this.emailSmsCodeError = false;
+        this.emailSmsCodeErrorText = '';
+      } else{
+        this.phoneSmsCode = '';
+        this.phoneSmsCodeError = false;
+        this.phoneSmsCodeErrorText = '';
+      }
     },
     okWithdrawal() {
       var data;
       var that = this;
-      that.withdrawalLoading = true;
+      if(this.tabsName === 'loginEmail'){
+        if(this.emailSmsCode.length !== 6){
+          this.emailSmsCodeError = true;
+          this.emailSmsCodeErrorText = this.$t('emailErrorCode');
+          return;
+        }
+      } else{
+        if(this.phoneSmsCode.length !== 6){
+          this.phoneSmsCodeError = true;
+          this.phoneSmsCodeErrorText = this.$t('phoneErrorCode');
+          return;
+        }
+      }
+
+      if(this.googleCode.length !== 6){
+        this.googleCodeError = true;
+        this.googleCodeErrorText = this.$t('googleErrorCode');
+        return;
+      }
       data = {
         symbol: this.changeCoin,
         addressId: this.addressListID,
@@ -411,7 +438,9 @@ var myAssetsWithdrawal = new Vue({
         fee: this.balanceDefaultFee,
         smsAuthCode: this.phoneSmsCode,
         googleCode: this.googleCode,
+        emailCode: this.emailSmsCode
       };
+      that.withdrawalLoading = true;
       post('api/finance/do_withdraw', JSON.stringify(data)).then((res) => {
         that.withdrawalLoading = false;
         if(res){
@@ -428,6 +457,12 @@ var myAssetsWithdrawal = new Vue({
     },
   },
   mounted() {
+    this.userInfo = JSON.parse(localStorage.getItem('user'));
+    //判断email和 phone Tab显示隐藏
+    this.disabledEmail = this.userInfo.emailAuthenticatorStatus === 0;
+    this.disabledPhone = this.userInfo.mobileAuthenticatorStatus === 0;
+    //判断跳转过来货币类型
+    this.modelCurrency = localStorage.getItem('asset_type') ? localStorage.getItem('asset_type') : 'USDT';
     this.getUserWithDrawList();
     this.getAddress('USDT');
     this.getAddress('ETH');
@@ -441,4 +476,7 @@ var myAssetsWithdrawal = new Vue({
       }
     },
   },
+  destroyed(){
+    localStorage.removeItem("asset_type");
+  }
 });

@@ -238,7 +238,7 @@ background: #f4f4f4;
   margin-bottom: 16px;
 }
 .withdrawal-container .ivu-tabs{
-  overflow: inherit;
+  overflow: hidden;
 }
 .ivu-tabs-nav .ivu-tabs-tab{
   padding: 8px 0;

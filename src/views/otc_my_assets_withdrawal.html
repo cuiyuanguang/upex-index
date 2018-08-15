@@ -137,13 +137,13 @@
       </div>
     </div>
     <div class="tabs-wrap">
-      <tabs v-model="tabsName" @on-click="tabChange">
-        <tab-pane label="E-mail verification" name="loginEmail" disabled='disabledEmail'>
-          <i-input
-            v-model="emailSmsCode"
-            type="text"
-            placeholder="E-mail verification code"
-            class="loginNext-input loginNext-sms-input" @on-focus="emailSmsCodeFocus" :class="emailSmsCodeError?'loginNext-input-red':' '">
+        <tabs v-model="tabsName" @on-click="tabChange">
+          <tab-pane label="E-mail verification" :disabled="disabledEmail" name="loginEmail">
+            <i-input
+              v-model="emailSmsCode"
+              type="text"
+              placeholder="E-mail verification code"
+              class="loginNext-input loginNext-sms-input" @on-focus="emailSmsCodeFocus" :class="emailSmsCodeError?'loginNext-input-red':' '">
           <span slot="append"
                 class="my-slot-append"
                 @click="runSendSms('email')"
@@ -151,16 +151,16 @@
           >
             {{sendSmsEmail}}
           </span>
-          </i-input>
-          <p class="my-loginNext-error">{{emailSmsCodeErrorText}}</p>
+            </i-input>
+            <p class="my-loginNext-error">{{emailSmsCodeErrorText}}</p>
 
-        </tab-pane>
-        <tab-pane label="SMS verification" name="loginPhone">
-          <i-input
-            v-model="phoneSmsCode"
-            type="text"
-            placeholder="phone verification code"
-            class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
+          </tab-pane>
+          <tab-pane label="SMS verification" :disabled="disabledPhone" name="loginPhone">
+            <i-input
+              v-model="phoneSmsCode"
+              type="text"
+              placeholder="phone verification code"
+              class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
 
           <span slot="append"
                 class="my-slot-append"
@@ -169,20 +169,20 @@
           >
             {{sendSmsPhone}}
           </span>
-          </i-input>
-          <p class="my-loginNext-error">{{phoneSmsCodeErrorText}}</p>
-        </tab-pane>
-      </tabs>
-      <h1 class="tabs-wrap-h1">Google verification</h1>
-      <i-input
-        v-model="googleCode"
-        type="text"
-        placeholder="phone verification code"
-        class="loginNext-input loginNext-sms-input" @on-focus="googleCodeFocus" :class="googleCodeError?'loginNext-input-red':' '">
+            </i-input>
+            <p class="my-loginNext-error">{{phoneSmsCodeErrorText}}</p>
+          </tab-pane>
+        </tabs>
+        <h1 class="tabs-wrap-h1">Google verification</h1>
+        <i-input
+          v-model="googleCode"
+          type="text"
+          placeholder="phone verification code"
+          class="loginNext-input loginNext-sms-input" @on-focus="googleCodeFocus" :class="googleCodeError?'loginNext-input-red':' '">
           </span>
-      </i-input>
-      <p class="my-loginNext-error">{{googleCodeErrorText}}</p>
-    </div>
+        </i-input>
+        <p class="my-loginNext-error">{{googleCodeErrorText}}</p>
+      </div>
     <div slot="footer">
       <i-button type="primary" size="large" long :loading="withdrawalLoading" @click="okWithdrawal">Complete binding</i-button>
     </div>

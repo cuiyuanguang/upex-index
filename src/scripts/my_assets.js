@@ -184,8 +184,9 @@ var myAssets = new Vue({
   },
   methods: {
     //跳转With
-    runWithdrawal(){
-      window.location.href= "otc_my_assets_withdrawal.html"
+    runWithdrawal(type){
+      window.location.href= "otc_my_assets_withdrawal.html";
+      localStorage.setItem("asset_type", type);
     },
 
     //获取头部数据

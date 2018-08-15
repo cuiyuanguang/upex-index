@@ -1,3 +1,4 @@
+
 var i18n = new VueI18n({
   locale: 'zh', // set locale
   fallbackLocale: 'zh',

@@ -229,8 +229,8 @@ var i18nComponentsMessages = {
     en: 'Inconsistency of ciphers'
   },
   errorPwdNum: {
-    zh: '以字母开头，长度在8-64之间，只能包含字符、数字',
-    en: 'Beginning with letters, length 8-64, can contain characters and numbers only.'
+    zh: '长度在8-64之间，只能包含字符、数字',
+    en: 'length 8-64, can contain characters and numbers only.'
   }
 };
 
@@ -1657,7 +1657,7 @@ var o_my_register = {
           } else if (!that.emailReg(that.emailVal)) {
             that.modal_loading = false;
             that.emailValError = true;
-            that.emailValErrorText = this.$t('errorPhoneNum');
+            that.emailValErrorText = this.$t('errorEmailNum');
           } else {
             data = {
               email: that.emailVal,
@@ -1694,9 +1694,8 @@ var o_my_register = {
     },
     //密码正则
     passwordReg(passwordVal) {
-      var reg1 = /(.+)?\d(.+)?/;
-      var reg2 = /.*[a-zA-Z]+.*/;
-      return !(passwordVal.length < 8 || passwordVal.length > 64 || !reg1.test(passwordVal) || !reg2.test(passwordVal))
+      var pwdRegx = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,64}$/;
+      return pwdRegx.test(passwordVal);
     },
     //phone正则
     phoneReg(phoneval) {
@@ -1758,7 +1757,7 @@ var o_my_register = {
           } else if (!that.emailReg(that.emailVal)) {
             that.modal_loading = false;
             that.emailValError = true;
-            that.emailValErrorText = this.$t('errorPhoneNum');
+            that.emailValErrorText = this.$t('errorEmailNum');
           } else if (that.emailSmsCode === '') {
             that.modal_loading = false;
             that.emailSmsCodeError = true;
@@ -1872,7 +1871,7 @@ var o_my_registerGoogle = {
               <Input
                 v-model="bindGooglePassword"
                 type="password"
-                placeholder="Please enter log in password"
+                placeholder="Please enter login password"
                 class="bindGoogle-input"
                 :class="bindGooglePasswordErrorText !== ''?'is-red':'is-gray'"
                 @on-focus="bindGooglePasswordFocus"
@@ -2357,9 +2356,8 @@ var o_my_retrievePwd = {
     },
     //密码正则
     passwordReg(passwordVal) {
-      var reg1 = /(.+)?\d(.+)?/;
-      var reg2 = /.*[a-zA-Z]+.*/;
-      return !(passwordVal.length < 8 || passwordVal.length > 64 || !reg1.test(passwordVal) || !reg2.test(passwordVal))
+      var pwdRegx = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,64}$/;
+      return pwdRegx.test(passwordVal);
     },
     //phone正则
     phoneReg(phoneval) {
@@ -2421,7 +2419,7 @@ var o_my_retrievePwd = {
           } else if (!that.emailReg(that.emailVal)) {
             that.modal_loading = false;
             that.emailValError = true;
-            that.emailValErrorText = this.$t('errorPhoneNum');
+            that.emailValErrorText = this.$t('errorEmailNum');
           } else if (that.emailSmsCode === '') {
             that.modal_loading = false;
             that.emailSmsCodeError = true;
