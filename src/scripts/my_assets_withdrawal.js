@@ -410,15 +410,23 @@ var myAssetsWithdrawal = new Vue({
       }
     },
     okWithdrawal() {
-      var data;
-      var that = this;
+      let data = {
+        symbol: this.changeCoin,
+        addressId: this.addressListID,
+        amount: this.valueAmount,
+        fee: this.balanceDefaultFee,
+        googleCode: this.googleCode,
+      };
+      let that = this;
       if(this.tabsName === 'loginEmail'){
+        data.emailCode = this.emailSmsCode;
         if(this.emailSmsCode.length !== 6){
           this.emailSmsCodeError = true;
           this.emailSmsCodeErrorText = this.$t('emailErrorCode');
           return;
         }
       } else{
+        data.smsAuthCode = this.phoneSmsCode;
         if(this.phoneSmsCode.length !== 6){
           this.phoneSmsCodeError = true;
           this.phoneSmsCodeErrorText = this.$t('phoneErrorCode');
@@ -431,15 +439,7 @@ var myAssetsWithdrawal = new Vue({
         this.googleCodeErrorText = this.$t('googleErrorCode');
         return;
       }
-      data = {
-        symbol: this.changeCoin,
-        addressId: this.addressListID,
-        amount: this.valueAmount,
-        fee: this.balanceDefaultFee,
-        smsAuthCode: this.phoneSmsCode,
-        googleCode: this.googleCode,
-        emailCode: this.emailSmsCode
-      };
+
       that.withdrawalLoading = true;
       post('api/finance/do_withdraw', JSON.stringify(data)).then((res) => {
         that.withdrawalLoading = false;

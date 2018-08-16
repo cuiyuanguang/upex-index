@@ -825,6 +825,11 @@ var i18nLoginRegisterMsg = {
     en: 'E-mail',
     ar: ''
   },
+  googleValidate: {
+    zh:'谷歌验证码',
+    en:'Google verification code',
+    ar:''
+  },
   emailValidate: {
     zh:'邮箱验证码',
     en:'E-mail verification code',
@@ -895,26 +900,47 @@ var i18nLoginRegisterMsg = {
     en: 'I have an account',
     ar: ''
   },
+  enterGoogleRecieve: {
+    zh: '请输入收到的谷歌验证码',
+    en: 'please enter Google verification code',
+    ar: ''
+  },
+  enterSMSRecieve: {
+    zh: '请输入收到的短信验证码',
+    en: 'Please enter the verification code received by',
+    ar: ''
+  },
+  enterEmailRecieve: {
+    zh: '请输入收到的邮箱验证码',
+    en: 'Please enter the verification code received by',
+    ar: ''
+  },
+
   //校验
   errorPhoneNum: {
     zh: '请输入合法的电话号码',
-    en: 'Please enter a legitimate phone number'
+    en: 'Please enter a legitimate phone number',
+    ar: ''
   },
   errorEmailNum: {
     zh: '请输入合法的邮件地址',
-    en: 'Please enter a legitimate email address'
+    en: 'Please enter a legitimate email address',
+    ar: ''
   },
   errorNoSamePwd: {
     zh: '密码不一致',
-    en: 'Inconsistency of ciphers'
+    en: 'Inconsistency of ciphers',
+    ar: ''
   },
   errorPwdNum: {
     zh: '长度在8-64之间，只能包含字符、数字',
-    en: 'length 8-64, can contain characters and numbers only.'
+    en: 'length 8-64, can contain characters and numbers only.',
+    ar: ''
   },
   noEmpty: {
     zh: '不能为空',
     en: 'can not be empty',
+    ar: ''
   },
 };
 
@@ -1009,6 +1035,7 @@ var o_my_login = {
   i18n: i18nLoginNRegister,
   data() {
     return {
+      locale: 'zh',
       //Email
       loginEmailVal: '',
       loginEmailError: false,
@@ -1041,7 +1068,7 @@ var o_my_login = {
     };
   },
   components: {VueRecaptcha},
-  props: ['login'],
+  props: ['login','langStatus'],
   computed: {
     countryArr: function () {
       return JSON.parse(localStorage.getItem('country'));
@@ -1227,12 +1254,25 @@ var o_my_login = {
       this.loginWrap = name;
     },
   },
+  mounted(){
+    let locale = localStorage.getItem('locale');
+    if (locale) {
+      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
+      this.$i18n.locale = locale;
+    }
+  },
   watch: {
     login: function (a, b) {
       this.login1 = a;
     },
+    langStatus: function (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+      }
+    }
   },
 };
+
 var o_my_loginNext = {
   template: `
     <Modal
@@ -1242,27 +1282,27 @@ var o_my_loginNext = {
       @on-cancel="asyncCancel" class="my-login my-loginNext"
       width="500"
     >
-      <div class="loginNext-title" v-if="isLoginNextTypeNum === '1'">Google verification code</div>
-      <div class="loginNext-title" v-if="isLoginNextTypeNum === '2'">SMS verification</div>
-      <div class="loginNext-title" v-if="isLoginNextTypeNum === '3'">E-mail verification</div>
+      <div class="loginNext-title" v-if="isLoginNextTypeNum === '1'">{{ $t('googleValidate') }}</div>
+      <div class="loginNext-title" v-if="isLoginNextTypeNum === '2'">{{ $t('phoneValidate') }}</div>
+      <div class="loginNext-title" v-if="isLoginNextTypeNum === '3'">{{ $t('emailValidate') }}</div>
       <div v-if="isLoginNextTypeNum === '1'">
       <Input
         v-model="loginNextSmsCode"
         type="text"
-        placeholder="please enter Google verification code"
+        :placeholder="$t('enterGoogleRecieve')"
         class="loginNext-input"  @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':''">
       </Input>
        <p class="my-loginNext-error">{{loginNextErrorText}}</p>
       </div>
       <div v-if="isLoginNextTypeNum === '2'">
         <p class="loginNextSmsText">
-          Please enter the verification code received by
+          
             <span>{{isLoginNextPhoneNum}}</span>
         </p>
         <Input
           v-model="loginNextSmsCode"
           type="text"
-          placeholder="please enter verification code"
+          :placeholder="$t('enterSMSRecieve')"
           class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':' '">
           <span slot="append"
             class="my-slot-append"
@@ -1276,13 +1316,13 @@ var o_my_loginNext = {
       </div>
          <div v-if="isLoginNextTypeNum === '3'">
         <p class="loginNextSmsText">
-          Please enter the verification code received by
+          {{ $t('enterEmailRecieve') }}
             <span>{{isLoginNextEmailNum}}</span>
         </p>
         <Input
           v-model="loginNextSmsCode"
           type="text"
-          placeholder="please enter verification code"
+          :placeholder="$t('enterEmailRecieve')"
           class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':' '">
           <span slot="append"
             class="my-slot-append"
@@ -1305,8 +1345,8 @@ var o_my_loginNext = {
       </div>
     </Modal>
   `,
-  i18n: i18nComponents,
-  props: ['loginNext', 'isLoginNextType', 'isLoginNextCookie', 'isLoginNextPhone', 'isLoginNextEmail'],
+  i18n: i18nLoginNRegister,
+  props: ['loginNext', 'isLoginNextType', 'isLoginNextCookie', 'isLoginNextPhone', 'isLoginNextEmail','langStatus'],
   data() {
     return {
       loginNextError: false,
@@ -1421,9 +1461,15 @@ var o_my_loginNext = {
       this.$Message.info('Clicked ok');
     },
   },
-
+  mounted(){
+    let locale = localStorage.getItem('locale');
+    if (locale) {
+      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
+      this.$i18n.locale = locale;
+    }
+  },
   watch: {
-    locale: function (newVal, oldVal) {
+    langStatus: function (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
       }
@@ -1613,8 +1659,15 @@ var o_my_register = {
       return JSON.parse(localStorage.getItem('country'));
     },
   },
+  mounted(){
+    let locale = localStorage.getItem('locale');
+    if (locale) {
+      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
+      this.$i18n.locale = locale;
+    }
+  },
   components: {VueRecaptcha},
-  props: ['register'],
+  props: ['register', 'langStatus'],
   methods: {
 
     onExpired() {
@@ -1937,6 +1990,13 @@ var o_my_register = {
       this.asyncCancel()
     }
   },
+  watch: {
+    langStatus: function (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+      }
+    }
+  }
 };
 var o_my_registerGoogle = {
   template: `
@@ -2032,7 +2092,7 @@ var o_my_registerGoogle = {
     };
   },
   i18n: i18nComponents,
-  props: ['registerGoogle', 'registerCookie'],
+  props: ['registerGoogle', 'registerCookie','langStatus'],
   methods: {
     doCopy: function () {
       var that = this;
@@ -2089,10 +2149,16 @@ var o_my_registerGoogle = {
       this.$parent.$emit('isregisterGoogle', false);
       this.modal_loading = false;
     },
-  }
-  ,
+  },
+  mounted(){
+    let locale = localStorage.getItem('locale');
+    if (locale) {
+      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
+      this.$i18n.locale = locale;
+    }
+  },
   watch: {
-    locale: function (newVal, oldVal) {
+    langStatus: function (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
       }
@@ -3057,16 +3123,17 @@ var o_header = {
           </ul>
         </i-col>
       </Row>
-      <mylogin :login="isLoginShow"></mylogin>
+      <mylogin :login="isLoginShow" :langStatus="$i18n.locale"></mylogin>
       <myloginnext
+        :langStatus="$i18n.locale"
         :login-next="isLoginNextShow"
         :is-login-next-type="isLoginNextType"
         :is-login-next-cookie="isLoginNextCookie"
         :is-login-next-phone="isLoginNextPhone"
         :is-login-next-email="isLoginNextEmail"
       ></myloginnext>
-      <myregister :register="isregister"></myregister>
-      <myregistergoogle :register-google="isRegisterGoogleShow" :register-cookie="isregisterCookie"></myregistergoogle>
+      <myregister :register="isregister" :langStatus="$i18n.locale"></myregister>
+      <myregistergoogle :register-google="isRegisterGoogleShow" :register-cookie="isregisterCookie" :langStatus="$i18n.locale"></myregistergoogle>
       <my-find-password :show="isretrievePwdShow"></my-find-password>
     </div>
   `,
