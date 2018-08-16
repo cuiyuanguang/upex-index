@@ -64,6 +64,18 @@ Vue.filter('date', function (utc) {
 });
 
 var i18nComponentsMessages = {
+  loginTitle: {
+    zh: '欢迎登录',
+    en: 'Welcome Login',
+  },
+  email: {
+    zh: '邮箱',
+    en: 'E-mail',
+  },
+  phone: {
+    zh: '手机',
+    en: '',
+  },
   login: {
     zh: '登录',
     en: 'Log In',
@@ -797,12 +809,125 @@ var g_auth = {
   }
 };
 
+var i18nLoginRegisterMsg = {
+  loginTitle: {
+    zh: '欢迎登录',
+    en: 'Welcome Login',
+    ar: ''
+  },
+  registerTitle: {
+    zh: '欢迎注册',
+    en: 'Welcome Register',
+    ar: ''
+  },
+  email: {
+    zh: '邮箱',
+    en: 'E-mail',
+    ar: ''
+  },
+  emailValidate: {
+    zh:'邮箱验证码',
+    en:'E-mail verification code',
+    ar: ''
+  },
+  phoneValidate: {
+    zh:'手机验证码',
+    en:'phone verification code',
+    ar: ''
+  },
+  getValidateCode: {
+    zh:'获取验证码',
+    en:'get verification code',
+    ar: ''
+  },
+  phone: {
+    zh: '手机',
+    en: '',
+    ar: ''
+  },
+  login: {
+    zh: '登录',
+    en: 'Log In',
+    ar: ''
+  },
+  register: {
+    zh: '注册',
+    en: 'Register',
+    ar: ''
+  },
+  enterEmail: {
+    zh: '请输入邮箱',
+    en: 'Enter your email',
+    ar: ''
+  },
+  enterPhone: {
+    zh: '请输入手机号',
+    en: 'Enter your Phone number',
+    ar: ''
+  },
+  enterPwd: {
+    zh: '请输入密码',
+    en: 'Enter your password',
+    ar: ''
+  },
+  surePwd:{
+    zh:'确认密码',
+    en:'Enter your password again',
+    ar: ''
+  },
+  forgetPwd: {
+    zh: '忘记密码?',
+    en: 'forget password?',
+    ar: ''
+  },
+  noAccount: {
+    zh: '没有账户',
+    en: 'No account',
+    ar: ''
+  },
+  registerAccount: {
+    zh: '注册账户',
+    en: 'Register an account',
+    ar: ''
+  },
+  haveAccount: {
+    zh: '我已经有账户了',
+    en: 'I have an account',
+    ar: ''
+  },
+  //校验
+  errorPhoneNum: {
+    zh: '请输入合法的电话号码',
+    en: 'Please enter a legitimate phone number'
+  },
+  errorEmailNum: {
+    zh: '请输入合法的邮件地址',
+    en: 'Please enter a legitimate email address'
+  },
+  errorNoSamePwd: {
+    zh: '密码不一致',
+    en: 'Inconsistency of ciphers'
+  },
+  errorPwdNum: {
+    zh: '长度在8-64之间，只能包含字符、数字',
+    en: 'length 8-64, can contain characters and numbers only.'
+  },
+  noEmpty: {
+    zh: '不能为空',
+    en: 'can not be empty',
+  },
+};
 
+var i18nLoginNRegister = new VueI18n({
+  locale: 'zh', // set locale
+  fallbackLocale: 'zh',
+  messages: utils.transform(i18nLoginRegisterMsg),
+});
 var o_my_login = {
   template: `
     <Modal
       v-model="login1"
-      title="Welcome Login"
+      :title="$t('loginTitle')"
       @on-cancel="asyncCancel"
       class="my-login"
       class-name="vertical-center-modal"
@@ -817,11 +942,11 @@ var o_my_login = {
       >
       </vue-recaptcha>
       <Tabs v-model="loginWrap" @on-click="loginEmailChange">
-        <TabPane label="E-mail" name="loginEmail">
+        <TabPane :label="this.$t('email')" name="loginEmail">
           <Input
             :class="loginEmailError?'is-red':'is-gray'"
             v-model="loginEmailVal"
-            placeholder="Enter your email"
+            :placeholder="$t('enterEmail')"
             class="iview-input"
             @on-focus="loginEmailFocus"
           ></Input>
@@ -830,19 +955,19 @@ var o_my_login = {
             :class="loginEmailPasswordError?'is-red':'is-gray'"
             v-model="loginEmailPassword"
             type="password"
-            placeholder="Enter your password"
+            :placeholder="$t('enterPwd')"
             class="iview-input"
             @on-focus="loginEmailPasswordFocus"
           >
-            <span slot="append" class="my-slot-append" @click="runForgetPassword">forget password?</span>
+            <span slot="append" class="my-slot-append" @click="runForgetPassword">{{ $t('forgetPwd') }}</span>
           </Input>
           <p class="my-login-error">{{loginEmailPasswordErrorText}}</p>
         </TabPane>
-        <TabPane label="Phone" name="loginPhone">
+        <TabPane :label="this.$t('phone')" name="loginPhone">
           <Input
             :class="loginPhoneError?'is-red':'is-gray'"
             v-model="loginPhoneVal"
-            placeholder="Enter your Phone number"
+            :placeholder="$t('enterPhone')"
             class="iview-input iview-input-countryPhone"
             @on-focus="loginPhoneFocus"
           >
@@ -863,25 +988,25 @@ var o_my_login = {
             :class="loginPhonePasswordError?'is-red':'is-gray'"
             v-model="loginPhonePassword"
             type="password"
-            placeholder="Enter your password"
+            :placeholder="$t('enterPwd')"
             class="iview-input"
             @on-focus="loginPhonePasswordFocus"
           >
-            <span slot="append" class="my-slot-append" @click="runForgetPassword">forget password?</span>
+            <span slot="append" class="my-slot-append" @click="runForgetPassword">{{ $t('forgetPwd') }}</span>
           </Input>
             <p class="my-login-error">{{loginPhonePasswordErrorText}}</p>
         </TabPane>
       </Tabs>
       <div slot="footer">
-        <Button type="primary" size="large" long :loading="modal_loading" @click="mySubmit">Log in</Button>
+        <Button type="primary" size="large" long :loading="modal_loading" @click="mySubmit">{{ $t('login') }}</Button>
         <div class="login-footer-wrap">
-          <span class="black">No account</span>
-          <span class="blue" @click="runRegister">Register an account</span>
+          <span class="black">{{ $t('noAccount') }}</span>
+          <span class="blue" @click="runRegister">{{ $t('registerAccount') }}</span>
         </div>
       </div>
     </Modal>
   `,
-  i18n: i18nComponents,
+  i18n: i18nLoginNRegister,
   data() {
     return {
       //Email
@@ -1324,17 +1449,17 @@ var o_my_register = {
       class-name="vertical-center-modal"
       @on-cancel="asyncCancel" class="my-login my-register"
       width="500"
-      title="Welcome Register"
+      :title="$t('registerTitle')"
       >
                   <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
  @expired="onExpired" @verify="onVerify" sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi">
             </vue-recaptcha>
       <Tabs v-model="registerWrap" @on-click="tabChange">
-        <TabPane label="E-mail" name="tabEmail">
+        <TabPane :label="$t('email')" name="tabEmail">
           <Input
             :class="emailValError?'is-red':'is-gray'"
             v-model="emailVal"
-            placeholder="Enter your email"
+            :placeholder="$t('enterEmail')"
             class="iview-input"
             @on-focus="emailValFocus"
           ></Input>
@@ -1342,7 +1467,7 @@ var o_my_register = {
           <Input
           v-model="emailSmsCode"
           type="text"
-          placeholder="E-mail verification code"
+          :placeholder="$t('emailValidate')"
           class="loginNext-input loginNext-sms-input" @on-focus="emailSmsCodeFocus" :class="emailSmsCodeError?'loginNext-input-red':' '">
           <span slot="append"
             class="my-slot-append"
@@ -1357,7 +1482,7 @@ var o_my_register = {
             :class="emailPasswordError?'is-red':'is-gray'"
             v-model="emailPassword"
             type="password"
-            placeholder="Enter your password"
+            :placeholder="$t('enterPwd')"
             class="iview-input"
             @on-focus="emailPasswordFocus">
           </Input>
@@ -1366,17 +1491,17 @@ var o_my_register = {
             :class="emailPasswordAgainError?'is-red':'is-gray'"
             v-model="emailPasswordAgain"
             type="password"
-            placeholder="Enter your password again"
+            :placeholder="$t('surePwd')"
             class="iview-input"
             @on-focus="emailPasswordAgainFocus">
           </Input>
           <p class="my-login-error">{{emailPasswordAgainErrorText}}</p>
         </TabPane>
-        <TabPane label="Phone" name="registerPhone">
+        <TabPane :label="$t('phone')" name="registerPhone">
           <Input
             :class="phoneValError?'is-red':'is-gray'"
             v-model="phoneVal"
-            placeholder="Enter your Phone number"
+            :placeholder="$t('enterPhone')"
             class="iview-input iview-input-countryPhone"
             @on-focus="phoneValFocus"
            >
@@ -1397,7 +1522,7 @@ var o_my_register = {
           <Input
           v-model="phoneSmsCode"
           type="text"
-          placeholder="phone verification code"
+          :placeholder="$t('phoneValidate')"
           class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
 
           <span slot="append"
@@ -1413,7 +1538,7 @@ var o_my_register = {
             :class="phonePasswordError?'is-red':'is-gray'"
             v-model="phonePassword"
             type="password"
-            placeholder="Enter your password"
+            :placeholder="$t('enterPwd')"
             class="iview-input"
             @on-focus="phonePasswordFocus">
           </Input>
@@ -1422,7 +1547,7 @@ var o_my_register = {
             :class="phonePasswordAgainError?'is-red':'is-gray'"
             v-model="phonePasswordAgain"
             type="password"
-            placeholder="Enter your password again"
+            :placeholder="$t('surePwd')"
             class="iview-input"
             @on-focus="phonePasswordAgainFocus">
           </Input>
@@ -1430,15 +1555,15 @@ var o_my_register = {
         </TabPane>
       </Tabs>
       <div slot="footer">
-        <Button type="primary" size="large" long :loading="modal_loading" @click="mySubmit" >Register</Button>
+        <Button type="primary" size="large" long :loading="modal_loading" @click="mySubmit" >{{ $t('register') }}</Button>
         <div class="login-footer-wrap">
-          <span class="black">I have an account</span>
-          <span class="blue" @click="runLogin">log in</span>
+          <span class="black">{{ $t('haveAccount') }}</span>
+          <span class="blue" @click="runLogin">{{ $t('login') }}</span>
         </div>
       </div>
       </Modal>
     `,
-  i18n: i18nComponents,
+  i18n: i18nLoginNRegister,
   data() {
     return {
       //email
@@ -1472,8 +1597,8 @@ var o_my_register = {
       register: '',
       registerWrap: 'tabEmail',
       modal_loading: false,
-      sendSmsEmail: 'get verification code',
-      sendSmsPhone: 'get verification code',
+      sendSmsEmail: this.$t('getValidateCode'),
+      sendSmsPhone: this.$t('getValidateCode'),
       showEmail: true,
       showPhone: true,
       countEmail: '',
