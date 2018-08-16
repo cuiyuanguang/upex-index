@@ -44,25 +44,20 @@ var messages = {
     en: 'Password',
     ar: 'كلمة السر',
   },
-  googleAuth: {
+  googleVerification: {
     zh: '谷歌验证',
     en: 'Google verification',
     ar: 'التحقق من الجوجل',
+  },
+  email: {
+    zh: '邮箱',
+    en: 'Email',
+    ar: 'صندوق البريد',
   },
   phone: {
     zh: '手机',
     en: 'Phone',
     ar: 'الهاتف',
-  },
-  newPhone: {
-    zh: '新手机',
-    en: 'New Phone',
-    ar: 'هاتف جديد',
-  },
-  phoneAuth: {
-    zh: '手机验证',
-    en: 'Phone verification',
-    ar: 'التحقق من الهاتف',
   },
   bound: {
     zh: '已绑定',
@@ -219,6 +214,21 @@ var messages = {
     en: 'Confirm',
     ar: 'تأكيد',
   },
+  changeWhatsApp: {
+    zh: '修改WhatsApp',
+    en: 'Modify WhatsApp',
+    ar: 'WhatsApp تعديل',
+  },
+  whatsAppHolder: {
+    zh: '请输入WhatsApp号码',
+    en: 'Please enter the WhatsApp number',
+    ar: 'يرجى إدخال رقم WhatsApp',
+  },
+  changePassword: {
+    zh: '修改密码',
+    en: 'Change password',
+    ar: 'تغيير كلمة المرور',
+  },
   originPassword: {
     zh: '旧密码',
     en: 'Old password',
@@ -234,55 +244,95 @@ var messages = {
     en: 'confirm password',
     ar: 'تأكيد كلمة السر',
   },
-  verify: {
-    zh: '验证',
-    en: 'verification',
-    ar: 'التحقق',
+  passwordHolder: {
+    zh: '请输入登录密码',
+    en: 'Please enter your login password',
+    ar: 'يرجى إدخال كلمة السر الخاصة بتسجيل الدخول',
   },
-  sms: {
-    zh: '短信',
-    en: 'SMS',
-    ar: 'الرسالة',
+  passwordNewHolder: {
+    zh: '请输入新密码',
+    en: 'Please enter your new password',
+    ar: 'يرجى إدخال كلمة المرور الجديدة',
   },
-  close: {
-    zh: '关闭',
-    en: 'close',
-    ar: 'إغلاق',
+  passwordRepeatHolder: {
+    zh: '请再次输入新密码',
+    en: 'Please enter your new password again',
+    ar: 'يرجى إدخال كلمة المرور الجديدة مرة أخرى',
   },
-  whatsAppHolder: {
-    zh: '请输入WhatsApp号码',
-    en: 'Please enter the WhatsApp number',
-    ar: 'يرجى إدخال رقم WhatsApp',
+  closeGoogleVerification: {
+    zh: '关闭谷歌验证',
+    en: 'Turn off Google verification',
+    ar: 'Google أوقف التحقق من',
   },
-  phoneHolder: {
-    zh: '请输入手机号码',
-    en: 'Please enter the phone number',
-    ar: 'يرجى إدخال رقم الهاتف',
+  phoneVerification: {
+    zh: '手机验证',
+    en: 'Phone verification',
+    ar: 'التحقق من الهاتف',
   },
-  phoneAuthHolder: {
+  phoneVerificationHolder: {
     zh: '请输入短信验证码',
     en: 'Please enter SMS verification code',
     ar: 'يرجى إدخال رمز تحقق الرسالة',
+  },
+  googleVerificationHolder: {
+    zh: '请输入谷歌验证码',
+    en: 'Please enter Google verification code',
+    ar: 'يرجى إدخال رمز تحقق الجوجل',
+  },
+  changeEmail: {
+    zh: '修改邮箱',
+    en: 'Change email',
+    ar: 'تعديل صندوق البريد',
+  },
+  originEmail: {
+    zh: '旧邮箱',
+    en: 'Old email',
+    ar: 'صندوق بريد قديم',
+  },
+  emailVerification: {
+    zh: '邮箱验证',
+    en: 'Email verification',
+    ar: 'التحقق من صندوق البريد',
   },
   emailHolder: {
     zh: '请输入邮箱地址',
     en: 'Please enter the email address',
     ar: 'يرجى إدخال عنوان البريد الإلكتروني',
   },
-  emailAuthHolder: {
+  emailVerificationHolder: {
     zh: '请输入邮箱验证码',
     en: 'Please enter the email verification code',
     ar: 'يرجى إدخال رمز تحقق البريد الإلكتروني',
   },
-  googleAuthHolder: {
-    zh: '请输入谷歌验证码',
-    en: 'Please enter Google verification code',
-    ar: 'يرجى إدخال رمز تحقق الجوجل',
+  changePhone: {
+    zh: '修改手机',
+    en: 'Change phone',
+    ar: 'تعديل الهاتف',
   },
-  passwordHolder: {
-    zh: '请输入登录密码',
-    en: 'Please enter your login password',
-    ar: 'يرجى إدخال كلمة السر الخاصة بتسجيل الدخول',
+  originPhone: {
+    zh: '旧手机',
+    en: 'Old phone',
+    ar: 'الهاتف القديم',
+  },
+  newPhone: {
+    zh: '新手机',
+    en: 'New Phone',
+    ar: 'هاتف جديد',
+  },
+  phoneHolder: {
+    zh: '请输入手机号码',
+    en: 'Please enter the phone number',
+    ar: 'يرجى إدخال رقم الهاتف',
+  },
+  close: {
+    zh: '关闭',
+    en: 'close',
+    ar: 'إغلاق',
+  },
+  changeBankcard: {
+    zh: '修改银行卡',
+    en: 'Modify bankcard',
+    ar: 'تعديل بطاقة البنك',
   },
   bankNameHolder: {
     zh: '请输入银行名称',
@@ -311,7 +361,7 @@ var messages = {
   },
   six2eighteen: {
     zh: '请输入长度在6到18位之间的字符',
-    en: 'Please enter  6 to 18 characters ',
+    en: 'Please enter 6 to 18 characters ',
     ar: 'يرجى إدخال من 6 إلى 18 حرفًا',
   },
   sendVerify: {
@@ -328,5 +378,10 @@ var messages = {
     zh: '您确认要退出登录吗？',
     en: 'Are you sure you want to log out?',
     ar: 'هل أنت متأكد أنك تريد تسجيل الخروج؟',
+  },
+  bindPhoneOrGoogleFirst: {
+    zh: '请先绑定手机或谷歌',
+    en: 'Bind phone or google first',
+    ar: 'يرجى ربط هاتفك أو جوجل أولا',
   },
 };
