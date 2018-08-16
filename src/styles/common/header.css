@@ -53,7 +53,10 @@
   overflow: hidden;
   visibility: hidden;
 }
-
+body[dir='rtl'] .my-login .ivu-input-group-append{
+  right: initial;
+  left: 1px;
+}
 .my-login .ivu-input-group-append {
   position: absolute;
   right: 1px;

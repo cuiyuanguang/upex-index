@@ -13,11 +13,24 @@ var account = new Vue({
   },
   data() {
     // 自定义表单验证
+    var validateOldEmailVerify = (rule, value, callback) => {
+      const valueTrim = value.trim();
+      // eslint-disable-next-line
+      if (this.user.isOpenEmailCheck) {
+        if (valueTrim === '') {
+          callback(new Error(this.$t('canNotBeEmpty')));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
     var validateEmailSecurity = (rule, value, callback) => {
       const valueTrim = value.trim();
       // eslint-disable-next-line
       const reg = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
-      if (this.user.email) {
+      if (this.user.isOpenEmailCheck) {
         if (valueTrim === '') {
           callback(new Error(this.$t('canNotBeEmpty')));
         } else if (!reg.test(valueTrim)) {
@@ -155,8 +168,11 @@ var account = new Vue({
         phone: '',
       },
       ruleEmail: {
-        oldEmail: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
-        email: [{ name: 'formEmail', validator: validateEmailSecurity, trigger: 'change' }],
+        oldEmail: [{ validator: validateOldEmailVerify, trigger: 'change' }],
+        email: [
+          { required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' },
+          { type: 'email', message: this.$t('formatError'), trigger: 'change' },
+        ],
         verify: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
         google: [{ name: 'formEmail', validator: validateGoogleSecurity, trigger: 'change' }],
         phone: [{ name: 'formEmail', validator: validatePhoneSecurity, trigger: 'change' }],
@@ -448,14 +464,14 @@ var account = new Vue({
     },
     modifyEmail() {
       if (!this.user.mobileNumber && !this.user.googleStatus) {
-        Toast.show('请先绑定手机或谷歌验证', { icon: 'warn' });
+        Toast.show(this.$t('bindPhoneOrGoogleFirst'), { icon: 'warn' });
         return;
       }
       this.modalEmail = true;
     },
     modifyPhone() {
-      if (!this.user.email && !this.user.googleStatus) {
-        Toast.show('请先绑定手机或谷歌验证', { icon: 'warn' });
+      if (!this.user.isOpenEmailCheck && !this.user.googleStatus) {
+        Toast.show(this.$t('bindPhoneOrGoogleFirst'), { icon: 'warn' });
         return;
       }
       this.modalPhone = true;
@@ -519,9 +535,10 @@ var account = new Vue({
                   : that.formBankConfirm.phone,
             }).then(function(res) {
               if (res) {
-                that.modalBankConfirm = false;
-                that.tabVerifyActive = 1;
+                that.clearTimers();
                 that.$refs[name].resetFields();
+                that.tabVerifyActive = 1;
+                that.modalBankConfirm = false;
                 that.getAllCard();
               }
             });
@@ -535,8 +552,9 @@ var account = new Vue({
             }).then(function(res) {
               if (res) {
                 that.tabVerifyActive = 1;
-                that.modalPassword = false;
+                that.clearTimers();
                 that.$refs[name].resetFields();
+                that.modalPassword = false;
               }
             });
           }
@@ -548,13 +566,14 @@ var account = new Vue({
             }).then(function(res) {
               if (res) {
                 that.modalGoogle = false;
+                that.clearTimers();
                 that.$refs[name].resetFields();
                 that.getUserInfo();
               }
             });
           }
           if (name === 'formEmail') {
-            var emailApi = that.user.email ? 'api/user/email_update' : 'api/user/email_bind_save';
+            var emailApi = that.user.isOpenEmailCheck ? 'api/user/email_update' : 'api/user/email_bind_save';
             post(emailApi, {
               emailOldValidCode: that.formEmail.oldEmail,
               email: that.formEmail.email,
@@ -564,6 +583,7 @@ var account = new Vue({
             }).then(function(res) {
               if (res) {
                 that.modalEmail = false;
+                that.clearTimers();
                 that.$refs[name].resetFields();
                 that.getUserInfo();
               }
@@ -582,13 +602,12 @@ var account = new Vue({
             }).then(function(res) {
               if (res) {
                 that.modalPhone = false;
+                that.clearTimers();
                 that.$refs[name].resetFields();
                 that.getUserInfo();
               }
             });
           }
-        } else {
-          this.$Message.error('Fail!');
         }
       });
     },
@@ -614,11 +633,14 @@ var account = new Vue({
       this.sendDisabledNewPhone = false;
       this.sendPlaceholderBank = this.$t('sendVerify');
       this.sendDisabledBank = false;
+      this.clearTimers();
+      this.$refs[name].resetFields();
+    },
+    clearTimers: function(){
       for (var key in this.timers) {
         clearInterval(this.timers[key]);
         delete this.timers[key];
       }
-      this.$refs[name].resetFields();
     },
     getAllCard: function() {
       var that = this;
@@ -630,7 +652,7 @@ var account = new Vue({
     },
     modifyBankInfo(data) {
       if (!this.user.mobileNumber && !this.user.googleStatus) {
-        Toast.show('请先绑定手机或谷歌验证', { icon: 'warn' });
+        Toast.show(this.$t('bindPhoneOrGoogleFirst'), { icon: 'warn' });
         return;
       }
       this.modalBankConfirmTitle = data ? this.$t('delete') + this.$t('bankCard') : this.$t('confirm') + this.$t('bind');

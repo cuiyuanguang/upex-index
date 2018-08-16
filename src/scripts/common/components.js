@@ -63,6 +63,7 @@ Vue.filter('date', function (utc) {
   return format;
 });
 
+
 var i18nComponentsMessages = {
   loginTitle: {
     zh: '欢迎登录',
@@ -209,8 +210,8 @@ var i18nComponentsMessages = {
     en: 'bind',
   },
   noEmpty: {
-    zh: '不能为空',
-    en: 'can not be empty',
+    zh: '此处不能为空',
+    en: 'This field can not be empty',
   },
   received: {
     zh: '已到账',
@@ -243,6 +244,102 @@ var i18nComponentsMessages = {
   errorPwdNum: {
     zh: '长度在8-64之间，只能包含字符、数字',
     en: 'length 8-64, can contain characters and numbers only.'
+  },
+  findPassword: {
+    zh: '找回密码',
+    en: 'Find my password',
+  },
+  emailHolder: {
+    zh: '请输入邮箱地址',
+    en: 'Enter email address here',
+  },
+  emailErrorEmpty: {
+    zh: '邮箱地址不能为空',
+    en: 'Email address can not be empty',
+  },
+  emailErrorFormat: {
+    zh: '邮箱地址格式错误',
+    en: 'Email address format error',
+  },
+  phoneHolder: {
+    zh: '请输入手机号码',
+    en: 'Enter phone number here',
+  },
+  phoneErrorEmpty: {
+    zh: '手机号码不能为空',
+    en: 'Phone number can not be empty',
+  },
+  phoneErrorFormat: {
+    zh: '手机号码格式不正确',
+    en: 'Phone number format error',
+  },
+  nextStep: {
+    zh: '下一步',
+    en: 'Next step',
+  },
+  newPassword: {
+    zh: '新密码',
+    en: 'New password',
+  },
+  newPasswordHolder: {
+    zh: '请输入新密码',
+    en: 'Enter new password here',
+  },
+  passwordErrorEmpty: {
+    zh: '密码不能为空',
+    en: 'Password can not be empty',
+  },
+  passwordErrorFormat: {
+    zh: '请输入6到18位长度的字符',
+    en: 'Enter 6 to 18 characters here',
+  },
+  repeatPassword: {
+    zh: '重复密码',
+    en: 'Repeat password',
+  },
+  repeatPasswordHolder: {
+    zh: '请再次输入密码',
+    en: 'Enter password here again',
+  },
+  repeatPasswordError: {
+    zh: '两次输入密码不一致',
+    en: 'Password repeat not match',
+  },
+  emailVerification: {
+    zh: '邮箱验证',
+    en: 'Email verification',
+  },
+  emailVerificationHolder: {
+    zh: '请输入邮箱验证码',
+    en: 'Enter email verification here',
+  },
+  phoneVerification: {
+    zh: '手机验证',
+    en: 'SMS verification',
+  },
+  phoneVerificationHolder: {
+    zh: '请输入短信验证码',
+    en: 'Enter sms verification here',
+  },
+  googleVerification: {
+    zh: '谷歌验证',
+    en: 'Google verification',
+  },
+  googleVerificationHolder: {
+    zh: '请输入谷歌验证码',
+    en: 'Enter Google verification here',
+  },
+  sendVerification: {
+    zh: '发送验证码',
+    en: 'Send',
+  },
+  sendVerificationAgain: {
+    zh: '重新发送',
+    en: 'Send again',
+  },
+  numericRequired: {
+    zh: '必须输入数字',
+    en: 'Numeric required here',
   }
 };
 
@@ -2175,507 +2272,12 @@ var o_my_registerGoogle = {
     // },
   },
 };
-var o_my_retrievePwd = {
-  template: `
-      <Modal
-      v-model="retrievePwd"
-      class-name="vertical-center-modal"
-      @on-cancel="asyncCancel" class="my-login my-register"
-      width="500"
-      title="Retrieve password"
-      >
-        <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
-          @expired="onExpired" @verify="onVerify" sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi">
-        </vue-recaptcha>
-      <Tabs v-model="registerWrap" @on-click="tabChange">
-        <TabPane label="E-mail" name="tabEmail">
-          <Input
-            :class="emailValError?'is-red':'is-gray'"
-            v-model="emailVal"
-            placeholder="Enter your email"
-            class="iview-input"
-            @on-focus="emailValFocus"
-          ></Input>
-          <p class="my-login-error">{{emailValErrorText}}</p>
-          <Input
-          v-model="emailSmsCode"
-          type="text"
-          placeholder="E-mail verification code"
-          class="loginNext-input loginNext-sms-input" @on-focus="emailSmsCodeFocus" :class="emailSmsCodeError?'loginNext-input-red':' '">
-          <span slot="append"
-            class="my-slot-append"
-             @click="runSendSms('email')"
-            :class="timerEmail?'my-slot-append-gary':'my-slot-append'"
-          >
-            {{sendSmsEmail}}
-          </span>
-        </Input>
-        <p class="my-loginNext-error">{{emailSmsCodeErrorText}}</p>
-          <Input
-            :class="emailPasswordError?'is-red':'is-gray'"
-            v-model="emailPassword"
-            type="password"
-            placeholder="Enter your password"
-            class="iview-input"
-            @on-focus="emailPasswordFocus">
-          </Input>
-          <p class="my-login-error">{{emailPasswordErrorText}}</p>
-           <Input
-            :class="emailPasswordAgainError?'is-red':'is-gray'"
-            v-model="emailPasswordAgain"
-            type="password"
-            placeholder="Enter your password again"
-            class="iview-input"
-            @on-focus="emailPasswordAgainFocus">
-          </Input>
-          <p class="my-login-error">{{emailPasswordAgainErrorText}}</p>
-        </TabPane>
-        <TabPane label="Phone" name="registerPhone">
-          <Input
-            :class="phoneValError?'is-red':'is-gray'"
-            v-model="phoneVal"
-            placeholder="Enter your Phone number"
-            class="iview-input iview-input-countryPhone"
-            @on-focus="phoneValFocus"
-           >
-            <Select v-model="selectCountry" @on-change="phoneValFocus" filterable slot="prepend" style="width:86px">
-              <Option
-                v-for="(country, index) in countryArr"
-                :value="country.dialingCode"
-                :label="country.dialingCode"
-                :key="index"
-              >
-                <span class="">{{country.dialingCode}}</span>
-                <span class="iview-input-countryPhone-span">{{country.enName}}</span>
-              </Option>
-            </Select>
-            </Input>
-             <p class="my-loginNext-error">{{phoneValErrorText}}</p>
 
-          <Input
-          v-model="phoneSmsCode"
-          type="text"
-          placeholder="E-mail verification code"
-          class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
-
-          <span slot="append"
-            class="my-slot-append"
-            @click="runSendSms('phone')"
-            :class="timerPhone?'my-slot-append-gary':'my-slot-append'"
-          >
-            {{sendSmsPhone}}
-          </span>
-        </Input>
-        <p class="my-loginNext-error">{{phoneSmsCodeErrorText}}</p>
-          <Input
-            :class="phonePasswordError?'is-red':'is-gray'"
-            v-model="phonePassword"
-            type="password"
-            placeholder="Enter your password"
-            class="iview-input"
-            @on-focus="phonePasswordFocus">
-          </Input>
-          <p class="my-login-error">{{phonePasswordErrorText}}</p>
-           <Input
-            :class="phonePasswordAgainError?'is-red':'is-gray'"
-            v-model="phonePasswordAgain"
-            type="password"
-            placeholder="Enter your password again"
-            class="iview-input"
-            @on-focus="phonePasswordAgainFocus">
-          </Input>
-          <p class="my-login-error">{{phonePasswordAgainErrorText}}</p>
-        </TabPane>
-      </Tabs>
-      <div slot="footer">
-        <Button type="primary" size="large" long :loading="modal_loading" @click="mySubmit" >submit</Button>
-        <div class="login-footer-wrap">
-        </div>
-      </div>
-      </Modal>
-    `,
-  data() {
-    return {
-      //email
-      emailVal: '',
-      emailValError: false,
-      emailValErrorText: '',
-      emailSmsCode: '',
-      emailSmsCodeError: false,
-      emailSmsCodeErrorText: '',
-      emailPassword: '',
-      emailPasswordError: false,
-      emailPasswordErrorText: '',
-      emailPasswordAgain: '',
-      emailPasswordAgainError: false,
-      emailPasswordAgainErrorText: '',
-      //phone
-      phoneVal: '',
-      phoneValError: false,
-      phoneValErrorText: '',
-      selectCountry: '+86',
-      countryArr: [],
-      phoneSmsCode: '',
-      phoneSmsCodeError: false,
-      phoneSmsCodeErrorText: '',
-      phonePassword: '',
-      phonePasswordError: false,
-      phonePasswordErrorText: '',
-      phonePasswordAgain: '',
-      phonePasswordAgainError: false,
-      phonePasswordAgainErrorText: '',
-      register: '',
-      registerWrap: 'tabEmail',
-      modal_loading: false,
-      sendSmsEmail: 'get verification code',
-      sendSmsPhone: 'get verification code',
-      showEmail: true,
-      showPhone: true,
-      countEmail: '',
-      countPhone: '',
-      timerEmail: null,
-      timerPhone: null,
-      isLogined: false
-    };
-  },
-  components: {VueRecaptcha},
-  i18n: i18nComponents,
-  props: ['retrievePwd'],
-  methods: {
-
-    onExpired() {
-      this.$refs.invisibleRecaptcha.reset()
-    },
-    onVerify(res) {
-      console.log(res)
-      var that = this;
-      var data;
-      var dataCaptcha = {
-        'captcha': res
-      };
-      post('api/common/googleValidCode', JSON.stringify(dataCaptcha), false).then(function (res) {
-        if (res) {
-          if (that.registerWrap === 'registerPhone') {
-            const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
-            data = {
-              "smsAuthCode": that.phoneSmsCode,
-              "countryCode": isLoginNextPhoneNumCountry,
-              "mobileNumber": that.phoneVal,
-              "loginPword": that.phonePasswordAgain,
-            };
-            post('api/user/reg_mobile', JSON.stringify(data), false).then(function (res) {
-              that.modal_loading = false;
-              if (res) {
-                this.$parent.$emit('isretrievePwdShow', false);
-                this.$parent.$emit('islogin', true);
-                this.clear();
-              } else {
-                that.$refs.invisibleRecaptcha.reset()
-              }
-            });
-
-          } else if (that.registerWrap === 'tabEmail') {
-            data = {
-              "email": that.emailVal,
-              "loginPword": that.emailPasswordAgain,
-              "emailAuthCode": that.emailSmsCode
-            };
-            post('api/user/reg_email', JSON.stringify(data), false).then(function (res) {
-              that.modal_loading = false;
-              if (res) {
-                localStorage.setItem('token', res);
-                that.$parent.$emit('isregisterCookie', res);
-                that.$parent.$emit('isregister', false);
-                that.$parent.$emit('isregisterGoogle', true);
-                get('api/userInfo').then(function (res) {
-                  if (res) {
-                    that.isLogined = true;
-                    that.$parent.$emit('logined', that.isLogined);
-                    localStorage.setItem('user', JSON.stringify(res));
-                  }
-                });
-              } else {
-                that.$refs.invisibleRecaptcha.reset()
-              }
-            });
-          }
-        } else {
-          that.$refs.invisibleRecaptcha.reset();
-          that.modal_loading = false;
-        }
-      });
-    },
-    //email
-    emailValFocus() {
-      this.emailValError = false;
-      this.emailValErrorText = '';
-    },
-    emailSmsCodeFocus() {
-      this.emailSmsCodeError = false;
-      this.emailSmsCodeErrorText = ''
-    },
-    emailPasswordFocus() {
-      this.emailPasswordError = false;
-      this.emailPasswordErrorText = '';
-      this.emailPasswordAgainError = false;
-      this.emailPasswordAgainErrorText = ''
-    },
-    emailPasswordAgainFocus() {
-      this.emailPasswordAgainError = false;
-      this.emailPasswordAgainErrorText = ''
-    },
-    //phone
-    phoneValFocus() {
-      this.phoneValError = false;
-      this.phoneValErrorText = '';
-    },
-    phoneSmsCodeFocus() {
-      this.phoneSmsCodeError = false;
-      this.phoneSmsCodeErrorText = ''
-    },
-    phonePasswordFocus() {
-      this.phonePasswordError = false;
-      this.phonePasswordErrorText = '';
-      this.phonePasswordAgainError = false;
-      this.phonePasswordAgainErrorText = ''
-    },
-    phonePasswordAgainFocus() {
-      this.phonePasswordAgainError = false;
-      this.phonePasswordAgainErrorText = ''
-    },
-    getCountry() {
-      var that = this;
-      get('api/country').then(function (res) {
-        if (res) {
-          that.countryArr = res;
-        } else {
-        }
-      });
-    },
-    //发送验证码
-    runSendSms(type) {
-      const TIME_COUNT = 90;
-      var that = this;
-      var data;
-      if (type === 'phone') {
-        if (!that.timerPhone) {
-          if (that.phoneVal === '' || that.selectCountry === '') {
-            that.modal_loading = false;
-            that.phoneValError = true;
-            that.phoneValErrorText = this.$t('noEmpty');
-          } else if (!that.phoneReg(that.phoneVal)) {
-            that.modal_loading = false;
-            that.phoneValError = true;
-            that.phoneValErrorText = this.$t('errorPhoneNum');
-          } else {
-            const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
-            const isLoginNextPhoneNumPhone = that.phoneVal;
-            data = {
-              countryCode: isLoginNextPhoneNumCountry,
-              mobile: isLoginNextPhoneNumPhone,
-              operationType: '1',
-            };
-            that.countPhone = TIME_COUNT;
-            that.sendSmsPhone = 'Resend after ' + that.countPhone + 's';
-            that.showPhone = false;
-            that.timerPhone = setInterval(() => {
-              if (that.countPhone > 0 && that.countPhone <= TIME_COUNT) {
-                that.countPhone--;
-                that.sendSmsPhone = 'Resend after ' + that.countPhone + ' s';
-              } else {
-                that.sendSmsPhone = 'Reacquire';
-                that.showPhone = true;
-                clearInterval(that.timerPhone);
-                that.timerPhone = null;
-              }
-            }, 1000);
-            post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
-              if (res) {
-
-              } else {
-
-              }
-            });
-          }
-        }
-      } else if (type === 'email') {
-        if (!that.timerEmail) {
-          if (that.emailVal === '') {
-            that.modal_loading = false;
-            that.emailValError = true;
-            that.emailValErrorText = this.$t('noEmpty');
-          } else if (!that.emailReg(that.emailVal)) {
-            that.modal_loading = false;
-            that.emailValError = true;
-            that.emailValErrorText = this.$t('errorEmailNum');
-          } else {
-            data = {
-              email: that.emailVal,
-              operationType: '1',
-            };
-            that.countEmail = TIME_COUNT;
-            that.sendSmsEmail = 'Resend after ' + that.countEmail + 's';
-            that.showEmail = false;
-            that.timerEmail = setInterval(() => {
-              if (that.countEmail > 0 && that.countEmail <= TIME_COUNT) {
-                that.countEmail--;
-                that.sendSmsEmail = 'Resend after ' + that.countEmail + ' s';
-              } else {
-                that.sendSmsEmail = 'Reacquire';
-                that.showEmail = true;
-                clearInterval(that.timerEmail);
-                that.timerEmail = null;
-              }
-            }, 1000);
-            post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
-              if (res) {
-
-              } else {
-
-              }
-            });
-          }
-        }
-      }
-
-    },
-    tabChange(name) {
-      this.registerWrap = name;
-    },
-    //密码正则
-    passwordReg(passwordVal) {
-      var pwdRegx = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,64}$/;
-      return pwdRegx.test(passwordVal);
-    },
-    //phone正则
-    phoneReg(phoneval) {
-      var mobileRegx = /^\d{1,}$/;
-      return mobileRegx.test(phoneval);
-    },
-    //email正则
-    emailReg(emailval) {
-      var emailRegx = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-      return emailRegx.test(emailval);
-    },
-    asyncCancel() {
-      this.$parent.$emit('isretrievePwdShow', false);
-      this.clear();
-      this.modal_loading = false;
-    },
-    mySubmit() {
-      var that = this;
-      var data;
-      if (!that.modal_loading) {
-        that.modal_loading = true;
-        if (that.registerWrap === 'registerPhone') {
-          if (that.phoneVal === '' || that.selectCountry === '') {
-            that.modal_loading = false;
-            that.phoneValError = true;
-            that.phoneValErrorText = this.$t('noEmpty');
-          } else if (!that.phoneReg(that.phoneVal)) {
-            that.modal_loading = false;
-            that.phoneValError = true;
-            that.phoneValErrorText = this.$t('errorPhoneNum');
-          } else if (that.phoneSmsCode === '') {
-            that.modal_loading = false;
-            that.phoneSmsCodeError = true;
-            that.phoneSmsCodeErrorText = this.$t('noEmpty');
-          } else if (that.phonePassword === '') {
-            that.modal_loading = false;
-            that.phonePasswordError = true;
-            that.phonePasswordErrorText = this.$t('noEmpty');
-          } else if (!that.passwordReg(that.phonePassword)) {
-            that.modal_loading = false;
-            that.phonePasswordError = true;
-            that.phonePasswordErrorText = this.$t('errorPwdNum');
-          } else if (that.phonePasswordAgain === '') {
-            that.modal_loading = false;
-            that.phonePasswordAgainError = true;
-            that.phonePasswordAgainErrorText = this.$t('noEmpty');
-          } else if (that.phonePassword !== that.phonePasswordAgain) {
-            that.modal_loading = false;
-            that.phonePasswordAgainError = true;
-            that.phonePasswordAgainErrorText = this.$t('errorNoSamePwd');
-          } else {
-            this.$refs.invisibleRecaptcha.execute();
-          }
-        } else if (that.registerWrap === 'tabEmail') {
-          if (that.emailVal === '') {
-            that.modal_loading = false;
-            that.emailValError = true;
-            that.emailValErrorText = this.$t('noEmpty');
-          } else if (!that.emailReg(that.emailVal)) {
-            that.modal_loading = false;
-            that.emailValError = true;
-            that.emailValErrorText = this.$t('errorEmailNum');
-          } else if (that.emailSmsCode === '') {
-            that.modal_loading = false;
-            that.emailSmsCodeError = true;
-            that.emailSmsCodeErrorText = this.$t('noEmpty');
-          } else if (that.emailPassword === '') {
-            that.modal_loading = false;
-            that.emailPasswordError = true;
-            that.emailPasswordErrorText = this.$t('noEmpty');
-          } else if (!that.passwordReg(that.emailPassword)) {
-            that.modal_loading = false;
-            that.emailPasswordError = true;
-            that.emailPasswordErrorText = this.$t('errorPwdNum');
-          } else if (that.emailPasswordAgain === '') {
-            that.modal_loading = false;
-            that.emailPasswordAgainError = true;
-            that.emailPasswordAgainErrorText = this.$t('noEmpty');
-          } else if (that.emailPassword !== that.emailPasswordAgain) {
-            that.modal_loading = false;
-            that.emailPasswordAgainError = true;
-            that.emailPasswordAgainErrorText = this.$t('errorNoSamePwd');
-          } else {
-            this.$refs.invisibleRecaptcha.execute();
-          }
-        }
-      }
-    },
-    clear() {
-      this.emailVal = '';
-      this.emailValError = false;
-      this.emailValErrorText = '';
-      this.emailSmsCode = '';
-      this.emailSmsCodeError = false;
-      this.emailSmsCodeErrorText = '';
-      this.emailPassword = '';
-      this.emailPasswordError = false;
-      this.emailPasswordErrorText = '';
-      this.emailPasswordAgain = '';
-      this.emailPasswordAgainError = false;
-      this.emailPasswordAgainErrorText = '';
-      this.phoneVal = '';
-      this.phoneValError = false;
-      this.phoneValErrorText = '';
-      this.phoneSmsCode = '';
-      this.phoneSmsCodeError = false;
-      this.phoneSmsCodeErrorText = '';
-      this.phonePassword = '';
-      this.phonePasswordError = false;
-      this.phonePasswordErrorText = '';
-      this.phonePasswordAgain = '';
-      this.phonePasswordAgainError = false;
-      this.phonePasswordAgainErrorText = '';
-    },
-  },
-  mounted: function () {
-    this.getCountry();
-  },
-  watch: {
-    locale: function (newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.$i18n.locale = newVal;
-      }
-    },
-  }
-};
 
 var o_find_password = {
+  i18n: i18nComponents,
   template: `
-    <Modal title="找回密码" v-model="show" width="500" footer-hide>
+    <Modal :title="$t('findPassword')" v-model="show" width="500" footer-hide>
       <div class="authority">
         <Form ref="formFind" :model="formFind" :rules="ruleFind" v-show="current === 0">
           <Tabs v-model="findType" :class="spread ? 'spreaded' : ''">
@@ -2686,7 +2288,7 @@ var o_find_password = {
                   size="large"
                   :maxlength="30"
                   v-model="formFind.email"
-                  placeholder="请输入邮箱地址"
+                  :placeholder="$t('emailHolder')"
                 >
                 </Input>
               </FormItem>
@@ -2699,7 +2301,7 @@ var o_find_password = {
                   number
                   :maxlength="16"
                   v-model="formFind.phone"
-                  placeholder="请输入手机号码"
+                  :placeholder="$t('phoneHolder')"
                 >
                   <Select
                     slot="prepend"
@@ -2725,67 +2327,67 @@ var o_find_password = {
               </FormItem>
             </TabPane>
           </Tabs>
-          <Button type="primary" size="large" long @click="handleSubmit('formFind')">下一步</Button>
+          <Button type="primary" size="large" long @click="handleSubmit('formFind')">{{ $t('nextStep') }}</Button>
         </Form>
         <Form ref="formReset" :model="formReset" :rules="ruleReset" v-show="current === 1">
-          <FormItem label="新密码" prop="password">
+          <FormItem :label="$t('newPassword')" prop="password">
             <Input
               type="password"
               size="large"
               v-model="formReset.password"
-              placeholder="请输入新密码"
+              :placeholder="$t('newPasswordHolder')"
             >
             </Input>
           </FormItem>
-          <FormItem label="重复密码" prop="passwordAgain">
+          <FormItem :label="$t('repeatPassword')" prop="passwordAgain">
             <Input
               type="password"
               size="large"
               v-model="formReset.passwordAgain"
-              placeholder="请再次输入新密码"
+              :placeholder="$t('repeatPasswordHolder')"
             >
             </Input>
           </FormItem>
-          <FormItem label="邮箱验证" prop="verifyEmail" v-if="findType === 'email'">
+          <FormItem :label="$t('emailVerification')" prop="verifyEmail" v-if="findType === 'email'">
             <Input
               type="text"
               size="large"
               number
               :maxlength="6"
               v-model="formReset.verifyEmail"
-              placeholder="请输入邮箱验证码"
+              :placeholder="$t('emailVerificationHolder')"
             >
               <Button slot="append" :disabled="sendDisabledEmail" @click="sendMessageSecurity('Email', 24)">
                 {{ sendPlaceholderEmail }}
               </Button>
             </Input>
           </FormItem>
-          <FormItem label="手机验证" prop="verifyPhone" v-if="findType === 'phone'">
+          <FormItem :label="$t('phoneVerification')" prop="verifyPhone" v-if="findType === 'phone'">
             <Input
               type="text"
               size="large"
               number
               :maxlength="6"
               v-model="formReset.verifyPhone"
-              placeholder="请输入短信验证码"
+              :placeholder="$t('phoneVerificationHolder')"
             >
               <Button slot="append" :disabled="sendDisabledPhone" @click="sendMessageSecurity('Phone', 24)">
                 {{ sendPlaceholderPhone }}
               </Button>
             </Input>
           </FormItem>
-          <FormItem label="谷歌验证" prop="verifyGoogle" v-if="googleAuthored">
+          <FormItem :label="$t('googleVerification')" prop="verifyGoogle" v-if="googleAuthored">
             <Input
               type="text"
               size="large"
               number
               :maxlength="6"
               v-model="formReset.verifyGoogle"
-              placeholder="请输入谷歌验证码"
+              :placeholder="$t('googleVerificationHolder')"
             >
             </Input>
           </FormItem>
-          <Button type="primary" size="large" long @click="handleSubmit('formReset')">提交</Button>
+          <Button type="primary" size="large" long @click="handleSubmit('formReset')">{{ $t('submit') }}</Button>
         </Form>
       </div>
     </Modal>
@@ -2794,7 +2396,11 @@ var o_find_password = {
     show: {
       type: Boolean,
       default: false,
-    }
+    },
+    locale: {
+      type: String,
+      default: 'zh',
+    },
   },
   data() {
     const validateEmail = (rule, value, callback) => {
@@ -2803,9 +2409,9 @@ var o_find_password = {
       const reg = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
       if (this.formFind.phone === '') {
         if (valueTrim === '') {
-          callback(new Error('邮箱地址不能为空'));
+          callback(new Error(this.$t('emailErrorEmpty')));
         } else if (!reg.test(valueTrim)) {
-          callback(new Error('邮箱地址格式不正确'));
+          callback(new Error(this.$t('emailErrorFormat')));
         } else {
           callback();
         }
@@ -2816,9 +2422,9 @@ var o_find_password = {
     const validatePhone = (rule, value, callback) => {
       if (this.formFind.email.trim() === '') {
         if (value === '') {
-          callback(new Error('手机号码不能为空'));
+          callback(new Error(this.$t('phoneErrorEmpty')));
         } else if (!/\d+$/g.test(value)) {
-          callback(new Error('手机号码格式不正确'));
+          callback(new Error(this.$t('phoneErrorFormat')));
         } else {
           callback();
         }
@@ -2829,9 +2435,9 @@ var o_find_password = {
     const validatePassword = (rule, value, callback) => {
       const valueTrim = value.trim();
       if (valueTrim === '') {
-        callback(new Error('密码不能为空'));
+        callback(new Error(this.$t('passwordErrorEmpty')));
       } else if (valueTrim.length > 18 || valueTrim.length < 6) {
-        callback(new Error('请输入6到18位长度的密码'));
+        callback(new Error(this.$t('passwordErrorFormat')));
       } else {
         if (this.formReset.password !== '') {
           // 对第二个密码框单独验证
@@ -2842,30 +2448,30 @@ var o_find_password = {
     };
     const validatePasswordAgain = (rule, value, callback) => {
       if (value.trim() === '') {
-        callback(new Error('请再次输入密码'));
+        callback(new Error(this.$t('repeatPasswordHolder')));
       } else if (value !== this.formReset.password) {
-        callback(new Error('输入与上次不匹配'));
+        callback(new Error(this.$t('repeatPasswordError')));
       } else {
         callback();
       }
     };
     const validateVerifyEmail = (rule, value, callback) => {
       if (this.findType === 'email' && value === '') {
-        callback(new Error('邮箱验证码不能为空'));
+        callback(new Error(this.$t('emailVerificationHolder')));
       } else {
         callback();
       }
     };
     const validateVerifyPhone = (rule, value, callback) => {
       if (this.findType === 'phone' && value === '') {
-        callback(new Error('手机验证码不能为空'));
+        callback(new Error(this.$t('phoneVerificationHolder')));
       } else {
         callback();
       }
     };
     const validateVerifyGoogle = (rule, value, callback) => {
       if (this.googleAuthored && value === '') {
-        callback(new Error('谷歌验证码不能为空'));
+        callback(new Error(this.$t('googleVerificationHolder')));
       } else {
         callback();
       }
@@ -2885,9 +2491,9 @@ var o_find_password = {
         email: [{ validator: validateEmail, trigger: 'change' }],
         phone: [{ validator: validatePhone, trigger: 'change' }],
       },
-      sendPlaceholderEmail: '发送验证码',
+      sendPlaceholderEmail: this.$t('sendVerification'),
       sendDisabledEmail: false,
-      sendPlaceholderPhone: '发送验证码',
+      sendPlaceholderPhone: this.$t('sendVerification'),
       sendDisabledPhone: false,
       formReset: {
         password: '',
@@ -2901,15 +2507,15 @@ var o_find_password = {
         passwordAgain: [{ validator: validatePasswordAgain, trigger: 'change' }],
         verifyEmail: [
           { validator: validateVerifyEmail, trigger: 'change' },
-          { type: 'number', message: '必须输入数字', trigger: 'change' },
+          { type: 'number', message: this.$t('numericRequired'), trigger: 'change' },
         ],
         verifyPhone: [
           { validator: validateVerifyPhone, trigger: 'change' },
-          { type: 'number', message: '必须输入数字', trigger: 'change' },
+          { type: 'number', message: this.$t('numericRequired'), trigger: 'change' },
         ],
         verifyGoogle: [
           { validator: validateVerifyGoogle, trigger: 'change' },
-          { type: 'number', message: '必须输入数字', trigger: 'change' },
+          { type: 'number', message: this.$t('numericRequired'), trigger: 'change' },
         ],
       },
     };
@@ -3002,8 +2608,8 @@ var o_find_password = {
         if (counter == 0) {
           that['sendDisabled' + name] = false;
           that['sendDisabledBind' + name] = false;
-          that['sendPlaceholder' + name] = '重新发送';
-          that['sendPlaceholderBind' + name] = '重新发送';
+          that['sendPlaceholder' + name] = that.$t('sendVerificationAgain');
+          that['sendPlaceholderBind' + name] = that.$t('sendVerificationAgain');
           clearInterval(timer);
         }
       }, 1000);
@@ -3017,6 +2623,10 @@ var o_find_password = {
         this.current = 0;
         this.$parent.$emit('isretrievePwdShow', false);
       }
+    },
+    locale(newVal) {
+      console.log(newVal);
+      this.$i18n.locale = newVal;
     }
   },
 };
@@ -3134,7 +2744,7 @@ var o_header = {
       ></myloginnext>
       <myregister :register="isregister" :langStatus="$i18n.locale"></myregister>
       <myregistergoogle :register-google="isRegisterGoogleShow" :register-cookie="isregisterCookie" :langStatus="$i18n.locale"></myregistergoogle>
-      <my-find-password :show="isretrievePwdShow"></my-find-password>
+      <my-find-password :show="isretrievePwdShow" :locale="$i18n.locale"></my-find-password>
     </div>
   `,
   i18n: i18nComponents,
@@ -3171,8 +2781,8 @@ var o_header = {
     toggleLanguage(name) {
       this.$i18n.locale = name;
       document.documentElement.lang = name;
-      document.body.dir = name === 'zh' ? 'ltr' : 'rtl';
-      document.body.style.fontSize = name === 'zh' ? '14px' : '12px';
+      document.body.dir = name === 'ar' ? 'rtl' : 'ltr';
+      document.body.style.fontSize = name === 'ar' ? '12px' : '14px';
       localStorage.setItem('locale', name);
       this.$parent.$emit('locale', name);
     },
@@ -3235,7 +2845,6 @@ var o_header = {
     myloginnext: o_my_loginNext,
     myregister: o_my_register,
     myregistergoogle: o_my_registerGoogle,
-    // myretrievepwd: o_my_retrievePwd,
     myFindPassword: o_find_password,
   },
   mounted() {
