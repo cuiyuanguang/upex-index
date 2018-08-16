@@ -189,6 +189,9 @@ var myAssets = new Vue({
       localStorage.setItem("asset_type", type);
     },
 
+    runRecharge(){
+      window.location.href= "otc_my_assets_recharge.html";
+    },
     //获取头部数据
     getUserBalance() {
       var that = this;

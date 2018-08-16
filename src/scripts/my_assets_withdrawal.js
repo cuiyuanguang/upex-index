@@ -12,6 +12,7 @@ var myAssetsWithdrawal = new Vue({
     row_my_assets_with
   },
   data: {
+    dailyRateStore: {},
     userInfo: {},
     data3: [],
     columns3: [
@@ -118,6 +119,8 @@ var myAssetsWithdrawal = new Vue({
     withdrawalAddress:'',
     disabledEmail: false,
     disabledPhone: false,
+    dailyLimit: '',
+    pricePlaceholder: "The minimum withdrawal amount is"
   },
   methods: {
     //提现
@@ -172,16 +175,21 @@ var myAssetsWithdrawal = new Vue({
     currencyChange(val) {
       this.valueAmount = '';
       if (val === 'USDT') {
-        this.addressList = this.currencyListUSDT
+        this.addressList = this.currencyListUSDT;
+        this.dailyLimit = this.dailyRateStore.open_coins_withdraw_one_day_max_usdt;
       } else if (val === 'BTC') {
-        this.addressList = this.currencyListBTC
+        this.addressList = this.currencyListBTC;
+        this.dailyLimit = this.dailyRateStore.open_coins_withdraw_one_day_max_btc;
       } else if (val === 'ETH') {
-        this.addressList = this.currencyListETH
+        this.addressList = this.currencyListETH;
+        this.dailyLimit = this.dailyRateStore.open_coins_withdraw_one_day_max_eth;
       }
       this.changeCoin = val;
       this.balanceExtractable = this.balance[val].normal_balance + ' ' + val;
-      this.balanceLimit = this.balance[val].withdraw_min + ' ' + val;
+      let balanceLimit = this.balance[val].withdraw_min + ' ' + val;
       this.balanceDefaultFee = this.balance[val].defaultFee;
+
+      this.pricePlaceholder = "The minimum withdrawal amount is " + balanceLimit;
     },
     //打开添加地址页面
     addressClick() {
@@ -274,6 +282,10 @@ var myAssetsWithdrawal = new Vue({
       this.modal_loading = true;
     },
     withdrawal() {
+      if(this.userInfo.googleAuthenticatorStatus === 0){
+        Toast.show('请先绑定谷歌账户', { icon: 'warn' });
+        return;
+      }
       if (this.loading) {
         if (this.valueAmount === '' || this.valueAmount === null) {
           this.withdrawalErrorText = '不能为空'
@@ -455,8 +467,17 @@ var myAssetsWithdrawal = new Vue({
     withdrawalCancelTrue(){
       this.withdrawalModelTrue= false;
     },
+    getDailyRate(){
+      get('api/rate').then((res) => {
+        this.dailyRateStore = res;
+        this.getAddress('USDT');
+        this.getAddress('ETH');
+        this.getAddress('BTC');
+      })
+    }
   },
   mounted() {
+    this.getDailyRate();
     this.userInfo = JSON.parse(localStorage.getItem('user'));
     //判断email和 phone Tab显示隐藏
     this.disabledEmail = this.userInfo.emailAuthenticatorStatus === 0;
@@ -464,9 +485,6 @@ var myAssetsWithdrawal = new Vue({
     //判断跳转过来货币类型
     this.modelCurrency = localStorage.getItem('asset_type') ? localStorage.getItem('asset_type') : 'USDT';
     this.getUserWithDrawList();
-    this.getAddress('USDT');
-    this.getAddress('ETH');
-    this.getAddress('BTC');
   },
   filters: {},
   watch: {

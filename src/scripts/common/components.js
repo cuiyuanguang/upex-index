@@ -909,93 +909,88 @@ var g_auth = {
 var i18nLoginRegisterMsg = {
   loginTitle: {
     zh: '欢迎登录',
-    en: 'Welcome Login',
-    ar: ''
+    en: 'Welcome to login',
+    ar: 'مرحبا في تسجيل الدخول'
   },
   registerTitle: {
     zh: '欢迎注册',
-    en: 'Welcome Register',
-    ar: ''
+    en: 'Welcome to register ',
+    ar: 'مرحبا في تسجيل حساب'
   },
   email: {
     zh: '邮箱',
     en: 'E-mail',
-    ar: ''
-  },
-  googleValidate: {
-    zh:'谷歌验证码',
-    en:'Google verification code',
-    ar:''
+    ar: 'البريد الالكتروني'
   },
   emailValidate: {
     zh:'邮箱验证码',
     en:'E-mail verification code',
-    ar: ''
+    ar: 'رمز التحقق من البريد الإلكتروني'
   },
   phoneValidate: {
     zh:'手机验证码',
     en:'phone verification code',
-    ar: ''
+    ar: 'رمز التحقق من الهاتف'
   },
   getValidateCode: {
     zh:'获取验证码',
-    en:'get verification code',
-    ar: ''
+    en:'Get verification code',
+    ar: 'الحصول على رمز التحقق'
   },
   phone: {
     zh: '手机',
-    en: '',
-    ar: ''
+    en: 'Phone',
+    ar: 'الهاتف'
   },
   login: {
     zh: '登录',
     en: 'Log In',
-    ar: ''
+    ar: 'تسجيل الدخول'
   },
   register: {
     zh: '注册',
     en: 'Register',
-    ar: ''
+    ar: 'تسجيل حساب'
   },
   enterEmail: {
     zh: '请输入邮箱',
-    en: 'Enter your email',
-    ar: ''
+    en: 'Please enter email',
+    ar: 'يرجى إدخال البريد الإلكتروني'
   },
   enterPhone: {
     zh: '请输入手机号',
-    en: 'Enter your Phone number',
-    ar: ''
+    en: 'Please enter phone number',
+    ar: 'يرجى إدخال رقم الهاتف'
   },
   enterPwd: {
     zh: '请输入密码',
-    en: 'Enter your password',
-    ar: ''
+    en: 'please enter password',
+    ar: 'يرجى إدخال كلمة السر'
   },
   surePwd:{
     zh:'确认密码',
-    en:'Enter your password again',
-    ar: ''
+    en:'confirm password',
+    ar: 'تأكيد كلمة السر'
   },
   forgetPwd: {
     zh: '忘记密码?',
-    en: 'forget password?',
-    ar: ''
+    en: 'forgot password?',
+    ar: 'نسيت كلمة السر؟'
   },
   noAccount: {
     zh: '没有账户',
-    en: 'No account',
-    ar: ''
+    en: 'Do not have an account',
+    ar: 'لا تملك حساب'
   },
   registerAccount: {
-    zh: '注册账户',
+    zh: '注册',
     en: 'Register an account',
-    ar: ''
+    ar: 'تسجيل حساب'
   },
   haveAccount: {
     zh: '我已经有账户了',
     en: 'I have an account',
-    ar: ''
+    ar: 'لدي حساب'
   },
   enterGoogleRecieve: {
     zh: '请输入收到的谷歌验证码',
@@ -1016,28 +1011,28 @@ var i18nLoginRegisterMsg = {
   //校验
   errorPhoneNum: {
     zh: '请输入合法的电话号码',
-    en: 'Please enter a legitimate phone number',
-    ar: ''
+    en: 'Please enter the correct phone number',
+    ar: 'يرجى إدخال رقم الهاتف الصحيح'
   },
   errorEmailNum: {
     zh: '请输入合法的邮件地址',
-    en: 'Please enter a legitimate email address',
-    ar: ''
+    en: 'Please enter the correct email address',
+    ar: 'يرجى إدخال عنوان البريد الإلكتروني الصحيح'
   },
   errorNoSamePwd: {
     zh: '密码不一致',
-    en: 'Inconsistency of ciphers',
-    ar: ''
+    en: 'password does not match',
+    ar: 'كلمة السر غير مطابقة'
   },
   errorPwdNum: {
     zh: '长度在8-64之间，只能包含字符、数字',
-    en: 'length 8-64, can contain characters and numbers only.',
-    ar: ''
+    en: 'password length is between 8 to 64, and can only contains characters and numbers',
+    ar: 'طول كلمة السر ما بين 8 الى 64 ، و تحتوي فقط على أحرف وأرقام'
   },
   noEmpty: {
     zh: '不能为空',
     en: 'can not be empty',
-    ar: ''
+    ar: 'لا يمكن أن تكون فارغة'
   },
 };
 
@@ -2090,6 +2085,8 @@ var o_my_register = {
   watch: {
     langStatus: function (newVal, oldVal) {
       if (newVal !== oldVal) {
+        this.sendSmsEmail = this.$t('getValidateCode');
+        this.sendSmsPhone = this.$t('getValidateCode');
         this.$i18n.locale = newVal;
       }
     }

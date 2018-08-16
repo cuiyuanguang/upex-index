@@ -52,13 +52,13 @@
           <div class="row-left">Amount</div>
           <div class="row-right amount-input">
             <i-input style="width: 400px" v-model="valueAmount" size="large"
-                     placeholder="The minimum withdrawal amount is 0.2 USDT"
+                     :placeholder="pricePlaceholder"
                      :class="withdrawalErrorText != ''?'red':''"
                      @on-focus="withdrawalErrorText = ''"
             ></i-input>
             <p class="amount-p">
               <span class="amount-p-title">Extractable:</span><span>{{balanceExtractable}}</span>
-              <span class="amount-p-title" style="margin-left: 20px">Daily limit:</span><span>{{balanceLimit}}</span>
+              <span class="amount-p-title" style="margin-left: 20px">Daily limit:</span><span>{{dailyLimit}}</span>
             </p>
             <p class="amount-p amount-error-p">{{withdrawalErrorText}}</p>
           </div>
@@ -113,7 +113,7 @@
     </i-input>
     <p class="WithdrawalAddressn-error">{{AddressTagErrorText}}</p>
     <div slot="footer">
-      <i-button type="primary" size="large" long :loading="modal_loading" @click="addressFun">Log in</i-button>
+      <i-button type="primary" size="large" long :loading="modal_loading" @click="addressFun">submit</i-button>
     </div>
   </modal>
   <modal
@@ -142,6 +142,7 @@
             <i-input
               v-model="emailSmsCode"
               type="text"
+              maxLength="6"
               placeholder="E-mail verification code"
               class="loginNext-input loginNext-sms-input" @on-focus="emailSmsCodeFocus" :class="emailSmsCodeError?'loginNext-input-red':' '">
           <span slot="append"
@@ -159,6 +160,7 @@
             <i-input
               v-model="phoneSmsCode"
               type="text"
+              maxLength="6"
               placeholder="phone verification code"
               class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
 
@@ -177,14 +179,15 @@
         <i-input
           v-model="googleCode"
           type="text"
-          placeholder="phone verification code"
+          maxLength="6"
+          placeholder="google verification code"
           class="loginNext-input loginNext-sms-input" @on-focus="googleCodeFocus" :class="googleCodeError?'loginNext-input-red':' '">
           </span>
         </i-input>
         <p class="my-loginNext-error">{{googleCodeErrorText}}</p>
       </div>
     <div slot="footer">
-      <i-button type="primary" size="large" long :loading="withdrawalLoading" @click="okWithdrawal">Complete binding</i-button>
+      <i-button type="primary" size="large" long :loading="withdrawalLoading" @click="okWithdrawal">submit</i-button>
     </div>
   </modal>
   <modal

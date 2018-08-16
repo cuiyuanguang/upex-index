@@ -20,7 +20,7 @@
               <span class="order-wrap-top-bold">USDT</span>
             </div>
             <div class="right-wrap">
-              <div class="order-wrap-top-button">Deposit</div>
+              <div class="order-wrap-top-button" @click="runRecharge">Deposit</div>
               <div class="order-wrap-top-button" @click="runWithdrawal('USDT')">Withdrawal</div>
             </div>
           </div>
@@ -44,7 +44,7 @@
               <span class="order-wrap-top-bold">BTC</span>
             </div>
             <div class="right-wrap">
-              <div class="order-wrap-top-button">Deposit</div>
+              <!--<div class="order-wrap-top-button">Deposit</div>-->
               <div class="order-wrap-top-button"  @click="runWithdrawal('BTC')">Withdrawal</div>
             </div>
           </div>
@@ -68,7 +68,7 @@
               <span class="order-wrap-top-bold">{{balance.ETH.total_balance}} ETH</span>
             </div>
             <div class="right-wrap">
-              <div class="order-wrap-top-button">Deposit</div>
+              <!--<div class="order-wrap-top-button">Deposit</div>-->
               <div class="order-wrap-top-button"  @click="runWithdrawal('ETH')">Withdrawal</div>
             </div>
           </div>

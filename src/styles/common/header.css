@@ -55,7 +55,7 @@
 }
 body[dir='rtl'] .my-login .ivu-input-group-append{
   right: initial;
-  left: 1px;
+  left: 50px;
 }
 .my-login .ivu-input-group-append {
   position: absolute;
