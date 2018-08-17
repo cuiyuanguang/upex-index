@@ -932,6 +932,11 @@ var i18nLoginRegisterMsg = {
     en:'phone verification code',
     ar: 'رمز التحقق من الهاتف'
   },
+  googleValidate: {
+    zh: '谷歌验证码',
+    en: 'google verification code',
+    ar: ''
+  },
   getValidateCode: {
     zh:'获取验证码',
     en:'Get verification code',
@@ -1077,7 +1082,7 @@ var o_my_login = {
             class="iview-input"
             @on-focus="loginEmailPasswordFocus"
           >
-            <span slot="append" class="my-slot-append" @click="runForgetPassword">{{ $t('forgetPwd') }}</span>
+            <span slot="append" class="my-slot-append" :class="highLightForget ? 'text-blue' : '' " @click="runForgetPassword">{{ $t('forgetPwd') }}</span>
           </Input>
           <p class="my-login-error">{{loginEmailPasswordErrorText}}</p>
         </TabPane>
@@ -1110,7 +1115,7 @@ var o_my_login = {
             class="iview-input"
             @on-focus="loginPhonePasswordFocus"
           >
-            <span slot="append" class="my-slot-append" @click="runForgetPassword">{{ $t('forgetPwd') }}</span>
+            <span slot="append" class="my-slot-append" :class="highLightForget ? 'text-blue' : '' " @click="runForgetPassword">{{ $t('forgetPwd') }}</span>
           </Input>
             <p class="my-login-error">{{loginPhonePasswordErrorText}}</p>
         </TabPane>
@@ -1143,6 +1148,7 @@ var o_my_login = {
       //country
       // countryArr: [],
       selectCountry: '+86',
+      highLightForget: false,
       //password
       loginPhonePassword: '',
       loginPhonePasswordError: false,
@@ -1200,6 +1206,7 @@ var o_my_login = {
                 that.modal_loading = false;
                 that.clear()
               } else {
+                that.highLightForget = true;
                 that.$refs.invisibleRecaptcha.reset()
                 that.modal_loading = false;
               }
@@ -1381,6 +1388,8 @@ var o_my_loginNext = {
       <Input
         v-model="loginNextSmsCode"
         type="text"
+        :maxlength="6"
+        @on-change="checkNum"
         :placeholder="$t('enterGoogleRecieve')"
         class="loginNext-input"  @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':''">
       </Input>
@@ -1394,6 +1403,8 @@ var o_my_loginNext = {
         <Input
           v-model="loginNextSmsCode"
           type="text"
+          @on-change="checkNum"
+          :maxlength="6"
           :placeholder="$t('enterSMSRecieve')"
           class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':' '">
           <span slot="append"
@@ -1414,6 +1425,8 @@ var o_my_loginNext = {
         <Input
           v-model="loginNextSmsCode"
           type="text"
+          @on-change="checkNum"
+          :maxlength="6"
           :placeholder="$t('enterEmailRecieve')"
           class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':' '">
           <span slot="append"
@@ -1459,8 +1472,19 @@ var o_my_loginNext = {
   },
   methods: {
     loginNextFocus() {
-      this.loginNextError = false;
-      this.loginNextErrorText = ''
+      if(!isNaN(this.loginNextSmsCode)){
+        this.loginNextError = false;
+        this.loginNextErrorText = ''
+      }
+    },
+    checkNum() {
+      if(isNaN(this.loginNextSmsCode)){
+        this.loginNextError = true;
+        this.loginNextErrorText = '验证码只包含数字';
+      }else{
+        this.loginNextError = false;
+        this.loginNextErrorText = '';
+      }
     },
     loginNextSubmit() {
       var that = this;

@@ -160,6 +160,10 @@ body[dir='rtl'] .float-right {
   color: #ed3f14;
 }
 
+.text-blue{
+  color: #2d8cf0;
+}
+
 .ivu-tabs.spreaded {
   height: 300px;
   transition: ease 500ms;

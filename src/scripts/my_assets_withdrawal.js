@@ -448,7 +448,7 @@ var myAssetsWithdrawal = new Vue({
       };
       let that = this;
       if(this.tabsName === 'loginEmail'){
-        data.emailCode = this.emailSmsCode;
+        data.emailAuthCode = this.emailSmsCode;
         if(this.emailSmsCode.length !== 6){
           this.emailSmsCodeError = true;
           this.emailSmsCodeErrorText = this.$t('emailErrorCode');

@@ -170,6 +170,17 @@ body[dir='rtl'] .my-register .ivu-input-group-append{
   border-right: 1px solid #DBDBDB;
 }
 
+.my-login .ivu-select-item{
+  line-height: 26px;
+}
+.my-login .ivu-select-item .iview-input-countryPhone-span{
+  color: #000;
+}
+
+.my-login .ivu-select-item:hover .iview-input-countryPhone-span{
+  font-weight: 600;
+}
+
 .my-login .ivu-select-single .ivu-select-input {
   text-align: center;
 }
