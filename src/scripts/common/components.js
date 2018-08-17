@@ -1152,7 +1152,7 @@ var o_my_login = {
       loading: true,
       login1: this.login,
       login: false,
-      loginWrap: '',
+      loginWrap: 'loginEmail',
       error: {
         phoneNum: '输入合法的电话号码',
         emailNum: '输入合法的邮箱地址',

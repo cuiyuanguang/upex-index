@@ -11,117 +11,130 @@ var myAssetsWithdrawal = new Vue({
     oHeader: o_header,
     row_my_assets_with
   },
-  data: {
-    dailyRateStore: {},
-    userInfo: {},
-    data3: [],
-    columns3: [
-      {
-        title: 'Time',
-        key: 'createdAt',
-        align: 'center'
-      },
-      {
-        title: 'Currency',
-        key: 'symbol',
-        align: 'center'
-      },
-      {
-        title: 'Type',
-        key: 'type',
-        align: 'center'
-      },
-      {
-        title: 'Amount',
-        key: 'amount',
-        align: 'center'
-      },
-      {
-        title: 'Status',
-        key: 'status',
-        align: 'center'
-      },
-      {
-        title: 'Operating',
-        type: 'expand',
-        render: (h, params) => {
-          return h(row_my_assets_with, {
-            props: {
-              row: params.row,
-            }
-          })
-        },
-        align: 'center'
-      },
-    ],
-    data3Page: 1,
-    tableLoading3: true,
-    modelCurrency: '',
-    currencyList: [
-      {
-        value: 'USDT'
-      },
-      {
-        value: 'BTC'
-      },
-      {
-        value: 'ETH'
-      },
-    ],
-    currencyListUSDT: [],
-    currencyListBTC: [],
-    currencyListETH: [],
-    valueAmount: '',
-    modelAddress: '',
-    addressList: [],
-    delStatus: true,
-    addressModel: false,
-    modal_loading: false,
-    WithdrawalAddressError: false,
-    WithdrawalAddress: '',
-    WithdrawalAddressErrorText: '',
-    AddressTagError: false,
-    AddressTag: '',
-    AddressTagErrorText: '',
-    withdrawalErrorText: '',
-    balance: {},
-    balanceExtractable: '',
-    balanceLimit: '',
-    loading: false,
-    withdrawalModel: false,
-    phoneSmsCode: '',
-    phoneSmsCodeError: false,
-    phoneSmsCodeErrorText: '',
-    emailSmsCode: '',
-    emailSmsCodeError: false,
-    emailSmsCodeErrorText: '',
-    sendSmsEmail: 'get verification code',
-    sendSmsPhone: 'get verification code',
-    showEmail: true,
-    showPhone: true,
-    countEmail: '',
-    countPhone: '',
-    timerEmail: null,
-    timerPhone: null,
-    googleCode: '',
-    googleCodeError: false,
-    googleCodeErrorText: '',
-    tabsName: 'loginEmail',
-    changeCoin: '',
-    balanceDefaultFee: '',
-    balanceDefaultFeeCalc: '',
-    valueAmountCalc: '',
-    addressListID: '',
-    withdrawalLoading:false,
-    withdrawalModelTrue:false,
-    withdrawalLoadingTrue:false,
-    withdrawalTime:'',
-    withdrawalAddress:'',
-    disabledEmail: false,
-    disabledPhone: false,
-    dailyLimit: '',
-    pricePlaceholder: "The minimum withdrawal amount is"
+  beforeCreate (){
+    this.userInfo = JSON.parse(localStorage.getItem('user'));
   },
+  data (){
+    return{
+      locale: {},
+      dailyRateStore: {},
+      userInfo: {},
+      data3: [],
+      columns3: [
+        {
+          title: '',
+          key: 'createdAt',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('time'))
+        },
+        {
+          title: '',
+          key: 'symbol',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('currency'))
+        },
+        {
+          title: '',
+          key: 'type',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('type'))
+        },
+        {
+          title: '',
+          key: 'amount',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('amount'))
+        },
+        {
+          title: '',
+          key: 'status',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('status'))
+        },
+        {
+          title: '',
+          type: 'expand',
+          renderHeader: (h) => h('span', this.$t('operate')),
+          render: (h, params) => {
+            return h(row_my_assets_with, {
+              props: {
+                row: params.row,
+              }
+            })
+          },
+          align: 'center'
+        },
+      ],
+      data3Page: 1,
+      tableLoading3: true,
+      modelCurrency: '',
+      currencyList: [
+        {
+          value: 'USDT'
+        },
+        {
+          value: 'BTC'
+        },
+        {
+          value: 'ETH'
+        },
+      ],
+      currencyListUSDT: [],
+      currencyListBTC: [],
+      currencyListETH: [],
+      valueAmount: '',
+      modelAddress: '',
+      addressList: [],
+      delStatus: true,
+      addressModel: false,
+      modal_loading: false,
+      WithdrawalAddressError: false,
+      WithdrawalAddress: '',
+      WithdrawalAddressErrorText: '',
+      AddressTagError: false,
+      AddressTag: '',
+      AddressTagErrorText: '',
+      withdrawalErrorText: '',
+      balance: {},
+      balanceExtractable: '',
+      balanceLimit: '',
+      loading: false,
+      withdrawalModel: false,
+      phoneSmsCode: '',
+      phoneSmsCodeError: false,
+      phoneSmsCodeErrorText: '',
+      emailSmsCode: '',
+      emailSmsCodeError: false,
+      emailSmsCodeErrorText: '',
+      sendSmsEmail: this.$t('getValidateCode'),
+      sendSmsPhone: this.$t('getValidateCode'),
+      showEmail: true,
+      showPhone: true,
+      countEmail: '',
+      countPhone: '',
+      timerEmail: null,
+      timerPhone: null,
+      googleCode: '',
+      googleCodeError: false,
+      googleCodeErrorText: '',
+      tabsName: this.userInfo.emailAuthenticatorStatus === 0 ? 'loginPhone' : 'loginEmail',
+      changeCoin: '',
+      balanceDefaultFee: '',
+      balanceDefaultFeeCalc: '',
+      valueAmountCalc: '',
+      addressListID: '',
+      withdrawalLoading:false,
+      withdrawalModelTrue:false,
+      withdrawalLoadingTrue:false,
+      withdrawalTime:'',
+      withdrawalAddress:'',
+      disabledEmail: this.userInfo.emailAuthenticatorStatus === 0,
+      disabledPhone: this.userInfo.mobileAuthenticatorStatus === 0,
+      dailyLimit: '',
+      pricePlaceholder: this.$t('minWithdraw')
+    }
+  },
+
   methods: {
     //提现
     getUserWithDrawList(page) {
@@ -189,7 +202,7 @@ var myAssetsWithdrawal = new Vue({
       let balanceLimit = this.balance[val].withdraw_min + ' ' + val;
       this.balanceDefaultFee = this.balance[val].defaultFee;
 
-      this.pricePlaceholder = "The minimum withdrawal amount is " + balanceLimit;
+      this.pricePlaceholder = this.$t('minWithdraw') + balanceLimit;
     },
     //打开添加地址页面
     addressClick() {
@@ -282,8 +295,12 @@ var myAssetsWithdrawal = new Vue({
       this.modal_loading = true;
     },
     withdrawal() {
+      if(!this.modelAddress){
+        Toast.show(this.$t('chooseAddress'), { icon: 'warn' });
+        return;
+      }
       if(this.userInfo.googleAuthenticatorStatus === 0){
-        Toast.show('请先绑定谷歌账户', { icon: 'warn' });
+        Toast.show(this.$t('bindGoogle'), { icon: 'warn' });
         return;
       }
       if (this.loading) {
@@ -477,11 +494,16 @@ var myAssetsWithdrawal = new Vue({
     }
   },
   mounted() {
+    var locale = localStorage.getItem('locale');
+    if (locale) {
+      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
+      this.$i18n.locale = locale;
+    }
+    var that = this;
+    this.$on('locale', function(i) {
+      that.locale = i;
+    });
     this.getDailyRate();
-    this.userInfo = JSON.parse(localStorage.getItem('user'));
-    //判断email和 phone Tab显示隐藏
-    this.disabledEmail = this.userInfo.emailAuthenticatorStatus === 0;
-    this.disabledPhone = this.userInfo.mobileAuthenticatorStatus === 0;
     //判断跳转过来货币类型
     this.modelCurrency = localStorage.getItem('asset_type') ? localStorage.getItem('asset_type') : 'USDT';
     this.getUserWithDrawList();

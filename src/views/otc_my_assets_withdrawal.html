@@ -12,14 +12,14 @@
   <o-header ref="header"></o-header>
   <div class="container">
     <div class="bg-white">
-      <h1 class="h1-text">Withdrawal</h1>
+      <h1 class="h1-text">{{ $t('withdrawal') }}</h1>
       <breadcrumb separator=">">
-        <breadcrumb-item to="otc_my_assets.html">My assets</breadcrumb-item>
-        <breadcrumb-item>Components</breadcrumb-item>
+        <breadcrumb-item to="otc_my_assets.html">{{ $t('myAsset') }}</breadcrumb-item>
+        <breadcrumb-item>{{ $t('withdrawal') }}</breadcrumb-item>
       </breadcrumb>
       <div class="wrap-gray">
         <div class="row-wrap">
-          <div class="row-left">Currency</div>
+          <div class="row-left">{{ $t('currency') }}</div>
           <div class="row-right currency-select">
             <i-select v-model="modelCurrency" @on-change="currencyChange(modelCurrency)" style="width:200px" size="large">
               <i-option v-for="currency in currencyList" :value="currency.value">{{ currency.value }}</i-option>
@@ -27,10 +27,10 @@
           </div>
         </div>
         <div class="row-wrap">
-          <div class="row-left">Withdrawal Address</div>
+          <div class="row-left">{{ $t('withdrawAddress') }}</div>
           <div class="row-right address-select">
             <div class="address-none" v-show="addressList.length === 0" @click="addressClick">
-              <span class="font_family">&#xe629;</span>Add address
+              <span class="font_family">&#xe629;</span>{{ $t('addAddress') }}
             </div>
             <i-select v-show="addressList.length" class="address-select-wrap" @on-change="addressChange(modelAddress)"
                       v-model="modelAddress" style="width:400px"
@@ -49,7 +49,7 @@
           </div>
         </div>
         <div class="row-wrap" style="margin-bottom: 10px">
-          <div class="row-left">Amount</div>
+          <div class="row-left">{{ $t('amount') }}</div>
           <div class="row-right amount-input">
             <i-input style="width: 400px" v-model="valueAmount" size="large"
                      :placeholder="pricePlaceholder"
@@ -57,22 +57,22 @@
                      @on-focus="withdrawalErrorText = ''"
             ></i-input>
             <p class="amount-p">
-              <span class="amount-p-title">Extractable:</span><span>{{balanceExtractable}}</span>
-              <span class="amount-p-title" style="margin-left: 20px">Daily limit:</span><span>{{dailyLimit}}</span>
+              <span class="amount-p-title">{{ $t('extractable') }}:</span><span>{{balanceExtractable}}</span>
+              <span class="amount-p-title" style="margin-left: 20px">{{ $t('dailyLimit') }}:</span><span>{{dailyLimit}}</span>
             </p>
             <p class="amount-p amount-error-p">{{withdrawalErrorText}}</p>
           </div>
         </div>
         <div class="row-wrap">
           <div class="row-left"></div>
-          <div class="row-right withdrawal-button" @click="withdrawal">Withdrawal</div>
+          <div class="row-right withdrawal-button" @click="withdrawal">{{ $t('withdrawal') }}</div>
         </div>
       </div>
     </div>
   </div>
   <div class="container">
     <div class="bg-white">
-      <h1 class="h1-text" style="margin-bottom: 30px">Withdrawal recording</h1>
+      <h1 class="h1-text" style="margin-bottom: 30px">{{ $t('withdrawalRecord') }}</h1>
       <i-table :columns="columns3" :data="data3" size="small" no-data-text="没有数据" :loading="tableLoading3"></i-table>
       <div style="margin: 10px;overflow: hidden" v-show="data3Page > 10">
         <div style="float: right;">
@@ -83,24 +83,24 @@
   </div>
   <modal
     v-model="addressModel"
-    title="Add a withdrawal address"
+    :title="$t('addOneAddress')"
     @on-cancel="asyncCancel"
     class-name="vertical-center-modal"
     width="500"
   >
-    <p class="modal-title">Withdrawal address</p>
+    <p class="modal-title">{{ $t('withdrawAddress') }}</p>
     <i-input
       size="large"
       :class="WithdrawalAddressError?'is-red':'is-gray'"
       v-model="WithdrawalAddress"
       type="text"
-      placeholder="Enter your withdrawal address"
+      :placeholder="$t('enterWithdraw')"
       class="modal-input"
       @on-focus="withdrawalAddressFocus"
     >
     </i-input>
     <p class="WithdrawalAddressn-error">{{WithdrawalAddressErrorText}}</p>
-    <p class="modal-title">Address tag</p>
+    <p class="modal-title">{{ $t('addressTag') }}</p>
     <i-input
       size="large"
       :class="AddressTagError?'is-red':'is-gray'"
@@ -113,12 +113,12 @@
     </i-input>
     <p class="WithdrawalAddressn-error">{{AddressTagErrorText}}</p>
     <div slot="footer">
-      <i-button type="primary" size="large" long :loading="modal_loading" @click="addressFun">submit</i-button>
+      <i-button type="primary" size="large" long :loading="modal_loading" @click="addressFun">{{ $t('submit') }}</i-button>
     </div>
   </modal>
   <modal
     v-model="withdrawalModel"
-    title="Please comfirm withdrawal info"
+    :title="$t('confirmModalTitle')"
     @on-cancel="withdrawalCancel"
     class-name="vertical-center-modal withdrawal-container"
     width="500"
@@ -126,9 +126,9 @@
   >
     <div class="withdrawal-wrap">
       <div class="gray-left">
-        <p>Withdrawal amount:</p>
-        <p>Fees :</p>
-        <p>Actual arrival:</p>
+        <p>{{ $t('withdrawAmount') }}</p>
+        <p>{{ $t('fee') }} :</p>
+        <p>{{ $t('realAmount') }}:</p>
       </div>
       <div class="gray-right">
         <p>{{valueAmount}} {{changeCoin}}</p>
@@ -137,13 +137,13 @@
       </div>
     </div>
     <div class="tabs-wrap">
-        <tabs v-model="tabsName" @on-click="tabChange">
-          <tab-pane label="E-mail verification" :disabled="disabledEmail" name="loginEmail">
+        <tabs :value="tabsName" @on-click="tabChange">
+          <tab-pane :label="$t('emailValidate')" :disabled="disabledEmail" name="loginEmail">
             <i-input
               v-model="emailSmsCode"
               type="text"
               maxLength="6"
-              placeholder="E-mail verification code"
+              :placeholder="$t('emailValidate')"
               class="loginNext-input loginNext-sms-input" @on-focus="emailSmsCodeFocus" :class="emailSmsCodeError?'loginNext-input-red':' '">
           <span slot="append"
                 class="my-slot-append"
@@ -156,12 +156,12 @@
             <p class="my-loginNext-error">{{emailSmsCodeErrorText}}</p>
 
           </tab-pane>
-          <tab-pane label="SMS verification" :disabled="disabledPhone" name="loginPhone">
+          <tab-pane :label="$t('phoneValidate')" :disabled="disabledPhone" name="loginPhone">
             <i-input
               v-model="phoneSmsCode"
               type="text"
               maxLength="6"
-              placeholder="phone verification code"
+              :placeholder="$t('emailValidate')"
               class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
 
           <span slot="append"
@@ -175,19 +175,19 @@
             <p class="my-loginNext-error">{{phoneSmsCodeErrorText}}</p>
           </tab-pane>
         </tabs>
-        <h1 class="tabs-wrap-h1">Google verification</h1>
+        <h1 class="tabs-wrap-h1">{{ $t('googleValidateCode') }}</h1>
         <i-input
           v-model="googleCode"
           type="text"
           maxLength="6"
-          placeholder="google verification code"
+          :placeholder="$t('googleValidateCode')"
           class="loginNext-input loginNext-sms-input" @on-focus="googleCodeFocus" :class="googleCodeError?'loginNext-input-red':' '">
           </span>
         </i-input>
         <p class="my-loginNext-error">{{googleCodeErrorText}}</p>
       </div>
     <div slot="footer">
-      <i-button type="primary" size="large" long :loading="withdrawalLoading" @click="okWithdrawal">submit</i-button>
+      <i-button type="primary" size="large" long :loading="withdrawalLoading" @click="okWithdrawal">{{ $t('submit') }}</i-button>
     </div>
   </modal>
   <modal

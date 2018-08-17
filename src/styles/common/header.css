@@ -55,6 +55,11 @@
 }
 body[dir='rtl'] .my-login .ivu-input-group-append{
   right: initial;
+  left: 0;
+}
+
+body[dir='rtl'] .my-register .ivu-input-group-append{
+  right: initial;
   left: 50px;
 }
 .my-login .ivu-input-group-append {
