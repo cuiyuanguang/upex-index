@@ -281,10 +281,10 @@ var messages = {
     en: 'Copied',
     ar: 'تم النسخ',
   },
-  noEmpty: {
-    zh: '不能为空',
-    en: 'can not be empty',
-    ar: 'لا يمكن أن تكون فارغة',
+  canNotBeEmpty: {
+    zh: '此处不能为空',
+    en: 'This place can not be empty ',
+    ar: 'هذا المكان لا يمكن أن يكون فارغاً',
   },
   twiceNotEqual: {
     zh: '两次输入不一致',

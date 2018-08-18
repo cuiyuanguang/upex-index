@@ -85,11 +85,11 @@ var pay = new Vue({
     },
     confirm: function () {
       if (!this.card) {
-        this.cardErrorTips = this.$t('noEmpty');
+        this.cardErrorTips = this.$t('canNotBeEmpty');
         return;
       }
       if (!this.recard) {
-        this.recardErrorTips = this.$t('noEmpty');
+        this.recardErrorTips = this.$t('canNotBeEmpty');
         return;
       }
       if (this.cardErrorTips || this.recardErrorTips) {
@@ -153,7 +153,6 @@ var pay = new Vue({
   mounted: function () {
     var locale = localStorage.getItem('locale');
     if (locale) {
-      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
       this.$i18n.locale = locale;
     }
     this.$on('locale', function(i) {
@@ -172,7 +171,7 @@ var pay = new Vue({
     },
     card: function (n, o) {
       if (!n) {
-        this.cardErrorTips = this.$t('noEmpty');
+        this.cardErrorTips = this.$t('canNotBeEmpty');
       } else if (!/(\d|\w)+$/.test(n)) {
         this.cardErrorTips = this.$t('numericOrLetter');
       } else if (n.length !== 4) {
@@ -183,7 +182,7 @@ var pay = new Vue({
     },
     recard: function (n, o) {
       if (!n) {
-        this.recardErrorTips = this.$t('noEmpty');
+        this.recardErrorTips = this.$t('canNotBeEmpty');
       } else if (!/(\d|\w)+$/.test(n)) {
         this.recardErrorTips = this.$t('numericOrLetter');
       } else if (n != this.card) {
