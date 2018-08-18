@@ -22,10 +22,10 @@
         <i-col class="tags" :span="4" :class="showListTag=='SELL' ? 'act' :'disact' ">
           <span @click="showListTag='SELL'">{{ $t('sell') }} USDT</span>
         </i-col>
-        <i-col span="16">
+        <i-col span="16" style="margin-top:10px;">
           <div class="text-right">
             <span>{{ $t('notSatisfied') }} ?</span>
-            <i-button type="ghost" shape="circle" style="color:#ff7100;font-weight: bold;background-color: #ffffff;" @click.native.prevent="showPostDialog();">
+            <i-button type="ghost" shape="circle" size="small" style="color:#ff7100;font-weight: bold;background-color: #ffffff;" @click="showPostDialog">
               <Icon type="plus-round"></Icon>
               {{ $t('releaseAdvert') }}
             </i-button>

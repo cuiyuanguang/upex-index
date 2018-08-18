@@ -21,6 +21,10 @@ body[dir='ltr'] * {
   direction: rtl;
 }
 
+.ivu-form-item-required .ivu-form-item-label:before {
+  display: none;
+}
+
 .border-top-dashed {
   border-top: 1px #f4f4f4 dashed;
 }
