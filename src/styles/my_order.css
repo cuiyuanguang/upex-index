@@ -43,6 +43,10 @@ td {
 	border-collapse: collapse;
 }
 
+#app .wrapper .body {
+	min-height: 600px;
+}
+
 #app .wrapper .body thead tr {
 	background: rgba(244, 244, 244, 1);
 	box-shadow: 0px 1px 0px 0px rgba(241, 241, 241, 1);
