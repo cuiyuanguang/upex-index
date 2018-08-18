@@ -129,6 +129,21 @@ var messages = {
     en: 'Google verification code',
     ar: ''
   },
+  waitTitle: {
+    zh: '提币申请已提交,请耐心等待...',
+    en: 'The coin application has been submitted please be patient',
+    ar: ''
+  },
+  inCountNum: {
+    zh: '到账数量',
+    en: '',
+    ar: ''
+  },
+  applyTime: {
+    zh: '申请时间',
+    en: '',
+    ar: ''
+  },
   enterEmail: {
     zh: '请输入邮箱',
     en: 'Please enter email',

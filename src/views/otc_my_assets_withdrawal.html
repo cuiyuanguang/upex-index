@@ -143,6 +143,7 @@
               v-model="emailSmsCode"
               type="text"
               maxLength="6"
+              @on-change="checkNum('email')"
               :placeholder="$t('emailValidate')"
               class="loginNext-input loginNext-sms-input" @on-focus="emailSmsCodeFocus" :class="emailSmsCodeError?'loginNext-input-red':' '">
           <span slot="append"
@@ -161,6 +162,7 @@
               v-model="phoneSmsCode"
               type="text"
               maxLength="6"
+              @on-change="checkNum('phone')"
               :placeholder="$t('emailValidate')"
               class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
 
@@ -180,6 +182,7 @@
           v-model="googleCode"
           type="text"
           maxLength="6"
+          @on-change="checkNum('google')"
           :placeholder="$t('googleValidateCode')"
           class="loginNext-input loginNext-sms-input" @on-focus="googleCodeFocus" :class="googleCodeError?'loginNext-input-red':' '">
           </span>
@@ -200,15 +203,15 @@
   >
     <div class="withdrawalTrue-title">
       <div class="withdrawalTrue-icon"></div>
-      <p>The coin application has been submitted please be patient</p>
+      <p>{{ $t('waitTitle') }}</p>
 
     </div>
     <div class="withdrawalTrue-text-wrap">
       <div class="withdrawalTrue-text-left">
-        <p>Number of arrivals:</p>
-        <p>Fees :</p>
-        <p>Application time:</p>
-        <p>Withdrawal address:</p>
+        <p>{{ $t('inCountNum') }}:</p>
+        <p>{{ $t('fee') }} :</p>
+        <p>{{ $t('applyTime') }}:</p>
+        <p>{{ $t('withdrawAddress') }}:</p>
       </div>
       <div class="withdrawalTrue-text-right">
         <p style="color:#5C95EA">{{valueAmountCalc}} {{changeCoin}}</p>

@@ -2949,14 +2949,14 @@ var row_my_assets_with = {
      <div>
         <Row class="expand-row">
             <Col >
-                <span class="expand-key">Withdrawal address: </span>
+                <span class="expand-key">{{ $t('withdrawAddress') }}: </span>
                 <span class="expand-value">{{ row.addressTo }}</span>
             </Col>
         </Row>
          <Row class="expand-row">
             <Col >
-                <span class="expand-key">Fees : </span>
-                <span class="expand-value">{{ row.amount }}</span>
+                <span class="expand-key">{{ $t('fee') }} : </span>
+                <span class="expand-value">{{ row.fee }}</span>
             </Col>
         </Row>
          <Row class="expand-row">

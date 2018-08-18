@@ -136,7 +136,37 @@ var myAssetsWithdrawal = new Vue({
   },
 
   methods: {
-    //提现
+    checkNum(type) {
+      switch (type){
+        case 'email':
+          if(isNaN(this.emailSmsCode)){
+            this.emailSmsCodeError = true;
+            this.emailSmsCodeErrorText = '验证码只包含数字';
+          }else{
+            this.emailSmsCodeError = false;
+            this.emailSmsCodeErrorText = '';
+          }
+          break;
+        case 'phone':
+          if(isNaN(this.phoneSmsCode)){
+            this.phoneSmsCodeError = true;
+            this.phoneSmsCodeErrorText = '验证码只包含数字';
+          }else{
+            this.phoneSmsCodeError = false;
+            this.phoneSmsCodeErrorText = '';
+          }
+          break;
+        case 'google':
+          if(isNaN(this.googleCode)){
+            this.googleCodeError = true;
+            this.googleCodeErrorText = '验证码只包含数字';
+          }else{
+            this.googleCodeError = false;
+            this.googleCodeErrorText = '';
+          }
+          break;
+      }
+    },
     getUserWithDrawList(page) {
       var that = this;
       that.tableLoading3 = true;
@@ -428,6 +458,7 @@ var myAssetsWithdrawal = new Vue({
       this.googleCodeErrorText = '';
     },
     tabChange(name) {
+      this.tabsName = name;
       if(name === 'loginPhone'){
         this.emailSmsCode = '';
         this.emailSmsCodeError = false;
