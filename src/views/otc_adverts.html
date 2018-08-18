@@ -12,9 +12,7 @@
   <div id="app" v-cloak>
     <!--header-->
     <o-header ref="header"></o-header>
-    <div class="banner">
-      {{ $t('welcome') }}
-    </div>
+    <div class="banner"></div>
 
     <div class="list wrapper">
       <Row>
@@ -36,97 +34,129 @@
       </Row>
       <div>
         <div v-show="showListTag=='BUY'">
-          <table class="buylist">
-            <thead>
-              <tr>
-                <th>{{ $t('seller') }}</th>
-                <th>{{ $t('amount') }}</th>
-                <th>
-                  {{ $t('limit') }}
-                  <br/>
-                  <span class="limit-tips">({{ $t('min2maxPurchase') }})</span>
-                </th>
-                <th>{{ $t('unitPrice') }}</th>
-                <th>{{ $t('payment') }}</th>
-                <th>{{ $t('operation') }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in buylist" :key="item.id">
-                <td>
-                  <span class="avatar" :class="userId == item.userId ? 'mine' : ''">
-                    {{ userId == item.userId ? $t('mine') : $t('seller') }}
-                  </span>
-                  {{item.userName}}
-                </td>
-                <td>{{(item.volume - item.sell).toFixed(4)}} USDT</td>
-                <td>
-                  {{item.minTrade}}--{{item.maxTrade}} SAR
-                </td>
-                <td class="price">{{item.price}} SAR</td>
-                <td>{{item.paymentBanks[0].bankName}}</td>
-                <td>
-                  <template v-if="userId == item.userId">
-                    <i-button @click="pause(item)" :disabled="item.status === 3 || item.status === 4 || item.status === 5" type="text">{{ item.status === 6 ? $t('start') : $t('pause') }}</i-button>
-                    <i-button @click="cancel(item)" :disabled="item.status === 4 || item.status === 5" type="text">{{ $t('cancel') }}</i-button>
-                  </template>
-                  <i-button type="primary" @click="showBuyUsdt(item)" v-else>{{ $t('buy') }} USDT</i-button>
-                </td>
-              </tr>
-              <tr v-if="!buylist.length"><td colspan="6">{{ $t('noData') }}</td></tr>
-            </tbody>
-          </table>
+          <div class="list-table">
+            <table class="buylist">
+              <thead>
+                <tr>
+                  <th>{{ $t('seller') }}</th>
+                  <th>{{ $t('amount') }}</th>
+                  <th>
+                    {{ $t('limit') }}
+                    <br/>
+                    <span class="limit-tips">({{ $t('min2maxPurchase') }})</span>
+                  </th>
+                  <th>{{ $t('unitPrice') }}</th>
+                  <th>{{ $t('payment') }}</th>
+                  <th>{{ $t('operation') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in buylist" :key="item.id">
+                  <td>
+                    <span class="avatar" :class="userId == item.userId ? 'mine' : ''">
+                      {{ userId == item.userId ? $t('mine') : $t('seller') }}
+                    </span>
+                    {{item.userName}}
+                  </td>
+                  <td>{{(item.volume - item.sell).toFixed(4)}} USDT</td>
+                  <td>
+                    {{item.minTrade}}--{{item.maxTrade}} SAR
+                  </td>
+                  <td class="price">{{item.price}} SAR</td>
+                  <td>{{item.paymentBanks[0].bankName}}</td>
+                  <td>
+                    <template v-if="userId == item.userId">
+                      <i-button
+                        @click="pause(item)" 
+                        :disabled="item.status === 3 || item.status === 4 || item.status === 5"
+                        type="link"
+                        size="small"
+                      >
+                        {{ item.status === 6 ? $t('start') : $t('pause') }}
+                      </i-button>
+                      <i-button
+                        @click="cancel(item)"
+                        :disabled="item.status === 4 || item.status === 5"
+                        type="link"
+                        size="small"
+                      >
+                        {{ $t('cancel') }}
+                      </i-button>
+                    </template>
+                    <i-button type="primary" size="small" @click="showBuyUsdt(item)" v-else>{{ $t('buy') }} USDT</i-button>
+                  </td>
+                </tr>
+                <tr v-if="!buylist.length"><td colspan="6">{{ $t('noData') }}</td></tr>
+              </tbody>
+            </table>
+          </div>
           <div class="page">
             <div class="wrapper">
               <div>
-                <Page show-total @on-change="toBuyPage" :page-size="pageSize" :total="buyTotal" :current="buyCurrentPage" size="small"></Page>
+                <Page @on-change="toBuyPage" :page-size="pageSize" :total="buyTotal" :current="buyCurrentPage" size="small"></Page>
               </div>
             </div>
           </div>
         </div>
         <div v-show="showListTag=='SELL'">
-          <table class="buylist">
-            <thead>
-              <tr>
-                <th>{{ $t('buyer') }}</th>
-                <th>{{ $t('amount') }}</th>
-                <th>
-                  {{ $t('limit') }}
-                  <br/>
-                  <span class="limit-tips">({{ $t('min2maxPurchase') }})</span>
-                </th>
-                <th>{{ $t('unitPrice') }}</th>
-                <th>{{ $t('operation') }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in selllist" :key="item.id">
-                <td>
-                  <span class="avatar" :class="userId == item.userId ? 'mine' : ''">
-                    {{ userId == item.userId ? $t('mine') : $t('buyer') }}
-                  </span>
-                  {{item.userName}}
-                </td>
-                <td>{{(item.volume - item.sell).toFixed(4)}} USDT</td>
-                <td>
-                  {{item.minTrade}}--{{item.maxTrade}} SAR
-                </td>
-                <td class="price">{{item.price}} SAR</td>
-                <td>
-                  <template v-if="userId == item.userId">
-                    <i-button @click="pause(item)" :disabled="item.status === 3 || item.status === 4 || item.status === 5" type="text">{{ item.status === 6 ? $t('start') : $t('pause') }}</i-button>
-                    <i-button @click="cancel(item)" :disabled="item.status === 4 || item.status === 5" type="text">{{ $t('cancel') }}</i-button>
-                  </template>
-                  <i-button type="primary" @click="showSellUsdt(item)" v-else>{{ $t('sell') }} USDT</i-button>
-                </td>
-              </tr>
-              <tr v-if="!selllist.length"><td colspan="5">{{ $t('noData') }}</td></tr>
-            </tbody>
-          </table>
+          <div class="list-table">
+            <table class="buylist">
+              <thead>
+                <tr>
+                  <th>{{ $t('buyer') }}</th>
+                  <th>{{ $t('amount') }}</th>
+                  <th>
+                    {{ $t('limit') }}
+                    <br/>
+                    <span class="limit-tips">({{ $t('min2maxPurchase') }})</span>
+                  </th>
+                  <th>{{ $t('unitPrice') }}</th>
+                  <th>{{ $t('operation') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in selllist" :key="item.id">
+                  <td>
+                    <span class="avatar" :class="userId == item.userId ? 'mine' : ''">
+                      {{ userId == item.userId ? $t('mine') : $t('buyer') }}
+                    </span>
+                    {{item.userName}}
+                  </td>
+                  <td>{{(item.volume - item.sell).toFixed(4)}} USDT</td>
+                  <td>
+                    {{item.minTrade}}--{{item.maxTrade}} SAR
+                  </td>
+                  <td class="price">{{item.price}} SAR</td>
+                  <td>
+                    <template v-if="userId == item.userId">
+                      <i-button
+                        @click="pause(item)"
+                        :disabled="item.status === 3 || item.status === 4 || item.status === 5"
+                        type="link"
+                        size="small"
+                      >
+                        {{ item.status === 6 ? $t('start') : $t('pause') }}
+                      </i-button>
+                      <i-button
+                        @click="cancel(item)"
+                        :disabled="item.status === 4 || item.status === 5"
+                        type="link"
+                        size="small"
+                      >
+                        {{ $t('cancel') }}
+                      </i-button>
+                    </template>
+                    <i-button type="primary" size="small" @click="showSellUsdt(item)" v-else>{{ $t('sell') }} USDT</i-button>
+                  </td>
+                </tr>
+                <tr v-if="!selllist.length"><td colspan="5">{{ $t('noData') }}</td></tr>
+              </tbody>
+            </table>
+          </div>
           <div class="page">
             <div class="wrapper">
               <div>
-                <Page show-total @on-change="toSellPage" :page-size="pageSize" :total="sellTotal" :current="sellCurrentPage" size="small"></Page>
+                <Page @on-change="toSellPage" :page-size="pageSize" :total="sellTotal" :current="sellCurrentPage" size="small"></Page>
               </div>
             </div>
           </div>
@@ -134,7 +164,7 @@
       </div>
     </div>
 
-    <div class="o-modal post-modal" :class="isPostDialogShow ? 'is-show' :'is-not-show' ">
+    <!-- <div class="o-modal post-modal" :class="isPostDialogShow ? 'is-show' :'is-not-show' ">
       <div class="content">
         <div class="content-wrapper" style="padding:0;">
           <div class="title">
@@ -155,7 +185,6 @@
                     <div class="o-input-number">
                       <div class="o-input-number-prepend">SAR</div>
                       <input-number
-                        size="large"
                         v-model="postData.priceBUY"
                         :min="marketPrice.trade_min_price"
                         :max="500000"
@@ -173,7 +202,6 @@
                     <div class="o-input-number">
                         <div class="o-input-number-prepend">USDT</div>
                         <input-number
-                          size="large"
                           v-model="postData.volumeBUY"
                           :min="marketPrice.trade_min_volume"
                           max="500000"
@@ -183,7 +211,7 @@
                         </input-number>
                       </div>
                   </div>
-                  <div>{{ $t('totalPrice') }}(SAR): {{ postTotalPrice || 0 }}</div>
+                  <div>{{ $t('totalPrice') }}(SAR): {{ releaseTotalPrice || 0 }}</div>
                   <div class="input-group">
                     <div>
                       <span class="input-label">{{ $t('transactionLimit') }}(SAR)</span>
@@ -194,7 +222,6 @@
                           <div class="o-input-number">
                             <div class="o-input-number-prepend">Min</div>
                             <input-number
-                              size="large"
                               v-model="postData.minTradeBUY"
                               :min="marketPrice.trade_min_price"
                               :max="postBuyMax"
@@ -207,7 +234,6 @@
                           <div class="o-input-number">
                             <div class="o-input-number-prepend">Max</div>
                             <input-number
-                              size="large"
                               v-model="postData.maxTradeBUY"
                               :min="marketPrice.trade_min_price"
                               :max="postBuyMax"
@@ -234,7 +260,6 @@
                     <div class="o-input-number">
                       <div class="o-input-number-prepend">SAR</div>
                       <input-number
-                        size="large"
                         v-model="postData.priceSELL"
                         :min="marketPrice.trade_min_price"
                         max="500000"
@@ -252,7 +277,6 @@
                     <div class="o-input-number">
                       <div class="o-input-number-prepend">USDT</div>
                       <input-number
-                        size="large"
                         v-model="postData.volumeSELL"
                         :min="marketPrice.trade_min_volume"
                         :max="balance"
@@ -262,7 +286,7 @@
                       </input-number>
                     </div>
                   </div>
-                  <div>{{ $t('totalPrice') }}(SAR): {{ postTotalPrice || 0 }}</div>
+                  <div>{{ $t('totalPrice') }}(SAR): {{ releaseTotalPrice || 0 }}</div>
                   <div class="input-group">
                     <div>
                       <span class="input-label">{{ $t('transactionLimit') }}(SAR)</span>
@@ -273,7 +297,6 @@
                           <div class="o-input-number">
                             <div class="o-input-number-prepend">Min</div>
                             <input-number
-                              size="large"
                               v-model="postData.minTradeSELL"
                               :min="marketPrice.trade_min_price"
                               :max="postSellMax"
@@ -286,7 +309,6 @@
                           <div class="o-input-number">
                             <div class="o-input-number-prepend">Max</div>
                             <input-number
-                              size="large"
                               v-model="postData.maxTradeSELL"
                               :min="marketPrice.trade_min_price"
                               :max="postSellMax"
@@ -307,7 +329,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!--buy-sell-modal-->
     <div class="o-modal buy-sell-modal" :class="isBuyDialogShow? 'is-show':'is-not-show' ">
@@ -329,7 +351,7 @@
             <i-col span="6">
               <div class="order-input-wrapper">
                 <div class="order-input" :class="buyAmountErrorText ? 'error' : ''">
-                  <input type="number" v-model="buyData.buyAmount" @change="changeAmount($event)" @focus="buyAmountAppendText = 'All'" @blur="buyAmountAppendText = 'SAR'"
+                  <input type="number" v-model="buyData.buyAmount" @input="changeAmount($event)" @focus="buyAmountAppendText = 'All'" @blur="buyAmountAppendText = 'SAR'"
                   />
                   <div class="order-input-append">
                     <span @click="tradeAll('amount')">{{ buyAmountAppendText }}</span>
@@ -338,7 +360,6 @@
                 <p class="order-input-tips" :class="buyAmountErrorText ? 'error' : ''">
                   {{ $t('limit') }}: {{buyData.min}} -- {{buyAmountMax}}SAR
                 </p>
-                <p class="error txt-right" v-show="buyAmountErrorText">{{ buyAmountErrorText }}</p>
               </div>
             </i-col>
             <i-col span="1" class="txt-center">
@@ -347,7 +368,7 @@
             <i-col span="6">
               <div class="order-input-wrapper">
                 <div class="order-input" :class="buyTotalErrorText ? 'error' : ''">
-                  <input type="number" v-model="buyData.buyTotal" @change="changeTotal($event)" @focus="buyTotalAppendText = 'All'" @blur="buyTotalAppendText = 'USDT'"
+                  <input type="number" v-model="buyData.buyTotal" @input="changeTotal($event)" @focus="buyTotalAppendText = 'All'" @blur="buyTotalAppendText = 'USDT'"
                   />
                   <div class="order-input-append">
                     <span @click="tradeAll('total')">{{ buyTotalAppendText }}</span>
@@ -356,7 +377,6 @@
                 <p class="order-input-tips" :class="buyTotalErrorText ? 'error' : ''">
                   {{ $t('limit') }}:{{ buyTotalMin }} -- {{ buyTotalMax }}USDT
                 </p>
-                <p class="error txt-right" v-show="buyTotalErrorText">{{ buyTotalErrorText }}</p>
               </div>
             </i-col>
             <i-col span="4" class="btn-wrapper">
@@ -369,41 +389,175 @@
       </div>
     </div>
 
-    <!--挂单-->
-    <Modal v-model="isPricePromptShow" width="420">
-      <p slot="header" style="color: #333333; text-align: center">
-        <span>{{ $t('deviationWarn') }}</span>
-      </p>
-      <div>
-        <div v-if="postOrderTag=='SELL'" style="padding:20px;text-align: center; height: 136px; background: rgba(171, 15, 15, 1);; color: white; font-size: 16px;">
-          <img src="../images/warning.png" alt="">
-          <p>{{postErroMsg}}</p>
+    <!-- 填写挂单信息 -->
+    <Modal :title="$t('releaseAdvert')" v-model="modalRelease" @on-cancel="handleReset('formRelease')">
+      <i-form ref="formRelease" :model="formRelease" :rules="ruleRelease" label-position="top">
+        <Row>
+          <i-col span="8" class="text-strong">挂单类型</i-col>
+        </Row>
+        <form-item prop="side">
+          <radio-group v-model="formRelease.side">
+            <Radio label="BUY" :disabled="buyDisabled">{{ $t('buy') + 'USDT' }}</Radio>
+            <Radio label="SELL" :disabled="sellDisabled">{{ $t('sell') + 'USDT' }}</Radio>
+          </radio-group>
+        </form-item>
+        <Row>
+          <i-col span="8" class="text-strong">{{ $t('unitPrice') }}</i-col>
+          <i-col span="16" class="text-right">{{ $t('currentPrice') }} {{marketPrice.exchange_sell_min || marketPrice.exchange_rate }} SAR</i-col>
+        </Row>
+        <form-item label="" prop="price">
+          <i-input
+            type="number"
+            number
+            v-model="formRelease.price"
+            :min="marketPrice.trade_min_price"
+            :max="500000"
+            :placeholder="$t('pricePlaceholder')"
+          >
+            <span slot="prepend">SAR</span>
+          </i-input>
+        </form-item>
+        <Row>
+          <i-col span="8" class="text-strong">{{ $t('quantity') }}</i-col>
+          <i-col span="16" class="text-right" v-show="formRelease.side === 'SELL'">{{ $t('balance') }} {{balance}} USDT</i-col>
+        </Row>
+        <form-item label="" prop="volume">
+          <i-input
+            type="number"
+            number
+            v-model="formRelease.volume"
+            :min="marketPrice.trade_min_volume"
+            :max="releaseMaxPrice"
+            :placeholder="$t('amountPlaceholder')"
+          >
+            <span slot="prepend">USDT</span>
+          </i-input>
+        </form-item>
+        <Row class="text-strong" style="margin-bottom: 24px;">{{ $t('totalPrice') }}(SAR): {{ releaseTotalPrice || 0 }}</Row>
+        <Row class="text-strong">{{ $t('transactionLimit') }}(SAR)</Row>
+        <Row>
+          <i-col span="11">
+            <form-item prop="minTrade">
+              <i-input
+                type="number"
+                number
+                v-model="formRelease.minTrade"
+                :min="marketPrice.trade_min_price"
+                :max="releaseMaxPrice"
+              >
+                <span slot="prepend">Min</span>
+              </i-input>
+            </form-item>
+          </i-col>
+          <i-col class="text-center" span="2" style="margin-top:10px">--</i-col>
+          <i-col span="11">
+            <form-item prop="maxTrade">
+              <i-input
+                type="number"
+                number
+                v-model="formRelease.maxTrade"
+                :min="marketPrice.trade_min_price"
+                :max="releaseMaxPrice"
+              >
+                <span slot="prepend">Max</span>
+              </i-input>
+            </form-item>
+          </i-col>
+        </Row>
+      </i-form>
+      <div slot="footer">
+          <i-button type="link" @click="handleReset('formRelease')">{{ $t('cancel') }}</i-button>
+          <i-button type="primary" @click="handleSubmit('formRelease')">{{ $t('confirm') }}</i-button>
         </div>
-        <div v-if="postOrderTag=='BUY'" style="padding:20px;text-align: center; height: 136px; background: rgba(171, 15, 15, 1);; color: white; font-size: 16px;">
-          <img src="../images/warning.png" alt="">
-          <p>{{postErroMsg}}</p>
-        </div>
-        <div style="padding: 0 50px;font-size: 16px;">
-          <p style="margin: 10px 0;">
-            <span>{{ $t('currentPrice') }}</span>
-            <span>{{marketPrice.exchange_sell_min || marketPrice.exchange_rate}} SAR</span>
-          </p>
-          <p style="margin: 10px 0;">
-            <span>{{ $t('currentReleasePrice') }}</span>
-            <span style="color:red;">{{ postData['price' + postOrderTag] }} SAR</span>
-          </p>
-        </div>
+    </Modal>
+
+    <!-- 挂单价格提醒 -->
+    <Modal :title="$t('deviationWarn')" v-model="modalReleaseWarning" class="modal-notice warning">
+      <div class="modal-notice-header text-center">
+        <img src="../images/warning.png" alt="">
+        <p class="text-white">{{ releaseWarning }}</p>
+      </div>
+      <div class="modal-notice-footer">
+        <Row>
+          <i-col span="6">{{ $t('currentPrice') }}</i-col>
+          <i-col span="18">{{marketPrice.exchange_sell_min || marketPrice.exchange_rate}} SAR</i-col>
+        </Row>
+        <Row>
+          <i-col span="6">{{ $t('currentReleasePrice') }}</i-col>
+          <i-col span="18" class="text-error">{{ formRelease.price }} SAR</i-col>
+        </Row>
       </div>
       <div slot="footer">
-        <a href="#" @click="confirmRelease">{{ $t('confirmRelease') }}</a>
-        <a href="#" @click="modifyPostOrder" class="i-modify" style="width:220px;display: inline-block;
-				height:44px;background:rgba(255,237,0,1);
-				border-radius:5px;">{{ $t('modifyNow') }}</a>
+        <i-button type="link" @click="continueRelease">{{ $t('confirmRelease') }}</i-button>
+        <i-button type="primary" @click="modifyRelease" >{{ $t('modifyNow') }}</i-button>
       </div>
     </Modal>
 
-    <!-- confirm pending order -->
-    <div class="o-modal pend-order-modal" :class="isPendModalShow? 'is-show' :'is-not-show'">
+    <!-- 确认挂单 -->
+    <Modal :title="$t('confirmRelease')" v-model="modalReleaseConfirm" class="modal-notice" @on-cancel="handleReset('formReleaseConfirm')">
+      <div class="modal-notice-header">
+        <Row>
+          <i-col span="6">{{ $t('unitPrice') }}</i-col>
+          <i-col span="18" class="text-strong">{{ formRelease.price }} SAR</i-col>
+          </Row>
+          <Row>
+            <i-col span="6">{{ $t('quantity') }}</i-col>
+            <i-col span="18" class="text-strong">{{ formRelease.volume }} USDT</i-col>
+          </Row>
+          <Row>
+            <i-col span="6">{{ $t('limit') }}</i-col>
+            <i-col span="18" class="text-strong">{{ formRelease.minTrade }} SAR -- {{ formRelease.maxTrade }} SAR</i-col>
+          </Row>
+          <Row>
+            <i-col span="6">{{ $t('totalPrice') }}</i-col>
+            <i-col span="18" class="text-strong">{{ (formRelease.price * formRelease.volume).toFixed(2) }} SAR</i-col>
+        </Row>
+      </div>
+      <div class="modal-notice-header border-top-dashed" v-show="formRelease.side === 'SELL'">
+        <Row>
+        <i-col span="6">WhatsApp</i-col>
+        <i-col span="18" class="text-strong">{{ whatsApp }}</i-col>
+        </Row>
+        <Row>
+          <i-col span="6">{{ $t('bankCard') }}</i-col>
+        </Row>
+        <Row v-for="item in cardList" :key="item.id" style="line-height: 26px">
+          <i-col span="18">
+            <h4 class="text-strong">{{ item.bankName }}</h4>
+            <p>{{ item.cardNo }}</p>
+          </i-col>
+          <i-col span="6" class="text-right">
+            <i-switch :value="!!item.status" size="large" @on-change="changeCardStatus($event, item)">
+              <span slot="open">YES</span>
+              <span slot="close">NO</span>
+            </i-switch>
+          </i-col>
+        </Row>
+      </div>
+      <div class="modal-notice-footer border-top-dashed">
+        <i-form ref="formReleaseConfirm" :model="formReleaseConfirm" :rules="ruleReleaseConfirm" label-position="top">
+          <Tabs v-model="tabVerifyActive">
+            <tab-pane :label="$t('googleVerification')" :name="1">
+              <form-item label="" prop="google">
+                <i-input v-model="formReleaseConfirm.google" maxlength="6" :placeholder="$t('googleVerificationHolder')"></i-input>
+              </form-item>
+            </tab-pane>
+            <tab-pane :label="$t('phoneVerification')" :name="2">
+              <form-item label="" prop="phone">
+                <i-input v-model="formReleaseConfirm.phone" maxlength="6" :placeholder="$t('phoneVerificationHolder')">
+                  <i-button slot="append" @click="sendMessage('Bank', 3)" :disabled="sendDisabledBank">{{ sendPlaceholderBank }}</i-button>
+                </i-input>
+              </form-item>
+            </tab-pane>
+          </Tabs>
+        </i-form>
+      </div>
+      <div slot="footer">
+        <i-button type="link" @click="handleReset('formReleaseConfirm', 'modify')">{{ $t('backEdit') }}</i-button>
+        <i-button type="primary" @click="handleSubmit('formReleaseConfirm')">{{ $t('confirmRelease') }}</i-button>
+      </div>
+    </Modal>
+    <!-- <div class="o-modal pend-order-modal" :class="isPendModalShow? 'is-show' :'is-not-show'">
       <div class="content">
         <div class="content-wrapper" style="padding:0;">
           <div class="p-header">
@@ -445,7 +599,7 @@
                 <Row>
                   <i-col span="24" class="key">{{ $t('bankCard') }}</i-col>
                 </Row>
-                <Row v-for="(item, index) in cardInfo">
+                <Row v-for="(item, index) in cardList">
                   <i-col span="20">
                     <p style="color: #ffffff;">{{ item.bankName }}</p>
                     <p class="key">{{item.cardNo}}</p>
@@ -468,10 +622,10 @@
             </Row>
             <div>
               <div class="gg" v-show="postData.checkType == 1">
-                <input v-model="gCode" type="text">
+                <input v-model="gCode" type="link">
               </div>
               <div class="sms" v-show="postData.checkType == 2">
-                <input v-model="smsCode" type="text">
+                <input v-model="smsCode" type="link">
                 <span v-show="sms" class="sendMsg">{{sendText}}s</span>
                 <span v-show="!sms" @click="sendMsg" class="sendMsg">sms</span>
               </div>
@@ -484,17 +638,82 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- confirm pending order end -->
 
     <!--bind card-->
-    <bindcard :show="isBindCardShow" :locale="locale"></bindcard>
-    <confirm :show="isConfirmBindShow" :locale="locale"></confirm>
+    <!-- <bindcard :modal-bank-info="isBindCardShow" :locale="locale"></bindcard> -->
+    <!-- <confirm :modal-bank-confirm="isConfirmBindShow" :form-bank-info="cardList" :locale="locale"></confirm> -->
+    <!-- 添加/修改银行卡 -->
+    <div data-id="modifyBankCard">
+      <Modal :title="$t('addBankCard')" v-model="modalBankInfo" @on-cancel="handleReset('formBankInfo')">
+        <i-form ref="formBankInfo" :model="formBankInfo" :rules="ruleBankInfo" label-position="top">
+          <form-item :label="$t('bankName')" prop="bankName">
+            <i-input v-model="formBankInfo.bankName" maxlength="30" :placeholder="$t('bankNameHolder')"></i-input>
+          </form-item>
+          <form-item :label="$t('accountName')" prop="name">
+            <i-input v-model="formBankInfo.name" maxlength="30" :placeholder="$t('accountNameHolder')"></i-input>
+          </form-item>
+          <form-item :label="$t('cardNo')" prop="cardNo">
+            <i-input v-model="formBankInfo.cardNo" maxlength="30" :placeholder="$t('cardNoHolder')"></i-input>
+          </form-item>
+          <form-item :label="'iban' + $t('number')" prop="ibanNo">
+            <i-input v-model="formBankInfo.ibanNo" maxlength="30" :placeholder="$t('ibanNoHolder')"></i-input>
+          </form-item>
+        </i-form>
+        <div slot="footer">
+          <i-button type="link" @click="handleReset('formBankInfo')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
+          <i-button type="primary" @click="handleSubmit('formBankInfo')">{{ $t('confirm') }}</i-button>
+        </div>
+      </Modal>
+      <Modal :title="$t('confirmBind')" class="modal-notice info" v-model="modalBankConfirm" @on-cancel="handleReset('formBankConfirm')">
+        <div class="modal-notice-header">
+          <Row>
+            <i-col span="8" class="text-secondary">{{ $t('bankName') }}</i-col>
+            <i-col span="16" class="text-strong">{{ formBankInfo.bankName }}</i-col>
+          </Row>
+          <Row>
+            <i-col span="8" class="text-secondary">{{ $t('accountName') }}</i-col>
+            <i-col span="16" class="text-strong">{{ formBankInfo.name }}</i-col>
+          </Row>
+          <Row>
+            <i-col span="8" class="text-secondary">{{ $t('cardNo') }}</i-col>
+            <i-col span="16" class="text-strong">{{ formBankInfo.cardNo }}</i-col>
+          </Row>
+          <Row>
+            <i-col span="8" class="text-secondary">iban{{ $t('number') }}</i-col>
+            <i-col span="16" class="text-strong">{{ formBankInfo.ibanNo }}</i-col>
+          </Row>
+        </div>
+        <div class="modal-notice-footer">
+          <i-form ref="formBankConfirm" :model="formBankConfirm" :rules="ruleBankConfirm" label-position="top">
+            <Tabs v-model="tabVerifyActive">
+              <tab-pane :label="$t('googleVerification')" :name="1">
+                <form-item label="" prop="google">
+                  <i-input v-model="formBankConfirm.google" maxlength="30" :placeholder="$t('googleVerificationHolder')"></i-input>
+                </form-item>
+              </tab-pane>
+              <tab-pane :label="$t('phoneVerification')" :name="2">
+                <form-item label="" prop="phone">
+                  <i-input v-model="formBankConfirm.phone" maxlength="6" :placeholder="$t('phoneVerificationHolder')">
+                    <i-button slot="append" @click="sendMessage('Bank', 3)" :disabled="sendDisabledBank">{{ sendPlaceholderBank }}</i-button>
+                  </i-input>
+                </form-item>
+              </tab-pane>
+            </Tabs>
+          </i-form>
+        </div>
+        <div slot="footer">
+          <i-button type="link" @click="handleReset('formBankConfirm', 'modify')" style="margin-left: 8px">{{ $t('backEdit') }}</i-button>
+          <i-button type="primary" @click="handleSubmit('formBankConfirm')">{{ $t('confirm') }}</i-button>
+        </div>
+      </Modal>
+    </div>
     <!--bind card end-->
 
     <acontact :show="isContactShow" :isWatchupBind="isWatchAppBind" :locale="locale"></acontact>
     <!-- <gauth :show="isGoogleAuthShow" :locale="locale"></gauth> -->
-    <selectcard :show="isSelectCardShow" :cards="cardInfo" :locale="locale"></selectcard>
+    <selectcard :show="isSelectCardShow" :cards="cardList" :locale="locale"></selectcard>
     <Modal class="google-modal" v-model="isGoogleAuthShow" footer-hide>
       <dl class="text-center">
         <dt><img src="../images/warn.png"/></dt>
@@ -515,7 +734,7 @@
         <div class="g-body_desc">{{ modalMsg.desc }}</div>
       </div>
       <div slot="footer">
-        <i-button type="text" @click="modalOperationOrder = false">{{ $t('cancel') }}</i-button>
+        <i-button type="link" @click="modalOperationOrder = false">{{ $t('cancel') }}</i-button>
         <i-button type="primary" @click="manualAction">{{ modalMsg.confirmText }}</i-button>
       </div>
     </Modal>
