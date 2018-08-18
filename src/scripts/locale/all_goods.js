@@ -14,6 +14,16 @@ var messages = {
     en: 'Market price is not satisfied?',
     ar: 'سعر السوق غير مرضية؟',
   },
+  bindGoogleAuthMsg: {
+    zh: '为了您的账户安全，我们强烈推荐您进行谷歌验证',
+    en: 'For your account security, we strongly recommend recommend you to verify Google',
+    ar: 'من أجل ضمان أمن حسابك ، نوصيك بشدة على التحقق من جوجل',
+  },
+  googleAuthBtn: {
+    zh: '身份验证',
+    en: 'Identity verification',
+    ar: 'التحقق من الهوية',
+  },
   dealOrderBeforeRelease: {
     zh: '请处理完现有订单再发布',
     en: 'please deal with your current order before releasing',
@@ -206,10 +216,10 @@ var messages = {
     en: 'No Data',
     ar: 'لايوجد بيانات',
   },
-  noEmpty: {
-    zh: '不能为空',
-    en: 'can not be empty',
-    ar: 'لا يمكن أن تكون فارغة',
+  canNotBeEmpty: {
+    zh: '此处不能为空',
+    en: 'This place can not be empty ',
+    ar: 'هذا المكان لا يمكن أن يكون فارغاً',
   },
   maxNoLessThanMin: {
     zh: '最大限额不能小于最小限额',
@@ -220,6 +230,11 @@ var messages = {
     zh: '最大限额不能大于总价',
     en: 'Max limit amount can not be bigger than the total price',
     ar: 'الحد الأقصى للمبلغ لا يمكن أن يكون أعلى من السعر الإجمالي',
+  },
+  numericRequired: {
+    zh: '必须输入数字',
+    en: 'Numeric required here',
+    ar: 'يجب إدخال رقم',
   },
   verifyNoEmpty: {
     zh: '验证码不能为空！',
@@ -235,5 +250,111 @@ var messages = {
     zh: '输入限制为：',
     en: 'the input limit is:',
     ar: 'المحددة للإدخال هي:',
+  },
+  // 新添加的绑定银行卡代码
+  sendVerify: {
+    zh: '发送验证码',
+    en: 'Send the verification code',
+    ar: 'إرسال رمز التحقق',
+  },
+  sendAgain: {
+    zh: '重新发送',
+    en: 'send again',
+    ar: 'إعادة إرسال',
+  },
+  close: {
+    zh: '关闭',
+    en: 'close',
+    ar: 'إغلاق',
+  },
+  addBankCard: {
+    zh: '添加银行卡',
+    en: 'Add bank card',
+    ar: 'إضافة بطاقة بنك',
+  },
+  bankName: {
+    zh: '银行名称',
+    en: 'Bank name',
+    ar: 'اسم البنك',
+  },
+  accountName: {
+    zh: '账户名称',
+    en: 'Account name',
+    ar: 'اسم الحساب',
+  },
+  cardNo: {
+    zh: '银行卡号',
+    en: 'Bank card number',
+    ar: 'رقم بطاقة البنك ',
+  },
+  number: {
+    zh: '号码',
+    en: 'number',
+    ar: 'الرقم',
+  },
+  bankNameHolder: {
+    zh: '请输入银行名称',
+    en: 'Please enter the bank name',
+    ar: 'يرجى إدخال اسم البنك',
+  },
+  accountNameHolder: {
+    zh: '请输入账户名称',
+    en: 'Please enter the account name',
+    ar: 'يرجى إدخال اسم الحساب',
+  },
+  cardNoHolder: {
+    zh: '请输入银行卡号',
+    en: 'Please enter the bank card number',
+    ar: 'يرجى إدخال رقم بطاقة البنك',
+  },
+  ibanNoHolder: {
+    zh: '请输入iban号码',
+    en: 'Please enter the IBAN number',
+    ar: 'يرجى إدخال رقم الإيبان',
+  },
+  formatError: {
+    zh: '格式错误',
+    en: 'format error',
+    ar: 'خطأ في التنسيق',
+  },
+  six2eighteen: {
+    zh: '请输入长度在6到18位之间的字符',
+    en: 'Please enter 6 to 18 characters ',
+    ar: 'يرجى إدخال من 6 إلى 18 حرفًا',
+  },
+  googleVerification: {
+    zh: '谷歌验证',
+    en: 'Google verification',
+    ar: 'التحقق من الجوجل',
+  },
+  phoneVerification: {
+    zh: '手机验证',
+    en: 'Phone verification',
+    ar: 'التحقق من الهاتف',
+  },
+  phoneVerificationHolder: {
+    zh: '请输入短信验证码',
+    en: 'Please enter SMS verification code',
+    ar: 'يرجى إدخال رمز تحقق الرسالة',
+  },
+  googleVerificationHolder: {
+    zh: '请输入谷歌验证码',
+    en: 'Please enter Google verification code',
+    ar: 'يرجى إدخال رمز تحقق الجوجل',
+  },
+  cancel: {
+    zh: '取消',
+    en: 'cancel',
+    ar: 'إلغاء',
+  },
+  confirm: {
+    zh: '确定',
+    en: 'Confirm',
+    ar: 'تأكيد',
+  },
+  confirmBind: {
+    zh: '确定绑定',
+    en: 'Confirm bind',
+    ar: 'تأكيد الربط',
   },
 };
