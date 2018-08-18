@@ -85,7 +85,8 @@
 }
 
 .pay .pay-info .info-header {
-  padding-left: 5px;
+  padding-left: 20px;
+  font-weight: 600;
   background: rgba(248, 248, 248, 1);
   height: 50px;
   line-height: 50px;
@@ -103,7 +104,7 @@
 }
 
 .pay .pay-info .info-items {
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .pay .pay-info .info-items > .ivu-row {
@@ -114,22 +115,53 @@
   color: rgba(102, 102, 102, 1);
 }
 
-.pay .pay-info .info-items .info-value {
+.pay .pay-info .info-value {
   font-family: SanFranciscoDisplay-Semibold;
   color: rgba(51, 51, 51, 1);
+  font-weight: 600;
 }
 
 .pay .pay-info .ivu-row {
-  margin: 10px;
+  margin-bottom: 12px;
+}
+.pay .pay-box-left{
+  padding-top: 24px;
+}
+
+
+.pay .pay-box-right{
+  padding-top: 24px;
+}
+.pay .pay-box-right .ivu-row{
+  padding-left: 40px;
+
+}
+
+.pay .pay-box-left .info-value-green{
+ color: #0CBF48 !important;
+}
+
+.pay .ivu-row .ivu-icon{
+  color: #cfcfcf;
 }
 
 .pay .pay-info .ivu-row .contact {
   background: #0cbf48;
-  padding: 2px 5px;
+  padding: 0 15px;
   color: white;
-  height: 25px;
   display: inline-block;
   border-radius: 12px;
+  height: 26px;
+  line-height: 26px;
+  margin-top: -13px;
+  width: 140px;
+  text-align: center;
+}
+.pay .pay-info .ivu-row .contact .whatup{
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  vertical-align: -2px;
 }
 .pay .pay-info .ivu-row .copy {
   border: none;
@@ -147,18 +179,18 @@
 }
 
 .pay-notice {
-  margin-bottom: 20px;
-  font-size: 20px;
+  margin-bottom: 14px;
+  font-size: 18px;
   font-weight: bold;
   line-height: 40px;
 }
 
 .pay-action {
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .pay-action-btn {
-  width: 170px;
+  width: 140px;
   height: 44px;
   background: #5C95EA;
   border-radius: 5px;
@@ -169,6 +201,7 @@
 }
 
 .pay-tips {
+  color: #999;
   margin-bottom: 20px;
   line-height: 30px;
 }
@@ -183,6 +216,7 @@
 }
 
 .pay .input-copy {
+  font-weight: 600;
   margin-right: 10px;
   position: relative;
 	outline: none;
@@ -205,6 +239,7 @@
 }
 
 .pay .pay-action-tips {
+  position: relative;
   display: inline-block;
   width: 466px;
   height: 38px;
@@ -213,25 +248,53 @@
   background: #DAE9FF;
   color: #526682;
   border-radius: 5px;
+  margin-left: 14px;
+}
+
+.pay .pay-action-tips .triangle{
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #DAE9FF;
+  left: -4px;
+  top: 15px;
+  transform: rotate(45deg);
 }
 
 .pay .pay-status .cancel-order {
   font-size: 14px;
-  color: rgba(52, 97, 167, 1);
+  color: #3461a7;
   line-height: 16px;
+  padding: 0;
 }
 
 #app .pay-modal .pay-modal-title {
   text-align: center;
-  padding-top: 40px;
+  padding-top: 50px;
+}
+
+#app .pay-modal .pay-modal-title h3{
+  color: #333;
 }
 
 #app .pay-modal .pay-modal-title p {
   margin: 18px;
+  color: #666666;
 }
 
 #app .pay-modal .content-wrapper .pay-modal-content {
   padding: 20px 30px;
+}
+
+#app .pay-modal .content-wrapper .cancel-btn{
+  float: right;
+  padding: 0;
+  border-bottom: 1px solid #333;
+  border-radius: 0;
+  line-height: 20px;
+  padding-top: 10px;
+  margin-right: 30px;
+  color: #333;
 }
 
 #app .pay-modal .content-wrapper .pay-modal-content .cancel {
@@ -239,7 +302,8 @@
 }
 
 #app .pay-modal .content-wrapper .pay-modal-content .paid {
-  width: 251px;
+  float: right;
+  width: 135px;
   height: 44px;
   background: #5C95EA;
   border: 0;
@@ -248,7 +312,7 @@
   text-align: center;
   display: inline-block;
   font-size: 16px;
-  color: rgba(51, 51, 51, 1);
+  color: #fff;
 }
 
 #app .pay-info-modal .content .content-wrapper {
@@ -258,7 +322,8 @@
 #app .pay-info-modal .content .content-wrapper .p-i-header {
   padding: 20px 30px;
   font-size: 18px;
-  color: rgba(51, 51, 51, 1);
+  color: #333;
+  font-weight: 600;
   line-height: 21px;
   border-bottom: 1px solid rgba(230, 230, 230, 1);
 }
@@ -273,8 +338,10 @@
 }
 
 #app .pay-info-modal .content .content-wrapper .p-i-content label {
+  display: block;
   font-size: 14px;
   color: rgba(51, 51, 51, 1);
+  margin-bottom: 12px;
 }
 
 #app .pay-info-modal .content .content-wrapper .p-i-content input {
@@ -296,5 +363,5 @@
   background: #5C95EA;
   border-radius: 5px;
   font-size: 16px;
-  color: rgba(51, 51, 51, 1);
+  color: #fff;
 }

@@ -1040,12 +1040,12 @@ var i18nLoginRegisterMsg = {
     ar: 'لا يمكن أن تكون فارغة'
   },
 };
-
 var i18nLoginNRegister = new VueI18n({
   locale: 'zh', // set locale
   fallbackLocale: 'zh',
   messages: utils.transform(i18nLoginRegisterMsg),
 });
+
 var o_my_login = {
   template: `
     <Modal
@@ -1114,6 +1114,7 @@ var o_my_login = {
             :placeholder="$t('enterPwd')"
             class="iview-input"
             @on-focus="loginPhonePasswordFocus"
+            @on-enter="mySubmit"
           >
             <span slot="append" class="my-slot-append" :class="highLightForget ? 'text-blue' : '' " @click="runForgetPassword">{{ $t('forgetPwd') }}</span>
           </Input>
@@ -1391,6 +1392,7 @@ var o_my_loginNext = {
         :maxlength="6"
         @on-change="checkNum"
         :placeholder="$t('enterGoogleRecieve')"
+        @on-enter="loginNextSubmit"
         class="loginNext-input"  @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':''">
       </Input>
        <p class="my-loginNext-error">{{loginNextErrorText}}</p>
@@ -1406,6 +1408,7 @@ var o_my_loginNext = {
           @on-change="checkNum"
           :maxlength="6"
           :placeholder="$t('enterSMSRecieve')"
+          @on-enter="loginNextSubmit"
           class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':' '">
           <span slot="append"
             class="my-slot-append"
@@ -1428,6 +1431,7 @@ var o_my_loginNext = {
           @on-change="checkNum"
           :maxlength="6"
           :placeholder="$t('enterEmailRecieve')"
+          @on-enter="loginNextSubmit"
           class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':' '">
           <span slot="append"
             class="my-slot-append"

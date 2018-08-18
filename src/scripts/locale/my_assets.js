@@ -59,6 +59,16 @@ var messages = {
     en: 'Other records',
     ar: ''
   },
+  withdrawAddress: {
+    zh: '提现地址',
+    en: 'Withdrawal Address',
+    ar: ''
+  },
+  fee: {
+    zh: '手续费',
+    en: '',
+    ar: ''
+  },
   time: {
     zh: '时间',
     en: 'Time',
