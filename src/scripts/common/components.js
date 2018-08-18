@@ -65,185 +65,260 @@ Vue.filter('date', function (utc) {
 
 
 var i18nComponentsMessages = {
-  loginTitle: {
-    zh: '欢迎登录',
-    en: 'Welcome Login',
-  },
-  email: {
-    zh: '邮箱',
-    en: 'E-mail',
-  },
-  phone: {
-    zh: '手机',
-    en: '',
-  },
   login: {
     zh: '登录',
     en: 'Log In',
+    ar: 'تسجيل الدخول',
   },
   loginout: {
     zh: '注销',
     en: 'Log Out',
+    ar: 'تسجيل خروج',
   },
   register: {
     zh: '注册',
     en: 'Register',
+    ar: 'تسجيل حساب',
   },
   homepage: {
     zh: '首页',
     en: 'Home',
+    ar: 'الرئيسية',
+  },
+  language: {
+    zh: '语言',
+    en: 'Language',
+    ar: 'لغة',
+  },
+  arba: {
+    zh: '阿拉伯语',
+    en: 'Arabic',
+    ar: 'العربية',
+  },
+  english: {
+    zh: '英语',
+    en: 'English',
+    ar: 'الإنجليزية',
+  },
+  chinese: {
+    zh: '简体中文',
+    en: 'Chinese',
+    ar: 'الصينية',
   },
   pendingOrder: {
     zh: '我的挂单',
     en: 'pending orders',
+    ar: 'طلبات معلقة',
   },
   allOrder: {
     zh: '我的订单',
     en: 'my orders',
+    ar: 'طلباتي',
   },
   myAccount: {
     zh: '个人中心',
-    en: 'my account',
+    en: 'Personal center',
+    ar: 'المركز الشخصي',
   },
   myAssets: {
     zh: '个人资产',
-    en: 'my assets',
+    en: 'Personal assets',
+    ar: 'الأصول الشخصية',
   },
   buy: {
     zh: '买入',
     en: 'Buy',
+    ar: 'شراء',
   },
   sell: {
     zh: '卖出',
     en: 'Sell',
+    ar: 'بيع',
+  },
+  expired: {
+    zh: '过期',
+    en: 'Expired',
+    ar: 'انتهت'
+  },
+  orderExpired: {
+    zh: '订单过期',
+    en: 'Order Expired',
+    ar: 'انتهت صلاحية الطلب',
+  },
+  seekForCustomService: {
+    zh: '客服介入，协助双方交易',
+    en: 'Customer service has been involved to assist both parties in trading',
+    ar: 'وقد شاركت خدمة العملاء لمساعدة الطرفين في التداول',
   },
   seeAllOrder: {
     zh: '查看所有订单',
-    en: 'view all my orders',
+    en: 'View all orders',
+    ar: 'عرض كل الطلبات',
   },
   ongoingOrders: {
     zh: '进行中的订单',
     en: 'Ongoing orders',
+    ar: 'طلبات في قيد التنفيذ',
   },
   viewOrder: {
     zh: '查看',
     en: 'view',
+    ar: 'عرض',
   },
   waitForSellerReceive: {
     zh: '等待卖家确认收款',
-    en: 'wait for seller to confirm',
+    en: 'Waiting for the seller to confirm the receipt',
+    ar: 'في انتظار البائع لتأكيد الاستلام',
   },
   waitForBuyerPay: {
     zh: '等待买家支付',
-    en: 'wait for buyer to pay',
+    en: 'waiting for buyer payment',
+    ar: 'في انتظار دفع المشتري',
   },
   buyerHasPaid: {
     zh: '买家已支付',
     en: 'buyer has paid',
+    ar: 'تم دفع المشتري',
   },
   payInTime: {
     zh: '支付截止时间',
-    en: 'Complete the payment in',
+    en: 'Payment deadline',
+    ar: 'الموعد النهائي للدفع',
   },
   waitForTime: {
     zh: '交易截止时间',
-    en: 'Waiting for the buyer to pay',
-  },
-  bindGoogleAuthMsg: {
-    zh: '为了您的账户安全，我们强烈推荐您进行谷歌验证',
-    en: 'For your account security, we strongly recommend that you turn on second verification',
-  },
-  googleAuthBtn: {
-    zh: '身份验证',
-    en: 'Google Authenticator',
+    en: 'Transaction deadline',
+    ar: 'الموعد النهائي للصفقة',
   },
   addContact: {
-    zh: '添加社交账号',
-    en: 'Add contact information',
+    zh: '添加whatsapp账号',
+    en: 'Add whatsapp account',
+    ar: 'أضف حساب الواتساب',
   },
   addContactTips: {
     zh: '请留下您的联系方式以便通知支付信息',
-    en: 'In order to contact you for payment, please leave your contact information.',
+    en: 'Please leave your contact information for easy to inform you about the payment information',
+    ar: 'يرجى ترك معلومات التواصل الخاصة بك لسهولة إبلاغك عن معلومات الدفع',
+  },
+  cancel: {
+    zh: '取消',
+    en: 'cancel',
+    ar: 'إلغاء',
+  },
+  confirm: {
+    zh: '确定',
+    en: 'Confirm',
+    ar: 'تأكيد',
+  },
+  changeWhatsApp: {
+    zh: '修改WhatsApp',
+    en: 'Modify WhatsApp',
+    ar: 'WhatsApp تعديل',
+  },
+  whatsAppHolder: {
+    zh: '请输入WhatsApp号码',
+    en: 'Please enter the WhatsApp number',
+    ar: 'يرجى إدخال رقم WhatsApp',
   },
   numericOrLetter: {
     zh: '请输入数字或字母',
-    en: 'type numeric or letter here please',
+    en: 'Please enter numbers or letters',
+    ar: 'يرجى إدخال أرقام أو حروف',
   },
   submit: {
     zh: '提交',
     en: 'submit',
+    ar: 'تقديم',
   },
   account: {
     zh: '账号',
-    en: 'account',
+    en: 'account number',
+    ar: 'رقم الحساب',
   },
   choseCard: {
     zh: '选择交易银行卡',
-    en: 'Select trade card',
+    en: 'Select transaction bank card',
+    ar: 'اختر بطاقة بنكية للصفقات',
   },
   addCard: {
     zh: '添加银行卡',
     en: 'Add bank card',
+    ar: 'أضف بطاقة بنكية',
   },
   openingBank: {
     zh: '开户行',
-    en: 'opening bank',
+    en: 'Bank name',
+    ar: 'إسم البنك',
   },
   accountName: {
     zh: '账户名',
     en: 'account name',
+    ar: 'اسم الحساب',
   },
   bankNumber: {
     zh: '银行卡号',
-    en: 'Bank Number',
+    en: 'Bank card number',
+    ar: 'رقم بطاقة البنك',
   },
   number: {
     zh: '账号',
-    en: 'Number',
+    en: 'account number',
+    ar: 'رقم الحساب',
   },
   backEdit: {
     zh: '返回修改',
     en: 'back to edit',
+    ar: 'العودة إلى تعديل',
   },
   bind: {
     zh: '绑定',
     en: 'bind',
+    ar: 'ربط',
   },
-  noEmpty: {
+  canNotBeEmpty: {
     zh: '此处不能为空',
-    en: 'This field can not be empty',
+    en: 'This place can not be empty ',
+    ar: 'هذا المكان لا يمكن أن يكون فارغاً',
   },
   received: {
     zh: '已到账',
     en: 'has been received',
+    ar: 'تم الوصول إلى الحساب',
   },
   viewAccount: {
     zh: '查看账户',
     en: 'view Account',
+    ar: 'عرض الحساب',
   },
   continueTrade: {
     zh: '继续交易',
-    en: 'continue trade',
+    en: 'Continue the transaction',
+    ar: 'مواصلة الصفقة',
   },
   copySuccess: {
     zh: '复制成功',
-    en: 'Replicating success'
+    en: 'Copied',
+    ar: 'تم النسخ',
   },
   errorPhoneNum: {
-    zh: '请输入合法的电话号码',
-    en: 'Please enter a legitimate phone number'
+    zh: '请输入有效的电话号码',
+    en: 'Please enter the correct phone number',
+    ar: 'يرجى إدخال رقم الهاتف الصحيح',
   },
   errorEmailNum: {
-    zh: '请输入合法的邮件地址',
-    en: 'Please enter a legitimate email address'
+    zh: '请输入有效的邮件地址',
+    en: 'Please enter the correct email address',
+    ar: 'يرجى إدخال عنوان البريد الإلكتروني الصحيح',
   },
   errorNoSamePwd: {
     zh: '密码不一致',
-    en: 'Inconsistency of ciphers'
+    en: 'password does not match',
+    ar: 'كلمة السر غير مطابقة',
   },
   errorPwdNum: {
-    zh: '长度在8-64之间，只能包含字符、数字',
-    en: 'length 8-64, can contain characters and numbers only.'
+    zh: '以字母开头，长度在8-64之间，只能包含字符、数字',
+    en: 'password length is between 8 and 64, starts with a letter and contains only letters and numbers.',
+    ar: ' طول كلمة السر ما بين 8 الى 64 ، تبدا بحرف و تحتوي  على حروف وأرقام فقط',
   },
   findPassword: {
     zh: '找回密码',
@@ -412,285 +487,7 @@ var om_notice = {
     }
   }
 };
-
-/** **********************bind card component********************* */
-var o_bindcard = {
-  template: `
-    <div class="o-modal add-bankcard-modal" :class="show ?'is-show':'is-not-show'">
-      <div class="content">
-        <div class="content-wrapper">
-          <div class="o-header">
-            <span>{{ $t('addCard') }}</span>
-            <Icon @click="close" type="close" class="close"></Icon>
-          </div>
-          <div class="o-content">
-            <ul>
-              <li>
-                <p>{{ $t('openingBank') }}</p>
-                <input v-model="cardInfo.bankName" maxlength="30">
-                <span class="error" v-if="bankNameError">{{ bankNameError }}</span>
-              </li>
-              <li>
-                <p>{{ $t('accountName') }}</p>
-                <input v-model="cardInfo.name" maxlength="30">
-                <span class="error" v-if="nameError">{{ nameError }}</span>
-              </li>
-              <li>
-                <p>{{ $t('bankNumber') }}</p>
-                <input v-model="cardInfo.cardNo" maxlength="30">
-                <span class="error" v-if="cardNoError">{{ cardNoError }}</span>
-              </li>
-              <li>
-                <p>Iban {{ $t('number') }}</p>
-                <input v-model="cardInfo.ibanNo" maxlength="30">
-                <span class="error" v-if="ibanNoError">{{ ibanNoError }}</span>
-              </li>
-              <li><button @click="binding">{{ $t('bind') }}</button></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
-  i18n: i18nComponents,
-  data() {
-    return {
-      // show trigger;
-      cardInfo: {
-        bankName: '',
-        name: '',
-        cardNo: '',
-        ibanNo: '',
-      },
-      bankNameError: '',
-      nameError: '',
-      cardNoError: '',
-      ibanNoError: '',
-    };
-  },
-  props: ['show', 'locale'],
-  methods: {
-    close() {
-      for (var key in this.cardInfo) {
-        this.cardInfo[key] = '';
-      }
-      this.$parent.$emit('isBindShow', false);
-    },
-    invalidCheck(target) {
-      return /(\d|\w)+$/.test(target);
-    },
-    binding() {
-      if (!this.cardInfo.bankName) {
-        this.bankNameError = this.$t('noEmpty');
-      } else if (!this.cardInfo.name) {
-        this.nameError = this.$t('noEmpty');
-      } else if (!this.cardInfo.cardNo) {
-        this.cardNoError = this.$t('noEmpty');
-      } else if (!this.cardInfo.ibanNo) {
-        this.ibanNoError = this.$t('noEmpty');
-      } else if (this.bankNameError || this.nameError || this.cardNoError || this.ibanNoError) {
-        return;
-      } else {
-        this.bankNameError = '';
-        this.nameError = '';
-        this.cardNoError = '';
-        this.ibanNoError = '';
-        //hide bind dialog
-        this.$parent.$emit('isBindShow', false);
-        //transfer the cardInfo
-        this.$parent.$emit('cardInfo', this.cardInfo);
-        //show confirm bind dialog
-        this.$parent.$emit('isConfirmShow', true);
-      }
-    },
-  },
-  watch: {
-    locale: function (newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.$i18n.locale = newVal;
-      }
-    },
-    'cardInfo.bankName': function (val) {
-      if (val && !this.invalidCheck(val)) {
-        this.bankNameError = this.$t('numericOrLetter');
-      } else {
-        this.bankNameError = '';
-      }
-    },
-    'cardInfo.name': function (val) {
-      if (val && !this.invalidCheck(val)) {
-        this.nameError = this.$t('numericOrLetter');
-      } else {
-        this.nameError = '';
-      }
-    },
-    'cardInfo.cardNo': function (val) {
-      if (val && !this.invalidCheck(val)) {
-        this.cardNoError = this.$t('numericOrLetter');
-      } else {
-        this.cardNoError = '';
-      }
-    },
-    'cardInfo.ibanNo': function (val) {
-      if (val && !this.invalidCheck(val)) {
-        this.ibanNoError = this.$t('numericOrLetter');
-      } else {
-        this.ibanNoError = '';
-      }
-    },
-  }
-};
-
-/** **********************confirm bind card component********************* */
-
-var o_confirm = {
-  template: `
-    <div class="o-modal confirm-bankcard-modal" :class="show?'is-show':'is-not-show'">
-      <div class="content">
-        <div class="content-wrapper">
-          <div class="o-header">
-            <span>{{ $t('addCard') }}</span>
-            <Icon @click="close" type="close" class="close"></Icon>
-          </div>
-          <div class="o-content">
-            <div class="info">
-              <ul>
-                <li>
-                  <Row>
-                    <i-col span="10">{{ $t('openingBank') }}</i-col>
-                    <i-col span="8">{{cardInfo.bankName}}</i-col>
-                  </Row>
-                </li>
-                <li>
-                  <Row>
-                    <i-col span="10">{{ $t('accountName') }}</i-col>
-                    <i-col span="8">{{cardInfo.name}}</i-col>
-                  </Row>
-                </li>
-                <li>
-                  <Row>
-                    <i-col span="10">{{ $t('bankNumber') }}</i-col>
-                    <i-col span="8">{{cardInfo.cardNo}}</i-col>
-                  </Row>
-                </li>
-                <li>
-                  <Row>
-                    <i-col span="10">Iban {{ $t('number') }}</i-col>
-                    <i-col span="8">{{cardInfo.ibanNo}}</i-col>
-                  </Row>
-                </li>
-              </ul>
-            </div>
-            <div class="verify">
-              <Tabs v-model="tab">
-                <Tab-Pane name="1" label="Google verification code"  icon="social-google" >
-                  <div class="g-code">
-                    <input v-model="gcode" placeholder="please enter verification code" type="text">
-                  </div>
-                </Tab-Pane>
-                <Tab-Pane  name="2" label="SMS verification" icon="android-textsms">
-                  <div class="g-code">
-                    <input v-model="ecode" type="text">
-                    <span v-show="sms" class="sendMsg">{{sendText}}s</span>
-                    <span v-show="!sms" @click="sendMsg" class="sendMsg">sms</span>
-                  </div>
-                </Tab-Pane>
-              </Tabs>
-            </div>
-            <div class="foot">
-              <a href="#" class="return" @click="backToEdit"><u>{{ $t('backEdit') }}</u></a>
-              <button @click="bind" class="binding">{{ $t('bind') }}</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
-  i18n: i18nComponents,
-  data() {
-    return {
-      cardInfo: {},
-      gcode: '',
-      ecode: '',
-      tab: '1',
-      sms: false,
-      sendText: 'send'
-    };
-  },
-  methods: {
-    close() {
-      this.$parent.$emit('isConfirmShow', false);
-    },
-    backToEdit() {
-      this.$parent.$emit('isConfirmShow', false);
-      this.$parent.$emit('isBindShow', true);
-    },
-    sendMsg: function () {
-      var that = this;
-      get('api/verifycode_sms', {
-        type: 8,
-      }).then(function (res) {
-        if (res) {
-          that.sms = true;
-          that.sendMsgCountDown();
-        }
-      });
-    },
-    sendMsgCountDown: function () {
-      var that = this;
-      that.sendText = 300;
-      var b = setInterval(function () {
-        that.sendText--;
-        if (that.sendText == 0) {
-          that.sms = false;
-          clearInterval(b);
-        }
-      }, 1000);
-    },
-    bind() {
-      var that = this;
-      post('api/bankCard', {
-        bankName: this.cardInfo.bankName,
-        name: this.cardInfo.name,
-        cardNo: this.cardInfo.cardNo,
-        ibanNo: this.cardInfo.ibanNo,
-        checkType: this.tab,
-        checkValue: this.tab == '1' ? this.gcode : this.ecode,
-      }).then(function (res) {
-        if (res) {
-          that.$parent.$emit('isConfirmShow', false);
-          that.$parent.$emit('isCardBinded', true);
-          //if no watchup bind ,show bind watchup dialog
-          if (!that.isWatchupBind) {
-            that.$parent.$emit('isContactShow', true);
-          }
-        }
-      });
-    },
-    //--------------END OF BINDING CARD--------------------------------------
-  },
-  props: ['show', 'isWatchupBind', 'locale'],
-  mounted() {
-    var that = this;
-    // to recieve the trigger of the confirm
-    this.$parent.$on('isConfirmShow', function (i) {
-      that.show = i;
-    });
-    //to recieve the car info
-    this.$parent.$on('cardInfo', function (i) {
-      that.cardInfo = i;
-    });
-  },
-  watch: {
-    locale: function (newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.$i18n.locale = newVal;
-      }
-    }
-  }
-};
 //---------------------------------END-----------------------------------------------------
-
 //--------------------------------select card---------------------------------------------
 var selectCard = {
   template: `
@@ -778,12 +575,13 @@ var selectCard = {
 //------------------------add contact----------------------------------------------------
 var addContact = {
   template: `
-    <Modal :title="$t('addContact')" class="modal-notice info" v-model="show" @on-cancel="">
-      <div class="modal-notice-header">
-        <div class="text-center"><img src="../images/whatup.png" /></div>
-        <p class="text-center">{{ $t('addContactTips') }}</p>
-      </div>
+    <Modal :title="$t('addContact')" class="modal-notice" v-model="show" width="420">
       <div class="modal-notice-footer">
+      <Row style="padding-bottom: 20px">
+        <i-col span="3"><img src="../images/whatup.png" /></i-col>
+        <i-col span="1">&nbsp;</i-col>
+        <i-col span="20">{{ $t('addContactTips') }}</i-col>
+      </Row>
         <i-form ref="formWhatsApp" :model="formWhatsApp" :rules="ruleWhatsApp" label-position="top">
           <form-item label="WhatsApp" prop="number">
             <i-input
@@ -841,14 +639,14 @@ var addContact = {
             if (res) {
               get('api/userInfo').then(function (result) {
                 localStorage.setItem('user', JSON.stringify(result));
-                that.handleClose();
+                that.handleClose(name);
               });
             }
           });
         }
       });
     },
-    handleClose() {
+    handleClose(name) {
       this.$refs[name].resetFields();
       this.$parent.$emit('isContactShow', false);
       this.$parent.$emit('isAddContactShow', false);
@@ -863,48 +661,6 @@ var addContact = {
   }
 };
 //-----------------END----------------------------------------------------------
-
-/***************************** google authenticate*********************************/
-var g_auth = {
-  template: `
-    <div class="o-modal google-modal" :class="show?'is-show':'is-not-show'">
-      <div class="content">
-        <div class="content-wrapper" style="padding:0;width:570px;height:314px">
-          <div class="g-header">
-            <Icon @click="close" type="close" class="close"></Icon>
-          </div>
-          <div class="g-body">
-            <div><img src="../images/warn.png"/></div>
-            <span style="font-size:16px;color: #333333;">
-              {{ $t('bindGoogleAuthMsg') }}
-            </span>
-            <a @click="toGoogeAuth"   target="blank" class="key">
-              {{ $t('googleAuthBtn') }} <img src="../images/gauth.png" />
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
-  i18n: i18nComponents,
-  props: ['show', 'locale'],
-  methods: {
-    close() {
-      this.$parent.$emit('isGoogleAuthShow', false);
-    },
-    toGoogeAuth() {
-      var host = utils.getHost();
-      window.location.href = host + '/exchange-web/toopen_google_authenticator.html';
-    },
-  },
-  watch: {
-    locale: function (newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.$i18n.locale = newVal;
-      }
-    }
-  }
-};
 
 var i18nLoginRegisterMsg = {
   loginTitle: {
@@ -1029,10 +785,10 @@ var i18nLoginRegisterMsg = {
     en: 'password length is between 8 to 64, and can only contains characters and numbers',
     ar: 'طول كلمة السر ما بين 8 الى 64 ، و تحتوي فقط على أحرف وأرقام'
   },
-  noEmpty: {
-    zh: '不能为空',
-    en: 'can not be empty',
-    ar: 'لا يمكن أن تكون فارغة'
+  canNotBeEmpty: {
+    zh: '此处不能为空',
+    en: 'This place can not be empty ',
+    ar: 'هذا المكان لا يمكن أن يكون فارغاً',
   },
 };
 
@@ -1157,15 +913,11 @@ var o_my_login = {
         phoneNum: '输入合法的电话号码',
         emailNum: '输入合法的邮箱地址',
       },
+      countryArr: [],
     };
   },
   components: {VueRecaptcha},
   props: ['login','langStatus'],
-  computed: {
-    countryArr: function () {
-      return JSON.parse(localStorage.getItem('country'));
-    },
-  },
   methods: {
     onExpired() {
       this.$refs.invisibleRecaptcha.reset()
@@ -1263,9 +1015,6 @@ var o_my_login = {
       var emailRegx = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
       return emailRegx.test(emailval);
     },
-    tabLogin(key) {
-      alert(key);
-    },
     loginPasswordFocus() {
       this.loginPasswordError = false;
     },
@@ -1308,7 +1057,7 @@ var o_my_login = {
           if (that.loginPhoneVal === '' || that.selectCountry === '') {
             that.modal_loading = false;
             that.loginPhoneError = true;
-            that.loginPhoneErrorText = this.$t('noEmpty');
+            that.loginPhoneErrorText = this.$t('canNotBeEmpty');
           } else if (!that.phoneReg(that.loginPhoneVal)) {
             that.modal_loading = false;
             that.loginPhoneError = true;
@@ -1316,7 +1065,7 @@ var o_my_login = {
           } else if (that.loginPhonePassword === '') {
             that.modal_loading = false;
             that.loginPhonePasswordError = true;
-            that.loginPhonePasswordErrorText = this.$t('noEmpty');
+            that.loginPhonePasswordErrorText = this.$t('canNotBeEmpty');
           } else {
             this.$refs.invisibleRecaptcha.execute();
           }
@@ -1325,7 +1074,7 @@ var o_my_login = {
           if (that.loginEmailVal === '') {
             that.modal_loading = false;
             that.loginEmailError = true;
-            that.loginEmailErrorText = this.$t('noEmpty');
+            that.loginEmailErrorText = this.$t('canNotBeEmpty');
           } else if (!that.emailReg(that.loginEmailVal)) {
             that.modal_loading = false;
             that.loginEmailError = true;
@@ -1333,7 +1082,7 @@ var o_my_login = {
           } else if (that.loginEmailPassword === '') {
             that.modal_loading = false;
             that.loginEmailPasswordError = true;
-            that.loginEmailPasswordErrorText = this.$t('noEmpty');
+            that.loginEmailPasswordErrorText = this.$t('canNotBeEmpty');
           } else {
             this.$refs.invisibleRecaptcha.execute();
 
@@ -1349,13 +1098,15 @@ var o_my_login = {
   mounted(){
     let locale = localStorage.getItem('locale');
     if (locale) {
-      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
       this.$i18n.locale = locale;
     }
   },
   watch: {
     login: function (a, b) {
       this.login1 = a;
+      if (a) {
+        this.countryArr = JSON.parse(localStorage.getItem('country'));
+      }
     },
     langStatus: function (newVal, oldVal) {
       if (newVal !== oldVal) {
@@ -1473,7 +1224,7 @@ var o_my_loginNext = {
         if (this.loginNextSmsCode.length === 0) {
           this.loginNextError = true;
           that.modal_loading = false;
-          this.loginNextErrorText = this.$t('noEmpty')
+          this.loginNextErrorText = this.$t('canNotBeEmpty')
         } else {
           post('api/user/confirm_login', JSON.stringify(data)).then(function (res) {
             if (res) {
@@ -1556,7 +1307,6 @@ var o_my_loginNext = {
   mounted(){
     let locale = localStorage.getItem('locale');
     if (locale) {
-      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
       this.$i18n.locale = locale;
     }
   },
@@ -1754,7 +1504,6 @@ var o_my_register = {
   mounted(){
     let locale = localStorage.getItem('locale');
     if (locale) {
-      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
       this.$i18n.locale = locale;
     }
   },
@@ -1879,7 +1628,7 @@ var o_my_register = {
           if (that.phoneVal === '' || that.selectCountry === '') {
             that.modal_loading = false;
             that.phoneValError = true;
-            that.phoneValErrorText = this.$t('noEmpty');
+            that.phoneValErrorText = this.$t('canNotBeEmpty');
           } else if (!that.phoneReg(that.phoneVal)) {
             that.modal_loading = false;
             that.phoneValError = true;
@@ -1920,7 +1669,7 @@ var o_my_register = {
           if (that.emailVal === '') {
             that.modal_loading = false;
             that.emailValError = true;
-            that.emailValErrorText = this.$t('noEmpty');
+            that.emailValErrorText = this.$t('canNotBeEmpty');
           } else if (!that.emailReg(that.emailVal)) {
             that.modal_loading = false;
             that.emailValError = true;
@@ -1988,7 +1737,7 @@ var o_my_register = {
           if (that.phoneVal === '' || that.selectCountry === '') {
             that.modal_loading = false;
             that.phoneValError = true;
-            that.phoneValErrorText = this.$t('noEmpty');
+            that.phoneValErrorText = this.$t('canNotBeEmpty');
           } else if (!that.phoneReg(that.phoneVal)) {
             that.modal_loading = false;
             that.phoneValError = true;
@@ -1996,11 +1745,11 @@ var o_my_register = {
           } else if (that.phoneSmsCode === '') {
             that.modal_loading = false;
             that.phoneSmsCodeError = true;
-            that.phoneSmsCodeErrorText = this.$t('noEmpty');
+            that.phoneSmsCodeErrorText = this.$t('canNotBeEmpty');
           } else if (that.phonePassword === '') {
             that.modal_loading = false;
             that.phonePasswordError = true;
-            that.phonePasswordErrorText = this.$t('noEmpty');
+            that.phonePasswordErrorText = this.$t('canNotBeEmpty');
           } else if (!that.passwordReg(that.phonePassword)) {
             that.modal_loading = false;
             that.phonePasswordError = true;
@@ -2008,7 +1757,7 @@ var o_my_register = {
           } else if (that.phonePasswordAgain === '') {
             that.modal_loading = false;
             that.phonePasswordAgainError = true;
-            that.phonePasswordAgainErrorText = this.$t('noEmpty');
+            that.phonePasswordAgainErrorText = this.$t('canNotBeEmpty');
           } else if (that.phonePassword !== that.phonePasswordAgain) {
             that.modal_loading = false;
             that.phonePasswordAgainError = true;
@@ -2020,7 +1769,7 @@ var o_my_register = {
           if (that.emailVal === '') {
             that.modal_loading = false;
             that.emailValError = true;
-            that.emailValErrorText = this.$t('noEmpty');
+            that.emailValErrorText = this.$t('canNotBeEmpty');
           } else if (!that.emailReg(that.emailVal)) {
             that.modal_loading = false;
             that.emailValError = true;
@@ -2028,11 +1777,11 @@ var o_my_register = {
           } else if (that.emailSmsCode === '') {
             that.modal_loading = false;
             that.emailSmsCodeError = true;
-            that.emailSmsCodeErrorText = this.$t('noEmpty');
+            that.emailSmsCodeErrorText = this.$t('canNotBeEmpty');
           } else if (that.emailPassword === '') {
             that.modal_loading = false;
             that.emailPasswordError = true;
-            that.emailPasswordErrorText = this.$t('noEmpty');
+            that.emailPasswordErrorText = this.$t('canNotBeEmpty');
           } else if (!that.passwordReg(that.emailPassword)) {
             that.modal_loading = false;
             that.emailPasswordError = true;
@@ -2040,7 +1789,7 @@ var o_my_register = {
           } else if (that.emailPasswordAgain === '') {
             that.modal_loading = false;
             that.emailPasswordAgainError = true;
-            that.emailPasswordAgainErrorText = this.$t('noEmpty');
+            that.emailPasswordAgainErrorText = this.$t('canNotBeEmpty');
           } else if (that.emailPassword !== that.emailPasswordAgain) {
             that.modal_loading = false;
             that.emailPasswordAgainError = true;
@@ -2219,9 +1968,9 @@ var o_my_registerGoogle = {
       var that = this;
       var data;
       if (that.bindGooglePassword === '') {
-        that.bindGooglePasswordErrorText = this.$t('noEmpty')
+        that.bindGooglePasswordErrorText = this.$t('canNotBeEmpty')
       } else if (that.bindGoogleCode === '') {
-        that.bindGoogleCodeErrorText = this.$t('noEmpty')
+        that.bindGoogleCodeErrorText = this.$t('canNotBeEmpty')
       } else {
         if (!that.modal_loading) {
           that.modal_loading = true;
@@ -2233,6 +1982,7 @@ var o_my_registerGoogle = {
           post('api/user/google_verify', JSON.stringify(data)).then(function (res) {
             if (res) {
               that.asyncCancel();
+              that.$parent.$emit('googleBound', true);
             }
             that.modal_loading = false;
           });
@@ -2247,7 +1997,6 @@ var o_my_registerGoogle = {
   mounted(){
     let locale = localStorage.getItem('locale');
     if (locale) {
-      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
       this.$i18n.locale = locale;
     }
   },
@@ -2622,7 +2371,6 @@ var o_find_password = {
       }
     },
     locale(newVal) {
-      console.log(newVal);
       this.$i18n.locale = newVal;
     }
   },
@@ -2646,54 +2394,74 @@ var o_header = {
         </i-col>
         <i-col span="9" class="management">
           <ul class="text-right">
-            <li class="items my-orders" v-if="logined">
-              <Badge :count="orders.length">
-                <a href="otc_my_order.html" class="demo-badge" @click="isMyordersShow=!isMyordersShow">{{ $t('allOrder') }}</a>
-              </Badge>
-              <div class="order-card" style="display:none;">
-                <div class="arrow"></div>
-                <div class="card-header">
-                  <span class="float-left">{{ $t('ongoingOrders') }}</span>
-                  <a href="otc_my_order.html">{{ $t('allOrder') }} > </a>
-                </div>
-                <ul>
-                  <li v-for="item in orders" :key="item.sequence">
+            <li class="items" v-if="logined">
+              <Dropdown placement="bottom-end" class="order-dropdown">
+                <Badge :count="orders.length">
+                  <a href="otc_my_order.html">{{ $t('allOrder') }}</a>
+                </Badge>
+                <DropdownMenu slot="list" class="text-left" style="width:360px;" v-if="orders.length > 0">
+                  <DropdownItem name="header">
                     <Row>
-                      <i-col span="2" class="text-left">
-                        <div class="buyType" v-if="item.buyer.id==userInfo.id">{{ $t('buy') }}</div>
-                        <div class="sellType" v-else>{{ $t('sell') }}</div>
+                      <i-col span="12">{{ $t('ongoingOrders') }}</i-col>
+                      <i-col span="12" class="text-right">
+                        <a href="otc_my_order.html">{{ $t('allOrder') }} <Icon type="ios-arrow-right"></Icon></a>
                       </i-col>
-                      <i-col span="18" class="text-left" style="padding-left:6px;">
-                        <div v-if="item.buyer.id==userInfo.id" class="tip">
+                    </Row>
+                  </DropdownItem>
+                  <DropdownItem v-for="item in orders" :key="item.sequence">
+                    <Row v-if="item.buyer.id == userInfo.id">
+                      <i-col span="4">
+                        <Avatar style="background:#FF2E2E;">{{ item.status < 7 ? $t('buy') : $t('outOfDate') }}</Avatar>
+                      </i-col>
+                      <i-col span="14">
+                        <template v-if="item.status < 7">
+                          <h4>
                           {{ item.status == 1 ? $t('waitForBuyerPay') : '' }}
                           {{ item.status == 2 ? $t('waitForSellerReceive') : '' }}
                           {{item.totalPrice}}SAR
-                        </div>
-                        <div v-else class="tip">
-                          {{ item.status == 1 ? $t('waitForBuyerPay') : '' }}
-                          {{ item.status == 2 ? $t('buyerHasPaid') : '' }}
-                          {{item.totalPrice}}SAR
-                        </div>
-                        <span v-if="item.buyer.id==userInfo.id">{{ $t('payInTime') }} {{item.ctime | date }}</span>
-                        <span v-else>{{ $t('waitForTime') }} {{item.ctime | date }}</span>
+                          </h4>
+                          <p>{{ $t('payInTime') }} {{item.ctime | date }}</p>
+                        </template>
+                        <template v-else>
+                          <h4>{{ $t('orderOutOfDate') }}</h4>
+                          <p>{{ $t('seekForCustomService') }</p>
+                        </template>
                       </i-col>
-                      <i-col span="4" class="text-right">
-                        <a v-if="item.buyer.id==userInfo.id" class="view" :href="'otc_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
-                        <a v-else class="view" :href="'otc_wait_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
+                      <i-col span="6" class="text-right">
+                        <a class="order-dropdown-view" :href="'otc_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
                       </i-col>
                     </Row>
-                  </li>
-                </ul>
-                <div class="card-footer">
-                  <a href="otc_my_order.html">{{ $t('seeAllOrder') }}</a>
-                </div>
-              </div>
+                    <Row v-else>
+                      <i-col span="4">
+                        <Avatar style="background:#5C95EA;">{{ item.status < 7 ? $t('sell') : $t('outOfDate') }}</Avatar>
+                      </i-col>
+                      <i-col span="14">
+                        <template v-if="item.status < 7">
+                          <h4>
+                            {{ item.status == 1 ? $t('waitForBuyerPay') : '' }}
+                            {{ item.status == 2 ? $t('buyerHasPaid') : '' }}
+                            {{item.totalPrice}}SAR
+                          </h4>
+                          <p>{{ $t('waitForTime') }} {{item.ctime | date }}</p>
+                        </template>
+                        <template v-else>
+                          <h4>{{ $t('orderOutOfDate') }}</h4>
+                          <p>{{ $t('seekForCustomService') }</p>
+                        </template>
+                      </i-col>
+                      <i-col span="6" class="text-right">
+                        <a class="order-dropdown-view" :href="'otc_wait_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
+                      </i-col>
+                    </Row>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
             </li>
             <li class="items" v-if="logined">
               <a href="otc_my_advert.html">{{ $t('pendingOrder') }}</a>
             </li>
             <li class="items" v-if="logined">
-              <Dropdown>
+              <Dropdown class="text-center">
                 <a href="javascript:void(0)">
                   {{ userInfo.showNickName }}
                   <Icon type="arrow-down-b"></Icon>
@@ -2715,15 +2483,15 @@ var o_header = {
               <a @click="showRegister()">{{ $t('register') }}</a>
             </li>
             <li class="items">
-              <Dropdown @on-click="toggleLanguage">
+              <Dropdown class="text-left" @on-click="toggleLanguage">
                 <a href="javascript:void(0)">
-                  Language
+                  {{ $t('language') }}
                   <Icon type="arrow-down-b"></Icon>
                 </a>
                 <DropdownMenu slot="list">
-                  <DropdownItem name="zh">ZH</DropdownItem>
-                  <DropdownItem name="en">EN</DropdownItem>
-                  <DropdownItem name="ar">AR</DropdownItem>
+                  <DropdownItem name="ar">{{ $t('arba') }}</DropdownItem>
+                  <DropdownItem name="en">{{ $t('english') }}</DropdownItem>
+                  <DropdownItem name="zh">{{ $t('chinese') }}</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </li>
@@ -2848,11 +2616,10 @@ var o_header = {
     if (!localStorage.getItem('country')) {
       this.getCountry();
     }
-    var locale = localStorage.getItem('locale');
-    if (locale) {
-      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
-      this.$i18n.locale = locale;
-    }
+    var locale = localStorage.getItem('locale') || navigator.language;
+    document.body.dir = locale === 'ar' ? 'rtl' : 'ltr';
+    this.$i18n.locale = locale;
+    // utils.loadScript('https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit&hl=' + locale);
 
     if (localStorage.getItem('token')) {
       this.logined = true;
@@ -2875,6 +2642,11 @@ var o_header = {
     this.logined = localStorage.getItem('user') !== null;
     this.$on('islogin', function (i) {
       this.isLoginShow = i;
+    });
+    this.$on('googleBound', function(i) {
+      if (i) {
+        this.$parent.$emit('googleBound', true);
+      }
     });
     this.$on("isregisterGoogle", function (i) {
       this.isRegisterGoogleShow = i;
