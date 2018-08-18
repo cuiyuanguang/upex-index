@@ -65,38 +65,13 @@
   //时间戳 返回 小时
   function MillisecondToDate(msd) {
     var time = parseInt(msd, 10) / 1000;
-    if (null != time && '' != time) {
-      if (time > 60 && time < 3600) {
-        time =
-          '00:' +
-          parseInt(time / 60) +
-          ':' +
-          parseInt((parseFloat(time / 60) - parseInt(time / 60)) * 60);
-      } else if (time >= 60 * 60 && time < 60 * 60 * 24) {
-        time =
-          parseInt(time / 3600) +
-          ':' +
-          parseInt((parseFloat(time / 3600) - parseInt(time / 3600)) * 60) +
-          ':' +
-          parseInt(
-            (parseFloat((parseFloat(time / 3600) - parseInt(time / 3600)) * 60) -
-              parseInt((parseFloat(time / 3600) - parseInt(time / 3600)) * 60)) *
-              60
-          );
-      } else {
-        time = '00:' + '00:' + parseInt(time);
-      }
-    }
-
-    var a = time.split(':');
-    var temp = '';
-    a.forEach(function(i) {
-      if (parseInt(i) <= 9 && parseInt(i) > 0) {
-        i = '0' + i;
-      }
-      temp += i + ':';
-    });
-    return temp.replace(/:$/gim, '');
+    var h = parseInt((time / 3600) % 24);
+    var m = parseInt((time / 60) % 60);
+    var s = parseInt(time % 60);
+    var hh = h > 9 ? h : '0' + h;
+    var mm = m > 9 ? m : '0' + m;
+    var ss = s > 9 ? s : '0' + s;
+    return hh + ':' + mm + ':' + ss;
   }
 
   function initData(p) {
@@ -187,22 +162,58 @@
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
 
-  
+  function loadScript(url, callback) {
+    var scriptList = document.querySelectorAll('script[type="text/javascript"]');
+    for (var i = 0; i < scriptList.length; i++) {
+      document.body.removeChild(document.querySelector('script[type="text/javascript"]'));
+    }
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    if (script.readyState) {
+      //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' || script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          if (typeof callback === 'function') {
+            callback();
+          }
+        }
+      };
+    } else {
+      //Others
+      script.onload = function() {
+        if (typeof callback === 'function') {
+          callback();
+        }
+      };
+    }
+    script.src = url;
+    script.async = true;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(script, s);
+    // document.getElementsByTagName('body')[0].appendChild(script);
+  }
+
   function dateFormat(utc, format) {
     var date = new Date(utc);
     format = format || 'yyyy-MM-dd hh:mm:ss';
     var o = {
-      "M+": date.getMonth() + 1, //月份 
-      "d+": date.getDate(), //日 
-      "h+": date.getHours(), //小时 
-      "m+": date.getMinutes(), //分 
-      "s+": date.getSeconds(), //秒 
-      "q+": Math.floor((date.getMonth() + 3) / 3), //季度 
-      "S": date.getMilliseconds() //毫秒 
+      'M+': date.getMonth() + 1, //月份
+      'd+': date.getDate(), //日
+      'h+': date.getHours(), //小时
+      'm+': date.getMinutes(), //分
+      's+': date.getSeconds(), //秒
+      'q+': Math.floor((date.getMonth() + 3) / 3), //季度
+      S: date.getMilliseconds(), //毫秒
     };
-    if (/(y+)/.test(format)) format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+    if (/(y+)/.test(format))
+      format = format.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
     for (var k in o)
-    if (new RegExp("(" + k + ")").test(format)) format = format.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+      if (new RegExp('(' + k + ')').test(format))
+        format = format.replace(
+          RegExp.$1,
+          RegExp.$1.length == 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length)
+        );
     return format;
   }
 
@@ -219,6 +230,7 @@
       initData: initData,
       transform: transform,
       getParam: getParam,
+      loadScript: loadScript,
       dateFormat: dateFormat,
     };
   }
