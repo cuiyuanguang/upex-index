@@ -12,7 +12,7 @@
   <o-header ref="header"></o-header>
   <div class="order-wrap">
     <div class="order-wrap-bg">
-      <h1 class="order-wrap-h1">My assets</h1>
+      <h1 class="order-wrap-h1">{{ $t('myAsset') }}</h1>
       <ul class="order-wrap-top-ul">
         <li class="li-usdt-wrap">
           <div class="order-wrap-top-li-top-wrap">
@@ -20,20 +20,20 @@
               <span class="order-wrap-top-bold">USDT</span>
             </div>
             <div class="right-wrap">
-              <div class="order-wrap-top-button" @click="runRecharge">Deposit</div>
-              <div class="order-wrap-top-button" @click="runWithdrawal('USDT')">Withdrawal</div>
+              <div class="order-wrap-top-button" @click="runRecharge">{{ $t('deposit') }}</div>
+              <div class="order-wrap-top-button" @click="runWithdrawal('USDT')">{{ $t('withdrawal') }}</div>
             </div>
           </div>
           <div class="order-wrap-total">
-            <span>Total</span>{{balance.BTC.total_balance}} USDT
+            <span>{{ $t('total') }}</span>{{balance.USDT.total_balance}} USDT
           </div>
           <div class="order-wrap-top-li-bottom-wrap">
             <div class="left-wrap">
-              <div class="order-wrap-top-title">Available:</div>
+              <div class="order-wrap-top-title">{{ $t('available') }}:</div>
               <div class="order-wrap-top-bold">{{balance.USDT.normal_balance}} USDT</div>
             </div>
             <div class="right-wrap">
-              <div class="order-wrap-top-title">Freeze:</div>
+              <div class="order-wrap-top-title">{{ $t('freeze') }}:</div>
               <div class="order-wrap-top-bold">{{balance.USDT.lock_balance}} USDT</div>
             </div>
           </div>
@@ -44,20 +44,20 @@
               <span class="order-wrap-top-bold">BTC</span>
             </div>
             <div class="right-wrap">
-              <!--<div class="order-wrap-top-button">Deposit</div>-->
-              <div class="order-wrap-top-button"  @click="runWithdrawal('BTC')">Withdrawal</div>
+              <!--<div class="order-wrap-top-button">{{ $t('deposit') }}</div>-->
+              <div class="order-wrap-top-button"  @click="runWithdrawal('BTC')">{{ $t('withdrawal') }}</div>
             </div>
           </div>
           <div class="order-wrap-total">
-            <span>Total</span>{{balance.BTC.total_balance}} BTC
+            <span>{{ $t('total') }}</span>{{balance.BTC.total_balance}} BTC
           </div>
           <div class="order-wrap-top-li-bottom-wrap">
             <div class="left-wrap">
-              <div class="order-wrap-top-title">Available:</div>
+              <div class="order-wrap-top-title">{{ $t('available') }}:</div>
               <div class="order-wrap-top-bold">{{balance.BTC.normal_balance}} BTC</div>
             </div>
             <div class="right-wrap">
-              <div class="order-wrap-top-title">Freeze:</div>
+              <div class="order-wrap-top-title">{{ $t('freeze') }}:</div>
               <div class="order-wrap-top-bold">{{balance.BTC.lock_balance}} BTC</div>
             </div>
           </div>
@@ -65,38 +65,38 @@
         <li class="li-eth-wrap">
           <div class="order-wrap-top-li-top-wrap">
             <div class="left-wrap">
-              <span class="order-wrap-top-bold">{{balance.ETH.total_balance}} ETH</span>
+              <span class="order-wrap-top-bold">ETH</span>
             </div>
             <div class="right-wrap">
-              <!--<div class="order-wrap-top-button">Deposit</div>-->
-              <div class="order-wrap-top-button"  @click="runWithdrawal('ETH')">Withdrawal</div>
+              <!--<div class="order-wrap-top-button">{{ $t('deposit') }}</div>-->
+              <div class="order-wrap-top-button"  @click="runWithdrawal('ETH')">{{ $t('withdrawal') }}</div>
             </div>
           </div>
           <div class="order-wrap-total">
-            <span>Total</span>{{balance.BTC.total_balance}} ETH
+            <span>{{ $t('total') }}</span>{{balance.BTC.total_balance}} ETH
           </div>
           <div class="order-wrap-top-li-bottom-wrap">
             <div class="left-wrap">
-              <div class="order-wrap-top-title">Available:</div>
+              <div class="order-wrap-top-title">{{ $t('available') }}:</div>
               <div class="order-wrap-top-bold">{{balance.ETH.normal_balance}} ETH</div>
             </div>
             <div class="right-wrap">
-              <div class="order-wrap-top-title">Freeze:</div>
+              <div class="order-wrap-top-title">{{ $t('freeze') }}:</div>
               <div class="order-wrap-top-bold">{{balance.ETH.total_balance}} ETH</div>
             </div>
           </div>
         </li>
       </ul>
       <h2 class="order-wrap-h2">
-        <span class="order-wrap-h2-gray">Asset folding</span>
+        <span class="order-wrap-h2-gray">{{ $t('assetCalc') }}</span>
         <span class="order-wrap-h2-black" v-show="getBTCToSAR">{{AssetFoldingBTCText}}</span>
       </h2>
     </div>
     <div class="order-wrap-bg">
-      <h1 class="order-wrap-h1">Financial record</h1>
+      <h1 class="order-wrap-h1">{{ $t('assetRecord') }}</h1>
       <div class="order-table-wrap">
         <tabs value="name1" v-model="orderWrapTable">
-          <tab-pane label="Recent record" name="name1">
+          <tab-pane :label="$t('recentRecord')" name="name1">
             <i-table :columns="columns1" :data="data1" size="small" no-data-text="没有数据" :loading="tableLoading1"></i-table>
             <div style="margin: 10px;overflow: hidden" v-show ="data1Page > 10">
               <div style="float: right;">
@@ -104,7 +104,7 @@
               </div>
             </div>
           </tab-pane>
-          <tab-pane label="Deposit record" name="name2">
+          <tab-pane :label="$t('depositRecord')" name="name2">
             <i-table :columns="columns2" :data="data2" size="small" no-data-text="没有数据" :loading="tableLoading2"></i-table>
             <div style="margin: 10px;overflow: hidden" v-show ="data2Page > 10">
               <div style="float: right;">
@@ -112,7 +112,7 @@
               </div>
             </div>
           </tab-pane>
-          <tab-pane label="Withdrawal record" name="name3">
+          <tab-pane :label="$t('withdrawalRecord')" name="name3">
             <i-table :columns="columns3" :data="data3" size="small" no-data-text="没有数据" :loading="tableLoading3"></i-table>
             <div style="margin: 10px;overflow: hidden" v-show ="data3Page > 10">
               <div style="float: right;">
@@ -120,7 +120,7 @@
               </div>
             </div>
           </tab-pane>
-          <tab-pane label="Other records" name="name4">
+          <tab-pane :label="$t('otherRecord')" name="name4">
             <i-table :columns="columns4" :data="data4" size="small" no-data-text="没有数据" :loading="tableLoading4"></i-table>
             <div style="margin: 10px;overflow: hidden" v-show ="data4Page > 10">
               <div style="float: right;">

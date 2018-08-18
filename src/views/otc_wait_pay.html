@@ -34,9 +34,9 @@
         </div>
         <div class="pay-info">
           <Row>
-            <i-col span="12">
+            <i-col span="10">
               <div class="info-header">{{ $t('orderInfo') }}</div>
-              <ul v-if="step<3">
+              <ul v-if="step < 3" class="pay-box-left">
                 <li class="info-items">
                   <Row>
                     <i-col span="6" class="info-key">{{ $t('orderNo') }} :</i-col>
@@ -56,7 +56,7 @@
                   </Row>
                 </li>
               </ul>
-              <ul v-if="step == 3">
+              <ul v-if="step == 3" class="pay-box-left">
                 <li class="info-items">
                   <Row>
                     <i-col span="6" class="info-key">{{ $t('orderNo') }} :</i-col>
@@ -77,36 +77,36 @@
                 </li>
               </ul>
             </i-col>
-            <i-col span="12">
+            <i-col span="14">
               <div class="info-header">{{ $t('buyInfo') }}</div>
-              <div>
+              <div class="pay-box-right">
                 <Row>
-                  <i-col span="9">
-                    <Icon type="person" size="16"></Icon>
+                  <i-col span="6">
+                    <Icon type="person" size="16" style="margin-right:12px"></Icon>
                     {{ $t('buyName') }}
                   </i-col>
-                  <i-col span="15">
+                  <i-col span="15" class="info-value">
                     {{orderInfo.buyer.showNickName}}
                   </i-col>
                 </Row>
                 <Row>
-                  <i-col span="9">
-                    <Icon type="iphone" size="20" style="width: 12px;text-align: center;"></Icon>
+                  <i-col span="6">
+                    <Icon type="ios-telephone" size="20" style="margin-right:12px;vertical-align: -2px;"></Icon>
                     {{ $t('phone') }}
                   </i-col>
-                  <i-col span="15">
+                  <i-col span="15" class="info-value">
                     {{orderInfo.buyer.hideMobileNumber}}
                   </i-col>
                 </Row>
                 <Row>
-                  <i-col span="9">
-                    <Icon type="android-contacts" size="16"></Icon>
+                  <i-col span="6">
+                    <Icon type="android-contacts" size="16" style="margin-right:12px"></Icon>
                     {{ $t('socialNumber') }}
                   </i-col>
-                  <i-col span="15">
-                    <input type="text" name="Social Number" readonly class="input-copy" :value="orderInfo.socialNumber" @click="copy($event)">
+                  <i-col span="15" class="info-value">
+                    <!--<input type="text" name="Social Number" readonly class="input-copy" :value="orderInfo.socialNumber" @click="copy($event)">-->
                     <a class="contact" :href="'https://api.whatsapp.com/send?phone='+whatsAppLink" target="_blank">
-                      <Icon type="ios-telephone-outline"></Icon>{{ $t('contactBuyer') }}</a>
+                      <img class="whatup" src="../images/whatup-white.png" />{{ $t('contactBuyer') }}</a>
                   </i-col>
                 </Row>
               </div>

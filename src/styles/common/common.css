@@ -29,6 +29,10 @@ body[dir='ltr'] * {
   border-top: 1px #f4f4f4 dashed;
 }
 
+.text-blue{
+  color: #2d8cf0;
+}
+
 .ivu-tabs.spreaded {
   height: 300px;
   transition: ease 500ms;

@@ -12,175 +12,186 @@ var myAssets = new Vue({
     row_my_assets,
     row_my_assets_with
   },
-  data: {
-    balance: {
-      BTC: {},
-      ETH: {},
-      USDT: {},
-    },
-    AssetFoldingBTC: 0,
-    AssetFoldingBTCText:'',
-    getBTCToSARLoding:false,
-    orderWrapTable: '',
-    columns1: [
-      {
-        title: 'Time',
-        key: 'createdAt',
-        align: 'center'
+  data (){
+    return{
+      locale: 'zh',
+      balance: {
+        BTC: {},
+        ETH: {},
+        USDT: {},
       },
-      {
-        title: 'Currency',
-        key: 'currency',
-        align: 'center'
-      },
-      {
-        title: 'Type',
-        key: 'type',
-        align: 'center'
-      },
-      {
-        title: 'Amount',
-        key: 'amount',
-        align: 'center'
-      },
-      // {
-      //   title: 'Operating',
-      //   type: 'expand',
-      //   render: (h, params) => {
-      //     return h(row_my_assets, {
-      //       props: {
-      //         row: params.row,
-      //       }
-      //     })
-      //   },
-      //   align: 'center'
-      // },
-    ],
-    columns2: [
-      {
-        title: 'Time',
-        key: 'createdAt',
-        align: 'center'
-      },
-      {
-        title: 'Currency',
-        key: 'symbol',
-        align: 'center'
-      },
-      {
-        title: 'Type',
-        key: 'type',
-        align: 'center'
-      },
-      {
-        title: 'Amount',
-        key: 'amount',
-        align: 'center'
-      },
-      {
-        title: 'Status',
-        key: 'status',
-        align: 'center'
-      },
-      {
-        title: 'Operating',
-        type: 'expand',
-        render: (h, params) => {
-          return h(row_my_assets, {
-            props: {
-              row: params.row,
-            }
-          })
+      AssetFoldingBTC: 0,
+      AssetFoldingBTCText:'',
+      getBTCToSARLoding:false,
+      orderWrapTable: '',
+      columns1: [
+        {
+          title: '',
+          key: 'createdAt',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('time'))
         },
-        align: 'center'
-      },
-    ],
-    columns3: [
-      {
-        title: 'Time',
-        key: 'createdAt',
-        align: 'center'
-      },
-      {
-        title: 'Currency',
-        key: 'symbol',
-        align: 'center'
-      },
-      {
-        title: 'Type',
-        key: 'type',
-        align: 'center'
-      },
-      {
-        title: 'Amount',
-        key: 'amount',
-        align: 'center'
-      },
-      {
-        title: 'Status',
-        key: 'status',
-        align: 'center'
-      },
-      {
-        title: 'Operating',
-        type: 'expand',
-        render: (h, params) => {
-          return h(row_my_assets_with, {
-            props: {
-              row: params.row,
-            }
-          })
+        {
+          title: '',
+          key: 'currency',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('currency'))
         },
-        align: 'center'
-      },
-    ],
-    columns4: [
-      {
-        title: 'Time',
-        key: 'createdAt',
-        align: 'center'
-      },
-      {
-        title: 'Currency',
-        key: 'currency',
-        align: 'center'
-      },
-      {
-        title: 'Type',
-        key: 'type',
-        align: 'center'
-      },
-      {
-        title: 'Amount',
-        key: 'amount',
-        align: 'center'
-      },
-      // {
-      //   title: 'Operating',
-      //   type: 'expand',
-      //   render: (h, params) => {
-      //     return h(row_my_assets, {
-      //       props: {
-      //         row: params.row,
-      //       }
-      //     })
-      //   },
-      //   align: 'center'
-      // },
-    ],
-    data1: [],
-    data2: [],
-    data3: [],
-    data4: [],
-    data1Page: 1,
-    data2Page: 1,
-    data3Page: 1,
-    data4Page: 1,
-    tableLoading1: true,
-    tableLoading2: true,
-    tableLoading3: true,
-    tableLoading4: true,
-    BTCToSAR:''
+        {
+          title: '',
+          key: 'type',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('type'))
+        },
+        {
+          title: '',
+          key: 'amount',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('amount'))
+        }
+      ],
+      columns2: [
+        {
+          title: '',
+          key: 'createdAt',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('time'))
+        },
+        {
+          title: '',
+          key: 'symbol',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('currency'))
+        },
+        {
+          title: '',
+          key: 'type',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('type'))
+        },
+        {
+          title: '',
+          key: 'amount',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('amount'))
+        },
+        {
+          title: '',
+          key: 'status',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('status'))
+        },
+        {
+          title: '',
+          type: 'expand',
+          renderHeader: (h) => h('span', this.$t('operate')),
+          render: (h, params) => {
+            return h(row_my_assets, {
+              props: {
+                row: params.row,
+              }
+            })
+          },
+          align: 'center'
+        },
+      ],
+      columns3: [
+        {
+          title: '',
+          key: 'createdAt',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('time')),
+        },
+        {
+          title: '',
+          key: 'symbol',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('currency'))
+        },
+        {
+          title: '',
+          key: 'type',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('type'))
+        },
+        {
+          title: '',
+          key: 'amount',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('amount'))
+        },
+        {
+          title: '',
+          key: 'status',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('status'))
+        },
+        {
+          title: '',
+          type: 'expand',
+          renderHeader: (h) => h('span', this.$t('operate')),
+          render: (h, params) => {
+            return h(row_my_assets_with, {
+              props: {
+                row: params.row,
+              }
+            })
+          },
+          align: 'center'
+        },
+      ],
+      columns4: [
+        {
+          title: '',
+          key: 'createdAt',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('time'))
+        },
+        {
+          title: '',
+          key: 'currency',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('currency'))
+        },
+        {
+          title: '',
+          key: 'type',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('type'))
+        },
+        {
+          title: '',
+          key: 'amount',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('amount'))
+        },
+        // {
+        //   title: 'Operating',
+        //   type: 'expand',
+        //   render: (h, params) => {
+        //     return h(row_my_assets, {
+        //       props: {
+        //         row: params.row,
+        //       }
+        //     })
+        //   },
+        //   align: 'center'
+        // },
+      ],
+      data1: [],
+      data2: [],
+      data3: [],
+      data4: [],
+      data1Page: 1,
+      data2Page: 1,
+      data3Page: 1,
+      data4Page: 1,
+      tableLoading1: true,
+      tableLoading2: true,
+      tableLoading3: true,
+      tableLoading4: true,
+      BTCToSAR:''
+    }
   },
   methods: {
     //跳转With
@@ -328,12 +339,20 @@ var myAssets = new Vue({
     },
   },
   mounted() {
+    var locale = localStorage.getItem('locale');
+    if (locale) {
+      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
+      this.$i18n.locale = locale;
+    }
+    var that = this;
+    this.$on('locale', function(i) {
+      that.locale = i;
+    });
     this.getUserBalance();
     this.getUserAllList();
     this.getUserDepositList();
     this.getUserWithDrawList();
     this.getUserOtherTransferList();
-
   },
   filters: {},
   watch: {
