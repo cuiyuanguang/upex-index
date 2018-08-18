@@ -21,6 +21,24 @@ body[dir='ltr'] * {
   direction: rtl;
 }
 
+.ml-10 {
+  margin-left: 10px;
+}
+
+.mr-10 {
+  margin-right: 10px;
+}
+
+body[dir='rtl'] .ml-10 {
+  margin-left: 0;
+  margin-right: 10px;
+}
+
+body[dir='rtl'] .mr-10 {
+  margin-right: 0;
+  margin-left: 10px;
+}
+
 .ivu-form-item-required .ivu-form-item-label:before {
   display: none;
 }

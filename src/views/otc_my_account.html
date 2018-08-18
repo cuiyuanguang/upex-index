@@ -299,21 +299,21 @@
       <Modal :title="$t('changeBankcard')" v-model="modalBankInfo" @on-cancel="handleReset('formBankInfo')">
         <i-form ref="formBankInfo" :model="formBankInfo" :rules="ruleBankInfo" label-position="top">
           <form-item :label="$t('bankName')" prop="bankName">
-            <i-input v-model="formBankInfo.bankName" maxlength="30" :placeholder="$t('bankNameHolder')"></i-input>
+            <i-input v-model="formBankInfo.bankName" maxlength="64" :placeholder="$t('bankNameHolder')"></i-input>
           </form-item>
           <form-item :label="$t('accountName')" prop="name">
-            <i-input v-model="formBankInfo.name" maxlength="30" :placeholder="$t('accountNameHolder')"></i-input>
+            <i-input v-model="formBankInfo.name" maxlength="64" :placeholder="$t('accountNameHolder')"></i-input>
           </form-item>
           <form-item :label="$t('cardNo')" prop="cardNo">
-            <i-input v-model="formBankInfo.cardNo" maxlength="30" :placeholder="$t('cardNoHolder')"></i-input>
+            <i-input v-model="formBankInfo.cardNo" maxlength="64" :placeholder="$t('cardNoHolder')"></i-input>
           </form-item>
           <form-item :label="'iban' + $t('number')" prop="ibanNo">
-            <i-input v-model="formBankInfo.ibanNo" maxlength="30" :placeholder="$t('ibanNoHolder')"></i-input>
+            <i-input v-model="formBankInfo.ibanNo" maxlength="64" :placeholder="$t('ibanNoHolder')"></i-input>
           </form-item>
         </i-form>
         <div slot="footer">
           <i-button type="link" @click="handleReset('formBankInfo')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
-          <i-button type="primary" @click="handleSubmit('formBankInfo')">{{ $t('confirm') }}</i-button>
+          <i-button type="primary" @click="handleSubmit('formBankInfo')">{{ $t('nextStep') }}</i-button>
         </div>
       </Modal>
       <Modal :title="modalBankConfirmTitle" class="modal-notice info" v-model="modalBankConfirm">

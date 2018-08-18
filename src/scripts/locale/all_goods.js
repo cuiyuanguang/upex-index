@@ -357,4 +357,8 @@ var messages = {
     en: 'Confirm bind',
     ar: 'تأكيد الربط',
   },
+  nextStep: {
+    zh: '下一步',
+    en: 'Next step',
+  },
 };

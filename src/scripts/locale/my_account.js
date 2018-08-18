@@ -389,4 +389,8 @@ var messages = {
     en: 'Numeric required here',
     ar: 'يجب إدخال رقم',
   },
+  nextStep: {
+    zh: '下一步',
+    en: 'Next step',
+  },
 };

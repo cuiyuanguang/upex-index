@@ -119,6 +119,7 @@
   border: 1px solid rgba(237, 237, 237, 1);
   text-align: center;
   border-radius: 50%;
+  text-overflow: clip;
 }
 .list .buylist .avatar.mine {
   background-color: #EDF4FF;
