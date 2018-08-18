@@ -2,14 +2,6 @@
   clear: both;
 }
 
-.text-secondary {
-  color: #666666;
-}
-
-.text-strong {
-  font-weight: bold;
-}
-
 .container {
   margin: 0 auto;
   padding: 0;
@@ -29,7 +21,7 @@
 }
 
 .account {
-  margin-top: -70px;
+  margin-top: -50px;
 }
 
 .account-row {

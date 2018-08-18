@@ -10,9 +10,7 @@
 <body>
   <div id="account" v-cloak>
     <o-header ref="header"></o-header>
-    <div class="banner">
-      {{ $t('myAccount') }}
-    </div>
+    <div class="banner"></div>
     <div class="container account">
       <!-- 账户与安全信息 -->
       <Row class="container-row" v-show="user.ctime">
@@ -25,7 +23,7 @@
                   <Tag color="#ff4d4d" v-if="user.accountStatus > 0">{{ $t('accountFrozen') }}</Tag>
                 </i-col>
                 <i-col span="12" class="text-right">
-                  <i-button type="text" size="small" @click="loginOut">{{ $t('loginOut') }}</i-button>
+                  <i-button type="link" size="small" @click="loginOut">{{ $t('loginOut') }}</i-button>
                 </i-col>
               </Row>
             </dt>
@@ -37,7 +35,7 @@
                 </i-col>
                 <i-col span="14" class="text-strong">{{ user.watchapp ? user.watchapp : $t('unBound') }}</i-col>
                 <i-col span="4" class="text-right">
-                  <i-button type="text" size="small" @click="modifyWhatsApp">{{ user.watchapp ? $t('change') : $t('bind') }}</i-button>
+                  <i-button type="link" size="small" @click="modifyWhatsApp">{{ user.watchapp ? $t('change') : $t('bind') }}</i-button>
                 </i-col>
               </Row>
             </dd>
@@ -49,7 +47,7 @@
                 </i-col>
                 <i-col span="14" class="text-strong">********</i-col>
                 <i-col span="4" class="text-right">
-                  <i-button type="text" size="small" @click="modalPassword = true">{{ $t('change') }}</i-button>
+                  <i-button type="link" size="small" @click="modalPassword = true">{{ $t('change') }}</i-button>
                 </i-col>
               </Row>
             </dd>
@@ -61,7 +59,7 @@
               <Row class="account-row">
                 <i-col span="24">
                   <span class="account-row-title">{{ $t('securitySet') }}</span>
-                  <Badge :count="$t('unsafe')" v-if="user.authLevel < 3"></Badge>
+                  <Badge :count="$t('unsafe')" v-if="!user.googleStatus || !user.isOpenEmailCheck || !user.isOpenMobileCheck"></Badge>
                 </i-col>
               </Row>
             </dt>
@@ -73,7 +71,7 @@
                 </i-col>
                 <i-col span="12" class="text-strong">{{ user.googleStatus ? $t('bound') : $t('unBound')}}</i-col>
                 <i-col span="6" class="text-right" v-if="user.googleStatus">
-                  <i-button type="text" size="small" @click="modifyGoogleStatus">{{ $t('unbind') }}</i-button>
+                  <i-button type="link" size="small" @click="modifyGoogleStatus">{{ $t('unbind') }}</i-button>
                 </i-col>
                 <i-col span="6" class="text-right" v-else>
                   <i-button type="error" size="small" @click="bindGoogle">{{ $t('bind') }}</i-button>
@@ -88,7 +86,7 @@
                 </i-col>
                 <i-col span="12" class="text-strong">{{ user.isOpenEmailCheck ? user.email : $t('unBound') }}</i-col>
                 <i-col span="6" class="text-right" v-if="user.isOpenEmailCheck">
-                  <i-button type="text" size="small" @click="modifyEmail">{{ $t('change') }}</i-button>
+                  <i-button type="link" size="small" @click="modifyEmail">{{ $t('change') }}</i-button>
                 </i-col>
                 <i-col span="6" class="text-right" v-else>
                   <i-button type="error" size="small" @click="modifyEmail">{{ $t('bind') }}</i-button>
@@ -103,10 +101,10 @@
                 </i-col>
                 <i-col span="12" class="text-strong">{{ user.isOpenMobileCheck ? user.mobileNumber : $t('unBound') }}</i-col>
                 <i-col span="6" class="text-right" v-if="user.isOpenMobileCheck">
-                  <i-button type="text" size="small" @click="modifyPhone">{{ $t('change') }}</i-button>
+                  <i-button type="link" size="small" @click="modifyPhone">{{ $t('change') }}</i-button>
                 </i-col>
                 <i-col span="6" class="text-right" v-else>
-                  <i-button type="text" size="small" @click="modifyPhone">{{ $t('bind') }}</i-button>
+                  <i-button type="link" size="small" @click="modifyPhone">{{ $t('bind') }}</i-button>
                 </i-col>
               </Row>
             </dd>
@@ -122,7 +120,7 @@
               {{ $t('bankCardTips') }}
             </i-col>
             <i-col span="12" class="text-right">
-              <i-button type="text" size="small" icon="plus" @click="modifyBankInfo('')">{{ $t('addBankCard') }}</i-button>
+              <i-button type="link" size="small" icon="plus" @click="modifyBankInfo('')">{{ $t('addBankCard') }}</i-button>
             </i-col>
           </Row>
           <i-table size="small" :columns="bankColumn" :data="bankData"></i-table>
@@ -133,11 +131,11 @@
         <Tabs v-model="tabLogActive">
           <tab-pane :label="$t('loginHistory')" name="loginHistory">
             <i-table size="small" :columns="loginColumn" :data="loginData"></i-table>
-            <Page :total="loginDataTotalCount" size="small" show-total @on-change="loginPageChange"></Page>
+            <Page :total="loginDataTotalCount" size="small" @on-change="loginPageChange"></Page>
           </tab-pane>
           <tab-pane :label="$t('securityHistory')" name="securityHistory">
             <i-table size="small" :columns="securityColumn" :data="securityData"></i-table>
-            <Page :total="securityDataTotalCount" size="small" show-total @on-change="securityPageChange"></Page>
+            <Page :total="securityDataTotalCount" size="small" @on-change="securityPageChange"></Page>
           </tab-pane>
         </Tabs>
       </div>
@@ -167,7 +165,7 @@
         </form-item>
       </i-form>
       <div slot="footer">
-        <i-button type="text" @click="handleReset('formWhatsApp')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
+        <i-button type="link" @click="handleReset('formWhatsApp')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
         <i-button type="primary" @click="handleSubmit('formWhatsApp')">{{ $t('confirm') }}</i-button>
       </div>
     </Modal>
@@ -198,7 +196,7 @@
         </form-item>
       </i-form>
       <div slot="footer">
-        <i-button type="text" @click="handleReset('formPassword')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
+        <i-button type="link" @click="handleReset('formPassword')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
         <i-button type="primary" @click="handleSubmit('formPassword')">{{ $t('confirm') }}</i-button>
       </div>
     </Modal>
@@ -218,7 +216,7 @@
         </form-item>
       </i-form>
       <div slot="footer">
-        <i-button type="text" @click="handleReset('formGoogle')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
+        <i-button type="link" @click="handleReset('formGoogle')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
         <i-button type="primary" @click="handleSubmit('formGoogle')">{{ $t('confirm') }}</i-button>
       </div>
     </Modal>
@@ -248,7 +246,7 @@
         </form-item>
       </i-form>
       <div slot="footer">
-        <i-button type="text" @click="handleReset('formEmail')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
+        <i-button type="link" @click="handleReset('formEmail')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
         <i-button type="primary" @click="handleSubmit('formEmail')">{{ $t('confirm') }}</i-button>
       </div>
     </Modal>
@@ -291,7 +289,7 @@
         </form-item>
       </i-form>
       <div slot="footer">
-        <i-button type="text" @click="handleReset('formPhone')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
+        <i-button type="link" @click="handleReset('formPhone')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
         <i-button type="primary" @click="handleSubmit('formPhone')">{{ $t('confirm') }}</i-button>
       </div>
     </Modal>
@@ -313,7 +311,7 @@
           </form-item>
         </i-form>
         <div slot="footer">
-          <i-button type="text" @click="handleReset('formBankInfo')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
+          <i-button type="link" @click="handleReset('formBankInfo')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
           <i-button type="primary" @click="handleSubmit('formBankInfo')">{{ $t('confirm') }}</i-button>
         </div>
       </Modal>
@@ -355,7 +353,7 @@
           </i-form>
         </div>
         <div slot="footer">
-          <i-button type="text" @click="handleReset('formBankConfirm')" style="margin-left: 8px">{{ modalBankConfirmCancel }}</i-button>
+          <i-button type="link" @click="handleReset('formBankConfirm')" style="margin-left: 8px">{{ modalBankConfirmCancel }}</i-button>
           <i-button type="primary" @click="handleSubmit('formBankConfirm')">{{ $t('confirm') }}</i-button>
         </div>
       </Modal>

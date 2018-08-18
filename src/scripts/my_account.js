@@ -248,7 +248,7 @@ var account = new Vue({
               'Button',
               {
                 props: {
-                  type: 'text',
+                  type: 'link',
                   size: 'small',
                 },
                 on: {
@@ -495,24 +495,6 @@ var account = new Vue({
             that.modalBankConfirm = true;
           }
           if (name === 'formBankConfirm') {
-            /* if (that.formBankInfo.id) {
-              put('api/bankCard', {
-                id: that.formBankInfo.id,
-                bankName: that.formBankInfo.bankName,
-                name: that.formBankInfo.name,
-                cardNo: that.formBankInfo.cardNo,
-                ibanNo: that.formBankInfo.ibanNo,
-                checkType: that.tabVerifyActive,
-                checkValue:
-                  that.tabVerifyActive == '1'
-                    ? that.formBankConfirm.google
-                    : that.formBankConfirm.phone,
-              }).then(function(res) {
-                that.modalBankConfirm = false;
-                that.tabVerifyActive = 1;
-                that.getAllCard();
-              });
-            } */
             var api = that.formBankInfo.id ? 'api/deleteBankCard' : 'api/bankCard';
             var checkType;
             if (that.user.mobileNumber && that.user.googleStatus) {
@@ -751,11 +733,15 @@ var account = new Vue({
   mounted() {
     var locale = localStorage.getItem('locale');
     if (locale) {
-      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
       this.$i18n.locale = locale;
     }
     this.$on('locale', function(i) {
       this.locale = i;
+    });
+    this.$on('googleBound', function(i) {
+      if (i) {
+        this.getUserInfo();
+      }
     });
     this.getUserInfo();
     this.getAllCard();
