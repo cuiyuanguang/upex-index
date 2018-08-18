@@ -384,4 +384,9 @@ var messages = {
     en: 'Bind phone or google first',
     ar: 'يرجى ربط هاتفك أو جوجل أولا',
   },
+  numericRequired: {
+    zh: '必须输入数字',
+    en: 'Numeric required here',
+    ar: 'يجب إدخال رقم',
+  },
 };

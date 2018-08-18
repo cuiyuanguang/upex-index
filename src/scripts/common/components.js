@@ -585,6 +585,7 @@ var addContact = {
         <i-form ref="formWhatsApp" :model="formWhatsApp" :rules="ruleWhatsApp" label-position="top">
           <form-item label="WhatsApp" prop="number">
             <i-input
+              number
               v-model="formWhatsApp.number"
               maxlength="30"
               :placeholder="$t('whatsAppHolder')"
@@ -618,7 +619,7 @@ var addContact = {
       },
       ruleWhatsApp: {
         number: [
-          { required: true, pattern: /(\d|\w)+$/, message: this.$t('numericOrLetter'), trigger: 'change' },
+          { required: true, type: 'number', message: this.$t('numericRequired'), trigger: 'change' },
         ],
       },
       selectCountry: '+86',

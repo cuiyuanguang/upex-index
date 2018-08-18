@@ -145,6 +145,7 @@
       <i-form ref="formWhatsApp" :model="formWhatsApp" :rules="ruleWhatsApp" label-position="top">
         <form-item :label="'WhatsApp: ' + user.watchapp" prop="number">
           <i-input
+            number
             v-model="formWhatsApp.number"
             maxlength="30"
             :placeholder="$t('whatsAppHolder')"

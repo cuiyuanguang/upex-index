@@ -126,7 +126,7 @@ var account = new Vue({
         number: '',
       },
       ruleWhatsApp: {
-        number: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        number: [{ required: true, type: 'number', message: this.$t('numericRequired'), trigger: 'change' }],
       },
       // 修改密码
       modalPassword: false,
