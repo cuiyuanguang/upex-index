@@ -1012,7 +1012,11 @@ var i18nLoginRegisterMsg = {
     en: 'Please enter the verification code received by',
     ar: ''
   },
-
+  onlyNum: {
+    zh: '验证码只包含数字',
+    en: '',
+    ar: ''
+  },
   //校验
   errorPhoneNum: {
     zh: '请输入合法的电话号码',
@@ -1045,7 +1049,6 @@ var i18nLoginNRegister = new VueI18n({
   fallbackLocale: 'zh',
   messages: utils.transform(i18nLoginRegisterMsg),
 });
-
 var o_my_login = {
   template: `
     <Modal
@@ -1659,6 +1662,7 @@ var o_my_register = {
             type="password"
             :placeholder="$t('surePwd')"
             class="iview-input"
+            @on-enter="mySubmit"
             @on-focus="emailPasswordAgainFocus">
           </Input>
           <p class="my-login-error">{{emailPasswordAgainErrorText}}</p>
@@ -1715,6 +1719,7 @@ var o_my_register = {
             type="password"
             :placeholder="$t('surePwd')"
             class="iview-input"
+            @on-enter="mySubmit"
             @on-focus="phonePasswordAgainFocus">
           </Input>
           <p class="my-login-error">{{phonePasswordAgainErrorText}}</p>
@@ -2120,6 +2125,74 @@ var o_my_register = {
     }
   }
 };
+
+var i18nRegisterGoogleMsg = {
+  noEmpty: {
+    zh: '此处不能为空',
+    en: 'This field can not be empty',
+    ar: ''
+  },
+  onlyNum: {
+    zh: '验证码只包含数字',
+    en: '',
+    ar: ''
+  },
+  copySuccess: {
+    zh: '复制成功',
+    en: 'Replicating success',
+    ar: ''
+  },
+  StrengthenTitle: {
+    zh: '增强你的账户安全性',
+    en: 'Strengthen your account security',
+    ar: ''
+  },
+  bindGoogle: {
+    zh: '3步去绑定谷歌认证',
+    en: '3 steps to bind Google authenticator',
+    ar: ''
+  },
+  downloadGoogle: {
+    zh: '下载谷歌身份验证',
+    en: 'Download google authenticator',
+    ar: ''
+  },
+  scanCode: {
+    zh: '使用谷歌认证器扫描条形码',
+    en: 'Use google authenticator to scan a barcode:',
+    ar: ''
+  },
+  enterKey: {
+    zh: '输入提供的key',
+    en: 'Enter Provided key',
+    ar: ''
+  },
+  copy: {
+    zh: '复制',
+    en: 'copy',
+    ar: ''
+  },
+  completeBind: {
+    zh: '完成绑定',
+    en: 'Complete binding',
+    ar: ''
+  },
+  enterPwd: {
+    zh: '请输入登录密码',
+    en: 'Please enter login password',
+    ar: ''
+  },
+  enterGoogleRecieved: {
+    zh: '请输入谷歌验证码',
+    en: 'please enter Google verification code',
+    ar: ''
+  },
+};
+var i18nRegisterGoogle = new VueI18n({
+  locale: 'zh', // set locale
+  fallbackLocale: 'zh',
+  messages: utils.transform(i18nRegisterGoogleMsg),
+});
 var o_my_registerGoogle = {
   template: `
     <Modal
@@ -2132,15 +2205,15 @@ var o_my_registerGoogle = {
       <div class="loginGoogle-title">
         <i class="loginGoogle-title-icon"></i>
         <div class="loginGoogle-title-right-wrap">
-            <h1>Strengthen your account security</h1>
-            <h2>3 steps to bind Google authenticator</h2>
+            <h1>{{ $t('StrengthenTitle') }}</h1>
+            <h2>{{ $t('bindGoogle') }}</h2>
         </div>
       </div>
       <ul class="loginGoogle-ul">
         <li class="clear">
           <div class="li-title">
             <span class="list-num">1</span>
-            <p>Download google authenticator</p>
+            <p>{{ $t('downloadGoogle') }}</p>
             <div class="loginGoogle-ul-download-wrap">
               <div class="loginGoogle-ul-download-google"></div>
               <div class="loginGoogle-ul-download-ios"></div>
@@ -2154,14 +2227,14 @@ var o_my_registerGoogle = {
             </div>
             <div class="tip-img tip-img1"></div>
             <span class="list-num">2</span>
-            <p style="width:158px">Use google authenticator to scan a barcode:</p>
+            <p style="width:158px">{{ $t('scanCode') }}:</p>
             <h6 style="color:#999;margin:26px 0 20px 50px">or</h6>
-            <p style="margin-left: 50px;">Enter Provided key:</p>
+            <p style="margin-left: 50px;">{{ $t('enterKey') }}:</p>
             <h6 style="color:#999;margin: 5px 0 0 50px">
              {{googleKey}}
               <span
                 style="color:#3461A7;cursor:pointer;margin-left:10px;text-decoration: underline;" @click="doCopy">
-                Copy
+                {{ $t('copy') }}
               </span>
             </h6>
           </div>
@@ -2170,13 +2243,14 @@ var o_my_registerGoogle = {
           <div class="li-title">
             <span class="list-num">3</span>
             <div class="tip-img tip-img2"></div>
-            <p>Completion of binding</p>
+            <p>{{ $t('completeBind') }}</p>
             <div class="input-wrap">
               <Input
                 v-model="bindGooglePassword"
                 type="password"
-                placeholder="Please enter login password"
+                :placeholder="$t('enterPwd')"
                 class="bindGoogle-input"
+                :maxlength="6"
                 :class="bindGooglePasswordErrorText !== ''?'is-red':'is-gray'"
                 @on-focus="bindGooglePasswordFocus"
               >
@@ -2185,8 +2259,10 @@ var o_my_registerGoogle = {
               <Input
                 v-model="bindGoogleCode"
                 type="text"
-                placeholder="Please input the google code."
-                 class="bindGoogle-input" style="margin-top: 0"
+                :placeholder="$t('enterGoogleRecieved')"
+                class="bindGoogle-input" style="margin-top: 0"
+                :maxlength="6"
+                @on-change="checkNum"
                 :class="bindGoogleCodeErrorText !== ''?'is-red':'is-gray'"
                 @on-focus="bindGoogleCodeFocus"
               >
@@ -2197,7 +2273,7 @@ var o_my_registerGoogle = {
         </li>
       </ul>
       <div slot="footer">
-        <Button type="primary" size="large" long :loading="modal_loading" @click="setGoogleInfo">Complete binding</Button>
+        <Button type="primary" size="large" long :loading="modal_loading" @click="setGoogleInfo">{{ $t('completeBind') }}</Button>
       </div>
     </Modal>
   `,
@@ -2213,7 +2289,7 @@ var o_my_registerGoogle = {
       bindGoogleCodeErrorText: '',
     };
   },
-  i18n: i18nComponents,
+  i18n: i18nRegisterGoogle,
   props: ['registerGoogle', 'registerCookie','langStatus'],
   methods: {
     doCopy: function () {
@@ -2221,6 +2297,13 @@ var o_my_registerGoogle = {
       this.$copyText(this.googleKey).then(function (e) {
         Toast.show(that.$t('copySuccess'), { icon: 'ok' });
       });
+    },
+    checkNum(type) {
+      if(isNaN(this.bindGoogleCode)){
+        this.bindGoogleCodeErrorText = this.$t('onlyNum');
+      }else{
+        this.bindGoogleCodeErrorText = '';
+      }
     },
     getToken() {
       this.isregisterToken = localStorage.getItem('token') ? localStorage.getItem('token') : '';
@@ -2297,8 +2380,6 @@ var o_my_registerGoogle = {
     // },
   },
 };
-
-
 var o_find_password = {
   i18n: i18nComponents,
   template: `

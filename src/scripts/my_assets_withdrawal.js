@@ -141,7 +141,7 @@ var myAssetsWithdrawal = new Vue({
         case 'email':
           if(isNaN(this.emailSmsCode)){
             this.emailSmsCodeError = true;
-            this.emailSmsCodeErrorText = '验证码只包含数字';
+            this.emailSmsCodeErrorText = this.$t('onlyNum');
           }else{
             this.emailSmsCodeError = false;
             this.emailSmsCodeErrorText = '';
@@ -150,7 +150,7 @@ var myAssetsWithdrawal = new Vue({
         case 'phone':
           if(isNaN(this.phoneSmsCode)){
             this.phoneSmsCodeError = true;
-            this.phoneSmsCodeErrorText = '验证码只包含数字';
+            this.phoneSmsCodeErrorText = this.$t('onlyNum');
           }else{
             this.phoneSmsCodeError = false;
             this.phoneSmsCodeErrorText = '';
@@ -159,7 +159,7 @@ var myAssetsWithdrawal = new Vue({
         case 'google':
           if(isNaN(this.googleCode)){
             this.googleCodeError = true;
-            this.googleCodeErrorText = '验证码只包含数字';
+            this.googleCodeErrorText = this.$t('onlyNum');
           }else{
             this.googleCodeError = false;
             this.googleCodeErrorText = '';

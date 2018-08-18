@@ -171,10 +171,17 @@ var messages = {
   },
   phoneErrorCode: {
     zh: '请输入6位手机验证码',
-    en: 'Please enter a 6-digit telephone verification code'
+    en: 'Please enter a 6-digit telephone verification code',
+    ar: ''
   },
   googleErrorCode: {
     zh: '请输入6位谷歌验证码',
-    en: 'Please enter a 6-digit google verification code'
-  }
+    en: 'Please enter a 6-digit google verification code',
+    ar: ''
+  },
+  onlyNum: {
+    zh: '验证码只包含数字',
+    en: '',
+    ar: ''
+  },
 };
