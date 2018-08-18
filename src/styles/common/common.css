@@ -5,12 +5,12 @@
 
 body[dir='rtl'] * {
   direction: rtl;
-  unicode-bidi: normal;
+  unicode-bidi: embed;
 }
 
 body[dir='ltr'] * {
   direction: ltr;
-  unicode-bidi: normal;
+  unicode-bidi: embed;
 }
 
 *[dir='ltr'] {
@@ -21,143 +21,8 @@ body[dir='ltr'] * {
   direction: rtl;
 }
 
-body[dir='rtl'] .ivu-col-span-1,
-body[dir='rtl'] .ivu-col-span-10,
-body[dir='rtl'] .ivu-col-span-11,
-body[dir='rtl'] .ivu-col-span-12,
-body[dir='rtl'] .ivu-col-span-13,
-body[dir='rtl'] .ivu-col-span-14,
-body[dir='rtl'] .ivu-col-span-15,
-body[dir='rtl'] .ivu-col-span-16,
-body[dir='rtl'] .ivu-col-span-17,
-body[dir='rtl'] .ivu-col-span-18,
-body[dir='rtl'] .ivu-col-span-19,
-body[dir='rtl'] .ivu-col-span-2,
-body[dir='rtl'] .ivu-col-span-20,
-body[dir='rtl'] .ivu-col-span-21,
-body[dir='rtl'] .ivu-col-span-22,
-body[dir='rtl'] .ivu-col-span-23,
-body[dir='rtl'] .ivu-col-span-24,
-body[dir='rtl'] .ivu-col-span-3,
-body[dir='rtl'] .ivu-col-span-4,
-body[dir='rtl'] .ivu-col-span-5,
-body[dir='rtl'] .ivu-col-span-6,
-body[dir='rtl'] .ivu-col-span-7,
-body[dir='rtl'] .ivu-col-span-8,
-body[dir='rtl'] .ivu-col-span-9 {
-  float: right;
-  direction: rtl;
-}
-
-body[dir='rtl'] .ivu-input-group-with-append .ivu-input,
-body[dir='rtl'] .ivu-input-group-with-append.ivu-input-group-small .ivu-input {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-}
-body[dir='rtl'] .ivu-input-group > .ivu-input:last-child,
-body[dir='rtl'] .ivu-input-group-append {
-  border-bottom-left-radius: 4px !important;
-  border-top-left-radius: 4px !important;
-  border-left: 1px solid #dddee1;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-body[dir='rtl'] .ivu-input-group-append {
-  border-right: 0;
-}
-body[dir='rtl'] .ivu-input-group-prepend {
-  border-bottom-right-radius: 4px !important;
-  border-top-right-radius: 4px !important;
-  border-right: 1px solid #dddee1;
-  border-left: 0;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-body[dir='rtl'] .ivu-form .ivu-form-item-label {
-  float: right;
-}
-body[dir='rtl'] .ivu-form-item-error .ivu-input-group > .ivu-input:last-child {
-  border-left-color: #ed3f14;
-}
-body[dir='rtl'] .ivu-form-item-error .ivu-input-group-prepend {
-  border-right-color: #ed3f14;
-}
-body[dir='rtl'] .ivu-form-item-error .ivu-input-group-append {
-  border-left-color: #ed3f14;
-}
-body[dir='rtl'] .ivu-form-item-error-tip {
-  right: 0;
-  left: auto;
-}
-body[dir='rtl'] .ivu-modal-close {
-  right: auto;
-  left: 16px;
-}
-body[dir='rtl'] .ivu-icon-ios-arrow-right:before {
-  content: "\f3d2";
-}
-body[dir='rtl'] .ivu-icon-ios-arrow-left:before {
-  content: "\f3d3";
-}
-body[dir='rtl'] .ivu-tabs-nav {
-  float: right;
-  direction: ltr;
-}
-body[dir='rtl'] .ivu-tabs .ivu-tabs-content-animated {
-  direction: ltr;
-}
-
-.ivu-tabs .ivu-tabs-tabpane {
-  display: block !important;
-}
-
-.text-left {
-  text-align: left;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.text-center {
-  text-align: center;
-}
-
-body[dir='rtl'] .text-left {
-  text-align: right;
-}
-
-body[dir='rtl'] .text-right {
-  text-align: left;
-}
-.float-left {
-  float: left;
-}
-
-.float-right {
-  float: right;
-}
-
-body[dir='rtl'] .float-left {
-  float: right;
-}
-
-body[dir='rtl'] .float-right {
-  float: left;
-}
-
-.text-success {
-  color: #0cbf48;
-}
-
-.text-warn {
-  color: #ff7100;
-}
-
-.text-error {
-  color: #ed3f14;
+.border-top-dashed {
+  border-top: 1px #f4f4f4 dashed;
 }
 
 .ivu-tabs.spreaded {
@@ -202,16 +67,24 @@ body[dir='rtl'] .float-right {
   padding: 0;
 }
 
+.modal-notice .ivu-row {
+  line-height: 32px;
+}
+
 .modal-notice .modal-notice-header {
   padding: 20px 50px;
 }
 
-.modal-notice .modal-notice-header .ivu-row {
-  line-height: 32px;
+.modal-notice.primary .modal-notice-header {
+  background-color: #596fed;
 }
 
 .modal-notice.info .modal-notice-header {
   background-color: #f4f4f4;
+}
+
+.modal-notice.warning .modal-notice-header {
+  background-color: #AB0F0F;
 }
 
 .modal-notice .modal-notice-footer {
@@ -280,8 +153,8 @@ input::-webkit-inner-spin-button {
 }
 
 .error {
-  border-color: red !important;
-  color: red !important;
+  border-color: red;
+  color: red;
 }
 
 .success {
@@ -453,12 +326,50 @@ input::-webkit-inner-spin-button {
   line-height: 50px;
 }
 
-.om-header .ivu-dropdown-rel a {
+.om-header .ivu-dropdown-rel > a {
   color: #adadad;
 }
 
-.om-header .ivu-dropdown-menu a {
+.om-header .ivu-dropdown-menu > a {
   color: #495060;
+}
+
+.order-dropdown .ivu-badge-count{
+  padding: 0;
+  min-width: 16px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  box-shadow: none;
+}
+
+.order-dropdown .ivu-dropdown-item:not(:first-child) {
+  padding: 16px 22px;
+  height: 66px;
+  line-height: 16px;
+  border-top: 1px solid #e6e6e6;
+}
+
+.order-dropdown .ivu-row,
+.order-dropdown .ivu-col {
+  height: 100%;
+}
+
+.order-dropdown .ivu-col h4 {
+  margin-bottom: 6px;
+}
+
+.order-dropdown .ivu-col .ivu-avatar-string {
+  left: 0 !important;
+  width: 100%;
+}
+
+.order-dropdown .order-dropdown-view {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 2px 8px;
+  border: 1px solid #5C95EA;
+  border-radius: 16px;
 }
 
 .om-header .arrow {
@@ -473,49 +384,21 @@ input::-webkit-inner-spin-button {
   border-bottom: 13px solid white;
 }
 
-.om-header .items .ivu-badge .ivu-badge-count {
-  /* width: 10px; */
-  position: absolute;
-  -webkit-transform: translateX(50%);
-  -ms-transform: translateX(50%);
-  transform: translateX(50%);
-  top: 3px;
-  right: 0;
-  height: 16px;
-  border-radius: 10px;
-  min-width: 16px;
-  background: #ed3f14;
-  color: #fff;
-  line-height: 16px;
-  text-align: center;
-  font-size: 12px;
-  white-space: nowrap;
-  -webkit-transform-origin: -10% center;
-  -ms-transform-origin: -10% center;
-  transform-origin: -10% center;
-  z-index: 10;
-  box-shadow: none;
-  padding: 0;
-}
-
-.om-header .management > ul > li .ivu-select-dropdown {
-  width: 80px;
-}
-
-.om-header .management > ul > li .ivu-select-dropdown .ivu-dropdown-menu {
-  min-width: 80px;
-}
-
-.om-header .management > ul > li .ivu-select-dropdown .ivu-dropdown-menu .ivu-dropdown-item{
-  text-align: center;
-}
-
 .banner {
   background: rgb(25, 25, 32);
   height: 220px;
   text-align: center;
   line-height: 220px;
   font-size: 24px;
+}
+
+html[lang='zh'] .banner,
+html[lang='en'] .banner {
+  background-image: url(../../images/topbanner-en.png);
+}
+
+html[lang='ar'] .banner {
+  background-image: url(../../images/topbanner-ar.png);
 }
 
 .banner > div {
