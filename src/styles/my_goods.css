@@ -30,6 +30,10 @@
   min-height: 810px;
 }
 
+.pend-order .main {
+  min-height: 600px;
+}
+
 .pend-order .main th,
 .pend-order .main td {
   width: 17%;

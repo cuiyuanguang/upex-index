@@ -99,7 +99,6 @@ var myGoods = new Vue({
   mounted() {
     var locale = localStorage.getItem('locale');
     if (locale) {
-      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
       this.$i18n.locale = locale;
     }
     var that = this;
