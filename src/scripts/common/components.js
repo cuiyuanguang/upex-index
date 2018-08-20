@@ -458,7 +458,7 @@ var om_notice = {
   template: `
     <div class="o-modal notice-modal" :class="show?'is-show':'is-not-show'"   >
       <div class="content">
-        <div class="content-wrapper" style="background-color: #fff;width: 500px;height: 320x;border-radius: 5px;" >
+        <div class="content-wrapper" style="background-color: #fff;width: 500px;height: 320px;border-radius: 5px;" >
           <Icon @click="close" type="close" class="close" style="position: absolute;right: 20px;"></Icon>
           <div class="header" style=" text-align: center;padding: 28px 0;">
             <img src="../images/arrive.png" alt="">
@@ -809,6 +809,11 @@ var i18nLoginRegisterMsg = {
     ar: ''
   },
   //校验
+  sixInform: {
+    zh: '验证码为6位数字',
+    en: '',
+    ar: ''
+  },
   errorPhoneNum: {
     zh: '请输入合法的电话号码',
     en: 'Please enter the correct phone number',
@@ -1289,6 +1294,11 @@ var o_my_loginNext = {
       }
     },
     loginNextSubmit() {
+      if(isNaN(this.loginNextSmsCode) || this.loginNextSmsCode.length !== 6){
+        this.loginNextError = true;
+        this.loginNextErrorText = this.$t('sixInform');
+        return;
+      }
       var that = this;
       if (!this.modal_loading) {
         that.modal_loading = true;
@@ -1296,31 +1306,24 @@ var o_my_loginNext = {
           authCode: this.loginNextSmsCode,
           token: this.isLoginNextCookieNum,
         };
-        if (this.loginNextSmsCode.length === 0) {
-          this.loginNextError = true;
-          that.modal_loading = false;
-          this.loginNextErrorText = this.$t('canNotBeEmpty')
-        } else {
-          post('api/user/confirm_login', JSON.stringify(data)).then(function (res) {
-            if (res) {
-              that.modal_loading = false;
-              that.$parent.$emit('isLoginNext', false);
-              localStorage.setItem('token', that.isLoginNextCookieNum);
-              post('api/common/user_info', '', false).then(function (res) {
-                if (res) {
-                  that.isLogined = true;
-                  that.$parent.$emit('logined', that.isLogined);
-                  localStorage.setItem('user', JSON.stringify(res));
-                  location.reload();
-                }
-              });
-            } else {
-              that.modal_loading = false;
-            }
-          });
-        }
+        post('api/user/confirm_login', JSON.stringify(data)).then(function (res) {
+          if (res) {
+            that.modal_loading = false;
+            that.$parent.$emit('isLoginNext', false);
+            localStorage.setItem('token', that.isLoginNextCookieNum);
+            post('api/common/user_info', '', false).then(function (res) {
+              if (res) {
+                that.isLogined = true;
+                that.$parent.$emit('logined', that.isLogined);
+                localStorage.setItem('user', JSON.stringify(res));
+                location.reload();
+              }
+            });
+          } else {
+            that.modal_loading = false;
+          }
+        });
       }
-
     },
     runSendSms(type) {
       const TIME_COUNT = 90;
@@ -1845,10 +1848,10 @@ var o_my_register = {
             that.modal_loading = false;
             that.phoneValError = true;
             that.phoneValErrorText = this.$t('errorPhoneNum');
-          } else if (that.phoneSmsCode === '') {
+          } else if (that.phoneSmsCode.length !== 6 || isNaN(that.phoneSmsCode)) {
             that.modal_loading = false;
             that.phoneSmsCodeError = true;
-            that.phoneSmsCodeErrorText = this.$t('canNotBeEmpty');
+            that.phoneSmsCodeErrorText = this.$t('sixInform');
           } else if (that.phonePassword === '') {
             that.modal_loading = false;
             that.phonePasswordError = true;
@@ -1877,10 +1880,10 @@ var o_my_register = {
             that.modal_loading = false;
             that.emailValError = true;
             that.emailValErrorText = this.$t('errorEmailNum');
-          } else if (that.emailSmsCode === '') {
+          } else if (that.emailSmsCode.length !== 6 || isNaN(that.emailSmsCode)) {
             that.modal_loading = false;
             that.emailSmsCodeError = true;
-            that.emailSmsCodeErrorText = this.$t('canNotBeEmpty');
+            that.emailSmsCodeErrorText = this.$t('sixInform');
           } else if (that.emailPassword === '') {
             that.modal_loading = false;
             that.emailPasswordError = true;
@@ -2158,7 +2161,7 @@ var o_my_registerGoogle = {
     },
     setGoogleInfo() {
       if (this.bindGooglePassword === '') {
-        this.bindGooglePasswordErrorText = this.$t('canNotBeEmpty')
+        this.bindGooglePasswordErrorText = this.$t('canNotBeEmpty');
         return;
       }
       if(isNaN(this.bindGoogleCode) || this.bindGoogleCode.length !== 6){
