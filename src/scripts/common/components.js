@@ -160,6 +160,11 @@ var i18nComponentsMessages = {
     en: 'Ongoing orders',
     ar: 'طلبات في قيد التنفيذ',
   },
+  noOrderForNow: {
+    zh: '暂无进行中的订单',
+    en: 'No orders in progress for now',
+    ar: 'لا أوامر في التقدم في الوقت الحالي',
+  },
   viewOrder: {
     zh: '查看',
     en: 'view',
@@ -415,7 +420,7 @@ var i18nComponentsMessages = {
   numericRequired: {
     zh: '必须输入数字',
     en: 'Numeric required here',
-  }
+  },
 };
 
 var i18nComponents = new VueI18n({
@@ -638,7 +643,7 @@ var addContact = {
         if (valid) {
           post('api/watchapp', that.selectCountry + '-' + that.wahtsApp).then(function (res) {
             if (res) {
-              get('api/userInfo').then(function (result) {
+              post('api/common/user_info', '', false).then(function (result) {
                 localStorage.setItem('user', JSON.stringify(result));
                 that.handleClose(name);
               });
@@ -799,6 +804,11 @@ var i18nLoginRegisterMsg = {
     zh: '此处不能为空',
     en: 'This place can not be empty ',
     ar: 'هذا المكان لا يمكن أن يكون فارغاً',
+  },
+  submit: {
+    zh: '提交',
+    en: 'submit',
+    ar: 'تقديم',
   },
 };
 var i18nLoginNRegister = new VueI18n({
@@ -1154,7 +1164,6 @@ var o_my_loginNext = {
       </div>
       <div v-if="isLoginNextTypeNum === '2'">
         <p class="loginNextSmsText">
-          
             <span>{{isLoginNextPhoneNum}}</span>
         </p>
         <Input
@@ -1205,7 +1214,7 @@ var o_my_loginNext = {
           long
           :loading="modal_loading"
           @click="loginNextSubmit"
-        >submit</Button>
+        >{{ $t('submit') }}</Button>
       </div>
     </Modal>
   `,
@@ -1263,7 +1272,7 @@ var o_my_loginNext = {
               that.modal_loading = false;
               that.$parent.$emit('isLoginNext', false);
               localStorage.setItem('token', that.isLoginNextCookieNum);
-              get('api/userInfo').then(function (res) {
+              post('api/common/user_info', '', false).then(function (res) {
                 if (res) {
                   that.isLogined = true;
                   that.$parent.$emit('logined', that.isLogined);
@@ -1571,7 +1580,7 @@ var o_my_register = {
                 that.$parent.$emit('isregisterCookie', res);
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
-                get('api/userInfo').then(function (res) {
+                post('api/common/user_info', '', false).then(function (res) {
                   if (res) {
                     that.isLogined = true;
                     that.$parent.$emit('logined', that.isLogined);
@@ -1596,7 +1605,7 @@ var o_my_register = {
                 that.$parent.$emit('isregisterCookie', res);
                 that.$parent.$emit('isregister', false);
                 that.$parent.$emit('isregisterGoogle', true);
-                get('api/userInfo').then(function (res) {
+                post('api/common/user_info', '', false).then(function (res) {
                   if (res) {
                     that.isLogined = true;
                     that.$parent.$emit('logined', that.isLogined);
@@ -2509,7 +2518,7 @@ var o_header = {
                 <Badge :count="orders.length">
                   <a href="otc_my_order.html">{{ $t('allOrder') }}</a>
                 </Badge>
-                <DropdownMenu slot="list" class="text-left" style="width:360px;" v-if="orders.length > 0">
+                <DropdownMenu slot="list" class="text-left" style="width:360px;">
                   <DropdownItem name="header">
                     <Row>
                       <i-col span="12">{{ $t('ongoingOrders') }}</i-col>
@@ -2517,6 +2526,10 @@ var o_header = {
                         <a href="otc_my_order.html">{{ $t('allOrder') }} <Icon type="ios-arrow-right"></Icon></a>
                       </i-col>
                     </Row>
+                  </DropdownItem>
+                  <DropdownItem class="order-dropdown-empty text-center" v-if="orders.length <= 0">
+                    <Icon type="ios-list-outline" size="30"></Icon>
+                    <p>{{ $t('noOrderForNow') }}</p>
                   </DropdownItem>
                   <DropdownItem v-for="item in orders" :key="item.sequence">
                     <Row v-if="item.buyer.id == userInfo.id">
@@ -2573,7 +2586,7 @@ var o_header = {
             <li class="items" v-if="logined">
               <Dropdown class="text-center">
                 <a href="javascript:void(0)">
-                  {{ userInfo.showNickName }}
+                  {{ userInfo.nickName }}
                   <Icon type="arrow-down-b"></Icon>
                 </a>
                 <DropdownMenu slot="list">
@@ -2746,10 +2759,10 @@ var o_header = {
     } else {
       this.logined = false;
     }
+    this.logined = localStorage.getItem('user') !== null;
     this.$on('logined', function (i) {
       this.logined = i;
     });
-    this.logined = localStorage.getItem('user') !== null;
     this.$on('islogin', function (i) {
       this.isLoginShow = i;
     });
