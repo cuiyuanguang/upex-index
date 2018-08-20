@@ -785,6 +785,11 @@ var i18nLoginRegisterMsg = {
     ar: ''
   },
   //校验
+  sixInform: {
+    zh: '验证码为6位数字',
+    en: '',
+    ar: ''
+  },
   errorPhoneNum: {
     zh: '请输入合法的电话号码',
     en: 'Please enter the correct phone number',
@@ -1261,6 +1266,11 @@ var o_my_loginNext = {
       }
     },
     loginNextSubmit() {
+      if(isNaN(this.loginNextSmsCode) || this.loginNextSmsCode.length !== 6){
+        this.loginNextError = true;
+        this.loginNextErrorText = this.$t('sixInform');
+        return;
+      }
       var that = this;
       if (!this.modal_loading) {
         that.modal_loading = true;
@@ -1268,29 +1278,23 @@ var o_my_loginNext = {
           authCode: this.loginNextSmsCode,
           token: this.isLoginNextCookieNum,
         };
-        if (this.loginNextSmsCode.length === 0) {
-          this.loginNextError = true;
-          that.modal_loading = false;
-          this.loginNextErrorText = this.$t('canNotBeEmpty')
-        } else {
-          post('api/user/confirm_login', JSON.stringify(data)).then(function (res) {
-            if (res) {
-              that.modal_loading = false;
-              that.$parent.$emit('isLoginNext', false);
-              localStorage.setItem('token', that.isLoginNextCookieNum);
-              get('api/userInfo').then(function (res) {
-                if (res) {
-                  that.isLogined = true;
-                  that.$parent.$emit('logined', that.isLogined);
-                  localStorage.setItem('user', JSON.stringify(res));
-                  location.reload();
-                }
-              });
-            } else {
-              that.modal_loading = false;
-            }
-          });
-        }
+        post('api/user/confirm_login', JSON.stringify(data)).then(function (res) {
+          if (res) {
+            that.modal_loading = false;
+            that.$parent.$emit('isLoginNext', false);
+            localStorage.setItem('token', that.isLoginNextCookieNum);
+            get('api/userInfo').then(function (res) {
+              if (res) {
+                that.isLogined = true;
+                that.$parent.$emit('logined', that.isLogined);
+                localStorage.setItem('user', JSON.stringify(res));
+                location.reload();
+              }
+            });
+          } else {
+            that.modal_loading = false;
+          }
+        });
       }
 
     },
@@ -1817,10 +1821,10 @@ var o_my_register = {
             that.modal_loading = false;
             that.phoneValError = true;
             that.phoneValErrorText = this.$t('errorPhoneNum');
-          } else if (that.phoneSmsCode === '') {
+          } else if (that.phoneSmsCode.length !== 6 || isNaN(that.phoneSmsCode)) {
             that.modal_loading = false;
             that.phoneSmsCodeError = true;
-            that.phoneSmsCodeErrorText = this.$t('canNotBeEmpty');
+            that.phoneSmsCodeErrorText = this.$t('sixInform');
           } else if (that.phonePassword === '') {
             that.modal_loading = false;
             that.phonePasswordError = true;
@@ -1849,10 +1853,10 @@ var o_my_register = {
             that.modal_loading = false;
             that.emailValError = true;
             that.emailValErrorText = this.$t('errorEmailNum');
-          } else if (that.emailSmsCode === '') {
+          } else if (that.emailSmsCode.length !== 6 || isNaN(that.emailSmsCode)) {
             that.modal_loading = false;
             that.emailSmsCodeError = true;
-            that.emailSmsCodeErrorText = this.$t('canNotBeEmpty');
+            that.emailSmsCodeErrorText = this.$t('sixInform');
           } else if (that.emailPassword === '') {
             that.modal_loading = false;
             that.emailPasswordError = true;
@@ -2130,7 +2134,7 @@ var o_my_registerGoogle = {
     },
     setGoogleInfo() {
       if (this.bindGooglePassword === '') {
-        this.bindGooglePasswordErrorText = this.$t('canNotBeEmpty')
+        this.bindGooglePasswordErrorText = this.$t('canNotBeEmpty');
         return;
       }
       if(isNaN(this.bindGoogleCode) || this.bindGoogleCode.length !== 6){

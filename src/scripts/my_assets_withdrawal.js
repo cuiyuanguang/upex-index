@@ -134,7 +134,6 @@ var myAssetsWithdrawal = new Vue({
       pricePlaceholder: this.$t('minWithdraw')
     }
   },
-
   methods: {
     checkNum(type) {
       switch (type){
@@ -547,7 +546,5 @@ var myAssetsWithdrawal = new Vue({
       }
     },
   },
-  destroyed(){
-    localStorage.removeItem("asset_type");
-  }
 });
+
