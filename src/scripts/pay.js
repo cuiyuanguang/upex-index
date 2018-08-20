@@ -22,6 +22,7 @@ var pay = new Vue({
       //step of pay
       step: 1,
       //left time for pay
+      timer: null,
       leftTime: 0,
       //create time
       payLimit: 0,
@@ -102,6 +103,7 @@ var pay = new Vue({
       var that = this;
       post("api/orderPayed", data).then(function (res) {
         if (res) {
+          clearInterval(that.timer);
           that.isPayInfoDialogShow = false;
           that.getOrderInfo(that.sequence);
         }
@@ -131,11 +133,11 @@ var pay = new Vue({
           var whatsAppStr = data.seller.userExtView.watchapp;
           that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1).replace(/\s+/g, '');
           var expiredTime = data.countDownTime + Date.now();
-          var timer = setInterval(function () {
+          that.timer = setInterval(function () {
             var now = Date.now();
             if ((expiredTime - now) <= 0) {
               that.leftTime = 0;
-              clearInterval(timer);
+              clearInterval(that.timer);
             } else {
               that.leftTime = utils.MillisecondToDate(expiredTime - now);
             }
@@ -151,6 +153,7 @@ var pay = new Vue({
     },
   },
   mounted: function () {
+    this.timer = null;
     var locale = localStorage.getItem('locale');
     if (locale) {
       this.$i18n.locale = locale;
