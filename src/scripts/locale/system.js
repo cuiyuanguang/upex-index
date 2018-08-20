@@ -159,15 +159,70 @@ var toastMsg = {
     en: 'Resetting password failed, please try again later',
     ar: 'تعذّر إعادة تعيين كلمة السر ، يرجى إعادة المحاولة لاحقًا',
   },
+  '10031': {
+    zh: '找回密码Token过期',
+    en: 'find my password Token has expired',
+    ar: 'استرجاع كلمة السر انتهت صلاحية Token',
+  },
+  '10032': {
+    zh: '提现被冻结',
+    en: 'withdraw frozen',
+    ar: 'تم تجميد السحب',
+  },
+  '10033': {
+    zh: '请先进行实名认证',
+    en: 'please authenticate the real name first',
+    ar: 'يرجى إجراء مصادقة الاسم الحقيقي أولاً',
+  },
+  '10034': {
+    zh: '可用余额不足',
+    en: ' Insufficient available balance ',
+    ar: 'الرصيد المتاح غير كاف',
+  },
+  '10039': {
+    zh: '未知的货币代号',
+    en: 'Unknown currency code',
+    ar: 'رمز العملة غير معروف',
+  },
+  '10040': {
+    zh: '地址需以1，3开头，无空格，包含大小写字母+数字，长度大于24位',
+    en: 'The address must start with 1, 3, no spaces, including upper and lowercase letters + numbers, and the length is longer than 24 digits',
+    ar: 'يجب أن يبدأ العنوان بـ 1 ، 3 ، بدون مسافات ، بما في ذلك الأحرف الكبيرة والصغيرة + الأرقام ، ويكون الطول أكبر من 24 رقمًا.',
+  },
+  '10041': {
+    zh: '地址需以\'0x\'开头，无空格，包含小写字母+数字，长度42位',
+    en: 'The address must start with \'0x\', no spaces, including lowercase letters + numbers, length 42 digits',
+    ar: 'يجب أن يبدأ العنوان بـ \'0x \' ، بدون مسافات ، بما في ذلك الأحرف الصفيرة + الأرقام  ، والطول لا يتعدى42 رقماً',
+  },
+  '10042': {
+    zh: '地址需以L,M开头，无空格，包含大小写字母+数字，长度大于24位',
+    en: 'The address should start with L, M, without spaces, including upper and lowercase letters + numbers, and the length is longer than 24 digits',
+    ar: 'يجب أن يبدأ العنوان بـ L ، M ، بدون مسافات ، بما في ذلك الأحرف الكبيرة والصغيرة + الأرقام ، وأن الطول أطول من 24 رقمًا',
+  },
   '10050': {
     zh: '密码错误',
-    en: '',
-    ar: ''
+    en: 'wrong password',
+    ar: 'كلمة السر خاطئة',
+  },
+  '10051': {
+    zh: '身份证号码已存在',
+    en: 'ID card number already exists',
+    ar: 'رقم بطاقة الهوية موجود بالفعل',
+  },
+  '10052': {
+    zh: '请求超时',
+    en: 'Request timeout',
+    ar: 'نفذ وقت الطلب',
+  },
+  '10053': {
+    zh: '地址已存在',
+    en: 'Address already exists',
+    ar: 'العنوان موجود بالفعل',
   },
   '10054': {
-    zh: '新手机号与原手机号相同',
-    en: 'The new mobile phone number is the same as the original mobile phone number',
-    ar: 'رقم الهاتف المحمول الجديد هو نفس رقم الهاتف المحمول الأصلي',
+    zh: '新旧手机号码相同',
+    en: 'The old and new phone number are the same',
+    ar: 'رقم الهاتف القديم والجديد هو نفسه',
   },
   '2': {
     zh: '未登录',

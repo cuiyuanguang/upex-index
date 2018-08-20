@@ -328,98 +328,122 @@ var i18nComponentsMessages = {
   findPassword: {
     zh: '找回密码',
     en: 'Find my password',
+    ar: 'استرجاع كلمة السر'
   },
   emailHolder: {
-    zh: '请输入邮箱地址',
-    en: 'Enter email address here',
+    zh: '输入邮箱地址',
+    en: 'Enter email address',
+    ar: 'أدخل عنوان البريد الالكتروني'
   },
   emailErrorEmpty: {
     zh: '邮箱地址不能为空',
     en: 'Email address can not be empty',
+    ar: 'لا يمكن أن يكون عنوان البريد الإلكتروني فارغاً'
   },
   emailErrorFormat: {
     zh: '邮箱地址格式错误',
     en: 'Email address format error',
+    ar: 'خطأ في تنسيق عنوان البريد الإلكتروني'
   },
   phoneHolder: {
-    zh: '请输入手机号码',
-    en: 'Enter phone number here',
+    zh: '输入手机号码',
+    en: 'Enter phone number ',
+    ar: 'أدخل رقم الهاتف'
   },
   phoneErrorEmpty: {
     zh: '手机号码不能为空',
     en: 'Phone number can not be empty',
+    ar: 'لا يمكن أن يكون رقم الهاتف فارغاً'
   },
   phoneErrorFormat: {
-    zh: '手机号码格式不正确',
+    zh: '手机号码格式错误',
     en: 'Phone number format error',
+    ar: 'خطأ في تنسيق رقم الهاتف '
   },
   nextStep: {
     zh: '下一步',
     en: 'Next step',
+    ar: 'الخطوة التالية'
   },
   newPassword: {
     zh: '新密码',
     en: 'New password',
+    ar: 'كلمة السر الجديدة'
   },
   newPasswordHolder: {
-    zh: '请输入新密码',
-    en: 'Enter new password here',
+    zh: '输入新密码',
+    en: 'Enter the new password here',
+    ar: 'أدخل كلمة السر الجديدة'
   },
   passwordErrorEmpty: {
     zh: '密码不能为空',
     en: 'Password can not be empty',
+    ar: 'لا يمكن أن تكون كلمة السر فارغة'
   },
   passwordErrorFormat: {
-    zh: '请输入6到18位长度的字符',
-    en: 'Enter 6 to 18 characters here',
+    zh: '密码为6-64位字符',
+    en: 'The password is from 6 to 64 characters',
+    ar: 'كلمة السر هي من 6-64 حرفاً'
   },
   repeatPassword: {
-    zh: '重复密码',
-    en: 'Repeat password',
+    zh: '确认密码',
+    en: 'confirm password',
+    ar: 'تأكيد كلمة السر'
   },
   repeatPasswordHolder: {
     zh: '请再次输入密码',
-    en: 'Enter password here again',
+    en: 'Please enter the password again',
+    ar: 'يرجى إدخال كلمة السر مرة أخرى'
   },
   repeatPasswordError: {
     zh: '两次输入密码不一致',
-    en: 'Password repeat not match',
+    en: 'two passwords are not match',
+    ar: 'كلمتا السر غير متطابقتين'
   },
   emailVerification: {
     zh: '邮箱验证',
     en: 'Email verification',
+    ar: 'التحقق من البريد الالكتروني'
   },
   emailVerificationHolder: {
-    zh: '请输入邮箱验证码',
-    en: 'Enter email verification here',
+    zh: '输入验证码',
+    en: 'Enter the verification code',
+    ar: 'أدخل رمز التحقق'
   },
   phoneVerification: {
-    zh: '手机验证',
+    zh: '短信验证',
     en: 'SMS verification',
+    ar: 'التحقق من الرسالة'
   },
   phoneVerificationHolder: {
-    zh: '请输入短信验证码',
-    en: 'Enter sms verification here',
+    zh: '输入验证码',
+    en: 'Enter the verification code',
+    ar: 'أدخل رمز التحقق'
   },
   googleVerification: {
     zh: '谷歌验证',
     en: 'Google verification',
+    ar: 'التحقق من الجوجل'
   },
   googleVerificationHolder: {
-    zh: '请输入谷歌验证码',
-    en: 'Enter Google verification here',
+    zh: '输入验证码',
+    en: 'Enter the verification code',
+    ar: 'أدخل رمز التحقق'
   },
   sendVerification: {
     zh: '发送验证码',
-    en: 'Send',
+    en: 'Send verification code',
+    ar: 'إرسال رمز التحقق'
   },
   sendVerificationAgain: {
     zh: '重新发送',
-    en: 'Send again',
+    en: 'Resend',
+    ar: 'إعادة إرسال'
   },
   numericRequired: {
     zh: '必须输入数字',
-    en: 'Numeric required here',
+    en: 'Must enter numbers',
+    ar: 'يجب إدخال أرقام'
   },
 };
 
@@ -779,11 +803,6 @@ var i18nLoginRegisterMsg = {
     en: '',
     ar: ''
   },
-  submit: {
-    zh: '提交',
-    en: 'submit',
-    ar: ''
-  },
   Reacquire: {
     zh: '再次获取',
     en: 'Reacquire',
@@ -872,7 +891,7 @@ var o_my_login = {
             :class="loginPhoneError?'is-red':'is-gray'"
             v-model="loginPhoneVal"
             :placeholder="$t('enterPhone')"
-            class="iview-input iview-input-countryPhone"           
+            class="iview-input iview-input-countryPhone"
             @on-focus="loginPhoneFocus"
           >
             <Select v-model="selectCountry" @on-change="loginPhoneFocus" slot="prepend" filterable style="width:86px">
