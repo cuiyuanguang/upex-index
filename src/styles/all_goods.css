@@ -30,6 +30,16 @@
   font-weight: 600;
 }
 
+.btn-show-release {
+  color: #ff7100;
+  background-color: #fff;
+}
+
+.btn-show-release:hover {
+  border-color: transparent;
+  background-color: #fff;
+}
+
 .list {
   min-height: 611px;
   margin-top: 20px;

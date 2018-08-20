@@ -231,10 +231,10 @@ var messages = {
     en: 'Max limit amount can not be bigger than the total price',
     ar: 'الحد الأقصى للمبلغ لا يمكن أن يكون أعلى من السعر الإجمالي',
   },
-  numericRequired: {
-    zh: '必须输入数字',
-    en: 'Numeric required here',
-    ar: 'يجب إدخال رقم',
+  noZeronumericRequired: {
+    zh: '请输入大于0的数字',
+    en: 'Please enter a number greater than 0',
+    ar: 'الرجاء إدخال رقم أكبر من 0',
   },
   verifyNoEmpty: {
     zh: '验证码不能为空！',
@@ -276,6 +276,66 @@ var messages = {
     zh: '银行名称',
     en: 'Bank name',
     ar: 'اسم البنك',
+  },
+  AlRajhiBank: {
+    zh: 'Al Rajhi Bank',
+    en: 'Al Rajhi Bank',
+    ar: 'مصرف الراجحي',
+  },
+  TheNationalCommercialBank: {
+    zh: 'The National Commercial Bank',
+    en: 'The National Commercial Bank',
+    ar: 'البنك الأهلي التجاري',
+  },
+  TheSaudiBritishBank: {
+    zh: 'The Saudi British Bank',
+    en: 'The Saudi British Bank',
+    ar: '‎ البنك السعودي البريطاني ساب',
+  },
+  SaudiInvestmentBank: {
+    zh: 'Saudi Investment Bank',
+    en: 'Saudi Investment Bank',
+    ar: 'البنك السعودي للاستثمار',
+  },
+  AlinmaBank: {
+    zh: 'Alinma Bank',
+    en: 'Alinma Bank',
+    ar: 'مصرف الإنماء',
+  },
+  BanqueSaudiFransi: {
+    zh: 'Banque Saudi Fransi',
+    en: 'Banque Saudi Fransi',
+    ar: 'البنك السعودي الفرنسي',
+  },
+  RiyadBank: {
+    zh: 'Riyad Bank',
+    en: 'Riyad Bank',
+    ar: 'بنك الرياض',
+  },
+  'SambaFinancialGroup(Samba)': {
+    zh: 'Samba Financial Group(Samba)',
+    en: 'Samba Financial Group(Samba)',
+    ar: 'مجموعة سامبا المالية',
+  },
+  SaudiHollandiBank: {
+    zh: 'Saudi Hollandi Bank',
+    en: 'Saudi Hollandi Bank',
+    ar: 'البنك السعودي الهولندي',
+  },
+  ArabNationalBank: {
+    zh: 'Arab National Bank',
+    en: 'Arab National Bank',
+    ar: 'البنك العربي الوطني',
+  },
+  'BankAl-Bliad': {
+    zh: 'Bank Al-Bliad',
+    en: 'Bank Al-Bliad',
+    ar: 'بنك البلاد',
+  },
+  BankAljazira: {
+    zh: 'Bank Aljazira',
+    en: 'Bank Aljazira',
+    ar: 'بنك الجزيرة',
   },
   accountName: {
     zh: '账户名称',
@@ -360,5 +420,6 @@ var messages = {
   nextStep: {
     zh: '下一步',
     en: 'Next step',
+    ar: 'التالي',
   },
 };
