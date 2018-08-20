@@ -18,7 +18,7 @@ var myAssetsWithdrawal = new Vue({
     return{
       locale: {},
       dailyRateStore: {},
-      userInfo: {},
+      userInfo: JSON.parse(localStorage.getItem('user')),
       data3: [],
       columns3: [
         {
@@ -219,13 +219,13 @@ var myAssetsWithdrawal = new Vue({
       this.valueAmount = '';
       if (val === 'USDT') {
         this.addressList = this.currencyListUSDT;
-        this.dailyLimit = this.dailyRateStore.open_coins_withdraw_one_day_max_usdt;
+        this.dailyLimit = this.dailyRateStore.open_coins_withdraw_one_day_max_usdt + ' USDT';
       } else if (val === 'BTC') {
         this.addressList = this.currencyListBTC;
-        this.dailyLimit = this.dailyRateStore.open_coins_withdraw_one_day_max_btc;
+        this.dailyLimit = this.dailyRateStore.open_coins_withdraw_one_day_max_btc + ' BTC';
       } else if (val === 'ETH') {
         this.addressList = this.currencyListETH;
-        this.dailyLimit = this.dailyRateStore.open_coins_withdraw_one_day_max_eth;
+        this.dailyLimit = this.dailyRateStore.open_coins_withdraw_one_day_max_eth + ' ETH';
       }
       this.changeCoin = val;
       this.balanceExtractable = this.balance[val].normal_balance + ' ' + val;
@@ -306,7 +306,7 @@ var myAssetsWithdrawal = new Vue({
       data = {
         "coinSymbol": that.modelCurrency,
         "address": that.WithdrawalAddress,
-        "label": that.AddressTag
+        "label": that.AddressTag || that.WithdrawalAddress
       };
       post('api/addr/add_withdraw_addr', JSON.stringify(data), false).then((res) => {
         if (res) {
@@ -329,7 +329,7 @@ var myAssetsWithdrawal = new Vue({
         Toast.show(this.$t('chooseAddress'), { icon: 'warn' });
         return;
       }
-      if(this.userInfo.googleAuthenticatorStatus === 0){
+      if(this.userInfo.googleAuthenticatorStatus !== 1){
         Toast.show(this.$t('bindGoogle'), { icon: 'warn' });
         return;
       }
