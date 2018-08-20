@@ -223,20 +223,27 @@ var account = new Vue({
           title: '',
           key: 'bankName',
           align: 'center',
+          minWidth: 120,
           renderHeader: (h) => h('span', this.$t('bankName')),
+          render: (h, params) => h('span', this.$t(params.row.bankName.replace(/\s/g, ''))),
         },
         {
           title: '',
           key: 'name',
           align: 'center',
-          minWidth: 150,
+          minWidth: 120,
           renderHeader: (h) => h('span', this.$t('accountName')),
         },
         {
           title: '',
           key: 'cardNo',
           align: 'center',
+          minWidth: 120,
           renderHeader: (h) => h('span', this.$t('cardNo')),
+          render: (h, params) => h(
+            'span',
+            params.row.cardNo.replace(/s/g, '').replace(/(.{4})/g, "$1 "),
+          ),
         },
         {
           title: '',
@@ -436,6 +443,7 @@ var account = new Vue({
       var that = this;
       post('api/common/user_info', '', false).then(function(res) {
         that.user = res;
+        localStorage.setItem('user', JSON.stringify(res));
       });
     },
     loginOut() {
@@ -753,6 +761,11 @@ var account = new Vue({
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
       }
+    },
+  },
+  filters: {
+    card: function(no) {
+      return no.replace(/s/g, '').replace(/(.{4})/g, "$1 ");
     },
   },
 });
