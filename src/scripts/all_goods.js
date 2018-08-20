@@ -56,28 +56,6 @@ var allGoods = new Vue({
       //挂单相关数据
       showListTag: 'BUY',
       postOrderTag: 'BUY',
-      postData: {
-        checkType: '1',
-        checkValue: '',
-        description: '',
-        maxTrade: '',
-        minTrade: '',
-        price: '',
-        volume: '',
-        maxTradeBUY: '',
-        minTradeBUY: '',
-        priceBUY: '',
-        volumeBUY: '',
-        maxTradeSELL: '',
-        minTradeSELL: '',
-        priceSELL: '',
-        volumeSELL: '',
-        side: '',
-      },
-      sendText: '',
-      sms: false,
-      gCode: '',
-      smsCode: '',
       marketPrice: {
         exchange_rate: '',
         exchange_buy_max: '',
@@ -86,9 +64,7 @@ var allGoods = new Vue({
       //END挂单相关数据
       //user info
       userId: '',
-      isGoogleBind: false,
       isCardBind: false,
-      isWatchAppBind: false,
       //bank card status
       cardList: [],
       cardStatus: [],
@@ -96,12 +72,7 @@ var allGoods = new Vue({
       balance: 0,
       //END user info
       //triggers
-      isMyordersShow: false,
       isBuyDialogShow: false,
-      isPostDialogShow: true,
-      isPricePromptShow: false,
-      isPendModalShow: false,
-      showMoreSettings: true,
       isBindCardShow: false,
       isConfirmBindShow: false,
       isGoogleAuthShow: false,
@@ -150,6 +121,7 @@ var allGoods = new Vue({
       sequence: '',
       whatsApp: '',
       // 新添加的绑定银行卡代码
+      userInfo: '',
       sendPlaceholderBank: this.$t('sendVerify'),
       sendDisabledBank: false,
       // 添加/修改银行卡
@@ -179,10 +151,10 @@ var allGoods = new Vue({
         google: [{ name: 'formBankConfirm', validator: validateGoogle, trigger: 'change' }],
       },
       // 发布挂单
+      modalReleaseLoading: false,
       modalRelease: false,
       buyDisabled: false,
       sellDisabled: false,
-      releaseMaxPrice: '',
       formRelease: {
         side: 'BUY',
         price: '',
@@ -192,8 +164,8 @@ var allGoods = new Vue({
       },
       ruleRelease: {
         side: [{ name: 'formRelease', required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
-        price: [{ required: true, type: 'number', message: this.$t('numericRequired'), trigger: 'change' }],
-        volume: [{ required: true, type: 'number', message: this.$t('numericRequired'), trigger: 'change' }],
+        price: [{ required: true, type: 'number', min: 0.01, max: 5e5, message: this.$t('noZeronumericRequired'), trigger: 'change' }],
+        volume: [{ required: true, type: 'number', min: 0.0001, max: 5e5, message: this.$t('noZeronumericRequired'), trigger: 'change' }],
         minTrade: [{ name: 'formRelease', validator: validateMinTrade, trigger: 'change' }],
         maxTrade: [{ name: 'formRelease', validator: validateMaxTrade, trigger: 'change' }],
       },
@@ -212,6 +184,10 @@ var allGoods = new Vue({
     };
   },
   computed: {
+    buyAmountMin: function() {
+      var amount = this.buyData.price * this.buyData.min;
+      return amount.toFixed(2);
+    },
     buyAmountMax: function() {
       var amount = Math.min(this.buyData.restAmount * this.buyData.price, this.buyData.max);
       return amount.toFixed(2);
@@ -226,21 +202,13 @@ var allGoods = new Vue({
     releaseTotalPrice: function() {
       return (this.formRelease.price * this.formRelease.volume).toFixed(2);
     },
-    postBuyMax: function() {
-      return this.releaseTotalPrice > 0 ? Math.min(this.releaseTotalPrice, this.marketPrice.trade_max_price) : this.marketPrice.trade_max_price;
-    },
-    postSellMax: function() {
+    releaseMaxPrice: function() {
       return Math.min(this.releaseTotalPrice, this.marketPrice.trade_max_price);
     },
   },
   methods: {
     getUserInfo: function() {
-      var user = JSON.parse(localStorage.getItem('user'));
-      this.userId = user && user.id;
-      this.whatsApp = user && user.userExtView.watchapp;
-      this.balance = user && user.usdtAmount.balance;
-      this.isGoogleBind = user && user.googleAuthenticatorStatus === 1;
-      this.isWatchAppBind = user && user.userExtView.watchapp;
+      this.userInfo = JSON.parse(localStorage.getItem('user')) || {};
     },
     // sell page handle
     toSellPage: function(page) {
@@ -283,7 +251,7 @@ var allGoods = new Vue({
       this.advertId = item.id;
       this.modalMsg = {
         title: item.status === 6 ? this.$t('start') : this.$t('pause'),
-        desc: this.$t('confirm') + this.$t(this.action) + this.$t('thisOrder'),
+        desc: this.$t('confirm') + this.$t(this.action),
         confirmText: this.$t('confirm'),
       };
       this.modalOperationOrder = true;
@@ -322,7 +290,7 @@ var allGoods = new Vue({
       ) {
         post(api[that.action], that.advertId).then(function(res) {
           if (res) {
-            that.showListTag === 'BUY' ? that.toBuyPage(1) : that.toSellPage(1);
+            that.showListTag === 'BUY' ? that.toSellPage(1) : that.toBuyPage(1);
           }
           that.modalOperationOrder = false;
         });
@@ -381,7 +349,7 @@ var allGoods = new Vue({
         return;
       }
       //check if google authed
-      if (!this.isGoogleBind) {
+      if (!this.userInfo.googleStatus) {
         this.isGoogleAuthShow = true;
         return;
       }
@@ -391,7 +359,7 @@ var allGoods = new Vue({
         return;
       }
       // check if contact binded
-      if (!this.isWatchAppBind) {
+      if (!this.userInfo.watchapp) {
         this.isContactShow = true;
         return;
       }
@@ -485,7 +453,7 @@ var allGoods = new Vue({
         }
       });
     },
-    showPostDialog: function() {
+    showModalRelease: function() {
       // check if login
       var that = this;
       var user = JSON.parse(localStorage.getItem('user'));
@@ -493,15 +461,16 @@ var allGoods = new Vue({
         that.$refs.header.showLogin();
         return;
       }
-      get('api/userInfo').then(function (result) {
+      that.modalReleaseLoading = true;
+      post('api/common/user_info', '', false).then(function (result) {
+        if (!result) {
+          that.modalReleaseLoading = false;
+          return;
+        }
         localStorage.setItem('user', JSON.stringify(result));
-        var user = result;
-        that.whatsApp = user && user.userExtView.watchapp;
-        that.balance = user && user.usdtAmount.balance;
-        that.isGoogleBind = user && user.googleAuthenticatorStatus === 1;
-        that.isWatchAppBind = user && user.userExtView.watchapp;
+        that.userInfo = result;
         //check if google authed
-        if (!that.isGoogleBind) {
+        if (!result.googleStatus) {
           that.isGoogleAuthShow = true;
           return;
         }
@@ -511,7 +480,7 @@ var allGoods = new Vue({
           return;
         }
         // check if contact binded
-        if (!that.isWatchAppBind) {
+        if (!result.watchapp) {
           that.isContactShow = true;
           return;
         }
@@ -533,6 +502,7 @@ var allGoods = new Vue({
             });
             // 获取发单数量及类型
             get('api/personAdverts/cnt').then(function(res) {
+              that.modalReleaseLoading = false;
               var buyCount = res.BUY;
               var sellCount = res.SELL;
               if (buyCount >= 2 && sellCount >= 2) {
@@ -569,153 +539,6 @@ var allGoods = new Vue({
       this.isGoogleAuthShow = false;
       this.$refs.header.$data.isRegisterGoogleShow = true;
     },
-    //post order
-    /* postOrder: function() {
-      var tag = this.postOrderTag;
-      this.$refs['inputNumberPrice' + tag].focused = false;
-      this.$refs['inputNumberVolume' + tag].focused = false;
-      this.$refs['inputNumberPrice' + tag].currentValue = this.postData['price' + tag];
-      this.$refs['inputNumberVolume' + tag].currentValue = this.postData['volume' + tag];
-      if (
-        !this.postData['price' + tag] ||
-        !this.postData['volume' + tag] ||
-        !this.postData['minTrade' + tag] ||
-        !this.postData['maxTrade' + tag]
-      ) {
-        this.error.postDataError = this.$t('canNotBeEmpty');
-        return;
-      } else {
-        this.error.postDataError = '';
-      }
-      if (parseFloat(this.postData['maxTrade' + tag]) < parseFloat(this.postData['minTrade' + tag])) {
-        this.error.postDataError = this.$t('maxNoLessThanMin');
-        return;
-      }
-      if (
-        parseFloat(this.postData['price' + tag]) * parseFloat(this.postData['volume' + tag]) <
-        parseFloat(this.postData['maxTrade' + tag])
-      ) {
-        this.error.postDataError = this.$t('maxNoMoreThanTotal');
-        return;
-      }
-      if (parseFloat(this.postData['price' + tag]) > this.marketPrice.exchange_rate * 1.5) {
-        this.releaseWarning = this.$t('moreThan50Percent');
-        this.isPricePromptShow = true;
-        this.isPostDialogShow = false;
-        return;
-      }
-      if (parseFloat(this.postData['price' + tag]) < this.marketPrice.exchange_rate * 0.5) {
-        this.releaseWarning = this.$t('lessThan50Percent');
-        this.isPricePromptShow = true;
-        this.isPostDialogShow = false;
-        return;
-      }
-      if (tag == 'BUY') {
-        if (parseFloat(this.postData['price' + tag]) > this.marketPrice.exchange_sell_max) {
-          this.releaseWarning = this.$t('lessThanHighestPurchase');
-          this.isPricePromptShow = true;
-          this.isPostDialogShow = false;
-          return;
-        }
-      }
-      if (tag == 'SELL') {
-        if (parseFloat(this.postData['price' + tag]) > this.marketPrice.exchange_buy_min) {
-          this.releaseWarning = this.$t('moreThanLowestPrice');
-          this.isPricePromptShow = true;
-          this.isPostDialogShow = false;
-          return;
-        }
-      }
-      this.isPostDialogShow = false;
-      this.isPendModalShow = true;
-    }, */
-    /* // back to modify the post order price
-    modifyPostOrder: function() {
-      this.isPendModalShow = false;
-      this.isConfirmBindShow = false;
-      this.isPricePromptShow = false;
-      this.isPostDialogShow = true;
-    },
-    //confirm post order
-    continueRelease: function() {
-      this.setCardStatus();
-      this.isPricePromptShow = false;
-      this.isPendModalShow = true;
-    }, */
-    /* clearPostModal: function() {
-      for (var key in this.postData) {
-        if (this.postData.hasOwnProperty(key)) {
-          if (key == 'checkType') {
-            this.postData['checkType'] = '1';
-          } else {
-            this.postData[key] = '';
-          }
-        }
-      }
-      this.gCode = '';
-      this.smsCode = '';
-      this.error.postDataError = '';
-    }, */
-    // comfirm post order
-    /* confirmPostOrder: function() {
-      var that = this;
-      var tag = this.postOrderTag;
-      this.getSelectCards(this.cardStatus, this.cardList);
-      this.postData.checkValue = this.postData.checkType == '1' ? this.gCode : this.smsCode;
-      if (!this.postData.checkValue) {
-        this.error.postError = this.$t('verifyNoEmpty');
-        return;
-      } else {
-        this.error.postError = '';
-      }
-      if (tag == 'SELL') {
-        if (this.selectedCardIds.length < 1) {
-          this.error.postError = this.$t('atLeastOneBank');
-          return;
-        }
-        this.postData.paymentBanks = this.selectedCardIds;
-      }
-      this.postData.side = tag;
-      this.postData.price = this.postData['price' + tag];
-      this.postData.volume = this.postData['volume' + tag];
-      this.postData.minTrade = this.postData['minTrade' + tag];
-      this.postData.maxTrade = this.postData['maxTrade' + tag];
-      post('api/advert', this.postData).then(function(res) {
-        if (res) {
-          that.isPendModalShow = false;
-          that.clearPostModal();
-          if (that.postOrderTag === 'BUY') {
-            that.toBuyPage(1);
-          }
-          if (that.postOrderTag === 'SELL') {
-            that.toSellPage(1);
-          }
-        }
-      });
-    }, */
-    /* sendMsg: function() {
-      var that = this;
-      get('api/verifycode_sms', {
-        type: 8,
-      }).then(function(res) {
-        if (res) {
-          that.sms = true;
-          that.sendMsgCountDown();
-        } else {
-        }
-      });
-    },
-    sendMsgCountDown: function() {
-      var that = this;
-      that.sendText = 300;
-      var b = setInterval(function() {
-        that.sendText--;
-        if (that.sendText == 0) {
-          that.sms = false;
-          clearInterval(b);
-        }
-      }, 1000);
-    }, */
     closeBuyDialog: function() {
       this.isBuyDialogShow = false;
       this.buyData.buyAmount = '';
@@ -723,10 +546,6 @@ var allGoods = new Vue({
       this.buyAmountErrorText = '';
       this.buyTotalErrorText = '';
     },
-    /* closePostDialog: function() {
-      this.clearPostModal();
-      this.isPostDialogShow = false;
-    }, */
     // 新添加的绑定银行卡代码
     handleSubmit(name) {
       var that = this;
@@ -801,9 +620,13 @@ var allGoods = new Vue({
             that.modalReleaseConfirm = true;
           }
           if (name === 'formReleaseConfirm') {
-            // if (that.formRelease.side === 'SELL') {
-            //   that.formRelease.paymentBanks = that.selectedCardIds;
-            // }
+            if (that.formRelease.side === 'SELL') {
+              if (!that.selectedCardIds.length) {
+                Toast.show(that.$t('atLeastOneBank'), { icon: 'warn' });
+                return;
+              }
+              that.formRelease.paymentBanks = that.selectedCardIds.map(function(item) { return { id: item } });
+            }
             that.formRelease.checkType = that.tabVerifyActive;
             that.formRelease.checkValue = that.tabVerifyActive == 1
             ? that.formReleaseConfirm.google
@@ -942,7 +765,7 @@ var allGoods = new Vue({
         this.$i18n.locale = newVal;
       }
     },
-    releaseMaxPrice: function(newVal, oldVal) {
+    releaseTotalPrice: function(newVal, oldVal) {
       if (newVal > this.marketPrice.trade_max_price) {
         this.formRelease.maxTrade = this.marketPrice.trade_max_price;
       } else if (newVal > 0 && newVal < this.marketPrice.trade_max_price) {
@@ -950,6 +773,11 @@ var allGoods = new Vue({
       } else {
         this.formRelease.maxTrade = this.marketPrice.trade_max_price;
       }
+    },
+  },
+  filters: {
+    card: function(no) {
+      return no.replace(/s/g, '').replace(/(.{4})/g, "$1 ");
     },
   },
 });

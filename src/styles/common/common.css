@@ -29,6 +29,10 @@ body[dir='ltr'] * {
   margin-right: 10px;
 }
 
+.text-white {
+  color: #fff;
+}
+
 body[dir='rtl'] .ml-10 {
   margin-left: 0;
   margin-right: 10px;
@@ -41,6 +45,22 @@ body[dir='rtl'] .mr-10 {
 
 .ivu-form-item-required .ivu-form-item-label:before {
   display: none;
+}
+
+.poptip-card.ivu-poptip {
+  width: 100%;
+}
+.poptip-card .ivu-poptip-rel {
+  width: 100%;
+}
+.poptip-card .ivu-poptip-inner {
+  height: 40px;
+  line-height: 26px;
+  font-size: 22px;
+  font-weight: bold;
+}
+.poptip-card .ivu-poptip-popper {
+  width: 100%;
 }
 
 .border-top-dashed {
@@ -374,6 +394,11 @@ input::-webkit-inner-spin-button {
   height: 66px;
   line-height: 16px;
   border-top: 1px solid #e6e6e6;
+}
+
+.order-dropdown .ivu-dropdown-item.order-dropdown-empty {
+  padding: 120px 0;
+  height: 300px;
 }
 
 .order-dropdown .ivu-row,

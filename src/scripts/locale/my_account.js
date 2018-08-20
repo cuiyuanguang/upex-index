@@ -335,14 +335,74 @@ var messages = {
     ar: 'تعديل بطاقة البنك',
   },
   bankNameHolder: {
-    zh: '请输入银行名称',
-    en: 'Please enter the bank name',
-    ar: 'يرجى إدخال اسم البنك',
+    zh: '请选择开户银行',
+    en: 'Please select the bank',
+    ar: 'الرجاء تحديد بنك حساب',
   },
   accountNameHolder: {
     zh: '请输入账户名称',
     en: 'Please enter the account name',
     ar: 'يرجى إدخال اسم الحساب',
+  },
+  AlRajhiBank: {
+    zh: 'Al Rajhi Bank',
+    en: 'Al Rajhi Bank',
+    ar: 'مصرف الراجحي',
+  },
+  TheNationalCommercialBank: {
+    zh: 'The National Commercial Bank',
+    en: 'The National Commercial Bank',
+    ar: 'البنك الأهلي التجاري',
+  },
+  TheSaudiBritishBank: {
+    zh: 'The Saudi British Bank',
+    en: 'The Saudi British Bank',
+    ar: '‎ البنك السعودي البريطاني ساب',
+  },
+  SaudiInvestmentBank: {
+    zh: 'Saudi Investment Bank',
+    en: 'Saudi Investment Bank',
+    ar: 'البنك السعودي للاستثمار',
+  },
+  AlinmaBank: {
+    zh: 'Alinma Bank',
+    en: 'Alinma Bank',
+    ar: 'مصرف الإنماء',
+  },
+  BanqueSaudiFransi: {
+    zh: 'Banque Saudi Fransi',
+    en: 'Banque Saudi Fransi',
+    ar: 'البنك السعودي الفرنسي',
+  },
+  RiyadBank: {
+    zh: 'Riyad Bank',
+    en: 'Riyad Bank',
+    ar: 'بنك الرياض',
+  },
+  SambaFinancialGroup: {
+    zh: 'Samba Financial Group(Samba)',
+    en: 'Samba Financial Group(Samba)',
+    ar: 'مجموعة سامبا المالية',
+  },
+  SaudiHollandiBank: {
+    zh: 'Saudi Hollandi Bank',
+    en: 'Saudi Hollandi Bank',
+    ar: 'البنك السعودي الهولندي',
+  },
+  ArabNationalBank: {
+    zh: 'Arab National Bank',
+    en: 'Arab National Bank',
+    ar: 'البنك العربي الوطني',
+  },
+  BankAlBliad: {
+    zh: 'Bank Al-Bliad',
+    en: 'Bank Al-Bliad',
+    ar: 'بنك البلاد',
+  },
+  BankAljazira: {
+    zh: 'Bank Aljazira',
+    en: 'Bank Aljazira',
+    ar: 'بنك الجزيرة',
   },
   cardNoHolder: {
     zh: '请输入银行卡号',
@@ -392,5 +452,6 @@ var messages = {
   nextStep: {
     zh: '下一步',
     en: 'Next step',
+    ar: 'التالي',
   },
 };
