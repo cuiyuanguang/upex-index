@@ -159,6 +159,11 @@ var toastMsg = {
     en: 'Resetting password failed, please try again later',
     ar: 'تعذّر إعادة تعيين كلمة السر ، يرجى إعادة المحاولة لاحقًا',
   },
+  '10050': {
+    zh: '密码错误',
+    en: '',
+    ar: ''
+  },
   '10054': {
     zh: '新手机号与原手机号相同',
     en: 'The new mobile phone number is the same as the original mobile phone number',

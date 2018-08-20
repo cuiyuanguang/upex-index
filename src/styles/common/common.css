@@ -446,10 +446,14 @@ input::-webkit-inner-spin-button {
 html[lang='zh'] .banner,
 html[lang='en'] .banner {
   background-image: url(../../images/topbanner-en.png);
+  background-position: center;
+  background-size: cover;
 }
 
 html[lang='ar'] .banner {
   background-image: url(../../images/topbanner-ar.png);
+  background-position: center;
+  background-size: cover;
 }
 
 .banner > div {

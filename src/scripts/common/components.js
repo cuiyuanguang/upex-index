@@ -779,6 +779,16 @@ var i18nLoginRegisterMsg = {
     en: '',
     ar: ''
   },
+  submit: {
+    zh: '提交',
+    en: 'submit',
+    ar: ''
+  },
+  Reacquire: {
+    zh: '再次获取',
+    en: 'Reacquire',
+    ar: ''
+  },
   //校验
   errorPhoneNum: {
     zh: '请输入合法的电话号码',
@@ -820,6 +830,7 @@ var o_my_login = {
   template: `
     <Modal
       v-model="login1"
+      :mask-closable="false"
       :title="$t('loginTitle')"
       @on-cancel="asyncCancel"
       class="my-login"
@@ -861,7 +872,7 @@ var o_my_login = {
             :class="loginPhoneError?'is-red':'is-gray'"
             v-model="loginPhoneVal"
             :placeholder="$t('enterPhone')"
-            class="iview-input iview-input-countryPhone"
+            class="iview-input iview-input-countryPhone"           
             @on-focus="loginPhoneFocus"
           >
             <Select v-model="selectCountry" @on-change="loginPhoneFocus" slot="prepend" filterable style="width:86px">
@@ -1143,6 +1154,7 @@ var o_my_loginNext = {
     <Modal
       v-model="loginNext"
       @on-ok="ok"
+      :mask-closable="false"
       class-name="vertical-center-modal"
       @on-cancel="asyncCancel" class="my-login my-loginNext"
       width="500"
@@ -1224,7 +1236,7 @@ var o_my_loginNext = {
     return {
       loginNextError: false,
       loginNextErrorText: '',
-      sendSms: 'get verification code',
+      sendSms: this.$t('getValidateCode'),
       loginNextGoogleCode: '',
       loginNextSmsCode: '',
       modal_loading: false,
@@ -1248,10 +1260,13 @@ var o_my_loginNext = {
     checkNum() {
       if(isNaN(this.loginNextSmsCode)){
         this.loginNextError = true;
-        this.loginNextErrorText = '验证码只包含数字';
+        this.loginNextErrorText = this.$t('onlyNum');
       }else{
         this.loginNextError = false;
         this.loginNextErrorText = '';
+        if(this.loginNextSmsCode.length === 6){
+          this.loginNextSubmit();
+        }
       }
     },
     loginNextSubmit() {
@@ -1329,7 +1344,7 @@ var o_my_loginNext = {
             this.count--;
             this.sendSms = 'Resend after ' + this.count + ' s';
           } else {
-            this.sendSms = 'Reacquire';
+            this.sendSms = this.$t('Reacquire');
             this.show = true;
             clearInterval(this.timer);
             this.timer = null;
@@ -1375,6 +1390,7 @@ var o_my_register = {
   template: `
       <Modal
       v-model="register"
+      :mask-closable="false"
       class-name="vertical-center-modal"
       @on-cancel="asyncCancel" class="my-login my-register"
       width="500"
@@ -1396,6 +1412,8 @@ var o_my_register = {
           <Input
           v-model="emailSmsCode"
           type="text"
+          maxlength="6"
+          @on-change="checkNum"
           :placeholder="$t('emailValidate')"
           class="loginNext-input loginNext-sms-input" @on-focus="emailSmsCodeFocus" :class="emailSmsCodeError?'loginNext-input-red':' '">
           <span slot="append"
@@ -1452,6 +1470,8 @@ var o_my_register = {
           <Input
           v-model="phoneSmsCode"
           type="text"
+          maxlength="6"
+          @on-change="checkNum"
           :placeholder="$t('phoneValidate')"
           class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
 
@@ -1553,7 +1573,28 @@ var o_my_register = {
   components: {VueRecaptcha},
   props: ['register', 'langStatus'],
   methods: {
-
+    checkNum() {
+      switch (this.registerWrap){
+        case 'tabEmail':
+          if(isNaN(this.emailSmsCode)){
+            this.emailSmsCodeError = true;
+            this.emailSmsCodeErrorText = this.$t('onlyNum');
+          }else{
+            this.emailSmsCodeError = false;
+            this.emailSmsCodeErrorText = '';
+          }
+          break;
+        case 'registerPhone':
+          if(isNaN(this.phoneSmsCode)){
+            this.phoneSmsCodeError = true;
+            this.phoneSmsCodeErrorText = this.$t('onlyNum');
+          }else{
+            this.phoneSmsCodeError = false;
+            this.phoneSmsCodeErrorText = '';
+          }
+          break;
+      }
+    },
     onExpired() {
       this.$refs.invisibleRecaptcha.reset()
     },
@@ -1886,6 +1927,11 @@ var o_my_register = {
 };
 
 var i18nRegisterGoogleMsg = {
+  canNotBeEmpty: {
+    zh: '此处不能为空',
+    en: 'This place can not be empty ',
+    ar: 'هذا المكان لا يمكن أن يكون فارغاً',
+  },
   noEmpty: {
     zh: '此处不能为空',
     en: 'This field can not be empty',
@@ -1946,6 +1992,11 @@ var i18nRegisterGoogleMsg = {
     en: 'please enter Google verification code',
     ar: ''
   },
+  sixInform: {
+    zh: '验证码为6位数字',
+    en: '',
+    ar: ''
+  }
 };
 var i18nRegisterGoogle = new VueI18n({
   locale: 'zh', // set locale
@@ -1957,6 +2008,7 @@ var o_my_registerGoogle = {
     <Modal
       v-model="registerGoogle"
       class-name="vertical-center-modal"
+      :mask-closable="false"
       @on-cancel="asyncCancel"
       class="my-login my-loginGoogle"
       width="672"
@@ -2008,8 +2060,7 @@ var o_my_registerGoogle = {
                 v-model="bindGooglePassword"
                 type="password"
                 :placeholder="$t('enterPwd')"
-                class="bindGoogle-input"
-                :maxlength="6"
+                class="bindGoogle-input"               
                 :class="bindGooglePasswordErrorText !== ''?'is-red':'is-gray'"
                 @on-focus="bindGooglePasswordFocus"
               >
@@ -2022,6 +2073,7 @@ var o_my_registerGoogle = {
                 class="bindGoogle-input" style="margin-top: 0"
                 :maxlength="6"
                 @on-change="checkNum"
+                @on-enter="setGoogleInfo"
                 :class="bindGoogleCodeErrorText !== ''?'is-red':'is-gray'"
                 @on-focus="bindGoogleCodeFocus"
               >
@@ -2086,28 +2138,33 @@ var o_my_registerGoogle = {
       this.bindGoogleCodeErrorText = '';
     },
     setGoogleInfo() {
+      if (this.bindGooglePassword === '') {
+        this.bindGooglePasswordErrorText = this.$t('canNotBeEmpty')
+        return;
+      }
+      if(isNaN(this.bindGoogleCode) || this.bindGoogleCode.length !== 6){
+        this.bindGoogleCodeErrorText = this.$t('sixInform');
+        return;
+      }
       var that = this;
       var data;
-      if (that.bindGooglePassword === '') {
-        that.bindGooglePasswordErrorText = this.$t('canNotBeEmpty')
-      } else if (that.bindGoogleCode === '') {
-        that.bindGoogleCodeErrorText = this.$t('canNotBeEmpty')
-      } else {
-        if (!that.modal_loading) {
-          that.modal_loading = true;
-          data = {
-            'googleKey': that.googleKey,
-            'googleCode': that.bindGoogleCode,
-            'loginPwd': that.bindGooglePassword,
-          };
-          post('api/user/google_verify', JSON.stringify(data)).then(function (res) {
-            if (res) {
-              that.asyncCancel();
-              that.$parent.$emit('googleBound', true);
-            }
-            that.modal_loading = false;
-          });
-        }
+      if (!that.modal_loading) {
+        that.modal_loading = true;
+        data = {
+          'googleKey': that.googleKey,
+          'googleCode': that.bindGoogleCode,
+          'loginPwd': that.bindGooglePassword,
+        };
+        post('api/user/google_verify', JSON.stringify(data)).then(function (res) {
+          if (res) {
+            that.asyncCancel();
+            that.$parent.$emit('googleBound', true);
+            get('api/userInfo').then(function (result) {
+              localStorage.setItem('user', JSON.stringify(result));
+            });
+          }
+          that.modal_loading = false;
+        });
       }
     },
     asyncCancel() {
