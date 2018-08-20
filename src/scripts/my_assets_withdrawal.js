@@ -117,7 +117,7 @@ var myAssetsWithdrawal = new Vue({
       googleCode: '',
       googleCodeError: false,
       googleCodeErrorText: '',
-      tabsName: this.userInfo.emailAuthenticatorStatus === 0 ? 'loginPhone' : 'loginEmail',
+      tabsName: this.userInfo.isOpenEmailCheck === 0 ? 'loginPhone' : 'loginEmail',
       changeCoin: '',
       balanceDefaultFee: '',
       balanceDefaultFeeCalc: '',
@@ -128,8 +128,8 @@ var myAssetsWithdrawal = new Vue({
       withdrawalLoadingTrue:false,
       withdrawalTime:'',
       withdrawalAddress:'',
-      disabledEmail: this.userInfo.emailAuthenticatorStatus === 0,
-      disabledPhone: this.userInfo.mobileAuthenticatorStatus === 0,
+      disabledEmail: this.userInfo.isOpenEmailCheck === 0,
+      disabledPhone: this.userInfo.isOpenMobileCheck === 0,
       dailyLimit: '',
       pricePlaceholder: this.$t('minWithdraw')
     }
@@ -328,7 +328,7 @@ var myAssetsWithdrawal = new Vue({
         Toast.show(this.$t('chooseAddress'), { icon: 'warn' });
         return;
       }
-      if(this.userInfo.googleAuthenticatorStatus !== 1){
+      if(this.userInfo.googleStatus !== 1){
         Toast.show(this.$t('bindGoogle'), { icon: 'warn' });
         return;
       }
