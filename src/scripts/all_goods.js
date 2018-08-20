@@ -134,9 +134,9 @@ var allGoods = new Vue({
       },
       ruleBankInfo: {
         bankName: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
-        name: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
-        cardNo: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
-        ibanNo: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        name: [{ required: true, pattern: /\w+$/g, message: this.$t('bankFormatError'), trigger: 'change' }],
+        cardNo: [{ required: true, pattern: /\w+$/g, message: this.$t('bankFormatError'), trigger: 'change' }],
+        ibanNo: [{ required: true, pattern: /\w+$/g, message: this.$t('bankFormatError'), trigger: 'change' }],
       },
       modalBankConfirmTitle: '',
       modalBankConfirmCancel: '',
@@ -185,7 +185,7 @@ var allGoods = new Vue({
   },
   computed: {
     buyAmountMin: function() {
-      var amount = this.buyData.price * this.buyData.min;
+      var amount = Math.min(this.buyData.restAmount * this.buyData.price, this.buyData.min);
       return amount.toFixed(2);
     },
     buyAmountMax: function() {

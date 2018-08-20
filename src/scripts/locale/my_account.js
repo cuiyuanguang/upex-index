@@ -344,6 +344,11 @@ var messages = {
     en: 'Please enter the account name',
     ar: 'يرجى إدخال اسم الحساب',
   },
+  bankFormatError: {
+    zh: '长度在1-64之间，只能包含字符、数字',
+    en: 'password length is between 1 to 64, and can only contains characters and numbers',
+    ar: 'طول كلمة السر ما بين 1 الى 64 ، و تحتوي فقط على أحرف وأرقام'
+  },
   AlRajhiBank: {
     zh: 'Al Rajhi Bank',
     en: 'Al Rajhi Bank',
