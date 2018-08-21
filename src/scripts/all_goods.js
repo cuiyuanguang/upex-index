@@ -13,22 +13,45 @@ var allGoods = new Vue({
   },
   data: function() {
     var validateGoogle = (rule, value, callback) => {
-      if (value === '' && this[rule.name].phone === '') {
-        callback(new Error(this.$t('canNotBeEmpty')));
+      if (value === '' && !this[rule.name].phone) {
+        callback(new Error(this.$t('sixLengthNumericRequired')));
       } else {
         callback();
       }
     };
     var validatePhone = (rule, value, callback) => {
-      if (value === '' && this[rule.name].google === '') {
-        callback(new Error(this.$t('canNotBeEmpty')));
+      if (value === '' && !this[rule.name].google) {
+        callback(new Error(this.$t('sixLengthNumericRequired')));
+      } else {
+        callback();
+      }
+    };
+    var validatePrice = (rule, value, callback) => {
+      value = Number(value);
+      if (!value) {
+        callback(new Error(this.$t('noZeroNumericRequired')));
+      } else if (value < this.marketPrice.trade_min_price || value > this.marketPrice.trade_max_price) {
+        callback(new Error(this.$t('sysLimitIs') + this.marketPrice.trade_min_price + '--' + this.marketPrice.trade_max_price));
+      } else {
+        callback();
+      }
+    };
+    var validateVolume = (rule, value, callback) => {
+      value = Number(value);
+      if (!value) {
+        callback(new Error(this.$t('noZeroNumericRequired')));
+      } else if (value < this.marketPrice.trade_min_volume || value > this.marketPrice.trade_max_volume) {
+        callback(new Error(this.$t('sysLimitIs') + this.marketPrice.trade_min_volume + '--' + this.marketPrice.trade_max_volume));
+      } else if (value > this.balance) {
+        callback(new Error(this.$t('balanceNotEnough')));
       } else {
         callback();
       }
     };
     var validateMinTrade = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error(this.$t('canNotBeEmpty')));
+      value = Number(value);
+      if (!value) {
+        callback(new Error(this.$t('noZeroNumericRequired')));
       } else if (value < this.marketPrice.trade_min_price) {
         callback(new Error(this.$t('minNoLessThanSysMin')));
       } else {
@@ -36,8 +59,9 @@ var allGoods = new Vue({
       }
     };
     var validateMaxTrade = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error(this.$t('canNotBeEmpty')));
+      value = Number(value);
+      if (!value) {
+        callback(new Error(this.$t('noZeroNumericRequired')));
       } else if (value < this.formRelease.minTrade) {
         callback(new Error(this.$t('maxNoLessThanMin')));
       } else if (this.releaseTotalPrice > 0 && value > this.releaseTotalPrice) {
@@ -53,31 +77,16 @@ var allGoods = new Vue({
       //挂单相关数据
       showListTag: 'BUY',
       postOrderTag: 'BUY',
-      marketPrice: {
-        exchange_rate: '',
-        exchange_buy_max: '',
-        exchange_sell_min: '',
-      },
+      marketPrice: '',
       //END挂单相关数据
-      //user info
-      userId: '',
-      isCardBind: false,
       //bank card status
       cardList: [],
-      cardStatus: [],
-      tradeCard: [],
       balance: 0,
       //END user info
       //triggers
-      isBuyDialogShow: false,
-      isGoogleAuthShow: false,
-      isContactShow: false,
-      // all error msg
-      error: {
-        buyError: '',
-        postError: '',
-        postDataError: '',
-      },
+      modalOrder: false,
+      modalGoogle: false,
+      modalWhatsApp: false,
       buyData: {
         id: 0,
         amount: 0,
@@ -97,7 +106,6 @@ var allGoods = new Vue({
       totalPage: 0,
       buyTotal: 0,
       sellTotal: 0,
-      pageSize: 10,
       buyCurrentPage: 1,
       sellCurrentPage: 1,
       selllist: [],
@@ -158,8 +166,8 @@ var allGoods = new Vue({
       },
       ruleRelease: {
         side: [{ name: 'formRelease', required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
-        price: [{ required: true, type: 'number', min: 0.01, max: 5e5, message: this.$t('noZeronumericRequired'), trigger: 'change' }],
-        volume: [{ required: true, type: 'number', min: 0.0001, max: 5e5, message: this.$t('noZeronumericRequired'), trigger: 'change' }],
+        price: [{ name: 'formRelease', validator: validatePrice, trigger: 'change' }],
+        volume: [{ name: 'formRelease', validator: validateVolume, trigger: 'change' }],
         minTrade: [{ name: 'formRelease', validator: validateMinTrade, trigger: 'change' }],
         maxTrade: [{ name: 'formRelease', validator: validateMaxTrade, trigger: 'change' }],
       },
@@ -179,11 +187,11 @@ var allGoods = new Vue({
   },
   computed: {
     buyAmountMin: function() {
-      var amount = Math.min(this.buyData.restAmount * this.buyData.price, this.buyData.min);
+      var amount = Math.max(this.marketPrice.trade_min_price, this.buyData.min);
       return amount.toFixed(2);
     },
     buyAmountMax: function() {
-      var amount = Math.min(this.buyData.restAmount * this.buyData.price, this.buyData.max);
+      var amount = Math.min(this.marketPrice.trade_max_price, this.buyData.max);
       return amount.toFixed(2);
     },
     buyTotalMin: function() {
@@ -196,47 +204,51 @@ var allGoods = new Vue({
     releaseTotalPrice: function() {
       return (this.formRelease.price * this.formRelease.volume).toFixed(2);
     },
-    releaseMaxPrice: function() {
-      return Math.min(this.releaseTotalPrice, this.marketPrice.trade_max_price);
+    releaseMaxVolume: function() {
+      var volume = 0;
+      if (this.formRelease.side === 'SELL') {
+        volume = Math.min(this.balance, this.marketPrice.trade_max_volume);
+      } else {
+        volume = this.marketPrice.trade_max_volume;
+      }
+      return volume;
     },
   },
   methods: {
     getUserInfo: function() {
       this.userInfo = JSON.parse(localStorage.getItem('user')) || {};
     },
-    // sell page handle
-    toSellPage: function(page) {
+    // 获取市场价格
+    getMarketPrice: function() {
       var that = this;
-      var data = {
-        coin: 'USDT',
-        page: page || 1,
-        pageSize: that.pageSize,
-        side: 'SELL',
-      };
-      get('api/adverts', data).then(function(res) {
+      get('api/rate').then(function(res) {
         if (res) {
-          that.totalPage = Math.round(res.count / that.pageSize);
-          that.buylist = res.rsts || [];
-          that.buyCurrentPage = page;
-          that.buyTotal = res.count;
+          that.marketPrice = res;
+          that.formRelease.minTrade = res.trade_min_price;
+          that.formRelease.maxTrade = res.trade_max_price;
         }
       });
     },
-    // buy page handle
-    toBuyPage: function(page) {
+    getAdvertList: function(type, page) {
       var that = this;
       var data = {
         coin: 'USDT',
+        side: type,
         page: page || 1,
-        pageSize: that.pageSize,
-        side: 'BUY',
+        pageSize: 10,
       };
       get('api/adverts', data).then(function(res) {
         if (res) {
-          that.totalPage = Math.round(res.count / that.pageSize);
-          that.selllist = res.rsts || [];
-          that.sellCurrentPage = page;
-          that.sellTotal = res.count;
+          that.totalPage = Math.round(res.count / 10);
+          if (type === 'SELL') {
+            that.buylist = res.rsts || [];
+            that.buyCurrentPage = page;
+            that.buyTotal = res.count;
+          } else {
+            that.selllist = res.rsts || [];
+            that.sellCurrentPage = page;
+            that.sellTotal = res.count;
+          }
         }
       });
     },
@@ -284,7 +296,7 @@ var allGoods = new Vue({
       ) {
         post(api[that.action], that.advertId).then(function(res) {
           if (res) {
-            that.showListTag === 'BUY' ? that.toSellPage(1) : that.toBuyPage(1);
+            that.showListTag === 'BUY' ? that.getAdvertList('SELL', 1) : that.getAdvertList('BUY', 1);
           }
           that.modalOperationOrder = false;
         });
@@ -294,7 +306,6 @@ var allGoods = new Vue({
       var that = this;
       get('api/bankCard').then(function(result) {
         if (result.length > 0) {
-          that.isCardBind = true;
           that.cardList = result;
           that.selectedCardIds = result.map(function(item) { return item.id });
         }
@@ -334,30 +345,26 @@ var allGoods = new Vue({
         this.changeTotal();
       }
     },
-    // sell USDT
-    showSellUsdt: function(item) {
-      // check if login
-      // this.getUserInfo();
+    showModalOrder: function(item, type) {
       if (!localStorage.getItem('user')) {
         this.$refs.header.showLogin();
         return;
       }
-      //check if google authed
-      if (!this.userInfo.googleStatus) {
-        this.isGoogleAuthShow = true;
-        return;
+      if (type === 'SELL') {
+        if (!this.userInfo.googleStatus) {
+          this.modalGoogle = true;
+          return;
+        }
+        if (!this.cardList.length) {
+          this.modalBankInfo = true;
+          return;
+        }
+        if (!this.userInfo.watchapp) {
+          this.modalWhatsApp = true;
+          return;
+        }
       }
-      //check if card binded
-      if (!this.isCardBind) {
-        this.modalBankInfo = true;
-        return;
-      }
-      // check if contact binded
-      if (!this.userInfo.watchapp) {
-        this.isContactShow = true;
-        return;
-      }
-      this.isBuyDialogShow = true;
+      this.modalOrder = true;
       this.buyData.id = item.id;
       this.buyData.price = item.price;
       this.buyData.method =
@@ -371,32 +378,7 @@ var allGoods = new Vue({
       this.buyData.min = item.minTrade;
       this.buyData.max = item.maxTrade;
     },
-    //buy USDT
-    showBuyUsdt: function(item) {
-      // check if login
-      // this.getUserInfo();
-      if (!localStorage.getItem('user')) {
-        this.$refs.header.showLogin();
-        return;
-      }
-      this.isBuyDialogShow = true;
-      if (item) {
-        this.buyData.id = item.id;
-        this.buyData.price = item.price;
-        this.buyData.method =
-          item.paymentBanks &&
-          item.paymentBanks
-            .map(function(item) {
-              return item.bankName + '<br>';
-            })
-            .join('');
-        this.buyData.restAmount = (item.volume - item.sell).toFixed(4);
-        this.buyData.min = item.minTrade;
-        this.buyData.max = item.maxTrade;
-      }
-    },
-    //buy
-    buy: function() {
+    confirmOrder: function(type) {
       if (this.buyAmountErrorText) return;
       if (!localStorage.getItem('user')) {
         this.$refs.header.showLogin();
@@ -413,36 +395,16 @@ var allGoods = new Vue({
         volume: this.buyData.buyTotal,
         totalPrice: this.buyData.buyAmount,
       };
-      post('api/buyOrder', data).then(function(res) {
-        if (res) {
-          that.isBuyDialogShow = false;
-          window.location.href = 'otc_pay.html?sequence=' + res.sequence;
-        }
-      });
-    },
-    //sell usdt
-    sell: function() {
-      if (this.buyAmountErrorText) return;
-      if (!localStorage.getItem('user')) {
-        this.$refs.header.showLogin();
-        return;
+      var api = 'api/buyOrder';
+      var payUrl = 'otc_pay.html?sequence=';
+      if (type === 'SELL') {
+        api = 'api/sellOrder';
+        payUrl = 'otc_wait_pay.html?sequence=';
       }
-      if (!this.buyData.buyTotal || !this.buyData.buyAmount) {
-        this.buyAmountErrorText = this.$t('canNotBeEmpty');
-        this.buyTotalErrorText = this.$t('canNotBeEmpty');
-        return;
-      }
-      var that = this;
-      var data = {
-        advertId: this.buyData.id,
-        volume: this.buyData.buyTotal,
-        totalPrice: this.buyData.buyAmount,
-      };
-      post('api/sellOrder', data).then(function(res) {
+      post(api, data).then(function(res) {
         if (res) {
-          var sequence = res.sequence;
-          that.isBuyDialogShow = false;
-          window.location.href = 'otc_wait_pay.html?sequence=' + sequence;
+          that.modalOrder = false;
+          window.location.href = payUrl + res.sequence;
         }
       });
     },
@@ -465,11 +427,11 @@ var allGoods = new Vue({
         //check if google authed
         if (!result.googleStatus) {
           that.modalReleaseLoading = false;
-          that.isGoogleAuthShow = true;
+          that.modalGoogle = true;
           return;
         }
         //check if card binded
-        if (!that.isCardBind) {
+        if (!that.cardList.length) {
           that.modalReleaseLoading = false;
           that.modalBankInfo = true;
           return;
@@ -477,70 +439,56 @@ var allGoods = new Vue({
         // check if contact binded
         if (!result.watchapp) {
           that.modalReleaseLoading = false;
-          that.isContactShow = true;
+          that.modalWhatsApp = true;
           return;
         }
-        // 获取市场价格
-        get('api/rate').then(function(res) {
-          if (res) {
-            that.marketPrice.exchange_rate = res.exchange_rate;
-            that.marketPrice.exchange_buy_max = res.exchange_buy_max;
-            that.marketPrice.exchange_sell_min = res.exchange_sell_min;
-            that.marketPrice.trade_min_price = res.trade_min_price;
-            that.marketPrice.trade_max_price = res.trade_max_price;
-            that.formRelease.minTrade = res.trade_min_price;
-            that.formRelease.maxTrade = res.trade_max_price;
-            // 获取用户余额
-            get('api/finance/account_balance').then(function(data) {
-              if (data) {
-                that.balance = data.allCoinMap.USDT.normal_balance;
-              } else {
-                that.modalReleaseLoading = false;
-              }
-            });
-            // 获取发单数量及类型
-            get('api/personAdverts/cnt').then(function(obj) {
-              that.modalReleaseLoading = false;
-              var buyCount = obj.BUY;
-              var sellCount = obj.SELL;
-              if (buyCount >= 2 && sellCount >= 2) {
-                Toast.show(that.$t('dealOrderBeforeRelease'), { icon: 'warning' });
-              } else if (buyCount >= 2 && sellCount < 2) {
-                Toast.show(that.$t('releaseSellOnly'), {
-                  icon: 'warning',
-                  duration: 1500,
-                  callback: function() {
-                    that.buyDisabled = true;
-                    that.formRelease.side = 'SELL';
-                    that.modalRelease = true;
-                  },
-                });
-              } else if (buyCount < 2 && sellCount >= 2) {
-                Toast.show(that.$t('releaseBuyOnly'), {
-                  icon: 'warning',
-                  duration: 1500,
-                  callback: function() {
-                    that.sellDisabled = true;
-                    that.formRelease.side = 'BUY';
-                    that.modalRelease = true;
-                  },
-                });
-              } else {
-                that.modalRelease = true;
-              }
-            });
+        // 获取用户余额
+        get('api/finance/account_balance').then(function(data) {
+          if (data) {
+            that.balance = data.allCoinMap.USDT.normal_balance;
           } else {
             that.modalReleaseLoading = false;
+          }
+        });
+        // 获取发单数量及类型
+        get('api/personAdverts/cnt').then(function(obj) {
+          that.modalReleaseLoading = false;
+          var buyCount = obj.BUY;
+          var sellCount = obj.SELL;
+          if (buyCount >= 2 && sellCount >= 2) {
+            Toast.show(that.$t('dealOrderBeforeRelease'), { icon: 'warning' });
+          } else if (buyCount >= 2 && sellCount < 2) {
+            Toast.show(that.$t('releaseSellOnly'), {
+              icon: 'warning',
+              duration: 1500,
+              callback: function() {
+                that.buyDisabled = true;
+                that.formRelease.side = 'SELL';
+                that.modalRelease = true;
+              },
+            });
+          } else if (buyCount < 2 && sellCount >= 2) {
+            Toast.show(that.$t('releaseBuyOnly'), {
+              icon: 'warning',
+              duration: 1500,
+              callback: function() {
+                that.sellDisabled = true;
+                that.formRelease.side = 'BUY';
+                that.modalRelease = true;
+              },
+            });
+          } else {
+            that.modalRelease = true;
           }
         });
       });
     },
     toGoogeAuth: function() {
-      this.isGoogleAuthShow = false;
+      this.modalGoogle = false;
       this.$refs.header.$data.isRegisterGoogleShow = true;
     },
     closeBuyDialog: function() {
-      this.isBuyDialogShow = false;
+      this.modalOrder = false;
       this.buyData.buyAmount = '';
       this.buyData.buyTotal = '';
       this.buyAmountErrorText = '';
@@ -557,14 +505,6 @@ var allGoods = new Vue({
           }
           if (name === 'formBankConfirm') {
             var checkType = that.tabVerifyActive;
-            /* var checkType;
-            if (that.user.mobileNumber && that.user.googleStatus) {
-              checkType = that.tabVerifyActive;
-            } else if (that.user.mobileNumber && !that.user.googleStatus) {
-              checkType = 2;
-            } else {
-              checkType = 1;
-            } */
             post('api/bankCard', {
               id: that.formBankInfo.id,
               bankName: that.formBankInfo.bankName,
@@ -635,12 +575,9 @@ var allGoods = new Vue({
               if (res) {
                 that.handleReset(name);
                 that.modalReleaseWarning = false;
-                if (that.formRelease.side === 'BUY') {
-                  that.toBuyPage(1);
-                }
-                if (that.formRelease.side === 'SELL') {
-                  that.toSellPage(1);
-                }
+                that.modalReleaseConfirm = false;
+                that.showListTag = that.formRelease.side;
+                that.getAdvertList(that.formRelease.side, 1);
               }
             });
           }
@@ -665,7 +602,6 @@ var allGoods = new Vue({
       this.modalRelease = true;
     },
     continueRelease: function() {
-      // this.setCardStatus();
       this.modalReleaseWarning = false;
       this.modalReleaseConfirm = true;
     },
@@ -730,33 +666,16 @@ var allGoods = new Vue({
     this.$on('locale', function(i) {
       that.locale = i;
     });
-    this.$on('isBindShow', function(i) {
-      that.modalBankInfo = i;
-    });
-    this.$on('isConfirmShow', function(i) {
-      that.isConfirmBindShow = i;
-    });
-    this.$on('isGoogleAuthShow', function(i) {
-      that.isGoogleAuthShow = i;
-    });
     this.$on('isContactShow', function(i) {
-      that.isContactShow = i;
-    });
-    this.$on('isCardBinded', function(i) {
-      that.isCardBind = i;
-      if (i) {
-        that.getBindedCard();
-      }
-    });
-    this.$on('tradeCards', function(i) {
-      that.tradeCard = i;
+      that.modalWhatsApp = i;
     });
     if (localStorage.getItem('token')) {
       this.getUserInfo();
       this.getBindedCard();
     }
-    this.toBuyPage();
-    this.toSellPage();
+    this.getAdvertList('SELL', 1);
+    this.getAdvertList('BUY', 1);
+    this.getMarketPrice();
   },
   watch: {
     locale: function(newVal, oldVal) {

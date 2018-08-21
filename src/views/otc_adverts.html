@@ -16,10 +16,10 @@
 
     <div class="list wrapper">
       <Row>
-        <i-col class="tags" :span="4" :class="showListTag=='BUY' ? 'act' :'disact' ">
+        <i-col class="tags" :span="4" :class="showListTag == 'BUY' ? 'act' :'disact' ">
           <span @click="showListTag='BUY'">{{ $t('buy') }} USDT</span>
         </i-col>
-        <i-col class="tags" :span="4" :class="showListTag=='SELL' ? 'act' :'disact' ">
+        <i-col class="tags" :span="4" :class="showListTag == 'SELL' ? 'act' :'disact' ">
           <span @click="showListTag='SELL'">{{ $t('sell') }} USDT</span>
         </i-col>
         <i-col span="16" style="margin-top:10px;">
@@ -33,7 +33,7 @@
         </i-col>
       </Row>
       <div>
-        <div v-show="showListTag=='BUY'">
+        <div v-show="showListTag == 'BUY'">
           <div class="list-table">
             <table class="buylist">
               <thead>
@@ -83,7 +83,7 @@
                         {{ $t('cancel') }}
                       </i-button>
                     </template>
-                    <i-button type="primary" size="small" @click="showBuyUsdt(item)" v-else>{{ $t('buy') }} USDT</i-button>
+                    <i-button type="primary" size="small" @click="showModalOrder(item, 'BUY')" v-else>{{ $t('buy') }} USDT</i-button>
                   </td>
                 </tr>
                 <tr v-if="!buylist.length"><td colspan="6">{{ $t('noData') }}</td></tr>
@@ -93,12 +93,12 @@
           <div class="page">
             <div class="wrapper">
               <div>
-                <Page @on-change="toBuyPage" :page-size="pageSize" :total="buyTotal" :current="buyCurrentPage" size="small"></Page>
+                <Page @on-change="getAdvertList('BUY', $event)" :total="buyTotal" :current="buyCurrentPage" size="small"></Page>
               </div>
             </div>
           </div>
         </div>
-        <div v-show="showListTag=='SELL'">
+        <div v-show="showListTag == 'SELL'">
           <div class="list-table">
             <table class="buylist">
               <thead>
@@ -146,7 +146,7 @@
                         {{ $t('cancel') }}
                       </i-button>
                     </template>
-                    <i-button type="primary" size="small" @click="showSellUsdt(item)" v-else>{{ $t('sell') }} USDT</i-button>
+                    <i-button type="primary" size="small" @click="showModalOrder(item, 'SELL')" v-else>{{ $t('sell') }} USDT</i-button>
                   </td>
                 </tr>
                 <tr v-if="!selllist.length"><td colspan="5">{{ $t('noData') }}</td></tr>
@@ -156,7 +156,7 @@
           <div class="page">
             <div class="wrapper">
               <div>
-                <Page @on-change="toSellPage" :page-size="pageSize" :total="sellTotal" :current="sellCurrentPage" size="small"></Page>
+                <Page @on-change="getAdvertList('SELL', $event)" :total="sellTotal" :current="sellCurrentPage" size="small"></Page>
               </div>
             </div>
           </div>
@@ -165,11 +165,11 @@
     </div>
 
     <!--buy-sell-modal-->
-    <div class="o-modal buy-sell-modal" :class="isBuyDialogShow? 'is-show':'is-not-show' ">
+    <div class="o-modal buy-sell-modal" :class="modalOrder? 'is-show':'is-not-show' ">
       <div class="content">
         <div class="content-wrapper" style="padding: 20px;width: 1200px;">
           <Icon type="close-circled" class="o-close" @click="closeBuyDialog"></Icon>
-          <div v-if="showListTag=='BUY'">
+          <div v-if="showListTag == 'BUY'">
             {{ $t('balance') }} {{balance}} USDT
           </div>
           <Row>
@@ -213,11 +213,10 @@
               </div>
             </i-col>
             <i-col span="4" class="btn-wrapper">
-              <button v-show="showListTag==='BUY'" @click="buy" class="order-btn">{{ $t('buy') }}</button>
-              <button v-show="showListTag==='SELL'" @click="sell" class="order-btn">{{ $t('sell') }}</button>
+              <button v-show="showListTag == 'BUY'" @click="confirmOrder('BUY')" class="order-btn">{{ $t('buy') }}</button>
+              <button v-show="showListTag == 'SELL'" @click="confirmOrder('SELL')" class="order-btn">{{ $t('sell') }}</button>
             </i-col>
           </Row>
-          <div class="buyError error">{{error.buyError}}</div>
         </div>
       </div>
     </div>
@@ -240,11 +239,10 @@
         </Row>
         <form-item label="" prop="price">
           <i-input
-            type="number"
             number
             v-model="formRelease.price"
             :min="marketPrice.trade_min_price"
-            :max="releaseMaxPrice"
+            :max="marketPrice.trade_max_price"
             :placeholder="$t('pricePlaceholder')"
           >
             <span slot="prepend">SAR</span>
@@ -256,11 +254,10 @@
         </Row>
         <form-item label="" prop="volume">
           <i-input
-            type="number"
             number
             v-model="formRelease.volume"
             :min="marketPrice.trade_min_volume"
-            :max="releaseMaxPrice"
+            :max="releaseMaxVolume"
             :placeholder="$t('amountPlaceholder')"
           >
             <span slot="prepend">USDT</span>
@@ -272,11 +269,10 @@
           <i-col span="11">
             <form-item prop="minTrade">
               <i-input
-                type="number"
                 number
                 v-model="formRelease.minTrade"
                 :min="marketPrice.trade_min_price"
-                :max="releaseMaxPrice"
+                :max="marketPrice.trade_max_price"
               >
                 <span slot="prepend">Min</span>
               </i-input>
@@ -286,11 +282,10 @@
           <i-col span="11">
             <form-item prop="maxTrade">
               <i-input
-                type="number"
                 number
                 v-model="formRelease.maxTrade"
                 :min="marketPrice.trade_min_price"
-                :max="releaseMaxPrice"
+                :max="marketPrice.trade_max_price"
               >
                 <span slot="prepend">Max</span>
               </i-input>
@@ -312,12 +307,12 @@
       </div>
       <div class="modal-notice-footer">
         <Row>
-          <i-col span="6">{{ $t('currentPrice') }}</i-col>
-          <i-col span="18">{{marketPrice.exchange_sell_min || marketPrice.exchange_rate}} SAR</i-col>
+          <i-col span="10">{{ $t('currentPrice') }}</i-col>
+          <i-col span="14">{{marketPrice.exchange_sell_min || marketPrice.exchange_rate}} SAR</i-col>
         </Row>
         <Row>
-          <i-col span="6">{{ $t('currentReleasePrice') }}</i-col>
-          <i-col span="18" class="text-error">{{ formRelease.price }} SAR</i-col>
+          <i-col span="10">{{ $t('currentReleasePrice') }}</i-col>
+          <i-col span="14" class="text-error">{{ formRelease.price }} SAR</i-col>
         </Row>
       </div>
       <div slot="footer">
@@ -372,12 +367,12 @@
           <Tabs v-model="tabVerifyActive">
             <tab-pane :label="$t('googleVerification')" :name="1">
               <form-item label="" prop="google">
-                <i-input v-model="formReleaseConfirm.google" number :maxlength="6" @on-change="autoSubmit($event, 'formReleaseConfirm')" :placeholder="$t('googleVerificationHolder')"></i-input>
+                <i-input v-model="formReleaseConfirm.google" :maxlength="6" @on-change="autoSubmit($event, 'formReleaseConfirm')" :placeholder="$t('googleVerificationHolder')"></i-input>
               </form-item>
             </tab-pane>
             <tab-pane :label="$t('phoneVerification')" :name="2">
               <form-item label="" prop="phone">
-                <i-input v-model="formReleaseConfirm.phone"  number:maxlength="6" @on-change="autoSubmit($event, 'formReleaseConfirm')" :placeholder="$t('phoneVerificationHolder')">
+                <i-input v-model="formReleaseConfirm.phone" :maxlength="6" @on-change="autoSubmit($event, 'formReleaseConfirm')" :placeholder="$t('phoneVerificationHolder')">
                   <i-button slot="append" @click="sendMessage('Bank', 3)" :disabled="sendDisabledBank">{{ sendPlaceholderBank }}</i-button>
                 </i-input>
               </form-item>
@@ -472,8 +467,8 @@
       </Modal>
     </div>
 
-    <acontact :show="isContactShow" :isWatchupBind="userInfo.watchapp" :locale="locale"></acontact>
-    <Modal class="google-modal" v-model="isGoogleAuthShow" footer-hide>
+    <acontact :show="modalWhatsApp" :isWatchupBind="userInfo.watchapp" :locale="locale"></acontact>
+    <Modal class="google-modal" v-model="modalGoogle" footer-hide>
       <dl class="text-center">
         <dt><img src="../images/warn.png"/></dt>
         <dd>{{ $t('bindGoogleAuthMsg') }}</dd>

@@ -241,10 +241,25 @@ var messages = {
     en: 'The maximum limit cannot be greater than the system limit',
     ar: 'لا يمكن ان يكون الحد الأقصى أكبر من حد النظام'
   },
-  noZeronumericRequired: {
+  sysLimitIs: {
+    zh: '系统限额',
+    en: 'System limitation',
+    ar: 'حدود النظام',
+  },
+  balanceNotEnough: {
+    zh: '余额不足',
+    en: 'Insufficient balance',
+    ar: 'عدم كفاية الرصيد',
+  },
+  noZeroNumericRequired: {
     zh: '请输入大于0的数字',
     en: 'Please enter a number greater than 0',
     ar: 'الرجاء إدخال رقم أكبر من 0',
+  },
+  sixLengthNumericRequired: {
+    zh: '请输入6位数字',
+    en: 'Please enter a 6-digit number',
+    ar: 'الرجاء إدخال 6 أرقام',
   },
   verifyNoEmpty: {
     zh: '验证码不能为空！',
