@@ -582,7 +582,7 @@ var addContact = {
       var that = this;
       this.$refs[name].validate(function(valid){
         if (valid) {
-          post('api/watchapp', that.selectCountry + '-' + that.wahtsApp).then(function (res) {
+          post('api/watchapp', that.selectCountry + '-' + that.formWhatsApp.number).then(function (res) {
             if (res) {
               post('api/common/user_info', '', false).then(function (result) {
                 localStorage.setItem('user', JSON.stringify(result));
