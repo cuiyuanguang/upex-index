@@ -74,29 +74,32 @@ var waitPay = new Vue({
       var that = this;
       var user = JSON.parse(localStorage.getItem('user'));
       get('api/orderDetail', { sequence: sequence }, ).then(function (res) {
-        var data = res;
-        if (data.sellerId != user.id) {
-          location.href = 'otc_pay.html?sequence=' + sequence;
-          return;
-        }
-        //to make sure the status of the order
-        that.orderInfo = data;
-        that.step = data.status;
-        that.orderInfo.bankCardLastNum =
-          data.description && JSON.parse(data.description).paymentBankCard;
-        //to make sure the status of the order
-        var whatsAppStr = data.seller.userExtView.watchapp;
-        that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1).replace(/\s+/g, '');
-        var expiredTime = data.countDownTime + Date.now();
-        var timer = setInterval(function () {
-          var now = Date.now();
-          if ((expiredTime - now) <= 0) {
-            that.leftTime = 0;
-            clearInterval(timer);
-          } else {
-            that.leftTime = utils.MillisecondToDate(expiredTime - now);
+        if (res) {
+          if (res.sellerId != user.id) {
+            location.href = 'otc_pay.html?sequence=' + sequence;
+            return;
           }
-        }, 1000);
+          //to make sure the status of the order
+          that.orderInfo = res;
+          that.step = res.status;
+          that.orderInfo.bankCardLastNum =
+            res.description && JSON.parse(res.description).paymentBankCard;
+          //to make sure the status of the order
+          var whatsAppStr = res.seller.userExtView.watchapp;
+          that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1).replace(/\s+/g, '');
+          var expiredTime = res.countDownTime + Date.now();
+          var timer = setInterval(function () {
+            var now = Date.now();
+            if ((expiredTime - now) <= 0) {
+              that.leftTime = 0;
+              clearInterval(timer);
+            } else {
+              that.leftTime = utils.MillisecondToDate(expiredTime - now);
+            }
+          }, 1000);
+        } else {
+          location.href = '404.html';
+        }
       });
     },
     getTimeLimit: function() {

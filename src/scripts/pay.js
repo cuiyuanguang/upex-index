@@ -128,26 +128,29 @@ var pay = new Vue({
       var user = JSON.parse(localStorage.getItem('user'));
       get('api/orderDetail', { sequence: sequence })
         .then(function (res) {
-          var data = res;
-          if (data.buyerId != user.id) {
-            location.href = 'otc_wait_pay.html?sequence=' + sequence;
-            return;
-          }
-          //to make sure the status of the order
-          that.step = data.status;
-          that.orderInfo = data;
-          var whatsAppStr = data.seller.userExtView.watchapp;
-          that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1).replace(/\s+/g, '');
-          var expiredTime = data.countDownTime + Date.now();
-          that.timer = setInterval(function () {
-            var now = Date.now();
-            if ((expiredTime - now) <= 0) {
-              that.leftTime = 0;
-              clearInterval(that.timer);
-            } else {
-              that.leftTime = utils.MillisecondToDate(expiredTime - now);
+          if (res) {
+            if (res.buyerId != user.id) {
+              location.href = 'otc_wait_pay.html?sequence=' + sequence;
+              return;
             }
-          }, 1000);
+            //to make sure the status of the order
+            that.step = res.status;
+            that.orderInfo = res;
+            var whatsAppStr = res.seller.userExtView.watchapp;
+            that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1).replace(/\s+/g, '');
+            var expiredTime = res.countDownTime + Date.now();
+            that.timer = setInterval(function () {
+              var now = Date.now();
+              if ((expiredTime - now) <= 0) {
+                that.leftTime = 0;
+                clearInterval(that.timer);
+              } else {
+                that.leftTime = utils.MillisecondToDate(expiredTime - now);
+              }
+            }, 1000);
+          } else {
+            location.href = '404.html';
+          }
         });
     },
     getTimeLimit: function() {
