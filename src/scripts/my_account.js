@@ -601,6 +601,11 @@ var account = new Vue({
         }
       });
     },
+    autoSubmit(e, name) {
+      if (e.target.value.length === 6) {
+        this.handleSubmit(name);
+      }
+    },
     handleReset(name) {
       if (name === 'formBankConfirm' && !this.formBankInfo.id) {
         this.modalBankConfirm = false;

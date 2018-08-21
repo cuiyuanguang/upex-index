@@ -9,10 +9,7 @@ var allGoods = new Vue({
   i18n: i18n,
   components: {
     oHeader: o_header,
-    // bindcard: o_bindcard,
-    // confirm: o_confirm,
     acontact: addContact,
-    selectcard: selectCard,
   },
   data: function() {
     var validateGoogle = (rule, value, callback) => {
@@ -73,11 +70,8 @@ var allGoods = new Vue({
       //END user info
       //triggers
       isBuyDialogShow: false,
-      isBindCardShow: false,
-      isConfirmBindShow: false,
       isGoogleAuthShow: false,
       isContactShow: false,
-      isSelectCardShow: false,
       // all error msg
       error: {
         buyError: '',
@@ -355,7 +349,7 @@ var allGoods = new Vue({
       }
       //check if card binded
       if (!this.isCardBind) {
-        this.isBindCardShow = true;
+        this.modalBankInfo = true;
         return;
       }
       // check if contact binded
@@ -374,7 +368,6 @@ var allGoods = new Vue({
           })
           .join('<br/>');
       this.buyData.restAmount = (item.volume - item.sell).toFixed(4);
-      this.buyData.paymentBanks = this.tradeCard;
       this.buyData.min = item.minTrade;
       this.buyData.max = item.maxTrade;
     },
@@ -478,7 +471,7 @@ var allGoods = new Vue({
         //check if card binded
         if (!that.isCardBind) {
           that.modalReleaseLoading = false;
-          that.isBindCardShow = true;
+          that.modalBankInfo = true;
           return;
         }
         // check if contact binded
@@ -654,6 +647,11 @@ var allGoods = new Vue({
         }
       });
     },
+    autoSubmit(e, name) {
+      if (e.target.value.length === 6) {
+        this.handleSubmit(name);
+      }
+    },
     changeCardStatus(value, data) {
       if (value) {
         this.selectedCardIds.push(data.id);
@@ -733,7 +731,7 @@ var allGoods = new Vue({
       that.locale = i;
     });
     this.$on('isBindShow', function(i) {
-      that.isBindCardShow = i;
+      that.modalBankInfo = i;
     });
     this.$on('isConfirmShow', function(i) {
       that.isConfirmBindShow = i;
@@ -750,14 +748,8 @@ var allGoods = new Vue({
         that.getBindedCard();
       }
     });
-    this.$on('isAddContactShow', function(i) {
-      that.isContactShow = i;
-    });
     this.$on('tradeCards', function(i) {
       that.tradeCard = i;
-    });
-    this.$on('isSelectCardShow', function(i) {
-      that.isSelectCardShow = i;
     });
     if (localStorage.getItem('token')) {
       this.getUserInfo();

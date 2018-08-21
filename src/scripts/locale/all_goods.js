@@ -221,6 +221,11 @@ var messages = {
     en: 'This place can not be empty ',
     ar: 'هذا المكان لا يمكن أن يكون فارغاً',
   },
+  minNoLessThanSysMin: {
+    zh: '最小限额不能小于系统限制',
+    en: 'The minimum limit cannot be less than the system limit',
+    ar: 'لا يمكن ان يكون الحد الأدنى اقل من حد النظام'
+  },
   maxNoLessThanMin: {
     zh: '最大限额不能小于最小限额',
     en: 'Max limit can not be less than the Min limit amount',
@@ -230,6 +235,11 @@ var messages = {
     zh: '最大限额不能大于总价',
     en: 'Max limit amount can not be bigger than the total price',
     ar: 'الحد الأقصى للمبلغ لا يمكن أن يكون أعلى من السعر الإجمالي',
+  },
+  maxNoMoreThanSysMax: {
+    zh: '最大限额不能大于系统限制',
+    en: 'The maximum limit cannot be greater than the system limit',
+    ar: 'لا يمكن ان يكون الحد الأقصى أكبر من حد النظام'
   },
   noZeronumericRequired: {
     zh: '请输入大于0的数字',

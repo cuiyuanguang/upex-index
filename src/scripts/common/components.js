@@ -517,100 +517,17 @@ var om_notice = {
   }
 };
 //---------------------------------END-----------------------------------------------------
-//--------------------------------select card---------------------------------------------
-var selectCard = {
-  template: `
-    <div class="o-modal select-card-modal" :class="show?'is-show':'is-not-show'">
-      <div class="content">
-        <div class="content-wrapper">
-          <div class="s-header">
-            {{ $t('choseCard') }}
-            <Icon @click="close" type="close" class="close"></Icon>
-          </div>
-          <div class="s-body">
-            <ul>
-              <li v-for="(item , index) in cards">
-                <Row>
-                  <i-col span="18">
-                    <h3>{{item.bankName}}</h3>
-                    <p>{{item.cardNo}}</p>
-                  </i-col>
-                  <i-col span="6">
-                    <i-switch v-model="status[index]"></i-switch>
-                  </i-col>
-                </Row>
-              </li>
-            </ul>
-          </div>
-          <div class="s-foot">
-            <button @click="submit">{{ $t('submit') }}</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
-  i18n: i18nComponents,
-  data() {
-    return {
-      selectedCards: [],
-      status: [],
-    };
-  },
-  props: ['show', 'cards', 'locale'],
-  methods: {
-    getStatus: function () {
-      var arr = [];
-      this.cards.forEach(function (i) {
-        arr.push(false);
-      });
-      return arr;
-    },
-    close() {
-      this.$parent.$emit('isSelectCardShow', false);
-    },
-    getSelectCards(s, c) {
-      var that = this;
-      for (var i = 0; i < s.length; i++) {
-        if (s[i]) {
-          that.selectedCards.push(c[i]);
-        }
-      }
-    },
-    submit() {
-      this.getSelectCards(this.status, this.cards);
-      this.$parent.$emit('tradeCards', this.selectedCards);
-      Toast.show('success', {
-        icon: 'ok',
-        callback: function () {
-          that.$parent.$emit('isSelectCardShow', false);
-          that.selectedCards = [];
-        },
-      });
-    },
-  },
-  mounted() {
-    this.status = this.getStatus();
-  },
-  watch: {
-    locale: function (newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.$i18n.locale = newVal;
-      }
-    }
-  }
-};
-//----------------------------------END-------------------------------------------------
 
 //------------------------add contact----------------------------------------------------
 var addContact = {
   template: `
-    <Modal :title="$t('addContact')" class="modal-notice" v-model="show" width="420">
+    <Modal :title="$t('addContact')" class="modal-notice" v-model="show" width="420" @on-cancel="handleClose('formWhatsApp')">
       <div class="modal-notice-footer">
-      <Row style="padding-bottom: 20px">
-        <i-col span="3"><img src="../images/whatup.png" /></i-col>
-        <i-col span="1">&nbsp;</i-col>
-        <i-col span="20">{{ $t('addContactTips') }}</i-col>
-      </Row>
+        <Row style="padding-bottom: 20px">
+          <i-col span="3"><img src="../images/whatup.png" /></i-col>
+          <i-col span="1">&nbsp;</i-col>
+          <i-col span="20">{{ $t('addContactTips') }}</i-col>
+        </Row>
         <i-form ref="formWhatsApp" :model="formWhatsApp" :rules="ruleWhatsApp" label-position="top">
           <form-item label="WhatsApp" prop="number">
             <i-input
@@ -679,7 +596,6 @@ var addContact = {
     handleClose(name) {
       this.$refs[name].resetFields();
       this.$parent.$emit('isContactShow', false);
-      this.$parent.$emit('isAddContactShow', false);
     },
   },
   watch: {
