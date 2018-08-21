@@ -82,12 +82,12 @@
 }
 .address-none .font_family{
   font-size:12px;
-  margin-right: 4px;
+  margin:0 4px;
 }
 .address .font_family{
   font-size:12px;
   color: #5C95EA;
-  margin-right: 4px;
+  margin:0 4px;
 }
 .ivu-input-large {
   height: 40px;
@@ -164,7 +164,7 @@
 }
 
 .googleAuth-modal .ivu-modal-body{
-  padding: 30px 50px 30px;
+  padding: 30px 30px 30px;
 }
 
 .modal-title {
@@ -229,15 +229,24 @@ background: #f4f4f4;
 .withdrawal-container .ivu-modal-footer{
   padding:0 30px 30px;
 }
-.gray-left{
+.withdrawal-wrap .gray-left{
   width:140px;
   color:#666;
   float: left;
 }
-.gray-right{
+body[dir='rtl'] .withdrawal-wrap .gray-left{
+  float: right;
+}
+.withdrawal-wrap .gray-right{
   float: left;
   color:#333;
 }
+
+body[dir='rtl'] .withdrawal-wrap .gray-right{
+  margin-right: 28px;
+  float: right;
+}
+
 .withdrawal-wrap p{
   margin-bottom: 16px;
 }
@@ -275,6 +284,11 @@ background: #f4f4f4;
   background: #fafafa;
   line-height: 30px;
   cursor: pointer;
+}
+
+body[dir='rtl'] .withdrawal-container .loginNext-input .ivu-input-group-append{
+  right: auto;
+  left: 1px;
 }
 .withdrawal-container .my-loginNext-error{
   margin: 0;

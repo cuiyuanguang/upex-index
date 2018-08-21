@@ -179,6 +179,31 @@ var messages = {
     en: 'Verification code only contains numbers',
     ar: 'رمز التحقق  فقط يحتوي على أرقام'
   },
+  noEmpty: {
+    zh: '此处不能为空',
+    en: 'This place cannot be empty',
+    ar: 'لا يمكن أن يكون هذا المكان فارغًا'
+  },
+  legalArea: {
+    zh: '请输入合法的区间范围',
+    en: '',
+    ar: ''
+  },
+  Reacquire: {
+    zh: '再次获取',
+    en: 'Reacquire',
+    ar: ''
+  },
+  pleaseChoose: {
+    zh: '请选择',
+    en: 'please choose',
+    ar: ''
+  },
+  noData: {
+    zh: '暂无数据',
+    en: 'no data',
+    ar: ''
+  },
   waitTitle: {
     zh: '提币申请已提交,请耐心等待...',
     en: 'The coin application has been submitted please be patient',

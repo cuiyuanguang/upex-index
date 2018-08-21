@@ -108,8 +108,8 @@ var myAssetsWithdrawal = new Vue({
       emailSmsCode: '',
       emailSmsCodeError: false,
       emailSmsCodeErrorText: '',
-      sendSmsEmail: this.$t('getValidateCode'),
-      sendSmsPhone: this.$t('getValidateCode'),
+      sendSmsEmail: '',
+      sendSmsPhone: '',
       showEmail: true,
       showPhone: true,
       countEmail: '',
@@ -335,10 +335,12 @@ var myAssetsWithdrawal = new Vue({
         return;
       }
       if (this.loading) {
+        this.sendSmsEmail = this.$t('getValidateCode');
+        this.sendSmsPhone = this.$t('getValidateCode');
         if (this.valueAmount === '' || this.valueAmount === null) {
-          this.withdrawalErrorText = '不能为空'
+          this.withdrawalErrorText = this.$t('noEmpty');
         } else if (isNaN(this.valueAmount) || Number(this.valueAmount) < Number(this.balance[this.modelCurrency].withdraw_min) || Number(this.valueAmount) > Number(this.balance[this.modelCurrency].normal_balance)) {
-          this.withdrawalErrorText = '请输入合法的区间范围'
+          this.withdrawalErrorText = this.$t('legalArea');
         } else  {
           this.withdrawalModel = true;
           this.valueAmount = this.returnFloat(Number(this.valueAmount));
@@ -392,14 +394,14 @@ var myAssetsWithdrawal = new Vue({
             operationType: '13',
           };
           that.countPhone = TIME_COUNT;
-          that.sendSmsPhone = 'Resend after ' + that.countPhone + 's';
+          that.sendSmsPhone = that.countPhone + 's';
           that.showPhone = false;
           that.timerPhone = setInterval(() => {
             if (that.countPhone > 0 && that.countPhone <= TIME_COUNT) {
               that.countPhone--;
-              that.sendSmsPhone = 'Resend after ' + that.countPhone + ' s';
+              that.sendSmsPhone = that.countPhone + ' s';
             } else {
-              that.sendSmsPhone = 'Reacquire';
+              that.sendSmsPhone = this.$t('Reacquire');
               that.showPhone = true;
               clearInterval(that.timerPhone);
               that.timerPhone = null;
@@ -420,14 +422,14 @@ var myAssetsWithdrawal = new Vue({
             operationType: '1',
           };
           that.countEmail = TIME_COUNT;
-          that.sendSmsEmail = 'Resend after ' + that.countEmail + 's';
+          that.sendSmsEmail = that.countEmail + 's';
           that.showEmail = false;
           that.timerEmail = setInterval(() => {
             if (that.countEmail > 0 && that.countEmail <= TIME_COUNT) {
               that.countEmail--;
-              that.sendSmsEmail = 'Resend after ' + that.countEmail + ' s';
+              that.sendSmsEmail = that.countEmail + ' s';
             } else {
-              that.sendSmsEmail = 'Reacquire';
+              that.sendSmsEmail = this.$t('Reacquire');
               that.showEmail = true;
               clearInterval(that.timerEmail);
               that.timerEmail = null;
