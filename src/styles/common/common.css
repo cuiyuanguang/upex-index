@@ -675,7 +675,62 @@ html[lang='ar'] .banner {
   margin-top: -8px;
   vertical-align: top;
   width: 40px;
+  margin-top: -8px;
 }
+
+.googleAuth-modal .pay-modal-title {
+  text-align: center;
+  padding-top: 10px;
+}
+
+.googleAuth-modal .pay-modal-title h3{
+  color: #333;
+}
+
+.googleAuth-modal .pay-modal-title p {
+  margin: 18px;
+  color: #666666;
+}
+
+.googleAuth-modal .content-wrapper .pay-modal-content {
+  padding-top: 20px;
+}
+
+.googleAuth-modal .content-wrapper .pay-modal-content .cancel {
+  line-height: 44px;
+}
+
+body[dir='rtl'] .googleAuth-modal .content-wrapper .pay-modal-content .cancel-btn{
+  float: left;
+}
+
+body[dir='rtl'] .googleAuth-modal .content-wrapper .pay-modal-content .paid{
+  float: left;
+}
+
+.googleAuth-modal .content-wrapper .pay-modal-content .paid {
+  float: right;
+  width: 135px;
+  background: #5C95EA;
+  border: 0;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #fff;
+}
+
+.googleAuth-modal .content-wrapper .cancel-btn{
+  float: right;
+  padding: 0;
+  border-radius: 0;
+  line-height: 20px;
+  padding-top: 10px;
+  margin: 0 30px;
+  color: #333;
+  border: 0;
+  border-bottom: 1px solid #333;
+  background: transparent;
+}
+
 
 
 /**********************googe validate end****************************/

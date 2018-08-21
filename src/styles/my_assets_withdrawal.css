@@ -163,6 +163,10 @@
   padding: 30px 50px 0;
 }
 
+.googleAuth-modal .ivu-modal-body{
+  padding: 30px 50px 30px;
+}
+
 .modal-title {
   font-size: 14px;
   line-height: 16px;
@@ -192,7 +196,7 @@
 }
 
 .ivu-modal {
-  top: 0;
+  /*top: 0;*/
 }
 
 .my-select-address-del {

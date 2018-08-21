@@ -9,17 +9,20 @@ var myAssets = new Vue({
   i18n: i18n,
   components: {
     oHeader: o_header,
+    oGoogleAuth: o_my_googleAuth,
     row_my_assets,
     row_my_assets_with
   },
   data (){
     return{
       locale: 'zh',
+      showGoogleAuth: false,
       balance: {
         BTC: {},
         ETH: {},
         USDT: {},
       },
+      userInfo: JSON.parse(localStorage.getItem('user')),
       AssetFoldingBTC: 0,
       AssetFoldingBTCText:'',
       getBTCToSARLoding:false,
@@ -196,6 +199,10 @@ var myAssets = new Vue({
   methods: {
     //跳转With
     runWithdrawal(type){
+      if(this.userInfo.googleStatus !== 1){
+        this.showGoogleAuth = true;
+        return;
+      }
       window.location.href= "otc_my_assets_withdrawal.html";
       localStorage.setItem("asset_type", type);
     },
@@ -347,6 +354,14 @@ var myAssets = new Vue({
     var that = this;
     this.$on('locale', function(i) {
       that.locale = i;
+    });
+
+    this.$on('cancelGoogleModal', (i) => {
+      this.showGoogleAuth = false;
+    });
+    this.$on('toGoogleAuth',(i) => {
+      this.showGoogleAuth = false;
+      this.$refs.header.$data.isRegisterGoogleShow = true;
     });
     this.getUserBalance();
     this.getUserAllList();

@@ -98,5 +98,10 @@ var messages = {
     zh: '操作',
     en: 'Operate',
     ar: 'إجراء العملية'
+  },
+  noData: {
+    zh: '暂无数据',
+    en: 'no data',
+    ar: ''
   }
 };
