@@ -302,7 +302,7 @@ var allGoods = new Vue({
         });
       }
     },
-    getBindedCard: function() {
+    getAvailableCardList: function() {
       var that = this;
       get('api/bankCard').then(function(result) {
         if (result.length > 0) {
@@ -523,7 +523,7 @@ var allGoods = new Vue({
                 that.$refs[name].resetFields();
                 that.tabVerifyActive = 1;
                 that.modalBankConfirm = false;
-                that.getAllCard();
+                that.getAvailableCardList();
               }
             });
           }
@@ -671,7 +671,7 @@ var allGoods = new Vue({
     });
     if (localStorage.getItem('token')) {
       this.getUserInfo();
-      this.getBindedCard();
+      this.getAvailableCardList();
     }
     this.getAdvertList('SELL', 1);
     this.getAdvertList('BUY', 1);
