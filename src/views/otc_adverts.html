@@ -223,7 +223,7 @@
     </div>
 
     <!-- 填写挂单信息 -->
-    <Modal :title="$t('releaseAdvert')" v-model="modalRelease" @on-cancel="handleReset('formRelease')">
+    <Modal :title="$t('releaseAdvert')" :mask-closable="false" v-model="modalRelease" @on-cancel="handleReset('formRelease')">
       <i-form ref="formRelease" :model="formRelease" :rules="ruleRelease" label-position="top">
         <Row>
           <i-col span="8" class="text-strong">挂单类型</i-col>
@@ -305,7 +305,7 @@
     </Modal>
 
     <!-- 挂单价格提醒 -->
-    <Modal :title="$t('deviationWarn')" v-model="modalReleaseWarning" class="modal-notice warning">
+    <Modal :title="$t('deviationWarn')" :mask-closable="false" v-model="modalReleaseWarning" class="modal-notice warning">
       <div class="modal-notice-header text-center">
         <img src="../images/warning.png" alt="">
         <p class="text-white">{{ releaseWarning }}</p>
@@ -327,7 +327,7 @@
     </Modal>
 
     <!-- 确认挂单 -->
-    <Modal :title="$t('confirmRelease')" v-model="modalReleaseConfirm" class="modal-notice" @on-cancel="handleReset('formReleaseConfirm')">
+    <Modal :title="$t('confirmRelease')" :mask-closable="false" v-model="modalReleaseConfirm" class="modal-notice" @on-cancel="handleReset('formReleaseConfirm')">
       <div class="modal-notice-header">
         <Row>
           <i-col span="6">{{ $t('unitPrice') }}</i-col>
@@ -393,7 +393,7 @@
 
     <!-- 添加/修改银行卡 -->
     <div data-id="modifyBankCard">
-      <Modal :title="$t('addBankCard')" v-model="modalBankInfo" @on-cancel="handleReset('formBankInfo')">
+      <Modal :title="$t('addBankCard')" :mask-closable="false" v-model="modalBankInfo" @on-cancel="handleReset('formBankInfo')">
         <i-form ref="formBankInfo" :model="formBankInfo" :rules="ruleBankInfo" label-position="top">
           <form-item :label="$t('bankName')" prop="bankName">
             <i-select v-model="formBankInfo.bankName" :placeholder="$t('bankNameHolder')">
@@ -428,7 +428,7 @@
           <i-button type="primary" @click="handleSubmit('formBankInfo')">{{ $t('nextStep') }}</i-button>
         </div>
       </Modal>
-      <Modal :title="$t('confirmBind')" class="modal-notice info" v-model="modalBankConfirm" @on-cancel="handleReset('formBankConfirm')">
+      <Modal :title="$t('confirmBind')" :mask-closable="false" class="modal-notice info" v-model="modalBankConfirm" @on-cancel="handleReset('formBankConfirm')">
         <div class="modal-notice-header">
           <Row>
             <i-col span="8" class="text-secondary">{{ $t('bankName') }}</i-col>

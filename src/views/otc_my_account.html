@@ -141,7 +141,7 @@
       </div>
     </div>
     <!-- 修改WhatsApp -->
-    <Modal :title="$t('changeWhatsApp')" v-model="modalWhatsApp" @on-cancel="handleReset('formWhatsApp')">
+    <Modal :title="$t('changeWhatsApp')" :mask-closable="false" v-model="modalWhatsApp" @on-cancel="handleReset('formWhatsApp')">
       <i-form ref="formWhatsApp" :model="formWhatsApp" :rules="ruleWhatsApp" label-position="top">
         <form-item :label="'WhatsApp: ' + user.watchapp" prop="number">
           <i-input
@@ -171,7 +171,7 @@
       </div>
     </Modal>
     <!-- 修改密码 -->
-    <Modal :title="$t('changePassword')" v-model="modalPassword" @on-cancel="handleReset('formPassword')">
+    <Modal :title="$t('changePassword')" :mask-closable="false" v-model="modalPassword" @on-cancel="handleReset('formPassword')">
       <i-form ref="formPassword" :model="formPassword" :rules="rulePassword" label-position="top">
         <form-item :label="$t('originPassword')" prop="password">
           <i-input type="password" v-model="formPassword.password" :placeholder="$t('passwordHolder')"></i-input>
@@ -202,7 +202,7 @@
       </div>
     </Modal>
     <!-- 修改谷歌 -->
-    <Modal :title="$t('closeGoogleVerification')" v-model="modalGoogle" @on-cancel="handleReset('formGoogle')">
+    <Modal :title="$t('closeGoogleVerification')" :mask-closable="false" v-model="modalGoogle" @on-cancel="handleReset('formGoogle')">
       <i-form ref="formGoogle" :model="formGoogle" :rules="rulePassword" label-position="top">
         <form-item :label="$t('phoneVerification')" prop="phone">
           <i-input v-model="formGoogle.phone" maxlength="6" :placeholder="$t('phoneVerificationHolder')">
@@ -222,7 +222,7 @@
       </div>
     </Modal>
     <!-- 修改邮箱 -->
-    <Modal :title="$t('changeEmail')" v-model="modalEmail" @on-cancel="handleReset('formEmail')">
+    <Modal :title="$t('changeEmail')" :mask-closable="false" v-model="modalEmail" @on-cancel="handleReset('formEmail')">
       <i-form ref="formEmail" :model="formEmail" :rules="ruleEmail" label-position="top">
         <form-item :label="$t('originEmail') + ' : ' + user.email" prop="oldEmail" v-show="user.email">
           <i-input v-model="formEmail.oldEmail" maxlength="6" :placeholder="$t('emailVerificationHolder')">
@@ -252,7 +252,7 @@
       </div>
     </Modal>
     <!-- 修改手机 -->
-    <Modal :title="$t('changePhone')" v-model="modalPhone" @on-cancel="handleReset('formPhone')">
+    <Modal :title="$t('changePhone')" :mask-closable="false" v-model="modalPhone" @on-cancel="handleReset('formPhone')">
       <i-form ref="formPhone" :model="formPhone" :rules="rulePhone" label-position="top">
         <form-item :label="$t('phoneVerification') + '(' + $t('originPhone') + ' : ' + user.mobileNumber + ')'" prop="oldVerify" v-show="user.isOpenMobileCheck">
           <i-input v-model="formPhone.oldVerify" maxlength="6" :placeholder="$t('phoneVerificationHolder')">
@@ -296,7 +296,7 @@
     </Modal>
     <!-- 添加/修改银行卡 -->
     <div>
-      <Modal :title="$t('changeBankcard')" v-model="modalBankInfo" @on-cancel="handleReset('formBankInfo')">
+      <Modal :title="$t('changeBankcard')" :mask-closable="false" v-model="modalBankInfo" @on-cancel="handleReset('formBankInfo')">
         <i-form ref="formBankInfo" :model="formBankInfo" :rules="ruleBankInfo" label-position="top">
           <form-item :label="$t('bankName')" prop="bankName">
             <i-select v-model="formBankInfo.bankName" :placeholder="$t('bankNameHolder')">
@@ -331,7 +331,7 @@
           <i-button type="primary" @click="handleSubmit('formBankInfo')">{{ $t('nextStep') }}</i-button>
         </div>
       </Modal>
-      <Modal :title="modalBankConfirmTitle" class="modal-notice info" v-model="modalBankConfirm">
+      <Modal :title="modalBankConfirmTitle" :mask-closable="false" class="modal-notice info" v-model="modalBankConfirm">
         <div class="modal-notice-header">
           <Row>
             <i-col span="8" class="text-secondary">{{ $t('bankName') }}</i-col>
