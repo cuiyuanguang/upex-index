@@ -237,21 +237,22 @@
             {{ $t('myTransferInfo') }}
             <Icon @click="close" type="close" class="close"></Icon>
           </div>
+
           <div class="p-i-content">
             <ul>
-              <li>
+              <li style="margin-top: 30px;">
                 <label>{{ $t('lastFourNumber') }}</label>
-                <div>
-                  <input type="text" maxlength="4" v-model="card">
-                  <p class="error" v-if="cardErrorTips">{{ cardErrorTips }}</p>
-                </div>
+                <i-input type="text" maxlength="4"
+                         @on-focus="cardFocus"
+                         v-model="card" :class="cardErrorTips?'is-red':'is-grey'"></i-input>
+                  <p class="error">{{ cardErrorTips }}</p>
               </li>
               <li>
                 <label>{{ $t('lastFourNumber') }}</label>
-                <div>
-                  <input type="text" maxlength="4" v-model="recard">
-                  <p class="error" v-if="recardErrorTips">{{ recardErrorTips }}</p>
-                </div>
+                <i-input type="text" maxlength="4"
+                         @on-focus="recardFocus"
+                         v-model="recard" :class="recardErrorTips?'is-red':'is-grey'"></i-input>
+                <p class="error">{{ recardErrorTips }}</p>
               </li>
               <li style="margin-bottom: 12px;">
                 <button @click="confirm" class="confirm">{{ $t('confirm') }}</button>

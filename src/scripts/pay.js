@@ -62,6 +62,12 @@ var pay = new Vue({
     toPay() {
       this.isPayDialogShow = true;
     },
+    cardFocus() {
+      this.cardErrorTips = '';
+    },
+    recardFocus() {
+      this.recardErrorTips = '';
+    },
     cancelPay() {
       var that = this;
       this.$Modal.confirm({

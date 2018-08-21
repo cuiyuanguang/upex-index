@@ -785,23 +785,23 @@ var i18nLoginRegisterMsg = {
   },
   enterGoogleRecieve: {
     zh: '请输入收到的谷歌验证码',
-    en: 'please enter Google verification code',
-    ar: ''
+    en: 'Please enter the received google verification code ',
+    ar: 'يرجى إدخال رمز تحقق  الجوجل'
   },
   enterSMSRecieve: {
     zh: '请输入收到的短信验证码',
-    en: 'Please enter the verification code received by',
-    ar: ''
+    en: 'Please enter the received SMS verification code ',
+    ar: 'يرجى إدخال رمز تحقق الرسالة'
   },
   enterEmailRecieve: {
     zh: '请输入收到的邮箱验证码',
-    en: 'Please enter the verification code received by',
-    ar: ''
+    en: 'Please enter the received email verification code',
+    ar: 'يرجى إدخال رمز تحقق البريد الإلكتروني '
   },
   onlyNum: {
     zh: '验证码只包含数字',
-    en: '',
-    ar: ''
+    en: 'Verification code only contains numbers',
+    ar: 'رمز التحقق فقط يحتوي على أرقام'
   },
   Reacquire: {
     zh: '再次获取',
@@ -1359,12 +1359,12 @@ var o_my_loginNext = {
           });
         }
         this.count = TIME_COUNT;
-        this.sendSms = 'Resend after ' + this.count + 's';
+        this.sendSms = this.count + 's';
         this.show = false;
         this.timer = setInterval(() => {
           if (this.count > 0 && this.count <= TIME_COUNT) {
             this.count--;
-            this.sendSms = 'Resend after ' + this.count + ' s';
+            this.sendSms = this.count + ' s';
           } else {
             this.sendSms = this.$t('Reacquire');
             this.show = true;
@@ -1748,12 +1748,12 @@ var o_my_register = {
               operationType: '1',
             };
             that.countPhone = TIME_COUNT;
-            that.sendSmsPhone = 'Resend after ' + that.countPhone + 's';
+            that.sendSmsPhone = that.countPhone + 's';
             that.showPhone = false;
             that.timerPhone = setInterval(() => {
               if (that.countPhone > 0 && that.countPhone <= TIME_COUNT) {
                 that.countPhone--;
-                that.sendSmsPhone = 'Resend after ' + that.countPhone + ' s';
+                that.sendSmsPhone = that.countPhone + ' s';
               } else {
                 that.sendSmsPhone = 'Reacquire';
                 that.showPhone = true;
@@ -1786,12 +1786,12 @@ var o_my_register = {
               operationType: '1',
             };
             that.countEmail = TIME_COUNT;
-            that.sendSmsEmail = 'Resend after ' + that.countEmail + 's';
+            that.sendSmsEmail = that.countEmail + 's';
             that.showEmail = false;
             that.timerEmail = setInterval(() => {
               if (that.countEmail > 0 && that.countEmail <= TIME_COUNT) {
                 that.countEmail--;
-                that.sendSmsEmail = 'Resend after ' + that.countEmail + ' s';
+                that.sendSmsEmail = that.countEmail + ' s';
               } else {
                 that.sendSmsEmail = 'Reacquire';
                 that.showEmail = true;
@@ -1949,75 +1949,75 @@ var o_my_register = {
 };
 
 var i18nRegisterGoogleMsg = {
-  canNotBeEmpty: {
-    zh: '此处不能为空',
-    en: 'This place can not be empty ',
-    ar: 'هذا المكان لا يمكن أن يكون فارغاً',
-  },
   noEmpty: {
     zh: '此处不能为空',
-    en: 'This field can not be empty',
-    ar: ''
+    en: 'This place cannot be empty',
+    ar: 'لا يمكن أن يكون هذا المكان فارغًا'
   },
   onlyNum: {
     zh: '验证码只包含数字',
-    en: '',
-    ar: ''
+    en: 'Verification code only contains numbers',
+    ar: 'رمز التحقق  فقط  يحتوي على أرقام'
   },
   copySuccess: {
     zh: '复制成功',
-    en: 'Replicating success',
-    ar: ''
+    en: 'Copied',
+    ar: 'تم النسخ'
   },
   StrengthenTitle: {
     zh: '增强你的账户安全性',
     en: 'Strengthen your account security',
-    ar: ''
+    ar: 'تعزيز أمن حسابك'
   },
   bindGoogle: {
-    zh: '3步去绑定谷歌认证',
-    en: '3 steps to bind Google authenticator',
-    ar: ''
+    zh: '3步绑定谷歌认证',
+    en: 'Step 3 bind google authentication',
+    ar: 'الخطوة 3 ربط مصادقة جوجل'
   },
   downloadGoogle: {
-    zh: '下载谷歌身份验证',
+    zh: '下载谷歌身份验证器',
     en: 'Download google authenticator',
-    ar: ''
+    ar: 'تحميل مصادقة جوجل'
   },
   scanCode: {
     zh: '使用谷歌认证器扫描条形码',
     en: 'Use google authenticator to scan a barcode:',
-    ar: ''
+    ar: 'استخدم أداة مصادقة جوجل لفحص الباركود'
   },
   enterKey: {
     zh: '输入提供的key',
-    en: 'Enter Provided key',
-    ar: ''
+    en: 'Enter the provided key',
+    ar: 'أدخل المفتاح المقدم'
   },
   copy: {
     zh: '复制',
     en: 'copy',
-    ar: ''
+    ar: 'نسخ'
   },
   completeBind: {
     zh: '完成绑定',
-    en: 'Complete binding',
-    ar: ''
+    en: 'Complete the binding',
+    ar: 'استكمال الربط'
   },
   enterPwd: {
     zh: '请输入登录密码',
-    en: 'Please enter login password',
-    ar: ''
+    en: 'Please enter the login password',
+    ar: 'يرجى إدخال كلمة السر لتسجيل الدخول'
   },
   enterGoogleRecieved: {
     zh: '请输入谷歌验证码',
     en: 'please enter Google verification code',
-    ar: ''
+    ar: 'يرجى إدخال رمز تحقق الجوجل'
   },
   sixInform: {
     zh: '验证码为6位数字',
     en: '',
     ar: ''
+  },
+  or: {
+    zh: '或者',
+    en: 'or',
+    ar: ' أو '
   }
 };
 var i18nRegisterGoogle = new VueI18n({
@@ -2061,7 +2061,7 @@ var o_my_registerGoogle = {
             <div class="tip-img tip-img1"></div>
             <span class="list-num">2</span>
             <p style="width:158px">{{ $t('scanCode') }}:</p>
-            <h6 style="color:#999;margin:26px 0 20px 50px">or</h6>
+            <h6 style="color:#999;margin:26px 0 20px 50px">{{ $t('or') }}</h6>
             <p style="margin-left: 50px;">{{ $t('enterKey') }}:</p>
             <h6 style="color:#999;margin: 5px 0 0 50px">
              {{googleKey}}
