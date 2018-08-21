@@ -2206,7 +2206,7 @@ var o_my_registerGoogle = {
           if (res) {
             that.asyncCancel();
             that.$parent.$emit('googleBound', true);
-            get('api/userInfo').then(function (result) {
+            post('api/common/user_info', '', false).then((result) => {
               localStorage.setItem('user', JSON.stringify(result));
             });
           }
@@ -2262,7 +2262,12 @@ var o_my_googleAuth = {
       </div>
     </Modal>`,
   i18n: i18nRegisterGoogle,
-  props: ['googleAuthShow'],
+  props: {
+    googleAuthShow:{
+      type: Boolean,
+      default: false
+    }
+  },
   methods: {
     toGoogleAuth() {
       this.$parent.$emit('toGoogleAuth',true);

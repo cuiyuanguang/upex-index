@@ -356,6 +356,11 @@ body[dir='rtl'] #app .pay-modal .content-wrapper .pay-modal-content .paid{
   right: 30px;
 }
 
+body[dir='rtl'] #app .pay-info-modal .content .content-wrapper .p-i-header .close{
+  left: 30px;
+  right: auto;
+}
+
 #app .pay-info-modal .content .content-wrapper .p-i-content {
   padding: 0 50px;
 }
