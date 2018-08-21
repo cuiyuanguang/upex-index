@@ -2,101 +2,101 @@ var messages = {
   myAsset: {
     zh: '我的资产',
     en: 'My assets',
-    ar: ''
+    ar: 'الأصول الخاص بي'
   },
   deposit: {
     zh: '存款',
     en: 'Deposit',
-    ar: ''
+    ar: 'إيداع'
   },
   withdrawal: {
     zh: '提现',
-    en: 'Withdrawal',
-    ar: ''
+    en: 'withdraw',
+    ar: 'سحب'
   },
   total: {
     zh: '总额',
-    en: 'Total',
-    ar: ''
+    en: 'Total amount',
+    ar: 'المبلغ الإجمالي'
   },
   available: {
     zh: '可用',
     en: 'available',
-    ar: ''
+    ar: 'المتاح'
   },
   freeze: {
     zh: '冻结',
     en: 'Freeze',
-    ar: ''
+    ar: 'تجميد'
   },
   assetCalc: {
     zh: '资产换算',
-    en: 'Asset folding',
-    ar: ''
+    en: 'Asset conversion',
+    ar: 'تحويل الأصول'
   },
   assetRecord: {
     zh: '财务记录',
     en: 'Financial record',
-    ar: ''
+    ar: 'السجل المالي'
   },
   recentRecord: {
     zh: '最近记录',
     en: 'Recent record',
-    ar: ''
+    ar: 'السجل الأخير'
   },
   depositRecord: {
     zh: '充币记录',
-    en: 'Deposit record',
-    ar: ''
+    en: 'Charge record',
+    ar: 'سجل الشحن'
   },
   withdrawalRecord: {
     zh: '提币记录',
-    en: 'Withdrawal record',
-    ar: ''
+    en: 'Withdraw record',
+    ar: 'سجل السحب'
   },
   otherRecord: {
     zh: '其他记录',
     en: 'Other records',
-    ar: ''
+    ar: 'سجلات أخرى'
   },
   withdrawAddress: {
     zh: '提现地址',
-    en: 'Withdrawal Address',
-    ar: ''
+    en: 'Withdraw Address',
+    ar: 'عنوان السحب'
   },
   fee: {
     zh: '手续费',
-    en: '',
-    ar: ''
+    en: 'transaction fee',
+    ar: 'رسوم المعاملة'
   },
   time: {
     zh: '时间',
     en: 'Time',
-    ar: ''
+    ar: 'الوقت'
   },
   currency: {
     zh: '币种',
     en: 'currency',
-    ar: ''
+    ar: 'العملة'
   },
   type: {
     zh: '类型',
     en: 'Type',
-    ar: ''
+    ar: 'النوع'
   },
   amount: {
     zh: '数量',
     en: 'Amount',
-    ar: ''
+    ar: 'الكمية'
   },
   status: {
     zh: '状态',
     en: 'status',
-    ar: ''
+    ar: 'الحالة'
   },
   operate: {
     zh: '操作',
     en: 'Operate',
-    ar: ''
+    ar: 'إجراء العملية'
   }
 };
