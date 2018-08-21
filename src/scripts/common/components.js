@@ -1949,6 +1949,16 @@ var o_my_register = {
 };
 
 var i18nRegisterGoogleMsg = {
+  bindGoogleAuthMsg: {
+    zh: '为了您的账户安全，我们强烈推荐您进行谷歌验证',
+    en: 'For your account security, we strongly recommend recommend you to verify Google',
+    ar: 'من أجل ضمان أمن حسابك ، نوصيك بشدة على التحقق من جوجل',
+  },
+  googleAuthBtn: {
+    zh: '身份验证',
+    en: 'Identity verification',
+    ar: 'التحقق من الهوية',
+  },
   noEmpty: {
     zh: '此处不能为空',
     en: 'This place cannot be empty',
@@ -2018,6 +2028,21 @@ var i18nRegisterGoogleMsg = {
     zh: '或者',
     en: 'or',
     ar: ' أو '
+  },
+  cancel: {
+    zh: '取消',
+    en: 'cancel',
+    ar: 'إلغاء',
+  },
+  secureTitle:{
+    zh: '安全提醒',
+    en: '',
+    ar: ''
+  },
+  secureSure:{
+    zh: '立即绑定',
+    en: '',
+    ar: ''
   }
 };
 var i18nRegisterGoogle = new VueI18n({
@@ -2218,6 +2243,36 @@ var o_my_registerGoogle = {
     // },
   },
 };
+var o_my_googleAuth = {
+  template: `<Modal class="googleAuth-modal" width="440" v-model="googleAuthShow" @on-cancel="cancelModal" footer-hide>
+     <div class="content">
+        <div class="content-wrapper">
+          <div class="pay-modal-title">
+            <h3>{{ $t('secureTitle') }}</h3>
+            <p>{{ $t('bindGoogleAuthMsg') }}</p>
+          </div>
+          <Row class="pay-modal-content">
+           
+            <Button @click="toGoogleAuth" class="paid">
+              {{ $t('secureSure') }}
+            </Button>  
+            <button class="cancel-btn" @click="cancelModal">{{ $t('cancel') }}</button>
+          </Row>
+        </div>
+      </div>
+    </Modal>`,
+  i18n: i18nRegisterGoogle,
+  props: ['googleAuthShow'],
+  methods: {
+    toGoogleAuth() {
+      this.$parent.$emit('toGoogleAuth',true);
+    },
+    cancelModal() {
+      this.$parent.$emit('cancelGoogleModal',false);
+    }
+  }
+};
+
 var o_find_password = {
   i18n: i18nComponents,
   template: `

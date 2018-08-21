@@ -10,6 +10,7 @@
 <body>
 <div id="app" v-cloak>
   <o-header ref="header"></o-header>
+  <o-google-auth :google-auth-show="showGoogleAuth"></o-google-auth>
   <div class="container">
     <div class="bg-white">
       <h1 class="h1-text">{{ $t('withdrawal') }}</h1>

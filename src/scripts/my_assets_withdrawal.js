@@ -9,6 +9,7 @@ var myAssetsWithdrawal = new Vue({
   i18n: i18n,
   components: {
     oHeader: o_header,
+    oGoogleAuth: o_my_googleAuth,
     row_my_assets_with
   },
   beforeCreate (){
@@ -16,6 +17,7 @@ var myAssetsWithdrawal = new Vue({
   },
   data (){
     return{
+      showGoogleAuth: false,
       locale: {},
       dailyRateStore: {},
       userInfo: JSON.parse(localStorage.getItem('user')),
@@ -324,12 +326,12 @@ var myAssetsWithdrawal = new Vue({
       this.modal_loading = true;
     },
     withdrawal() {
-      if(!this.modelAddress){
-        Toast.show(this.$t('chooseAddress'), { icon: 'warn' });
+      if(this.userInfo.googleStatus !== 1){
+        this.showGoogleAuth = true;
         return;
       }
-      if(this.userInfo.googleStatus !== 1){
-        Toast.show(this.$t('bindGoogle'), { icon: 'warn' });
+      if(!this.modelAddress){
+        Toast.show(this.$t('chooseAddress'), { icon: 'warn' });
         return;
       }
       if (this.loading) {
@@ -532,6 +534,13 @@ var myAssetsWithdrawal = new Vue({
     var that = this;
     this.$on('locale', function(i) {
       that.locale = i;
+    });
+    this.$on('cancelGoogleModal', (i) => {
+      this.showGoogleAuth = false;
+    });
+    this.$on('toGoogleAuth',(i) => {
+      this.showGoogleAuth = false;
+      this.$refs.header.$data.isRegisterGoogleShow = true;
     });
     this.getDailyRate();
     //判断跳转过来货币类型
