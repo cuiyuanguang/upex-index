@@ -2691,9 +2691,9 @@ var o_header = {
                   <Icon type="arrow-down-b"></Icon>
                 </a>
                 <DropdownMenu slot="list">
-                  <DropdownItem name="ar">{{ $t('arba') }}</DropdownItem>
-                  <DropdownItem name="en">{{ $t('english') }}</DropdownItem>
-                  <DropdownItem name="zh">{{ $t('chinese') }}</DropdownItem>
+                  <DropdownItem name="ar">العربية</DropdownItem>
+                  <DropdownItem name="en">English</DropdownItem>
+                  <DropdownItem name="zh">简体中文</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </li>

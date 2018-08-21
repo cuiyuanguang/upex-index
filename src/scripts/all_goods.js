@@ -471,16 +471,19 @@ var allGoods = new Vue({
         that.userInfo = result;
         //check if google authed
         if (!result.googleStatus) {
+          that.modalReleaseLoading = false;
           that.isGoogleAuthShow = true;
           return;
         }
         //check if card binded
         if (!that.isCardBind) {
+          that.modalReleaseLoading = false;
           that.isBindCardShow = true;
           return;
         }
         // check if contact binded
         if (!result.watchapp) {
+          that.modalReleaseLoading = false;
           that.isContactShow = true;
           return;
         }
@@ -495,16 +498,18 @@ var allGoods = new Vue({
             that.formRelease.minTrade = res.trade_min_price;
             that.formRelease.maxTrade = res.trade_max_price;
             // 获取用户余额
-            get('api/finance/account_balance').then(function(res) {
-              if (res) {
-                that.balance = res.allCoinMap.USDT.normal_balance;
+            get('api/finance/account_balance').then(function(data) {
+              if (data) {
+                that.balance = data.allCoinMap.USDT.normal_balance;
+              } else {
+                that.modalReleaseLoading = false;
               }
             });
             // 获取发单数量及类型
-            get('api/personAdverts/cnt').then(function(res) {
+            get('api/personAdverts/cnt').then(function(obj) {
               that.modalReleaseLoading = false;
-              var buyCount = res.BUY;
-              var sellCount = res.SELL;
+              var buyCount = obj.BUY;
+              var sellCount = obj.SELL;
               if (buyCount >= 2 && sellCount >= 2) {
                 Toast.show(that.$t('dealOrderBeforeRelease'), { icon: 'warning' });
               } else if (buyCount >= 2 && sellCount < 2) {
@@ -531,6 +536,8 @@ var allGoods = new Vue({
                 that.modalRelease = true;
               }
             });
+          } else {
+            that.modalReleaseLoading = false;
           }
         });
       });

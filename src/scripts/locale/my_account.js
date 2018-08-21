@@ -384,7 +384,7 @@ var messages = {
     en: 'Riyad Bank',
     ar: 'بنك الرياض',
   },
-  SambaFinancialGroup: {
+  'SambaFinancialGroup(Samba)': {
     zh: 'Samba Financial Group(Samba)',
     en: 'Samba Financial Group(Samba)',
     ar: 'مجموعة سامبا المالية',
@@ -399,7 +399,7 @@ var messages = {
     en: 'Arab National Bank',
     ar: 'البنك العربي الوطني',
   },
-  BankAlBliad: {
+  'BankAl-Bliad': {
     zh: 'Bank Al-Bliad',
     en: 'Bank Al-Bliad',
     ar: 'بنك البلاد',

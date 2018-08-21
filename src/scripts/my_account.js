@@ -101,22 +101,22 @@ var account = new Vue({
       }
     };
     return {
-      locale: 'zh',
+      locale: '',
       user: {},
       googleStatus: '',
-      sendPlaceholderPassword: this.$t('sendVerify'),
+      sendPlaceholderPassword: '',
       sendDisabledPassword: false,
-      sendPlaceholderGoogle: this.$t('sendVerify'),
+      sendPlaceholderGoogle: '',
       sendDisabledGoogle: false,
-      sendPlaceholderOldEmail: this.$t('sendVerify'),
+      sendPlaceholderOldEmail: '',
       sendDisabledOldEmail: false,
-      sendPlaceholderEmail: this.$t('sendVerify'),
+      sendPlaceholderEmail: '',
       sendDisabledEmail: false,
-      sendPlaceholderOldPhone: this.$t('sendVerify'),
+      sendPlaceholderOldPhone: '',
       sendDisabledOldPhone: false,
-      sendPlaceholderNewPhone: this.$t('sendVerify'),
+      sendPlaceholderNewPhone: '',
       sendDisabledNewPhone: false,
-      sendPlaceholderBank: this.$t('sendVerify'),
+      sendPlaceholderBank: '',
       sendDisabledBank: false,
       timers: {},
       // 修改WhatsApp
@@ -461,7 +461,7 @@ var account = new Vue({
     },
     modifyWhatsApp() {
       var whatsAppStr = this.user.watchapp;
-      this.formWhatsApp.number = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1);
+      this.formWhatsApp.number = Number(whatsAppStr.substr(whatsAppStr.indexOf('-') + 1));
       this.modalWhatsApp = true;
     },
     modifyGoogleStatus() {
@@ -741,10 +741,12 @@ var account = new Vue({
   mounted() {
     var locale = localStorage.getItem('locale');
     if (locale) {
+      this.locale = locale;
       this.$i18n.locale = locale;
     }
     this.$on('locale', function(i) {
       this.locale = i;
+      this.$i18n.locale = locale;
     });
     this.$on('googleBound', function(i) {
       if (i) {
@@ -760,6 +762,14 @@ var account = new Vue({
     locale: function(newVal, oldVal) {
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
+        var sendVerify = this.$t('sendVerify');
+        this.sendPlaceholderPassword = sendVerify;
+        this.sendPlaceholderGoogle = sendVerify;
+        this.sendPlaceholderOldEmail = sendVerify;
+        this.sendPlaceholderEmail = sendVerify;
+        this.sendPlaceholderOldPhone = sendVerify;
+        this.sendPlaceholderNewPhone = sendVerify;
+        this.sendPlaceholderBank = sendVerify;
       }
     },
   },
