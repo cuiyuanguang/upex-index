@@ -1,3 +1,7 @@
+.banner {
+  background-image: url('../images/account_bg.jpg');
+}
+
 .ivu-row::before {
   clear: both;
 }
@@ -21,7 +25,7 @@
 }
 
 .account {
-  margin-top: -50px;
+  margin-top: -70px;
 }
 
 .account-row {

@@ -209,11 +209,11 @@
             <i-button slot="append" @click="sendMessageSecurity('Google', 30)" :disabled="sendDisabledGoogle">{{ sendPlaceholderGoogle }}</i-button>
           </i-input>
         </form-item>
-        <form-item :label="$t('googleVerification')" prop="google">
-          <i-input v-model="formGoogle.google" :maxlength="6" :placeholder="$t('googleVerificationHolder')"></i-input>
-        </form-item>
         <form-item :label="$t('password')" prop="password">
           <i-input type="password" v-model="formGoogle.password" :maxlength="64" :placeholder="$t('passwordHolder')"></i-input>
+        </form-item>
+        <form-item :label="$t('googleVerification')" prop="google">
+          <i-input v-model="formGoogle.google" :maxlength="6" :placeholder="$t('googleVerificationHolder')"></i-input>
         </form-item>
       </i-form>
       <div slot="footer">
@@ -352,7 +352,7 @@
         </div>
         <div class="modal-notice-footer">
           <i-form ref="formBankConfirm" :model="formBankConfirm" :rules="ruleBankConfirm" label-position="top">
-            <Tabs v-model="tabVerifyActive">
+            <Tabs v-model="tabVerifyActive" v-if="modalBankConfirm">
               <tab-pane :label="$t('googleVerification')" :name="1" v-if="user.googleStatus">
                 <form-item label="" prop="google">
                   <i-input v-model="formBankConfirm.google" :maxlength="6" @on-change="autoSubmit($event, 'formBankConfirm')" :placeholder="$t('googleVerificationHolder')"></i-input>
