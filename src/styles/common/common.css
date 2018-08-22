@@ -1,4 +1,48 @@
 @charset "UTF-8";
+
+@font-face {
+  font-family: 'HelveticaNeueLTArabic';
+  src: url('../../fonts/HelveticaNeueLTArabic-Roman.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'HelveticaNeueLTArabicBold';
+  src: url('../../fonts/HelveticaNeueLTArabic-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SanFranciscoDisplay';
+  src: url('../../fonts/SanFranciscoDisplay-Regular-2.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SanFranciscoDisplayMedium';
+  src: url('../../fonts/SanFranciscoDisplay-Medium-7.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html,
+body {
+  font-family: 'HelveticaNeueLTArabic', 'HelveticaNeueLTArabicBold', 'SanFranciscoDisplay', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+html[lang='en'],
+body[dir='ltr'] {
+  font-family: 'SanFranciscoDisplay', 'SanFranciscoDisplayMedium';
+}
+
+html[lang='ar'],
+body[dir='rtl'] {
+  font-family: 'HelveticaNeueLTArabic', 'HelveticaNeueLTArabicBold';
+}
+
 * {
   direction: inherit;
 }
@@ -11,6 +55,10 @@ body[dir='rtl'] * {
 body[dir='ltr'] * {
   direction: ltr;
   unicode-bidi: embed;
+}
+
+.text-dir-plain {
+  unicode-bidi: plaintext !important;
 }
 
 *[dir='ltr'] {
@@ -45,6 +93,14 @@ body[dir='rtl'] .mr-10 {
 
 body[dir='rtl'] .ivu-radio {
   margin-left: 6px;
+}
+
+body[dir='rtl'] .ivu-radio-group-button .ivu-radio-wrapper:first-child {
+  border-radius: 0 5px 5px 0;
+}
+
+body[dir='rtl'] .ivu-radio-group-button .ivu-radio-wrapper:last-child {
+  border-radius: 5px 0 0 5px;
 }
 
 .ivu-form-item-required .ivu-form-item-label:before {
@@ -390,11 +446,12 @@ input::-webkit-inner-spin-button {
 }
 
 .order-dropdown .ivu-badge-count{
+  top: 0;
   padding: 0;
   min-width: 16px;
   width: 16px;
   height: 16px;
-  line-height: 16px;
+  line-height: 12px;
   box-shadow: none;
 }
 
@@ -408,6 +465,10 @@ input::-webkit-inner-spin-button {
 .order-dropdown .ivu-dropdown-item.order-dropdown-empty {
   padding: 120px 0;
   height: 300px;
+}
+
+.order-dropdown .ivu-dropdown-item.order-dropdown-empty:hover {
+  background-color: #fff;
 }
 
 .order-dropdown .ivu-row,
@@ -449,210 +510,6 @@ input::-webkit-inner-spin-button {
   height: 220px;
   background-position: center;
   background-size: cover;
-}
-
-html[lang='zh'] .banner,
-html[lang='en'] .banner {
-  background-image: url('../../images/topbanner-en.png');
-}
-
-html[lang='ar'] .banner {
-  background-image: url('../../images/topbanner-ar.png');
-}
-
-.banner > div {
-  text-align: center;
-  line-height: 220px;
-  color: white;
-}
-/*****************************/
-
-/*       bind card style     */
-
-/*****************************/
-
-.add-bankcard-modal .content .content-wrapper {
-  background: white;
-  border-radius: 5px;
-}
-
-.add-bankcard-modal .content .content-wrapper .o-header {
-  position: relative;
-  height: 60px;
-  line-height: 60px;
-  border-bottom: 1px solid #e6e6e6;
-  padding: 0 30px;
-}
-
-.add-bankcard-modal .content .content-wrapper .o-header span {
-  font-size: 18px;
-  font-family: SanFranciscoDisplay-Semibold;
-  color: #333333;
-}
-
-.add-bankcard-modal .content .content-wrapper .o-header .close {
-  position: absolute;
-  right: 30px;
-  top: 20px;
-}
-
-.add-bankcard-modal .content .content-wrapper .o-content {
-  padding: 0 50px 30px;
-}
-
-.add-bankcard-modal .content .content-wrapper .o-content ul li {
-  list-style: none;
-  margin-top: 30px;
-}
-
-.add-bankcard-modal .content .content-wrapper .o-content ul li p {
-  font-size: 14px;
-  font-family: SanFranciscoDisplay-Medium;
-  color: #333333;
-}
-
-.add-bankcard-modal .content .content-wrapper .o-content ul li input {
-  height: 40px;
-  width: 400px;
-  background: #fafafa;
-  border-radius: 2px;
-  border: 1px solid #eeeeee;
-}
-
-.add-bankcard-modal .content .content-wrapper .o-content ul li button {
-  outline: none;
-  border: none;
-  width: 400px;
-  height: 44px;
-  background: #ffed00;
-  border-radius: 5px;
-}
-
-/*********************************/
-
-/* style of confirm bind card    */
-
-/*********************************/
-
-.confirm-bankcard-modal .content .content-wrapper .o-header {
-  position: relative;
-  height: 60px;
-  line-height: 60px;
-  border-bottom: 1px solid #e6e6e6;
-  padding: 0 30px;
-}
-
-.confirm-bankcard-modal .content .content-wrapper .o-header span {
-  font-size: 18px;
-  font-family: SanFranciscoDisplay-Semibold;
-  color: #333333;
-}
-
-.confirm-bankcard-modal .content .content-wrapper .o-header .close {
-  position: absolute;
-  right: 30px;
-  top: 20px;
-}
-
-.confirm-bankcard-modal .content .content-wrapper .o-content .info {
-  font-size: 16px;
-  color: white;
-  height: 218px;
-  background: linear-gradient(-138.7deg, #596fed, #4878f6);
-  padding: 0 40px;
-}
-
-.confirm-bankcard-modal .content .content-wrapper .o-content .info ul {
-  padding-top: 25px;
-}
-
-.confirm-bankcard-modal .content .content-wrapper .o-content .info ul li {
-  list-style: none;
-  margin-top: 15px;
-}
-
-.confirm-bankcard-modal .content .content-wrapper .o-content .foot {
-  margin-top: 20px;
-  padding: 0 30px 30px;
-  text-align: center;
-}
-
-.confirm-bankcard-modal .content .content-wrapper .o-content .foot .return {
-  margin-right: 110px;
-  color: #333333;
-}
-
-.confirm-bankcard-modal .content .content-wrapper .o-content .foot .binding {
-  width: 240px;
-  height: 44px;
-  background: #ffed00;
-  border-radius: 5px;
-  border: none;
-}
-
-.confirm-bankcard-modal .ivu-tabs-content .ivu-tabs-tabpane {
-  padding: 0 30px;
-}
-
-.confirm-bankcard-modal .ivu-tabs-content .ivu-tabs-tabpane .g-code {
-  position: relative;
-  margin-top: 20px;
-  width: 440px;
-  height: 40px;
-}
-
-.confirm-bankcard-modal .ivu-tabs-content .ivu-tabs-tabpane .g-code > input {
-  padding-left: 10px;
-  padding-right: 40px;
-  width: 100%;
-  height: 100%;
-  background: #fafafa;
-  border-radius: 2px;
-  border: 1px solid #eeeeee;
-}
-
-.confirm-bankcard-modal .ivu-tabs-content .ivu-tabs-tabpane .g-code .sendMsg {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 40px;
-  height: 100%;
-  text-align: center;
-  line-height: 40px;
-  color: rgba(202, 171, 0, 1);
-  cursor: pointer;
-}
-
-.confirm-bankcard-modal .nav-text {
-  width: 100%;
-}
-
-.confirm-bankcard-modal .nav-text .ivu-tabs-tab {
-  height: 50px;
-  line-height: 34px;
-  width: 50%;
-  font-size: 14px;
-  color: #434343;
-  margin-right: 0;
-  text-align: center;
-  background-color: #ebebeb;
-}
-
-.confirm-bankcard-modal .nav-text .ivu-tabs-tab .ivu-icon-social-google {
-  color: #ff6a4b;
-}
-
-.confirm-bankcard-modal .nav-text .ivu-tabs-tab .ivu-icon-android-textsms {
-  color: #009688;
-}
-
-.confirm-bankcard-modal .nav-text .ivu-tabs-tab-active {
-  background-color: #fff;
-  border: none;
-}
-
-.confirm-bankcard-modal .nav-text .ivu-tabs-ink-bar {
-  background-color: white;
 }
 
 /******************************googe validate**************************/
@@ -740,149 +597,7 @@ body[dir='rtl'] .googleAuth-modal .content-wrapper .pay-modal-content .paid{
   background: transparent;
 }
 
-
-
 /**********************googe validate end****************************/
-
-/***************************add contact style ***********************/
-
-.add-contact-modal .o-header {
-  height: 60px;
-  line-height: 60px;
-  margin-left: 20px;
-  font-size: 18px;
-  color: rgba(51, 51, 51, 1);
-}
-
-.add-contact-modal .o-header .close {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-}
-
-.add-contact-modal .tp {
-  text-align: center;
-  width: 500px;
-  height: 218px;
-  background: rgba(244, 244, 244, 1);
-}
-
-.add-contact-modal .tp > div > img {
-  margin-top: 60px;
-}
-
-.add-contact-modal .o-body ul.bt {
-  margin: 30px 40px;
-}
-
-.add-contact-modal .o-body ul.bt > li {
-  padding-bottom: 30px;
-}
-
-.add-contact-modal .o-body ul.bt > li .ivu-select-dropdown {
-  left: 0 !important;
-  width: 100% !important;
-}
-
-.add-contact-modal .o-body ul.bt > li .ivu-select-item {
-  height: 24px;
-}
-
-.add-contact-modal .o-body ul.bt li .ivu-input {
-  height: 40px;
-  line-height: 40px;
-}
-
-.add-contact-modal .o-body ul.bt li .ivu-input-group-prepend {
-  background: #ffffff;
-}
-
-.add-contact-modal .o-body ul.bt li .ivu-select-input {
-  text-align: center;
-}
-
-.add-contact-modal .o-body ul.bt li > button {
-  width: 426px;
-  height: 44px;
-  background: #5C95EA;
-  border-radius: 5px;
-  border: none;
-  outline: none;
-}
-
-.add-contact-modal .o-body ul.bt li > button:hover {
-  background: rgb(215, 202, 20);
-}
-
-.success-tips {
-  top: 39%;
-  right: 24%;
-  width: 260px;
-  height: 100px;
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 8px;
-  position: absolute;
-  color: white;
-  z-index: 100;
-}
-
-.success-tips > div {
-  margin-top: 20px;
-}
-
-.success-tips > * {
-  text-align: center;
-}
-
-/***************************add contact style end ***********************/
-
-.select-card-modal > .content > .content-wrapper > .s-header {
-  height: 60px;
-  line-height: 60px;
-  padding-left: 30px;
-}
-
-.select-card-modal > .content > .content-wrapper > .s-header > .close {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-}
-
-.select-card-modal > .content > .content-wrapper > .s-body {
-  padding: 20px 30px;
-  background: linear-gradient(-138.7deg, rgba(89, 111, 237, 1), rgba(72, 120, 246, 1));
-  color: white;
-  min-height: 200px;
-}
-
-.select-card-modal > .content > .content-wrapper > .s-body p {
-  color: #bbceff;
-}
-
-.select-card-modal > .content > .content-wrapper > .s-body ul > li {
-  margin-bottom: 20px;
-}
-
-.select-card-modal > .content > .content-wrapper > .s-foot {
-  text-align: center;
-  padding: 20px;
-}
-
-.select-card-modal > .content > .content-wrapper > .s-foot button {
-  width: 400px;
-  height: 40px;
-  border: none;
-  border-radius: 5px;
-  background: #ffed00;
-  color: #333333;
-  font-size: 16px;
-  font-weight: 500;
-  outline: none;
-}
-
-.select-card-modal > .content > .content-wrapper > .s-foot button:hover {
-  background: rgb(227, 212, 7);
-}
 
 .toast {
   position: fixed;
