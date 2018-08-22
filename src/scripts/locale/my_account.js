@@ -99,6 +99,11 @@ var messages = {
     en: 'Add bank card',
     ar: 'إضافة بطاقة بنك',
   },
+  atMostFiveCards: {
+    zh: '最多添加5张银行卡',
+    en: 'Add up to 5 bank cards',
+    ar: 'أضافه ما يصل إلى 5 بطاقات بنكيه',
+  },
   bankName: {
     zh: '银行名称',
     en: 'Bank name',
