@@ -77,9 +77,7 @@
   function initData(p) {
     for (var i in this[p]) {
       if (isNumberic(this[p][i])) {
-        console.log(this[p][i]);
         this[p][i] = 0;
-        console.log(this[p][i]);
       }
       if (isArray(this[p][i])) {
         this[p][i] = [];
@@ -162,7 +160,7 @@
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
 
-  function loadScript(url, callback) {
+  function loadScript(url, id, callback) {
     var scriptList = document.querySelectorAll('script[type="text/javascript"]');
     for (var i = 0; i < scriptList.length; i++) {
       document.body.removeChild(document.querySelector('script[type="text/javascript"]'));
@@ -188,9 +186,9 @@
       };
     }
     script.src = url;
-    script.async = true;
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(script, s);
+    // script.async = true;
+    var s = document.getElementById(id);
+    s.parentNode.insertBefore(script, s.nextSibling);
     // document.getElementsByTagName('body')[0].appendChild(script);
   }
 

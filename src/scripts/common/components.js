@@ -895,7 +895,6 @@ var o_my_login = {
       this.$refs.invisibleRecaptcha.reset()
     },
     onVerify(res) {
-      console.log(res)
       var that = this;
       var dataCaptcha = {
         'captcha': res
@@ -2458,7 +2457,6 @@ var o_find_password = {
               mobileNumber: this.formFind.phone || '',
               email: this.formFind.email || '',
             }, false).then(res => {
-              console.log(res);
               if (res) {
                 this.googleAuthored = res.isGoogleAuth == 1;
                 this.token = res.token;
@@ -2723,44 +2721,12 @@ var o_header = {
     },
     toggleLanguage(name) {
       this.$i18n.locale = name;
+      utils.loadScript('../scripts/locale/' + name + '.js', 'iview');
       document.documentElement.lang = name;
       document.body.dir = name === 'ar' ? 'rtl' : 'ltr';
       document.body.style.fontSize = name === 'ar' ? '12px' : '14px';
       localStorage.setItem('locale', name);
       this.$parent.$emit('locale', name);
-    },
-    threadPoxi() {
-      var agentData = 'mymessage';
-      var that = this;
-      if (that.websock.readyState === that.websock.OPEN) {
-        that.websocketsend(agentData);
-      } else if (that.websock.readyState === that.websock.CONNECTING) {
-        setTimeout(function () {
-          that.websocketsend(agentData);
-        }, 300);
-      } else {
-        that.initWebSocket();
-        setTimeout(function () {
-          that.websocketsend(agentData);
-        }, 500);
-      }
-    },
-    initWebSocket() {
-      // var  wsuri ="ws:"+utils.getHost()+"/websocket/socketServer";
-      var wsuri = 'ws://localhost:8080/otc-web/api/websocket/socketServer.do';
-      this.websock = new WebSocket(wsuri);
-      this.websock.onmessage = this.websocketonmessage;
-      this.websock.onclose = this.websocketclose;
-    },
-    websocketonmessage(e) {
-      var redata = JSON.parse(e.data);
-      console.log(redata.value);
-    },
-    websocketsend(agentData) {
-      this.websock.send(agentData);
-    },
-    websocketclose(e) {
-      console.log('connection closed (' + e.code + ')');
     },
     loginOut() {
       var that = this;
@@ -2794,9 +2760,14 @@ var o_header = {
     if (!localStorage.getItem('country')) {
       this.getCountry();
     }
-    var locale = localStorage.getItem('locale') || navigator.language;
-    document.body.dir = locale === 'ar' ? 'rtl' : 'ltr';
+    var locale = localStorage.getItem('locale') || 'ar';
     this.$i18n.locale = locale;
+    utils.loadScript('../scripts/locale/' + locale + '.js', 'iview');
+    document.documentElement.lang = locale;
+    document.body.dir = locale === 'ar' ? 'rtl' : 'ltr';
+    document.body.style.fontSize = locale === 'ar' ? '12px' : '14px';
+    localStorage.setItem('locale', locale);
+    this.$parent.$emit('locale', locale);
     // utils.loadScript('https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit&hl=' + locale);
 
     if (localStorage.getItem('token')) {
