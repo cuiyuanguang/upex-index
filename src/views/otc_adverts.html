@@ -22,7 +22,7 @@
         <i-col class="tags" :span="4" :class="showListTag == 'SELL' ? 'act' :'disact' ">
           <span @click="showListTag='SELL'">{{ $t('sell') }} USDT</span>
         </i-col>
-        <i-col span="16" style="margin-top:10px;">
+        <i-col span="16" style="margin-top:10px;width:68.7%">
           <div class="text-right">
             <span class="mr-10">{{ $t('notSatisfied') }} ?</span>
             <i-button type="ghost" shape="circle" size="small" class="btn-show-release" :loading="modalReleaseLoading" @click="showModalRelease">
@@ -56,7 +56,7 @@
                     <span class="avatar mr-10" :class="userInfo.id == item.userId ? 'mine' : ''">
                       {{ userInfo.id == item.userId ? $t('mine') : $t('seller') }}
                     </span>
-                    {{item.userName}}
+                    <span>{{ $t('saUser') }}</span>
                   </td>
                   <td>{{(item.volume - item.sell).toFixed(4)}} USDT</td>
                   <td>
@@ -117,10 +117,10 @@
               <tbody>
                 <tr v-for="item in selllist" :key="item.id">
                   <td>
-                    <span class="avatar mr-10" :class="userInfo.id == item.userId ? 'mine' : ''">
+                    <div class="avatar mr-10" :class="userInfo.id == item.userId ? 'mine' : ''">
                       {{ userInfo.id == item.userId ? $t('mine') : $t('buyer') }}
-                    </span>
-                    {{item.userName}}
+                    </div>
+                    <span>{{ $t('saUser') }}</span>
                   </td>
                   <td>{{(item.volume - item.sell).toFixed(4)}} USDT</td>
                   <td>
@@ -168,7 +168,7 @@
     <Modal v-model="modalOrder" width="1200" footer-hide class="order-modal">
       <Icon type="close-circled" size="24" color="#4C4C4C" slot="close"></Icon>
       <Row>
-        <i-col span="8">
+        <i-col span="6">
           <Row>
             <i-col span="12">{{ $t('amount') }}:</i-col>
             <i-col span="12" class="text-strong">
@@ -184,7 +184,7 @@
             <i-col span="12" class="text-strong">{{ selectedAdvertBanks }}</i-col>
           </Row>
         </i-col>
-        <i-col span="12">
+        <i-col span="14">
           <Row>
             <i-col span="11">
               <div class="o-input-number append" :class="legalCurrencyError ? 'error' : ''">
@@ -251,11 +251,8 @@
     <!-- 填写挂单信息 -->
     <Modal :title="$t('releaseAdvert')" :mask-closable="false" v-model="modalRelease" @on-cancel="handleReset('formRelease')">
       <i-form ref="formRelease" :model="formRelease" :rules="ruleRelease" label-position="top">
-        <Row>
-          <i-col span="8" class="text-strong">{{ $t('releaseType') }}</i-col>
-        </Row>
         <form-item prop="side">
-          <radio-group v-model="formRelease.side">
+          <radio-group v-model="formRelease.side" type="button" size="large">
             <Radio label="BUY" :disabled="buyDisabled">{{ $t('buy') + 'USDT' }}</Radio>
             <Radio label="SELL" :disabled="sellDisabled">{{ $t('sell') + 'USDT' }}</Radio>
           </radio-group>
@@ -313,8 +310,7 @@
         </Row>
       </i-form>
       <div slot="footer">
-          <i-button type="link" @click="handleReset('formRelease')">{{ $t('cancel') }}</i-button>
-          <i-button type="primary" @click="handleSubmit('formRelease')">{{ $t('confirm') }}</i-button>
+          <i-button type="primary" long @click="handleSubmit('formRelease')">{{ $t('confirm') }}</i-button>
         </div>
     </Modal>
 

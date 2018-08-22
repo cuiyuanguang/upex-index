@@ -184,6 +184,7 @@ var allGoods = new Vue({
         phone: [{ name: 'formReleaseConfirm', validator: validatePhone, trigger: 'change' }],
         google: [{ name: 'formReleaseConfirm', validator: validateGoogle, trigger: 'change' }],
       },
+      timers: {},
     };
   },
   computed: {
@@ -281,7 +282,7 @@ var allGoods = new Vue({
       this.advertId = item.id;
       this.modalMsg = {
         title: item.status === 6 ? this.$t('start') : this.$t('pause'),
-        desc: this.$t('confirm') + this.$t(this.action),
+        desc: this.$t('confirm') + ' ' + this.$t(this.action),
         confirmText: this.$t('confirm'),
       };
       this.modalOperationOrder = true;
@@ -570,7 +571,8 @@ var allGoods = new Vue({
             : that.formReleaseConfirm.phone;
             post('api/advert', that.formRelease).then(function(res) {
               if (res) {
-                that.handleReset(name);
+                that.handleReset('formRelease');
+                that.handleReset('formReleaseConfirm');
                 that.modalReleaseWarning = false;
                 that.modalReleaseConfirm = false;
                 that.showListTag = that.formRelease.side === 'SELL' ? 'BUY' : 'SELL';
@@ -662,7 +664,7 @@ var allGoods = new Vue({
       this.sendPlaceholderBank = this.$t('sendVerify');
     }
     this.$on('locale', function(i) {
-      that.locale = i;
+      this.locale = i;
       this.$i18n.locale = locale;
       this.sendPlaceholderBank = this.$t('sendVerify');
     });
@@ -678,6 +680,12 @@ var allGoods = new Vue({
     this.getMarketPrice();
   },
   watch: {
+    locale(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+        this.sendPlaceholderBank = this.$t('sendVerify');
+      }
+    },
     legalCurrency(newVal) {
       this.legalCurrencyError = !newVal === true;
     },
