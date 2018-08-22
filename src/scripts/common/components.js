@@ -785,7 +785,7 @@ var o_my_login = {
         sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi"
       >
       </vue-recaptcha>
-      <Tabs v-model="loginWrap" @on-click="loginEmailChange">
+      <Tabs v-model="loginWrap" @on-click="loginEmailChange" v-if="login1">
         <TabPane :label="this.$t('email')" name="loginEmail">
           <Input
             :class="loginEmailError?'is-red':'is-gray'"
@@ -1337,7 +1337,7 @@ var o_my_register = {
                   <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
  @expired="onExpired" @verify="onVerify" sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi">
             </vue-recaptcha>
-      <Tabs v-model="registerWrap" @on-click="tabChange">
+      <Tabs v-model="registerWrap" @on-click="tabChange" v-if="register">
         <TabPane :label="$t('email')" name="tabEmail">
           <Input
             :class="emailValError?'is-red':'is-gray'"

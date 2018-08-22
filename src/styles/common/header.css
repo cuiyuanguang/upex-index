@@ -55,12 +55,12 @@
 }
 body[dir='rtl'] .my-login .ivu-input-group-append{
   right: initial;
-  left: 0;
+  left: 1px;
 }
 
 body[dir='rtl'] .my-register .ivu-input-group-append{
   right: initial;
-  left: 50px;
+  left: 51px;
 }
 
 /*谷歌注册样式*/
@@ -97,7 +97,6 @@ body[dir='rtl'] .loginGoogle-ul li .li-title .tip-img2{
 
 /*登陆注册样式*/
 body[dir='rtl'] .my-login .iview-input-countryPhone .ivu-input{
-  text-indent: 0;
   border-right: 1px solid #dddee1;
 }
 
@@ -208,6 +207,13 @@ body[dir='rtl'] .my-login .iview-input-countryPhone .ivu-input{
   border-right: 1px solid #DBDBDB;
 }
 
+body[dir='rtl'] .my-login .ivu-input-group-prepend{
+  right: 1px;
+  left: auto;
+  border-right: 0;
+  border-left: 1px solid #DBDBDB;
+}
+
 .my-login .ivu-select-item{
   line-height: 26px;
 }
@@ -221,6 +227,11 @@ body[dir='rtl'] .my-login .iview-input-countryPhone .ivu-input{
 
 .my-login .ivu-select-single .ivu-select-input {
   text-align: center;
+  height: 48px;
+}
+
+.my-login .ivu-select-arrow{
+  margin-top: -2px;
 }
 
 .my-login .iview-input-countryPhone .ivu-input {
@@ -240,6 +251,11 @@ body[dir='rtl'] .my-login .iview-input-countryPhone .ivu-input{
   text-align: left;
   left: -1px !important;
   width: 400px !important;
+}
+
+body[dir='rtl'] .my-login .ivu-select-dropdown{
+  right: 0;
+  left: auto;
 }
 
 .my-loginGoogle .ivu-modal-body {
