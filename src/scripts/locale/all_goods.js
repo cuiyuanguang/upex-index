@@ -221,6 +221,21 @@ var messages = {
     en: 'This place can not be empty ',
     ar: 'هذا المكان لا يمكن أن يكون فارغاً',
   },
+  releaseType: {
+    zh: '挂单类型',
+    en: 'Pending order type',
+    ar: 'نوع الأمر المعلق',
+  },
+  min: {
+    zh: 'Min',
+    en: 'Min',
+    ar: 'الحد الادني',
+  },
+  max: {
+    zh: 'Max',
+    en: 'Max',
+    ar: 'الحد الاقصي',
+  },
   minNoLessThanSysMin: {
     zh: '最小限额不能小于系统限制',
     en: 'The minimum limit cannot be less than the system limit',

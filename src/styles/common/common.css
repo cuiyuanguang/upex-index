@@ -43,6 +43,10 @@ body[dir='rtl'] .mr-10 {
   margin-left: 10px;
 }
 
+body[dir='rtl'] .ivu-radio {
+  margin-left: 6px;
+}
+
 .ivu-form-item-required .ivu-form-item-label:before {
   display: none;
 }
@@ -378,6 +382,11 @@ input::-webkit-inner-spin-button {
 
 .om-header .ivu-dropdown-menu > a {
   color: #495060;
+}
+
+.order-dropdown .ivu-badge {
+  height: 50px;
+  line-height: 48px;
 }
 
 .order-dropdown .ivu-badge-count{
