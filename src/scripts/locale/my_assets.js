@@ -101,7 +101,7 @@ var messages = {
   },
   noData: {
     zh: '暂无数据',
-    en: 'no data',
-    ar: ''
-  }
+    en: 'No data',
+    ar: 'لا توجد بيانات '
+  },
 };

@@ -700,9 +700,9 @@ var i18nLoginRegisterMsg = {
     ar: 'لدي حساب'
   },
   enterGoogleRecieve: {
-    zh: '请输入收到的谷歌验证码',
-    en: 'Please enter the received google verification code ',
-    ar: 'يرجى إدخال رمز تحقق  الجوجل'
+    zh: '请输入谷歌验证码',
+    en: 'please enter Google verification code',
+    ar: 'يرجى إدخال رمز تحقق الجوجل'
   },
   enterSMSRecieve: {
     zh: '请输入收到的短信验证码',
@@ -722,13 +722,13 @@ var i18nLoginRegisterMsg = {
   Reacquire: {
     zh: '再次获取',
     en: 'Reacquire',
-    ar: ''
+    ar: 'أعد الطلب '
   },
   //校验
   sixInform: {
     zh: '验证码为6位数字',
-    en: '',
-    ar: ''
+    en: 'The verification code should be 6 digits',
+    ar: 'رمز التحقق يكون من 6 ارقام '
   },
   errorPhoneNum: {
     zh: '请输入合法的电话号码',
@@ -1937,8 +1937,8 @@ var i18nRegisterGoogleMsg = {
   },
   sixInform: {
     zh: '验证码为6位数字',
-    en: '',
-    ar: ''
+    en: 'The verification code should be 6 digits',
+    ar: 'رمز التحقق يكون من 6 ارقام '
   },
   or: {
     zh: '或者',
@@ -1952,13 +1952,13 @@ var i18nRegisterGoogleMsg = {
   },
   secureTitle:{
     zh: '安全提醒',
-    en: '',
-    ar: ''
+    en: 'Security reminder',
+    ar: 'تذكير الأمان'
   },
   secureSure:{
     zh: '立即绑定',
-    en: '',
-    ar: ''
+    en: 'Bind now',
+    ar: 'اربط الآن'
   }
 };
 var i18nRegisterGoogle = new VueI18n({

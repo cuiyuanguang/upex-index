@@ -186,27 +186,27 @@ var messages = {
   },
   legalArea: {
     zh: '请输入合法的区间范围',
-    en: '',
-    ar: ''
+    en: 'Exceeded the draw limit',
+    ar: 'تجاوزت حد السحب'
   },
   Reacquire: {
     zh: '再次获取',
     en: 'Reacquire',
-    ar: ''
+    ar: 'أعد الطلب '
   },
   pleaseChoose: {
     zh: '请选择',
-    en: 'please choose',
-    ar: ''
+    en: 'Please select',
+    ar: 'يرجى الاختيار'
   },
   noData: {
     zh: '暂无数据',
     en: 'no data',
-    ar: ''
+    ar: 'لا توجد بيانات '
   },
   waitTitle: {
     zh: '提币申请已提交,请耐心等待...',
-    en: 'The coin application has been submitted please be patient',
-    ar: ''
+    en: 'Application for withdraw has been submitted, please be patient.',
+    ar: 'تم تقديم طلب السحب ، الرجاء الإنتظار '
   },
 };
