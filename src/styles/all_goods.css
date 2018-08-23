@@ -81,7 +81,7 @@ html[lang='ar'] .banner {
 
 .list .buylist tr > td,
 .list .buylist tr > th {
-  border-bottom: 1px solid #efefef;
+  border-bottom: 1px solid #f4f4f4;
 }
 
 .list .ivu-tabs-mini .ivu-tabs-tab {
@@ -143,9 +143,6 @@ html[lang='ar'] .banner {
 
 .order-modal {
   height: 110px;
-}
-.order-modal .ivu-modal{
-  top: 35%;
 }
 .order-modal .ivu-modal-content {
   padding: 22px 56px;

@@ -26,7 +26,7 @@
           <div class="text-right">
             <span class="mr-10">{{ $t('notSatisfied') }} ?</span>
             <i-button type="ghost" shape="circle" size="small" class="btn-show-release" :loading="modalReleaseLoading" @click="showModalRelease">
-              <Icon type="plus-round"></Icon>
+              <Icon type="plus-round" class="mr-8"></Icon>
               {{ $t('releaseAdvert') }}
             </i-button>
           </div>
@@ -252,7 +252,7 @@
     <Modal :title="$t('releaseAdvert')" :mask-closable="false" v-model="modalRelease" @on-cancel="handleReset('formRelease')">
       <i-form ref="formRelease" :model="formRelease" :rules="ruleRelease" label-position="top">
         <form-item prop="side">
-          <radio-group v-model="formRelease.side" type="button" size="large">
+          <radio-group v-model="formRelease.side" type="button" size="large" @on-change="releaseSideChange">
             <Radio label="BUY" :disabled="buyDisabled">{{ $t('buy') + 'USDT' }}</Radio>
             <Radio label="SELL" :disabled="sellDisabled">{{ $t('sell') + 'USDT' }}</Radio>
           </radio-group>
@@ -494,14 +494,8 @@
         </dd>
       </dl>
     </Modal>
-    <Modal v-model="modalOperationOrder" width="500" class="pend-order_modal">
-      <div class="g-body">
-        <div class="g-body_title">
-          <i class="pend-icon icon-wait"></i>
-          {{ modalMsg.title }}
-        </div>
-        <div class="g-body_desc">{{ modalMsg.desc }}</div>
-      </div>
+    <Modal :title="modalMsg.title" v-model="modalOperationOrder">
+      <div>{{ modalMsg.desc }}</div>
       <div slot="footer">
         <i-button type="link" @click="modalOperationOrder = false">{{ $t('cancel') }}</i-button>
         <i-button type="primary" @click="manualAction">{{ modalMsg.confirmText }}</i-button>

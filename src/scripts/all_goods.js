@@ -63,7 +63,7 @@ var allGoods = new Vue({
         callback(new Error(this.$t('noZeroNumericRequired')));
       } else if (value < this.marketPrice.trade_min_volume || value > this.marketPrice.trade_max_volume) {
         callback(new Error(this.$t('sysLimitIs') + this.marketPrice.trade_min_volume + '--' + this.marketPrice.trade_max_volume));
-      } else if (value > this.balance) {
+      } else if (this.formRelease.side === 'SELL' && value > this.balance) {
         callback(new Error(this.$t('balanceNotEnough')));
       } else {
         callback();
@@ -94,7 +94,7 @@ var allGoods = new Vue({
       }
     };
     return {
-      locale: 'zh',
+      locale: '',
       //挂单相关数据
       showListTag: 'BUY',
       postOrderTag: 'BUY',
@@ -334,7 +334,7 @@ var allGoods = new Vue({
       ) {
         post(api[that.action], that.advertId).then(function(res) {
           if (res) {
-            that.showListTag === 'BUY' ? that.getAdvertList('SELL', 1) : that.getAdvertList('BUY', 1);
+            that.showListTag === 'BUY' ? that.getAdvertList('SELL') : that.getAdvertList('BUY');
           }
           that.modalOperationOrder = false;
         });
@@ -471,7 +471,11 @@ var allGoods = new Vue({
           var sellCount = obj.SELL;
           if (buyCount >= 2 && sellCount >= 2) {
             Toast.show(that.$t('dealOrderBeforeRelease'), { icon: 'error' });
-          } else if (buyCount >= 2 && sellCount < 2) {
+            return;
+          }
+          that.formRelease.minTrade = that.marketPrice.trade_min_price;
+          that.formRelease.maxTrade = that.marketPrice.trade_max_price;
+          if (buyCount >= 2 && sellCount < 2) {
             Toast.show(that.$t('releaseSellOnly'), {
               icon: 'error',
               callback: function() {
@@ -494,6 +498,12 @@ var allGoods = new Vue({
           }
         });
       });
+    },
+    releaseSideChange: function(value) {
+      this.$refs.formRelease.resetFields();
+      this.formRelease.side = value;
+      this.formRelease.minTrade = this.marketPrice.trade_min_price;
+      this.formRelease.maxTrade = this.marketPrice.trade_max_price;
     },
     toGoogeAuth: function() {
       this.modalGoogle = false;
@@ -540,36 +550,43 @@ var allGoods = new Vue({
             });
           }
           if (name === 'formRelease') {
-            if (parseFloat(that.formRelease.price) > that.marketPrice.exchange_rate * 1.5) {
-              that.modalRelease = false;
-              that.releaseWarning = that.$t('moreThan50Percent');
-              that.modalReleaseWarning = true;
-              return;
-            }
-            if (parseFloat(that.formRelease.price) < that.marketPrice.exchange_rate * 0.5) {
-              that.modalRelease = false;
-              that.releaseWarning = that.$t('lessThan50Percent');
-              that.modalReleaseWarning = true;
-              return;
-            }
-            if (that.formRelease.side == 'BUY') {
-              if (parseFloat(that.formRelease.price) > that.marketPrice.exchange_sell_max) {
+            get('api/rate').then(function(res) {
+              if (res) {
+                that.marketPrice = res;
+                that.formRelease.minTrade = res.trade_min_price;
+                that.formRelease.maxTrade = res.trade_max_price;
+                if (parseFloat(that.formRelease.price) > res.exchange_rate * 1.5) {
+                  that.modalRelease = false;
+                  that.releaseWarning = that.$t('moreThan50Percent');
+                  that.modalReleaseWarning = true;
+                  return;
+                }
+                if (parseFloat(that.formRelease.price) < res.exchange_rate * 0.5) {
+                  that.modalRelease = false;
+                  that.releaseWarning = that.$t('lessThan50Percent');
+                  that.modalReleaseWarning = true;
+                  return;
+                }
+                if (that.formRelease.side == 'BUY') {
+                  if (parseFloat(that.formRelease.price) > res.exchange_sell_max) {
+                    that.modalRelease = false;
+                    that.releaseWarning = that.$t('lessThanHighestPurchase');
+                    that.modalReleaseWarning = true;
+                    return;
+                  }
+                }
+                if (that.formRelease.side == 'SELL') {
+                  if (parseFloat(that.formRelease.price) > res.exchange_buy_min) {
+                    that.modalRelease = false;
+                    that.releaseWarning = that.$t('moreThanLowestPrice');
+                    that.modalReleaseWarning = true;
+                    return;
+                  }
+                }
                 that.modalRelease = false;
-                that.releaseWarning = that.$t('lessThanHighestPurchase');
-                that.modalReleaseWarning = true;
-                return;
+                that.modalReleaseConfirm = true;
               }
-            }
-            if (that.formRelease.side == 'SELL') {
-              if (parseFloat(that.formRelease.price) > that.marketPrice.exchange_buy_min) {
-                that.modalRelease = false;
-                that.releaseWarning = that.$t('moreThanLowestPrice');
-                that.modalReleaseWarning = true;
-                return;
-              }
-            }
-            that.modalRelease = false;
-            that.modalReleaseConfirm = true;
+            });
           }
           if (name === 'formReleaseConfirm') {
             if (that.formRelease.side === 'SELL') {
@@ -590,7 +607,7 @@ var allGoods = new Vue({
                 that.modalReleaseWarning = false;
                 that.modalReleaseConfirm = false;
                 that.showListTag = that.formRelease.side === 'SELL' ? 'BUY' : 'SELL';
-                that.getAdvertList(that.formRelease.side, 1);
+                that.getAdvertList(that.formRelease.side);
               }
             });
           }
@@ -674,12 +691,13 @@ var allGoods = new Vue({
     var that = this;
     var locale = localStorage.getItem('locale');
     if (locale) {
+      this.locale = locale;
       this.$i18n.locale = locale;
       this.sendPlaceholderBank = this.$t('sendVerify');
     }
     this.$on('locale', function(i) {
       this.locale = i;
-      this.$i18n.locale = locale;
+      this.$i18n.locale = i;
       this.sendPlaceholderBank = this.$t('sendVerify');
     });
     this.$on('isContactShow', function(i) {
