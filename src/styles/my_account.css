@@ -1,5 +1,10 @@
-.banner {
-  background-image: url('../images/account_bg.jpg');
+html[lang='zh'] .banner,
+html[lang='en'] .banner {
+  background-image: url('../images/account_bg-en.jpg');
+}
+
+html[lang='ar'] .banner {
+  background-image: url('../images/account_bg-ar.jpg');
 }
 
 .ivu-row::before {
@@ -14,6 +19,8 @@
 }
 
 .container-row {
+  margin-top: 6px;
+  padding: 50px 0;
   background-color: #fff;
   border-bottom: 1px solid #fafafa;
 }
@@ -29,7 +36,6 @@
 }
 
 .account-row {
-  margin-top: 30px;
   padding: 0 40px;
 }
 
@@ -39,10 +45,6 @@
   vertical-align: middle;
   font-size: 18px;
   font-weight: bold;
-}
-
-.account-card {
-  margin-bottom: 40px;
 }
 
 .account-card.border-left {
@@ -65,7 +67,6 @@
 }
 
 .account .ivu-table {
-  margin-bottom: 30px;
   font-size: 14px;
 }
 
@@ -97,10 +98,6 @@
   border-bottom-color: transparent;
 }
 
-.account .ivu-tabs {
-  padding-bottom: 20px;
-}
-
 .account .ivu-tabs-bar {
   margin-bottom: 0;
 }
@@ -116,5 +113,6 @@
 }
 
 .account .ivu-page {
+  margin-top: 20px;
   text-align: center;
 }

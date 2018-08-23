@@ -127,7 +127,7 @@
         </i-col>
       </Row>
       <!-- 登录/操作历史 -->
-      <div class="container-row" style="margin-top: 2px;">
+      <div class="container-row">
         <Tabs v-model="tabLogActive">
           <tab-pane :label="$t('loginHistory')" name="loginHistory">
             <i-table size="small" :columns="loginColumn" :data="loginData"></i-table>
