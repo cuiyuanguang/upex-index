@@ -13,15 +13,25 @@ var allGoods = new Vue({
   },
   data: function() {
     var validateGoogle = (rule, value, callback) => {
-      if (value === '' && !this[rule.name].phone) {
-        callback(new Error(this.$t('sixLengthNumericRequired')));
+      var valueTrim = value.trim();
+      if (!this[rule.name].phone) {
+        if (!/\d+$/g.test(valueTrim)) {
+          callback(new Error(this.$t('sixLengthNumericRequired')));
+        } else {
+          callback();
+        }
       } else {
         callback();
       }
     };
     var validatePhone = (rule, value, callback) => {
-      if (value === '' && !this[rule.name].google) {
-        callback(new Error(this.$t('sixLengthNumericRequired')));
+      var valueTrim = value.trim();
+      if (!this[rule.name].google) {
+        if (!/\d+$/g.test(valueTrim)) {
+          callback(new Error(this.$t('sixLengthNumericRequired')));
+        } else {
+          callback();
+        }
       } else {
         callback();
       }
@@ -30,8 +40,6 @@ var allGoods = new Vue({
       value = Number(value);
       if (!value) {
         callback(new Error(this.$t('noZeroNumericRequired')));
-      } else if (value < this.marketPrice.trade_min_price || value > this.marketPrice.trade_max_price) {
-        callback(new Error(this.$t('sysLimitIs') + this.marketPrice.trade_min_price + '--' + this.marketPrice.trade_max_price));
       } else {
         callback();
       }
@@ -85,24 +93,16 @@ var allGoods = new Vue({
       //END user info
       //triggers
       modalOrder: false,
+      selectedAdvert: {},
+      legalCurrency: 0,
+      legalCurrencyAll: false,
+      legalCurrencyError: false,
+      digitalCurrency: 0,
+      digitalCurrencyAll: false,
+      digitalCurrencyError: false,
       modalGoogle: false,
       modalWhatsApp: false,
-      buyData: {
-        id: 0,
-        amount: 0,
-        price: 0,
-        method: '测试',
-        buyAmount: '',
-        sum: 0,
-        paymentBanks: [],
-        min: 0,
-        max: 0,
-        buyTotal: '',
-      },
-      buyAmountAppendText: 'SAR',
-      buyAmountErrorText: '',
-      buyTotalAppendText: 'USDT',
-      buyTotalErrorText: '',
+      // 广告列表
       totalPage: 0,
       buyTotal: 0,
       sellTotal: 0,
@@ -110,6 +110,7 @@ var allGoods = new Vue({
       sellCurrentPage: 1,
       selllist: [],
       buylist: [],
+      // 暂停/取消接单
       modalOperationOrder: false,
       cancelable: false,
       pauseable: false,
@@ -124,7 +125,7 @@ var allGoods = new Vue({
       whatsApp: '',
       // 新添加的绑定银行卡代码
       userInfo: '',
-      sendPlaceholderBank: this.$t('sendVerify'),
+      sendPlaceholderBank: '',
       sendDisabledBank: false,
       // 添加/修改银行卡
       modalBankInfo: false,
@@ -183,40 +184,64 @@ var allGoods = new Vue({
         phone: [{ name: 'formReleaseConfirm', validator: validatePhone, trigger: 'change' }],
         google: [{ name: 'formReleaseConfirm', validator: validateGoogle, trigger: 'change' }],
       },
+      timers: {},
     };
   },
   computed: {
-    buyAmountMin: function() {
-      var amount = Math.max(this.marketPrice.trade_min_price, this.buyData.min);
+    selectedAdvertBanks() {
+      var that = this;
+      var banks;
+      if (this.selectedAdvert.paymentBanks) {
+        banks = this.selectedAdvert.paymentBanks.map(function(item) {
+          return that.$t(item.bankName.replace(/\s+/g, '')) + '\r';
+        });
+        return banks.join();
+      }
+    },
+    legalCurrencyMin() {
+      var amount = Math.max(this.marketPrice.trade_min_price, this.selectedAdvert.minTrade);
       return amount.toFixed(2);
     },
-    buyAmountMax: function() {
-      var amount = Math.min(this.marketPrice.trade_max_price, this.buyData.max);
+    legalCurrencyMax() {
+      var amount = Math.min(this.marketPrice.trade_max_price, this.selectedAdvert.maxTrade);
       return amount.toFixed(2);
     },
-    buyTotalMin: function() {
-      return (this.buyData.min / this.buyData.price).toFixed(4);
+    legalCurrencyTips() {
+      return `${this.$t('limit')}: ${this.selectedAdvert.minTrade} - ${this.selectedAdvert.maxTrade} ${this.selectedAdvert.paycoin}`;
     },
-    buyTotalMax: function() {
-      var amount = Math.min(this.buyData.max / this.buyData.price, this.buyData.restAmount);
-      return amount.toFixed(4);
+    digitalCurrencyAvailable() {
+      return (this.selectedAdvert.volume - this.selectedAdvert.sell).toFixed(4);
+    },
+    digitalCurrencyMin() {
+      return Number((this.selectedAdvert.minTrade / this.selectedAdvert.price).toFixed(4));
+    },
+    digitalCurrencyMax() {
+      const amount = (this.selectedAdvert.maxTrade / this.selectedAdvert.price).toFixed(4);
+      return Math.min(amount, this.digitalCurrencyAvailable);
+    },
+    digitalCurrencyTips() {
+      return `
+        ${this.$t('limit')}: ${this.digitalCurrencyMin} -
+        ${this.digitalCurrencyMax}
+        ${this.selectedAdvert.coin}
+      `;
     },
     releaseTotalPrice: function() {
       return (this.formRelease.price * this.formRelease.volume).toFixed(2);
-    },
-    releaseMaxVolume: function() {
-      var volume = 0;
-      if (this.formRelease.side === 'SELL') {
-        volume = Math.min(this.balance, this.marketPrice.trade_max_volume);
-      } else {
-        volume = this.marketPrice.trade_max_volume;
-      }
-      return volume;
     },
   },
   methods: {
     getUserInfo: function() {
       this.userInfo = JSON.parse(localStorage.getItem('user')) || {};
+    },
+    // 获取用户余额
+    getBalance: function() {
+      var that = this;
+      get('api/finance/account_balance').then(function(res) {
+        if (res) {
+          that.balance = res.allCoinMap.USDT.normal_balance;
+        }
+      });
     },
     // 获取市场价格
     getMarketPrice: function() {
@@ -257,7 +282,7 @@ var allGoods = new Vue({
       this.advertId = item.id;
       this.modalMsg = {
         title: item.status === 6 ? this.$t('start') : this.$t('pause'),
-        desc: this.$t('confirm') + this.$t(this.action),
+        desc: this.$t('confirm') + ' ' + this.$t(this.action),
         confirmText: this.$t('confirm'),
       };
       this.modalOperationOrder = true;
@@ -311,38 +336,26 @@ var allGoods = new Vue({
         }
       });
     },
-    changeAmount: function() {
-      var value = this.buyData.buyAmount;
-      if (value < this.buyData.min || value > this.buyData.max) {
-        this.buyAmountErrorText =
-          this.$t('buyInputLimit') + this.buyData.min + '-' + this.buyData.max;
-        return;
-      } else {
-        this.buyAmountErrorText = '';
-        this.buyTotalErrorText = '';
-        this.buyData.buyTotal = (value / this.buyData.price).toFixed(4);
+    changeLegalCurrency() {
+      const digitalCurrencyCalc =
+        Number((this.legalCurrency / this.selectedAdvert.price).toFixed(4));
+      this.digitalCurrency = Math.min(digitalCurrencyCalc, this.digitalCurrencyMax);
+      if (digitalCurrencyCalc > this.digitalCurrencyMax) {
+        this.legalCurrency =
+          Number((this.digitalCurrencyMax * this.selectedAdvert.price).toFixed(2));
       }
     },
-    changeTotal: function() {
-      var value = this.buyData.buyTotal;
-      if (value < this.buyTotalMin || value > this.buyTotalMax) {
-        this.buyTotalErrorText =
-          this.$t('buyInputLimit') + this.buyTotalMin + '-' + this.buyTotalMax;
-        return;
-      } else {
-        this.buyTotalErrorText = '';
-        this.buyAmountErrorText = '';
-        this.buyData.buyAmount = (value * this.buyData.price).toFixed(2);
-      }
+    changeDigitalCurrency() {
+      this.legalCurrency = Number((this.digitalCurrency * this.selectedAdvert.price).toFixed(2));
     },
-    tradeAll: function(type) {
-      if (type === 'amount') {
-        this.buyData.buyAmount = this.buyAmountMax;
-        this.changeAmount();
+    tradeAll(type) {
+      if (type === 'legalCurrency') {
+        this.legalCurrency = this.selectedAdvert.maxTrade;
+        this.changeLegalCurrency();
       }
-      if (type === 'total') {
-        this.buyData.buyTotal = this.buyTotalMax;
-        this.changeTotal();
+      if (type === 'digitalCurrency') {
+        this.digitalCurrency = this.digitalCurrencyMax;
+        this.changeDigitalCurrency();
       }
     },
     showModalOrder: function(item, type) {
@@ -363,38 +376,30 @@ var allGoods = new Vue({
           this.modalWhatsApp = true;
           return;
         }
+        this.getBalance();
       }
+      this.selectedAdvert = item;
       this.modalOrder = true;
-      this.buyData.id = item.id;
-      this.buyData.price = item.price;
-      this.buyData.method =
-        item.paymentBanks &&
-        item.paymentBanks
-          .map(function(item) {
-            return item.bankName;
-          })
-          .join('<br/>');
-      this.buyData.restAmount = (item.volume - item.sell).toFixed(4);
-      this.buyData.min = item.minTrade;
-      this.buyData.max = item.maxTrade;
     },
     confirmOrder: function(type) {
-      if (this.buyAmountErrorText) return;
       if (!localStorage.getItem('user')) {
         this.$refs.header.showLogin();
         return;
       }
-      if (!this.buyData.buyTotal || !this.buyData.buyAmount) {
-        this.buyAmountErrorText = this.$t('canNotBeEmpty');
-        this.buyTotalErrorText = this.$t('canNotBeEmpty');
+      if (!this.legalCurrency) {
+        this.legalCurrencyError = true;
         return;
       }
-      var that = this;
+      if (!this.digitalCurrency) {
+        this.digitalCurrencyError = true;
+        return;
+      }
       var data = {
-        advertId: this.buyData.id,
-        volume: this.buyData.buyTotal,
-        totalPrice: this.buyData.buyAmount,
+        advertId: this.selectedAdvert.id,
+        volume: Number(this.digitalCurrency),
+        totalPrice: this.legalCurrency,
       };
+      var that = this;
       var api = 'api/buyOrder';
       var payUrl = 'otc_pay.html?sequence=';
       if (type === 'SELL') {
@@ -442,14 +447,7 @@ var allGoods = new Vue({
           that.modalWhatsApp = true;
           return;
         }
-        // 获取用户余额
-        get('api/finance/account_balance').then(function(data) {
-          if (data) {
-            that.balance = data.allCoinMap.USDT.normal_balance;
-          } else {
-            that.modalReleaseLoading = false;
-          }
-        });
+        that.getBalance();
         // 获取发单数量及类型
         get('api/personAdverts/cnt').then(function(obj) {
           that.modalReleaseLoading = false;
@@ -573,10 +571,11 @@ var allGoods = new Vue({
             : that.formReleaseConfirm.phone;
             post('api/advert', that.formRelease).then(function(res) {
               if (res) {
-                that.handleReset(name);
+                that.handleReset('formRelease');
+                that.handleReset('formReleaseConfirm');
                 that.modalReleaseWarning = false;
                 that.modalReleaseConfirm = false;
-                that.showListTag = that.formRelease.side;
+                that.showListTag = that.formRelease.side === 'SELL' ? 'BUY' : 'SELL';
                 that.getAdvertList(that.formRelease.side, 1);
               }
             });
@@ -662,9 +661,12 @@ var allGoods = new Vue({
     var locale = localStorage.getItem('locale');
     if (locale) {
       this.$i18n.locale = locale;
+      this.sendPlaceholderBank = this.$t('sendVerify');
     }
     this.$on('locale', function(i) {
-      that.locale = i;
+      this.locale = i;
+      this.$i18n.locale = locale;
+      this.sendPlaceholderBank = this.$t('sendVerify');
     });
     this.$on('isContactShow', function(i) {
       that.modalWhatsApp = i;
@@ -678,16 +680,24 @@ var allGoods = new Vue({
     this.getMarketPrice();
   },
   watch: {
-    locale: function(newVal, oldVal) {
+    locale(newVal, oldVal) {
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
+        this.sendPlaceholderBank = this.$t('sendVerify');
       }
     },
+    legalCurrency(newVal) {
+      this.legalCurrencyError = !newVal === true;
+    },
+    digitalCurrency(newVal) {
+      this.digitalCurrencyError = !newVal === true;
+    },
     releaseTotalPrice: function(newVal, oldVal) {
-      if (newVal > this.marketPrice.trade_max_price) {
+      var value = Number(newVal);
+      if (value > this.marketPrice.trade_max_price) {
         this.formRelease.maxTrade = this.marketPrice.trade_max_price;
-      } else if (newVal > 0 && newVal < this.marketPrice.trade_max_price) {
-        this.formRelease.maxTrade = newVal;
+      } else if (value > 0 && value < this.marketPrice.trade_max_price) {
+        this.formRelease.maxTrade = value;
       } else {
         this.formRelease.maxTrade = this.marketPrice.trade_max_price;
       }

@@ -14,11 +14,12 @@ var account = new Vue({
   data() {
     // 自定义表单验证
     var validateOldEmailVerify = (rule, value, callback) => {
-      const valueTrim = value.trim();
-      // eslint-disable-next-line
+      var valueTrim = value.trim();
       if (this.user.isOpenEmailCheck) {
         if (valueTrim === '') {
           callback(new Error(this.$t('canNotBeEmpty')));
+        } else if (!/\d+$/g.test(valueTrim)) {
+          callback(new Error(this.$t('numericRequired')));
         } else {
           callback();
         }
@@ -27,9 +28,8 @@ var account = new Vue({
       }
     };
     var validateEmailSecurity = (rule, value, callback) => {
-      const valueTrim = value.trim();
-      // eslint-disable-next-line
-      const reg = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
+      var valueTrim = value.trim();
+      var reg = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
       if (this.user.isOpenEmailCheck) {
         if (valueTrim === '') {
           callback(new Error(this.$t('canNotBeEmpty')));
@@ -43,18 +43,24 @@ var account = new Vue({
       }
     };
     var validateGoogleSecurity = (rule, value, callback) => {
-      if (this.user.googleStatus && value === '') {
-        callback(new Error(this.$t('canNotBeEmpty')));
-      } else {
-        callback();
+      var valueTrim = value.trim();
+      if (this.user.googleStatus) {
+        if (valueTrim === '') {
+          callback(new Error(this.$t('canNotBeEmpty')));
+        } else if (!/\d+$/g.test(valueTrim)) {
+          callback(new Error(this.$t('numericRequired')));
+        } else {
+          callback();
+        }
       }
     };
     var validatePhoneSecurity = (rule, value, callback) => {
+      var valueTrim = value.trim();
       if (this.user.mobileNumber) {
-        if (value === '') {
+        if (valueTrim === '') {
           callback(new Error(this.$t('canNotBeEmpty')));
-        } else if (!/\d+$/g.test(value)) {
-          callback(new Error(this.$t('phone') + ' ' + this.$t('formatError')));
+        } else if (!/\d+$/g.test(valueTrim)) {
+          callback(new Error(this.$t('numericRequired')));
         } else {
           callback();
         }
@@ -63,26 +69,40 @@ var account = new Vue({
       }
     };
     var validateGoogleBank = (rule, value, callback) => {
-      if (value === '' && this[rule.name].phone === '') {
-        callback(new Error(this.$t('canNotBeEmpty')));
+      var valueTrim = value.trim();
+      if (this[rule.name].phone === '') {
+        if (valueTrim === '') {
+          callback(new Error(this.$t('canNotBeEmpty')));
+        } else if (!/\d+$/g.test(valueTrim)) {
+          callback(new Error(this.$t('numericRequired')));
+        } else {
+          callback();
+        }
       } else {
         callback();
       }
     };
     var validatePhoneBank = (rule, value, callback) => {
-      if (value === '' && this[rule.name].google === '') {
-        callback(new Error(this.$t('canNotBeEmpty')));
+      var valueTrim = value.trim();
+      if (this[rule.name].google === '') {
+        if (valueTrim === '') {
+          callback(new Error(this.$t('canNotBeEmpty')));
+        } else if (!/\d+$/g.test(valueTrim)) {
+          callback(new Error(this.$t('numericRequired')));
+        } else {
+          callback();
+        }
       } else {
         callback();
       }
     };
     var validatePass = (rule, value, callback) => {
-      const valueTrim = value.trim();
-      const reg = /^(?=.*[a-z])(?=.*\d)[\s\S]{6,18}$/g;
+      var valueTrim = value.trim();
+      var reg = /^(?=.*[a-z])(?=.*\d)[\s\S]{8,64}$/g;
       if (valueTrim === '') {
         callback(new Error(this.$t('canNotBeEmpty')));
       } else if (!reg.test(valueTrim)) {
-        callback(new Error(this.$t('six2eighteen')));
+        callback(new Error(this.$t('eight2SixtyFour')));
       } else {
         if (this.formPassword.passwordNew !== '') {
           // 对第二个密码框单独验证
@@ -96,6 +116,35 @@ var account = new Vue({
         callback(new Error(this.$t('canNotBeEmpty')));
       } else if (value !== this.formPassword.passwordNew) {
         callback(new Error(this.$t('notMatch')));
+      } else {
+        callback();
+      }
+    };
+    var validateEmpty = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('canNotBeEmpty')));
+      } else {
+        callback();
+      }
+    };
+    var validateNumeric = (rule, value, callback) => {
+      if (!/\d+$/g.test(value)) {
+        callback(new Error(this.$t('numericRequired')));
+      } else {
+        callback();
+      }
+    };
+    var validateNumeric = (rule, value, callback) => {
+      if (!/\d+$/g.test(value)) {
+        callback(new Error(this.$t('numericRequired')));
+      } else {
+        callback();
+      }
+    };
+    var validateFormat = (rule, value, callback) => {
+      var reg = /^(?=.*[a-z])(?=.*\d)[\s\S]{8,64}$/g;
+      if (!reg.test(value)) {
+        callback(new Error(this.$t('eight2SixtyFour')));
       } else {
         callback();
       }
@@ -126,7 +175,7 @@ var account = new Vue({
         number: '',
       },
       ruleWhatsApp: {
-        number: [{ required: true, type: 'number', message: this.$t('numericRequired'), trigger: 'change' }],
+        number: [{ validator: validateNumeric, trigger: 'change' }],
       },
       // 修改密码
       modalPassword: false,
@@ -139,9 +188,9 @@ var account = new Vue({
         phone: '',
       },
       rulePassword: {
-        password: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
-        passwordNew: [{ required: true, validator: validatePass, trigger: 'change' }],
-        passwordReNew: [{ required: true, validator: validatePassCheck, trigger: 'change' }],
+        password: [{ validator: validateEmpty, trigger: 'change' }],
+        passwordNew: [{ validator: validatePass, trigger: 'change' }],
+        passwordReNew: [{ validator: validatePassCheck, trigger: 'change' }],
         email: [{ validator: validateEmailSecurity, trigger: 'change' }],
         google: [{ name: 'formPassword', validator: validateGoogleSecurity, trigger: 'change' }],
         phone: [{ name: 'formPassword', validator: validatePhoneSecurity, trigger: 'change' }],
@@ -154,9 +203,9 @@ var account = new Vue({
         password: '',
       },
       ruleGoogle: {
-        google: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
-        phone: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
-        password: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        google: [{ required: true, pattern: /\d+$/g, validator: validateNumeric, trigger: 'change' }],
+        phone: [{ required: true, pattern: /\d+$/g, validator: validateNumeric, trigger: 'change' }],
+        password: [{ validator: validateEmpty, trigger: 'change' }],
       },
       // 绑定/修改邮箱
       modalEmail: false,
@@ -170,10 +219,10 @@ var account = new Vue({
       ruleEmail: {
         oldEmail: [{ validator: validateOldEmailVerify, trigger: 'change' }],
         email: [
-          { required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' },
-          { type: 'email', message: this.$t('formatError'), trigger: 'change' },
+          { validator: validateEmpty, trigger: 'change' },
+          { type: 'email', validator: validateFormat, trigger: 'change' },
         ],
-        verify: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        verify: [{ required: true, pattern: /\d+$/g, validator: validateNumeric, trigger: 'change' }],
         google: [{ name: 'formEmail', validator: validateGoogleSecurity, trigger: 'change' }],
         phone: [{ name: 'formEmail', validator: validatePhoneSecurity, trigger: 'change' }],
       },
@@ -183,13 +232,15 @@ var account = new Vue({
         oldVerify: '',
         phone: '',
         verify: '',
+        email: '',
         google: '',
       },
       rulePhone: {
         oldVerify: [{ validator: validatePhoneSecurity, trigger: 'change' }],
-        phone: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
-        verify: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
-        google: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        phone: [{ required: true, pattern: /\d+$/g, validator: validateNumeric, trigger: 'change' }],
+        verify: [{ required: true, pattern: /\d+$/g, validator: validateNumeric, trigger: 'change' }],
+        email: [{ pattern: /\d+$/g, validator: validateNumeric, trigger: 'change' }],
+        google: [{ required: true, pattern: /\d+$/g, validator: validateNumeric, trigger: 'change' }],
       },
       // 添加/修改银行卡
       modalBankInfo: false,
@@ -200,15 +251,15 @@ var account = new Vue({
         ibanNo: '',
       },
       ruleBankInfo: {
-        bankName: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
-        name: [{ required: true, pattern: /\w+$/g, message: this.$t('bankFormatError'), trigger: 'change' }],
-        cardNo: [{ required: true, pattern: /\w+$/g, message: this.$t('bankFormatError'), trigger: 'change' }],
-        ibanNo: [{ required: true, pattern: /\w+$/g, message: this.$t('bankFormatError'), trigger: 'change' }],
+        bankName: [{ validator: validateEmpty, trigger: 'change' }],
+        name: [{ validator: validateFormat, trigger: 'change' }],
+        cardNo: [{ validator: validateFormat, trigger: 'change' }],
+        ibanNo: [{ validator: validateFormat, trigger: 'change' }],
       },
       modalBankConfirmTitle: '',
       modalBankConfirmCancel: '',
       modalBankConfirm: false,
-      tabVerifyActive: '1',
+      tabVerifyActive: 1,
       formBankConfirm: {
         phone: '',
         google: '',
@@ -527,7 +578,6 @@ var account = new Vue({
               if (res) {
                 that.clearTimers();
                 that.$refs[name].resetFields();
-                that.tabVerifyActive = 1;
                 that.modalBankConfirm = false;
                 that.getAllCard();
               }
@@ -541,7 +591,6 @@ var account = new Vue({
               newLoginPword: that.formPassword.passwordReNew,
             }).then(function(res) {
               if (res) {
-                that.tabVerifyActive = 1;
                 that.clearTimers();
                 that.$refs[name].resetFields();
                 that.modalPassword = false;
@@ -641,7 +690,8 @@ var account = new Vue({
       var that = this;
       get('api/allBankCard').then(function(res) {
         if (res.length > 0) {
-          that.bankData = res;
+          // that.bankData = res;
+          that.bankData = [];
         }
       });
     },
@@ -650,8 +700,13 @@ var account = new Vue({
         Toast.show(this.$t('bindPhoneOrGoogleFirst'), { icon: 'warn' });
         return;
       }
+      if (!data && this.bankData.length >= 5) {
+        Toast.show(this.$t('atMostFiveCards'), { icon: 'warn' });
+        return;
+      }
       this.modalBankConfirmTitle = data ? this.$t('delete') + this.$t('bankCard') : this.$t('confirm') + this.$t('bind');
       this.modalBankConfirmCancel = data ? this.$t('cancel') : this.$t('change');
+      this.tabVerifyActive = 1;
       if (data) {
         this.formBankInfo = JSON.parse(JSON.stringify(data));
         this.modalBankConfirm = true;
@@ -748,6 +803,14 @@ var account = new Vue({
     if (locale) {
       this.locale = locale;
       this.$i18n.locale = locale;
+      var sendVerify = this.$t('sendVerify');
+      this.sendPlaceholderPassword = sendVerify;
+      this.sendPlaceholderGoogle = sendVerify;
+      this.sendPlaceholderOldEmail = sendVerify;
+      this.sendPlaceholderEmail = sendVerify;
+      this.sendPlaceholderOldPhone = sendVerify;
+      this.sendPlaceholderNewPhone = sendVerify;
+      this.sendPlaceholderBank = sendVerify;
     }
     this.$on('locale', function(i) {
       this.locale = i;
@@ -764,18 +827,21 @@ var account = new Vue({
     this.getSecurityData(1);
   },
   watch: {
-    locale: function(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.$i18n.locale = newVal;
-        var sendVerify = this.$t('sendVerify');
-        this.sendPlaceholderPassword = sendVerify;
-        this.sendPlaceholderGoogle = sendVerify;
-        this.sendPlaceholderOldEmail = sendVerify;
-        this.sendPlaceholderEmail = sendVerify;
-        this.sendPlaceholderOldPhone = sendVerify;
-        this.sendPlaceholderNewPhone = sendVerify;
-        this.sendPlaceholderBank = sendVerify;
-      }
+    locale: {
+      handler: function(newVal, oldVal) {
+        if (newVal !== oldVal) {
+          this.$i18n.locale = newVal;
+          var sendVerify = this.$t('sendVerify');
+          this.sendPlaceholderPassword = sendVerify;
+          this.sendPlaceholderGoogle = sendVerify;
+          this.sendPlaceholderOldEmail = sendVerify;
+          this.sendPlaceholderEmail = sendVerify;
+          this.sendPlaceholderOldPhone = sendVerify;
+          this.sendPlaceholderNewPhone = sendVerify;
+          this.sendPlaceholderBank = sendVerify;
+        }
+      },
+      immediate: true
     },
   },
   filters: {

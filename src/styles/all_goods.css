@@ -1,33 +1,10 @@
-.warm-tips > .wrapper {
-  position: relative;
-  top: 12px;
-  width: auto;
+html[lang='zh'] .banner,
+html[lang='en'] .banner {
+  background-image: url('../../images/topbanner-en.png');
 }
 
-.warm-tips > .wrapper > div {
-  text-align: right;
-  width: 500px;
-  position: absolute;
-  right: 0;
-}
-
-.robin .ivu-modal-header {
-  border: none;
-}
-
-.warm-tips > .wrapper > div > button {
-  display: inline-block;
-  outline: none;
-  width: 190px;
-  height: 26px;
-  background: rgba(251, 251, 251, 1);
-  border-radius: 15px;
-  border: none;
-  color: rgba(255, 113, 0, 1);
-  line-height: 14px;
-  font-size: 14px;
-  font-family: SanFranciscoDisplay-Semibold;
-  font-weight: 600;
+html[lang='ar'] .banner {
+  background-image: url('../../images/topbanner-ar.png');
 }
 
 .btn-show-release {
@@ -47,10 +24,10 @@
 
 .list .tags {
   width: 187px;
-  height: 48px;
-  line-height: 48px;
+  height: 46px;
+  line-height: 46px;
   text-align: center;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .list .tags span {
@@ -126,10 +103,11 @@
   width: 40px;
   height: 40px;
   line-height: 40px;
+  vertical-align: middle;
   border: 1px solid rgba(237, 237, 237, 1);
   text-align: center;
   border-radius: 50%;
-  text-overflow: clip;
+  overflow: hidden;
 }
 .list .buylist .avatar.mine {
   background-color: #EDF4FF;
@@ -162,431 +140,123 @@
   margin-bottom: 20px;
 }
 
-.o-input-number-prepend {
+.order-modal {
+  height: 110px;
+}
+.order-modal .ivu-modal{
+  top: 35%;
+}
+.order-modal .ivu-modal-content {
+  padding: 22px 56px;
+  height: 100%;
+}
+.order-modal .ivu-modal-body {
+  padding: 0;
+}
+.order-modal .ivu-modal-close {
+  top: -10px;
+  right: -10px;
+}
+.order-modal .ivu-modal-close .ivu-icon {
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+}
+.order-modal .ivu-input {
+  border: 0;
+  border-radius: 4px;
+}
+.order-modal .ivu-input[readonly] {
+  color: #999999;
+  background-color: #fafafa;
+}
+.order-modal .ivu-input-group {
+  position: relative;
+  border: 1px solid #dcdee2;
+  border-radius: 4px;
+}
+.order-modal .ivu-input-group.error {
+  border-color: #ff2e2e;
+}
+.order-modal .ivu-input-group-append {
+  border: 0;
+  background-color: transparent;
+  position: absolute;
+  right: 2px;
+  z-index: 2;
+  padding: 0;
+  width: 50px;
+  height: 32px;
+  line-height: 32px;
+  border-radius: 4px;
+}
+.order-modal .input-tips {
+  display: block;
+  padding-top: 5px;
+  text-align: right;
+}
+.order-modal .ivu-btn-warning {
+  min-width: 140px;
+}
+.order-modal .input-tips.error {
+  color: #ff2e2e;
+}
+.o-input-number {
+  border: 1px solid #dcdee2;
+  border-radius: 4px;
+}
+.o-input-number.error {
+  border-color: #ff3300;
+}
+.o-input-number.prepend .ivu-input-number {
+  margin-left: -6px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.o-input-number.append .ivu-input-number {
+  margin-right: -6px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.o-input-number-prepend,
+.o-input-number-append {
   display: inline-block;
   vertical-align: top;
   width: 50px;
-  height: 38px;
+  height: 44px;
   text-align: center;
-  line-height: 38px;
-  border: 1px solid #d5d5d5;
-  border-right-color: transparent;
+  line-height: 44px;
+  border: none;
+  cursor: pointer;
+}
+.o-input-number-prepend {
   border-radius: 4px 0 0 4px;
-  background-color: #eeeeee;
+}
+.o-input-number-append {
+  border-radius: 0 4px 4px 0;
+}
+.o-input-number .ivu-input-number {
+  width: calc(100% - 50px);
+  height: 44px;
+  border: none;
 }
 
-.o-input-number .ivu-input-number-large {
+body[dir='rtl'] .order-modal .ivu-modal-close {
+  left: -10px;
+}
+
+body[dir='rtl'] .o-input-number.append .ivu-input-number {
   margin-left: -6px;
-  padding-left: 10px;
-  width: calc(100% - 50px);
-  height: 38px;
+  margin-right: auto;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
-  /* border-left-color: transparent; */
 }
 
-.post-modal {
-  display: none;
-}
-
-.post-modal .content {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1000;
-  overflow: auto;
-}
-
-.post-modal > .content > .content-wrapper {
-  width: 500px;
-  height: 575px;
-  padding: 0;
-  position: relative;
-  margin: 0 auto;
-  top: 30%;
-  background-color: white;
-  border-radius: 5px;
-}
-
-.post-modal > .content > .content-wrapper > .title {
-  position: relative;
-  padding: 20px;
-}
-
-.post-modal > .content > .content-wrapper > .title > span:first-child {
-  font-size: 18px;
-  color: #333333;
-}
-
-.post-modal > .content > .content-wrapper > .title .close {
-  position: absolute;
-  right: 31px;
-  font-size: 17px;
-}
-
-.post-modal > .content > .content-wrapper .ivu-input-wrapper {
-  height: 40px;
-}
-
-.post-modal > .content > .content-wrapper .ivu-input-wrapper input {
-  height: 40px;
-}
-
-.post-modal > .content > .content-wrapper .input-group {
-  margin: 30px 0;
-}
-
-.post-modal > .content > .content-wrapper .input-group > div:first-child {
-  margin: 10px 0;
-  position: relative;
-}
-
-.post-modal > .content > .content-wrapper .input-group > div:first-child .input-tips {
-  position: absolute;
-  right: 0;
-}
-
-.post-modal > .content > .content-wrapper .o-to {
-  text-align: center;
-  line-height: 40px;
-}
-
-.o-buy-sell-btn {
-  border: none;
-  width: 400px;
-  height: 44px;
-  background: rgba(92, 149, 234, 1);
-  border-radius: 5px;
-  color: white;
-}
-
-/***********buy-sell-model**************/
-
-.buy-sell-modal .content .content-wrapper {
-  width: 1200px;
-  min-height: 130px;
-}
-
-.buy-sell-modal .content > .content-wrapper .ivu-col > * {
-  margin-top: 5px;
-}
-
-.buy-sell-modal .content > .content-wrapper .o-close {
-  font-size: 20px;
-  position: absolute;
-  right: -6px;
-  top: -6px;
-}
-
-.buy-sell-modal .content > .content-wrapper .txt-right {
+body[dir='rtl'] .ivu-input-number input {
   text-align: right;
-}
-
-.buy-sell-modal .content > .content-wrapper .txt-left {
-  text-align: left;
-}
-
-.buy-sell-modal .content > .content-wrapper .txt-center {
-  text-align: center;
-}
-
-.buy-sell-modal .content > .content-wrapper .item-name {
-  color: #666666;
-  font-size: 14px;
-}
-
-.buy-sell-modal .content > .content-wrapper .txt-bold {
-  color: rgba(51, 51, 51, 1);
-  font-size: 14px;
-}
-
-.buy-sell-modal .content > .content-wrapper .o-swap {
-  height: 53px;
-  line-height: 53px;
-  text-align: center;
-  color: #979797;
-  font-size: 17px;
-}
-
-.buy-sell-modal .content > .content-wrapper .order-btn {
-  border: none;
-  background: #ff7100;
-  color: white;
-  width: 130px;
-  height: 40px;
-  border-radius: 3px;
-  font-size: 14px;
-}
-
-.buy-sell-modal .order-input-wrapper {
-  width: 250px;
-}
-
-.buy-sell-modal .order-input-wrapper .order-input {
-  display: inline-block;
-  position: relative;
-  width: 250px;
-  height: 40px;
-  border: 1px solid #d5d5d5;
-  border-radius: 6px;
-}
-
-.buy-sell-modal .order-input-wrapper .order-input > input {
-  padding-right: 40px;
-  padding-left: 10px;
-  width: 100%;
-  height: 100%;
-  outline: none;
-  border: none;
-  border-radius: 6px;
-}
-
-.buy-sell-modal .order-input-wrapper .order-input-append {
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 0 10px;
-  height: 40px;
-  line-height: 40px;
-  cursor: pointer;
-}
-
-.buy-sell-modal .order-input-wrapper .order-input-tips {
-  padding: 4px 0;
-  text-align: right;
-}
-
-.buy-sell-modal .order-input-wrapper .order-input.error {
-  border-color: #ff3300;
-}
-
-.buy-sell-modal .content > .content-wrapper .ivu-input {
-  width: 210px;
-  height: 40px;
-}
-
-.buy-sell-modal .content > .content-wrapper .o-tips {
-  position: absolute;
-  right: 7px;
-  top: 11px;
-  color: #999999;
-}
-
-.buy-sell-modal .content > .content-wrapper .o-tips-usdt {
-  position: absolute;
-  top: 11px;
-  right: 89px;
-  color: #999999;
-  z-index: 10;
-}
-
-.buy-sell-modal .content > .content-wrapper .mg-right-80 {
-  margin-right: 80px;
-}
-
-.buy-sell-modal .content > .content-wrapper .btn-wrapper {
-  text-align: center;
-}
-
-.buy-sell-modal .content > .content-wrapper .buyError {
-  padding-right: 20px;
-  text-align: right;
-  margin-top: 14px;
-}
-
-/******************ENDLINE**********************************/
-
-/*******************pending order************************************/
-
-.pend-order-modal > .content > .content-wrapper {
-  width: 500px;
-}
-
-.pend-order-modal > .content > .content-wrapper .o-close {
-  position: absolute;
-  right: 20px;
-}
-
-.pend-order-modal > .content > .content-wrapper .p-header {
-  padding: 20px;
-}
-
-.pend-order-modal > .content > .content-wrapper .p-info {
-  padding: 20px;
-  min-height: 167px;
-  background: linear-gradient(-138.7deg, rgba(89, 111, 237, 1), rgba(72, 120, 246, 1));
-}
-
-.pend-order-modal > .content > .content-wrapper .p-info .ivu-row {
-  margin-bottom: 8px;
-}
-
-.pend-order-modal > .content > .content-wrapper .key {
-  color: rgba(187, 206, 255, 1);
-}
-
-.pend-order-modal > .content > .content-wrapper .p-info .value {
-  color: white;
-}
-
-.pend-order-modal > .content > .content-wrapper .p-info .settings {
-  padding-top: 10px;
-  color: white;
-  font-size: 14px;
-}
-
-.pend-order-modal > .content > .content-wrapper .p-info .settings .s-header p {
-  font-size: 11px;
-  margin-bottom: 8px;
-}
-
-.pend-order-modal > .content > .content-wrapper .p-info .settings .s-body .ivu-row {
-  margin-bottom: 8px;
-}
-
-.pend-order-modal > .content > .content-wrapper .p-info .settings .s-body .input-single-line {
-  border: 0;
-  background-color: transparent;
-  color: #fff;
-  border-bottom: 1px solid #fff;
-  outline: none;
-}
-
-.pend-order-modal > .content > .content-wrapper .ivu-tabs-tabpane {
-  position: relative;
-}
-
-.pend-order-modal > .content > .content-wrapper .p-info .settings .ivu-switch.ivu-switch-checked {
-  border-color: #009688;
-  background-color: #009688;
-}
-
-.pend-order-modal > .content > .content-wrapper .ivu-icon-social-google {
-  color: #ff6a4b;
-}
-.pend-order-modal
-  > .content
-  > .content-wrapper
-  .p-info
-  .settings
-  .ivu-switch.ivu-switch-checked
-  .pend-order-modal
-  > .content
-  > .content-wrapper
-  .ivu-icon-android-textsms {
-  color: #009688;
-}
-
-.pend-order-modal > .content > .content-wrapper .ivu-tabs-tab {
-  color: rgba(67, 67, 67, 1);
-}
-
-.pend-order-modal > .content > .content-wrapper .ivu-tabs-tabpane {
-  text-align: center;
-}
-
-.pend-order-modal > .content > .content-wrapper .ivu-tabs-tabpane input {
-  width: 440px;
-  height: 40px;
-  background: rgba(250, 250, 250, 1);
-  border-radius: 2px;
-  border: 1px solid rgba(238, 238, 238, 1);
-  margin-top: 60px;
-}
-
-.pend-order-modal > .content > .content-wrapper .p-foot {
-  position: relative;
-  margin-top: 20px;
-  padding-bottom: 30px;
-  text-align: center;
-}
-
-.pend-order-modal > .content > .content-wrapper .p-foot-tips {
-  position: absolute;
-  bottom: 5px;
-  left: 30px;
-}
-
-.pend-order-modal > .content > .content-wrapper .p-foot .return {
-  margin-right: 100px;
-}
-
-.pend-order-modal > .content > .content-wrapper .p-foot .config {
-  color: #333333;
-  width: 251px;
-  height: 44px;
-  line-height: 44px;
-  background: #5C95EA;
-  border-radius: 5px;
-  display: inline-block;
-}
-
-.pend-order-modal > .content > .content-wrapper .sendMsg {
-  position: absolute;
-  right: 44px;
-  top: 31px;
-  color: rgba(202, 171, 0, 1);
-}
-
-.pend-order-modal > .content > .content-wrapper .rtabs .ivu-col-span-12 {
-  height: 50px;
-  line-height: 50px;
-  text-align: center;
-}
-
-.pend-order-modal > .content > .content-wrapper .rtabs .gg,
-.pend-order-modal > .content > .content-wrapper .rtabs .sms {
-  text-align: center;
-  position: relative;
-}
-
-.pend-order-modal > .content > .content-wrapper .rtabs input {
-  width: 440px;
-  height: 40px;
-  background: rgba(250, 250, 250, 1);
-  border-radius: 2px;
-  border: 1px solid rgba(238, 238, 238, 1);
-  margin-top: 20px;
-  outline: none;
-}
-
-.pend-order-modal > .content > .content-wrapper .rtabs .sms span {
-  cursor: pointer;
-}
-
-.pend-order-modal > .content > .content-wrapper .rtabs .ivu-row:first-child span {
-  display: inline-block;
-  width: 100%;
-  cursor: pointer;
-}
-
-.tb-act {
-  background-color: #ffffff;
-}
-
-.tb-disact {
-  background: rgba(235, 235, 235, 1);
-}
-
-/*******************end of pending order*************************************************/
-.i-modify {
-  width: 220px;
-  display: inline-block;
-  height: 44px;
-  line-height: 44px;
-  background: rgb(255, 237, 0);
-  border-radius: 5px;
-  text-align: center;
-  color: #333333;
-}
-
-.top {
-  background-color: #ab0f0f;
-  height: 136px;
-  font-size: 16px;
-  font-family: PingFangSC-Regular;
-  color: rgba(255, 213, 213, 1);
-  line-height: 22px;
 }

@@ -99,6 +99,11 @@ var messages = {
     en: 'Add bank card',
     ar: 'إضافة بطاقة بنك',
   },
+  atMostFiveCards: {
+    zh: '最多添加5张银行卡',
+    en: 'Add up to 5 bank cards',
+    ar: 'أضافه ما يصل إلى 5 بطاقات بنكيه',
+  },
   bankName: {
     zh: '银行名称',
     en: 'Bank name',
@@ -424,10 +429,10 @@ var messages = {
     en: 'format error',
     ar: 'خطأ في التنسيق',
   },
-  six2eighteen: {
-    zh: '请输入长度在6到18位之间的字符',
-    en: 'Please enter 6 to 18 characters ',
-    ar: 'يرجى إدخال من 6 إلى 18 حرفًا',
+  eight2SixtyFour: {
+    zh: '请输入长度在8到64位之间的字符',
+    en: 'Please enter 8 to 64 characters ',
+    ar: 'يرجى إدخال من 8 إلى 64 حرفًا',
   },
   sendVerify: {
     zh: '发送验证码',

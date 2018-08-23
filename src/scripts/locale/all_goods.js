@@ -64,6 +64,11 @@ var messages = {
     en: 'Mine',
     ar: 'الخاص بي',
   },
+  saUser: {
+    zh: '沙特用户',
+    en: 'Saudi users',
+    ar: 'المستخدمون السعوديون',
+  },
   amount: {
     zh: '数量',
     en: 'Amount',
@@ -108,6 +113,31 @@ var messages = {
     zh: '暂停接单',
     en: 'suspend receiving orders',
     ar: 'وقف استقبال الطلبات',
+  },
+  unremovable: {
+    zh: '暂时不能移除',
+    en: "Can't be removed at this time",
+    ar: 'لا يمكن إزالتها في الوقت الحالي',
+  },
+  unremovableTips: {
+    zh: '进行中的订单处理之后才能下线',
+    en: 'Can not go offline until processing order processed',
+    ar: 'لا يمكنك مغادرة الخط إلا بعد معالجة الطلب الجاري',
+  },
+  unremovableOperation: {
+    zh: '立即处理',
+    en: 'Process now',
+    ar: 'معالجة الأن',
+  },
+  removable: {
+    zh: '移除订单',
+    en: 'Remove order',
+    ar: 'إزالة الطلب',
+  },
+  removableTips: {
+    zh: '确认移除订单',
+    en: 'Confirm remove this order',
+    ar: 'تأكيد إزالة هذا الطلب',
   },
   currentPrice: {
     zh: '当前市场价',
@@ -220,6 +250,21 @@ var messages = {
     zh: '此处不能为空',
     en: 'This place can not be empty ',
     ar: 'هذا المكان لا يمكن أن يكون فارغاً',
+  },
+  releaseType: {
+    zh: '挂单类型',
+    en: 'Pending order type',
+    ar: 'نوع الأمر المعلق',
+  },
+  min: {
+    zh: 'Min',
+    en: 'Min',
+    ar: 'الحد الادني',
+  },
+  max: {
+    zh: 'Max',
+    en: 'Max',
+    ar: 'الحد الاقصي',
   },
   minNoLessThanSysMin: {
     zh: '最小限额不能小于系统限制',
