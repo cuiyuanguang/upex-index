@@ -70,9 +70,15 @@ var pay = new Vue({
     },
     cancelPay() {
       var that = this;
-      this.$Modal.confirm({
+      that.$Modal.confirm({
         title: that.$t('cancelOrder'),
-        content: '<p><span class="error">' + that.$t('paidAndNoCancel') + '</span><br>' + that.$t('helpTipsFourth') + '</p>',
+        render: function(h) {
+          return h('p', { 'class': 'error' }, [
+            h('span', that.$t('paidAndNoCancel')),
+            h('br'),
+            h('span', that.$t('helpTipsFourth')),
+          ]);
+        },
         onOk: function () {
           post('api/cancelOrder', that.sequence).then(function (res) {
             location.reload();
