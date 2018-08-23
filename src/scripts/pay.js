@@ -1,8 +1,18 @@
+Vue.locale = () => {};
+var messagesTransformed = utils.transform(messages);
+var messagesAll = {
+  zh: Object.assign(messagesTransformed.zh, iview.langs['zh']),
+  en: Object.assign(messagesTransformed.en, iview.langs['en']),
+  ar: Object.assign(messagesTransformed.ar, iview.langs['ar']),
+};
+
 var i18n = new VueI18n({
   locale: 'zh', // set locale
   fallbackLocale: 'zh',
-  messages: utils.transform(messages),
+  messages: messagesAll,
 });
+
+iview.i18n((key, value) => i18n.t(key, value));
 
 var pay = new Vue({
   el: "#app",
@@ -13,7 +23,7 @@ var pay = new Vue({
   },
   data: function () {
     return {
-      locale: 'zh',
+      locale: '',
       sequence: '',
       //trigger of pay modal
       isPayDialogShow: false,
@@ -73,7 +83,7 @@ var pay = new Vue({
       that.$Modal.confirm({
         title: that.$t('cancelOrder'),
         render: function(h) {
-          return h('p', { 'class': 'error' }, [
+          return h('p', {}, [
             h('span', that.$t('paidAndNoCancel')),
             h('br'),
             h('span', that.$t('helpTipsFourth')),
@@ -81,7 +91,9 @@ var pay = new Vue({
         },
         onOk: function () {
           post('api/cancelOrder', that.sequence).then(function (res) {
-            location.reload();
+            if (res) {
+              location.href = 'otc_adverts.html';
+            }
           });
         },
         onCancel: function () {
@@ -171,10 +183,12 @@ var pay = new Vue({
     this.timer = null;
     var locale = localStorage.getItem('locale');
     if (locale) {
+      this.locale = locale;
       this.$i18n.locale = locale;
     }
     this.$on('locale', function(i) {
       this.locale = i;
+      this.$i18n.locale = i;
     });
     var sequence = utils.getParam('sequence');
     this.sequence = sequence;

@@ -1,8 +1,18 @@
+Vue.locale = () => {};
+var messagesTransformed = utils.transform(messages);
+var messagesAll = {
+  zh: Object.assign(messagesTransformed.zh, iview.langs['zh']),
+  en: Object.assign(messagesTransformed.en, iview.langs['en']),
+  ar: Object.assign(messagesTransformed.ar, iview.langs['ar']),
+};
+
 var i18n = new VueI18n({
   locale: 'zh', // set locale
   fallbackLocale: 'zh',
-  messages: utils.transform(messages),
+  messages: messagesAll,
 });
+
+iview.i18n((key, value) => i18n.t(key, value));
 
 //订单状态 待支付1 已支付2 交易成功3 取消4 申诉5  打币中6  异常订单7
 var waitPay = new Vue({
@@ -14,7 +24,7 @@ var waitPay = new Vue({
   },
   data: function() {
     return {
-      locale: 'zh',
+      locale: '',
       //trigger of pay modal
       isPayDialogShow: false,
       //trigger of pay info modal
@@ -115,11 +125,12 @@ var waitPay = new Vue({
   mounted: function() {
     var locale = localStorage.getItem('locale');
     if (locale) {
+      this.locale = locale;
       this.$i18n.locale = locale;
     }
-    var that = this;
     this.$on('locale', function(i) {
-      that.locale = i;
+      this.locale = i;
+      this.$i18n.locale = i;
     });
     var sequence = utils.getParam('sequence');
     this.sequence = sequence;
