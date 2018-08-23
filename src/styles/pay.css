@@ -110,10 +110,6 @@ body[dir='rtl'] .pay .pay-info .info-header{
   padding-right: 20px;
 }
 
-.pay .pay-info .bankcard li {
-  padding-top: 24px;
-}
-
 .pay .pay-info .bankcard li .ivu-row:not(:last-child){
   margin-bottom: 12px ;
 }
