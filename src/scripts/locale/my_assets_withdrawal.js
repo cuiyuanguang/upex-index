@@ -4,6 +4,11 @@ var messages = {
     en: 'withdraw ',
     ar: 'سحب العملة'
   },
+  deposit: {
+    zh: '存款',
+    en: 'Deposit',
+    ar: 'إيداع'
+  },
   myAsset: {
     zh: '我的资产',
     en: 'My assets',
@@ -209,4 +214,39 @@ var messages = {
     en: 'Application for withdraw has been submitted, please be patient.',
     ar: 'تم تقديم طلب السحب ، الرجاء الإنتظار '
   },
+  iKnow:{
+    zh: '我知道了',
+    en: '',
+    ar: ''
+  },
+  unAuditStatus: {
+    zh: '未审核',
+    en: '',
+    ar: ''
+  },
+  auditSuccessStatus:{
+    zh: '审核成功',
+    en: '',
+    ar: ''
+  },
+  auditFailStatus: {
+    zh: '审核失败',
+    en: '',
+    ar: ''
+  },
+  inPayStatus: {
+    zh: '支付中已经打币',
+    en: '',
+    ar: ''
+  },
+  payFailStatus: {
+    zh: '支付失败',
+    en: '',
+    ar: ''
+  },
+  dismissStatus: {
+    zh: '已撤销',
+    en: '',
+    ar: ''
+  }
 };

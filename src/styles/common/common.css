@@ -550,6 +550,10 @@ input::-webkit-inner-spin-button {
   padding-top: 10px;
 }
 
+.googleAuth-modal .ivu-modal-body{
+  padding-bottom: 30px;
+}
+
 .googleAuth-modal .pay-modal-title h3{
   color: #333;
 }
@@ -641,4 +645,17 @@ body[dir='rtl'] .googleAuth-modal .content-wrapper .pay-modal-content .paid{
 
 .expand-row{
   margin:8px 0;
+}
+
+.expand-key{
+  margin-left: 0;
+  margin-right: 6px;
+}
+
+body[dir='rtl'] .expand-row{
+  text-align: right;
+}
+
+body[dir='rtl'] .expand-row .expand-key{
+  margin-left: 6px;
 }

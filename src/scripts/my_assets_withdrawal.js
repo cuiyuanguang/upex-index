@@ -181,22 +181,22 @@ var myAssetsWithdrawal = new Vue({
         that.tableLoading3 = false;
         that.data3Page = res.count;
         for (var i = 0; i < res.financeList.length; i++) {
-          if (res.financeList[i].status === 0) {
-            that.$set(that.data3[i], 'status', '未审核')
-          } else if (res.financeList[i].status === 1) {
-            that.$set(that.data3[i], 'status', '审核通过')
-          } else if (res.financeList[i].status === 2) {
-            that.$set(that.data3[i], 'status', '审核拒绝')
-          } else if (res.financeList[i].status === 3) {
-            that.$set(that.data3[i], 'status', '支付中已经打币')
-          } else if (res.financeList[i].status === 4) {
-            that.$set(that.data3[i], 'status', '支付失败')
-          } else if (res.financeList[i].status === 5) {
-            that.$set(that.data3[i], 'status', '已完成')
-          } else if (res.financeList[i].status === 6) {
-            that.$set(that.data3[i], 'status', '已撤销')
+          if(res.financeList[i].status === 0){
+            that.$set(that.data3[i], 'status', that.$t('unAuditStatus'))
+          }else if(res.financeList[i].status === 1){
+            that.$set(that.data3[i], 'status', that.$t('auditSuccessStatus'))
+          }else if(res.financeList[i].status === 2){
+            that.$set(that.data3[i], 'status', that.$t('auditFailStatus'))
+          }else if(res.financeList[i].status === 3){
+            that.$set(that.data3[i], 'status', that.$t('inPayStatus'))
+          }else if(res.financeList[i].status === 4){
+            that.$set(that.data3[i], 'status', that.$t('auditFailStatus'))
+          }else if(res.financeList[i].status === 5){
+            that.$set(that.data3[i], 'status', that.$t('completeStatus'))
+          }else if(res.financeList[i].status === 6){
+            that.$set(that.data3[i], 'status', that.$t('dismissStatus'))
           }
-          that.$set(that.data3[i], 'type', 'Withdrawal')
+          that.$set(that.data3[i], 'type', that.$t('withdrawal'))
         }
       })
     },
@@ -307,7 +307,7 @@ var myAssetsWithdrawal = new Vue({
       data = {
         "coinSymbol": that.modelCurrency,
         "address": that.WithdrawalAddress,
-        "label": that.AddressTag || that.WithdrawalAddress
+        "label": that.AddressTag || Date.parse(new Date())
       };
       post('api/addr/add_withdraw_addr', JSON.stringify(data), false).then((res) => {
         if (res) {

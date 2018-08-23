@@ -257,6 +257,15 @@ var myAssets = new Vue({
         that.tableLoading1 = false;
         that.data1 = res.financeList;
         that.data1Page = res.count;
+        for(let i = 0; i < res.financeList.length; i++){
+          switch (res.financeList[i].type){
+            case 'buy':
+              that.$set(that.data1[i], 'status', that.$t('unAuditStatus'))
+              break;
+            case 1:
+
+          }
+        }
       })
     },
     changePageAll(page) {
@@ -277,13 +286,13 @@ var myAssets = new Vue({
         that.data2Page = res.count;
         for (var i = 0; i < res.financeList.length; i++) {
           if(res.financeList[i].status === 0){
-            that.$set(that.data2[i], 'status', '未确认')
+            that.$set(that.data2[i], 'status', that.$t('unConfirmStatus'))
           }else if(res.financeList[i].status === 1){
-            that.$set(that.data2[i], 'status', '已完成')
+            that.$set(that.data2[i], 'status', that.$t('completeStatus'))
           }else if(res.financeList[i].status === 2){
-            that.$set(that.data2[i], 'status', '异常')
+            that.$set(that.data2[i], 'status', that.$t('errorStatus'))
           }
-          that.$set(that.data2[i], 'type', 'deposit')
+          that.$set(that.data2[i], 'type', that.$t('deposit'))
         }
       })
     },
@@ -305,21 +314,21 @@ var myAssets = new Vue({
         that.data3Page = res.count;
         for (var i = 0; i < res.financeList.length; i++) {
           if(res.financeList[i].status === 0){
-            that.$set(that.data3[i], 'status', '未审核')
+            that.$set(that.data3[i], 'status', that.$t('unAuditStatus'))
           }else if(res.financeList[i].status === 1){
-            that.$set(that.data3[i], 'status', '审核通过')
+            that.$set(that.data3[i], 'status', that.$t('auditSuccessStatus'))
           }else if(res.financeList[i].status === 2){
-            that.$set(that.data3[i], 'status', '审核拒绝')
+            that.$set(that.data3[i], 'status', that.$t('auditFailStatus'))
           }else if(res.financeList[i].status === 3){
-            that.$set(that.data3[i], 'status', '支付中已经打币')
+            that.$set(that.data3[i], 'status', that.$t('inPayStatus'))
           }else if(res.financeList[i].status === 4){
-            that.$set(that.data3[i], 'status', '支付失败')
+            that.$set(that.data3[i], 'status', that.$t('auditFailStatus'))
           }else if(res.financeList[i].status === 5){
-            that.$set(that.data3[i], 'status', '已完成')
+            that.$set(that.data3[i], 'status', that.$t('completeStatus'))
           }else if(res.financeList[i].status === 6){
-            that.$set(that.data3[i], 'status', '已撤销')
+            that.$set(that.data3[i], 'status', that.$t('dismissStatus'))
           }
-          that.$set(that.data3[i], 'type', 'Withdrawal')
+          that.$set(that.data3[i], 'type', that.$t('withdrawal'))
         }
       })
     },
