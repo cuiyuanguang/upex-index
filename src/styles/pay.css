@@ -49,8 +49,11 @@
 }
 
 .pay .pay-header h3 {
-  padding-top: 20px;
   font-size: 22px;
+}
+
+.pay .pay-header h3 .orange{
+  color: #FF7100;
 }
 
 .pay .pay-header .step-wrapper {
@@ -88,13 +91,13 @@
 }
 
 .pay .pay-info {
-  padding: 10px 20px;
+  padding: 20px 30px;
 }
 
 .pay .pay-info .info-header {
   padding-left: 20px;
   font-weight: 600;
-  background: rgba(248, 248, 248, 1);
+  background: #f8f8f8;
   height: 50px;
   line-height: 50px;
   border-right: 1px solid #f4f4f4;
@@ -102,12 +105,22 @@
   color: rgba(51, 51, 51, 1);
 }
 
+body[dir='rtl'] .pay .pay-info .info-header{
+  padding-left: 0;
+  padding-right: 20px;
+}
+
 .pay .pay-info .bankcard li {
-  border-bottom: 1px dashed #d4d0d0;
+  padding-top: 24px;
+}
+
+.pay .pay-info .bankcard li .ivu-row:not(:last-child){
+  margin-bottom: 12px ;
 }
 
 .pay .pay-info > .ivu-row {
   border: 1px solid rgba(244, 244, 244, 1);
+  padding-bottom: 14px;
 }
 
 .pay .pay-info .info-items {
@@ -116,6 +129,11 @@
 
 .pay .pay-info .info-items > .ivu-row {
   padding-left: 30px;
+}
+
+body[dir='rtl'] .pay .pay-info .info-items > .ivu-row{
+  padding-right: 30px;
+  padding-left: 0;
 }
 
 .pay .pay-info .info-items .info-key {
@@ -128,20 +146,17 @@
   font-weight: 600;
 }
 
-.pay .pay-info .ivu-row {
-  margin-bottom: 12px;
-}
 .pay .pay-box-left{
   padding-top: 24px;
 }
 
-
-.pay .pay-box-right{
-  padding-top: 24px;
-}
 .pay .pay-box-right .ivu-row{
-  padding-left: 40px;
+  padding-left: 53px;
+}
 
+body[dir='rtl'] .pay .pay-box-right .ivu-row{
+  padding-left: 0;
+  padding-right: 53px;
 }
 
 .pay .pay-box-left .info-value-green{
@@ -160,9 +175,19 @@
   border-radius: 12px;
   height: 26px;
   line-height: 26px;
-  margin-top: -13px;
-  width: 140px;
   text-align: center;
+  margin-top: -4px;
+  min-width: 140px;
+}
+
+.pay .bankcard .pay-image{
+  vertical-align: -2px;
+  margin-right: 12px;
+}
+
+body[dir='rtl'] .pay .bankcard .pay-image{
+  margin-right: 0;
+  margin-left: 12px;
 }
 
 body[dir='rtl'] .pay .pay-info .ivu-row .contact .whatup{
@@ -195,6 +220,10 @@ body[dir='rtl'] .pay .pay-info .ivu-row .contact .whatup{
   font-size: 18px;
   font-weight: bold;
   line-height: 40px;
+}
+
+.pay .pay-notice .text-success, .pay .pay-notice .text-error{
+  margin: 0 8px;
 }
 
 .pay-action {
@@ -236,6 +265,11 @@ body[dir='rtl'] .pay .pay-info .ivu-row .contact .whatup{
 	color: #495060;
 	cursor: pointer;
 	min-width: 120px;
+}
+
+body[dir='rtl'] .pay .input-copy{
+  margin-right: 0;
+  margin-left: 10px;
 }
 
 .pay .input-copy::selection {
@@ -282,6 +316,7 @@ body[dir='rtl'] .pay .pay-action-tips .triangle{
   color: #3461a7;
   line-height: 16px;
   padding: 0;
+  text-align: left;
 }
 
 #app .pay-modal .pay-modal-title {
@@ -311,6 +346,7 @@ body[dir='rtl'] .pay .pay-action-tips .triangle{
   padding-top: 10px;
   margin:0 30px;
   color: #333;
+  min-width: auto;
 }
 body[dir='rtl'] #app .pay-modal .content-wrapper .cancel-btn {
   float: left;

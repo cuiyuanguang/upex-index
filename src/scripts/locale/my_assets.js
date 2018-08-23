@@ -104,4 +104,49 @@ var messages = {
     en: 'No data',
     ar: 'لا توجد بيانات '
   },
+  unConfirmStatus: {
+    zh: '未确认',
+    en: '',
+    ar: ''
+  },
+  completeStatus: {
+    zh: '已完成',
+    en: '',
+    ar: ''
+  },
+  errorStatus: {
+    zh: '异常',
+    en: '',
+    ar: ''
+  },
+  unAuditStatus: {
+    zh: '未审核',
+    en: '',
+    ar: ''
+  },
+  auditSuccessStatus:{
+    zh: '审核成功',
+    en: '',
+    ar: ''
+  },
+  auditFailStatus: {
+    zh: '审核失败',
+    en: '',
+    ar: ''
+  },
+  inPayStatus: {
+    zh: '支付中已经打币',
+    en: '',
+    ar: ''
+  },
+  payFailStatus: {
+    zh: '支付失败',
+    en: '',
+    ar: ''
+  },
+  dismissStatus: {
+    zh: '已撤销',
+    en: '',
+    ar: ''
+  }
 };

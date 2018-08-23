@@ -15,7 +15,7 @@
         <div class="pay-header">
             <h3 v-if="step==1">
               {{ $t('payToSeller') }}
-              <span>{{orderInfo.totalPrice}}SAR</span>
+              <span class="orange">&nbsp;{{orderInfo.totalPrice}} SAR</span>
             </h3>
             <h3 v-if="step==2">
               {{ $t('waitForSellerConfirm') }}
@@ -42,20 +42,20 @@
                 <ul v-if="step < 3" class="pay-box-left">
                   <li class="info-items">
                     <Row>
-                      <i-col span="6" class="info-key">{{ $t('orderNo') }} :</i-col>
-                      <i-col span="18" class="info-value">{{orderInfo.sequence}}</i-col>
+                      <i-col span="8" class="info-key">{{ $t('orderNo') }} :</i-col>
+                      <i-col span="16" class="info-value">{{orderInfo.sequence}}</i-col>
                     </Row>
                   </li>
                   <li class="info-items">
                     <Row>
-                      <i-col span="6" class="info-key">{{ $t('totalPurchase') }} :</i-col>
-                      <i-col span="18" class="info-value">{{orderInfo.volume}} USDT</i-col>
+                      <i-col span="8" class="info-key">{{ $t('totalPurchase') }} :</i-col>
+                      <i-col span="16" class="info-value">{{orderInfo.volume}} USDT</i-col>
                     </Row>
                   </li>
                   <li class="info-items">
                     <Row>
-                      <i-col span="6" class="info-key">{{ $t('totalPrice') }} :</i-col>
-                      <i-col span="18" class="info-value">{{orderInfo.totalPrice}} SAR</i-col>
+                      <i-col span="8" class="info-key">{{ $t('totalPrice') }} :</i-col>
+                      <i-col span="16" class="info-value">{{orderInfo.totalPrice}} SAR</i-col>
                     </Row>
                   </li>
                 </ul>
@@ -117,27 +117,29 @@
                       <i-col span="15" class="info-value">{{item.ibanNo}}</i-col>
                     </Row>
                   </li>
+                  <li>
+                    <Row>
+                      <i-col span="6">
+                        <img src="../images/pay_phone.png" class="pay-image">
+                        {{ $t('phone') }}
+                      </i-col>
+                      <i-col span="15" class="info-value">
+                        {{orderInfo.seller.hideMobileNumber}}
+                      </i-col>
+                    </Row>
+                    <Row>
+                      <i-col span="6">
+                        <img src="../images/pay_whatsapp.png" class="pay-image">
+                        {{ $t('socialNumber') }}
+                      </i-col>
+                      <i-col span="15" class="info-value">
+                        <!--<input type="text" name="Social Number" readonly class="input-copy" :value="orderInfo.seller.userExtView.watchapp" @click="copy($event)">-->
+                        <a class="contact" :href="'https://api.whatsapp.com/send?phone='+whatsAppLink" target="_blank">
+                          <img class="whatup" src="../images/whatup-white.png" />{{ $t('contactSeller') }}</a>
+                      </i-col>
+                    </Row>
+                  </li>
                 </ul>
-                <Row>
-                  <i-col span="6">
-                    <Icon type="android-call" style="margin-right:12px"></Icon>
-                    {{ $t('phone') }}
-                  </i-col>
-                  <i-col span="15" class="info-value">
-                    {{orderInfo.seller.hideMobileNumber}}
-                  </i-col>
-                </Row>
-                <Row>
-                  <i-col span="6">
-                    <Icon type="android-contacts" style="margin-right:12px"></Icon>
-                    {{ $t('socialNumber') }}
-                  </i-col>
-                  <i-col span="15" class="info-value">
-                    <input type="text" name="Social Number" readonly class="input-copy" :value="orderInfo.seller.userExtView.watchapp" @click="copy($event)">
-                    <a class="contact" :href="'https://api.whatsapp.com/send?phone='+whatsAppLink" target="_blank">
-                      <img class="whatup" src="../images/whatup-white.png" />{{ $t('contactSeller') }}</a>
-                  </i-col>
-                </Row>
               </div>
 
             </i-col>
@@ -159,7 +161,7 @@
         <div class="pay-status" v-if="step==2">
           <p class="pay-notice" v-if="limitTime > 0">
             {{ $t('sellerNotConfirmIn') }}<span class="text-success">{{ (confirmLimit / 60).toFixed(2) }}</span> {{ $t('hour') }}<br>
-            {{ $t('restTime') }}<span class="text-error">{{leftTime}}</span>
+            {{ $t('restTime') }}<span class="text-success">{{leftTime}}</span>
           </p>
           <p class="pay-notice" v-else>
             <span class="text-error"> {{ $t('orderExpired') }}</span>
