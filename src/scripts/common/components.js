@@ -564,13 +564,20 @@ var addContact = {
   `,
   i18n: i18nComponents,
   data() {
+    var validateNumeric = (rule, value, callback) => {
+      if (!/\d+$/g.test(value)) {
+        callback(new Error(this.$t('numericRequired')));
+      } else {
+        callback();
+      }
+    };
     return {
       formWhatsApp: {
         number: '',
       },
       ruleWhatsApp: {
         number: [
-          { required: true, type: 'number', message: this.$t('numericRequired'), trigger: 'change' },
+          { validator: validateNumeric, trigger: 'change' },
         ],
       },
       selectCountry: '+86',
@@ -2550,6 +2557,101 @@ var o_find_password = {
     }
   },
 };
+
+var pendingOrderItem = {
+  template: `
+    <Row v-if="data.buyer.id == id">
+      <i-col span="4">
+        <Avatar style="background:#FF2E2E;">{{ data.status < 7 ? $t('buy') : $t('expired') }}</Avatar>
+      </i-col>
+      <i-col span="14">
+        <template v-if="data.status < 7">
+          <h4>
+          {{ data.status == 1 ? $t('waitForBuyerPay') : '' }}
+          {{ data.status == 2 ? $t('waitForSellerReceive') : '' }}
+          {{data.totalPrice}}SAR
+          </h4>
+          <p>
+            {{ $t('payInTime') }}
+            <span class="text-error text-strong">{{ timeStr != 0 ? timeStr : $t('expired') }}</span>
+          </p>
+        </template>
+        <template v-else>
+          <h4>{{ $t('orderExpired') }}</h4>
+          <p>{{ $t('seekForCustomService') }</p>
+        </template>
+      </i-col>
+      <i-col span="6" class="text-right">
+        <a class="order-dropdown-view" :href="'otc_pay.html?sequence='+data.sequence">{{ $t('viewOrder') }}</a>
+      </i-col>
+    </Row>
+    <Row v-else>
+      <i-col span="4">
+        <Avatar style="background:#5C95EA;">{{ data.status < 7 ? $t('sell') : $t('expired') }}</Avatar>
+      </i-col>
+      <i-col span="14">
+        <template v-if="data.status < 7">
+          <h4>
+            {{ data.status == 1 ? $t('waitForBuyerPay') : '' }}
+            {{ data.status == 2 ? $t('buyerHasPaid') : '' }}
+            {{data.totalPrice}}SAR
+          </h4>
+          <p>
+            {{ $t('waitForTime') }}
+            <span class="text-primary text-strong">{{ timeStr != 0 ? timeStr : $t('expired') }}</span>
+          </p>
+        </template>
+        <template v-else>
+          <h4>{{ $t('orderexpired') }}</h4>
+          <p>{{ $t('seekForCustomService') }</p>
+        </template>
+      </i-col>
+      <i-col span="6" class="text-right">
+        <a class="order-dropdown-view" :href="'otc_wait_pay.html?sequence='+data.sequence">{{ $t('viewOrder') }}</a>
+      </i-col>
+    </Row>
+  `,
+  i18n: i18nComponents,
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+    data: {
+      type: Object,
+      required: true,
+    },
+    locale: {
+      type: String,
+      default: 'zh',
+    },
+  },
+  data: function() {
+    return {
+      timer: null,
+      timeStr: '',
+    };
+  },
+  watch: {
+    locale(newVal) {
+      this.$i18n.locale = newVal;
+    }
+  },
+  mounted: function() {
+    var expiredTime = this.data.status == 1 ? this.data.limitTime : this.data.confirmLimitTime;
+    var that = this;
+    that.timer = setInterval(function () {
+      var now = Date.now();
+      if ((expiredTime - now) <= 0) {
+        that.timeStr = 0;
+        clearInterval(that.timer);
+      } else {
+        that.timeStr = utils.MillisecondToDate(expiredTime - now);
+      }
+    }, 1000);
+  },
+};
+
 // header
 var o_header = {
   template: `
@@ -2574,7 +2676,7 @@ var o_header = {
                 <Badge :count="orders.length">
                   <a href="otc_my_order.html">{{ $t('allOrder') }}</a>
                 </Badge>
-                <DropdownMenu slot="list" class="text-left" style="width:400px;">
+                <DropdownMenu slot="list" class="text-left" style="width:360px;">
                   <DropdownItem name="header">
                     <Row>
                       <i-col span="12">{{ $t('ongoingOrders') }}</i-col>
@@ -2588,58 +2690,7 @@ var o_header = {
                     <p>{{ $t('noOrderForNow') }}</p>
                   </DropdownItem>
                   <DropdownItem v-for="item in orders" :key="item.sequence">
-                    <Row v-if="item.buyer.id == userInfo.id">
-                      <i-col span="4">
-                        <Avatar style="background:#FF2E2E;">{{ item.status < 7 ? $t('buy') : $t('outOfDate') }}</Avatar>
-                      </i-col>
-                      <i-col span="14">
-                        <template v-if="item.status < 7">
-                          <h4>
-                          {{ item.status == 1 ? $t('waitForBuyerPay') : '' }}
-                          {{ item.status == 2 ? $t('waitForSellerReceive') : '' }}
-                          {{item.totalPrice}}SAR
-                          </h4>
-                          <p>
-                            {{ $t('payInTime') }}
-                            <span class="text-error" v-if="item.status == 1">{{ item.limitTime | date }}</span>
-                            <span class="text-error" v-if="item.status == 2">{{ item.confirmLimitTime | date }}</span>
-                          </p>
-                        </template>
-                        <template v-else>
-                          <h4>{{ $t('orderOutOfDate') }}</h4>
-                          <p>{{ $t('seekForCustomService') }</p>
-                        </template>
-                      </i-col>
-                      <i-col span="6" class="text-right">
-                        <a class="order-dropdown-view" :href="'otc_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
-                      </i-col>
-                    </Row>
-                    <Row v-else>
-                      <i-col span="4">
-                        <Avatar style="background:#5C95EA;">{{ item.status < 7 ? $t('sell') : $t('outOfDate') }}</Avatar>
-                      </i-col>
-                      <i-col span="14">
-                        <template v-if="item.status < 7">
-                          <h4>
-                            {{ item.status == 1 ? $t('waitForBuyerPay') : '' }}
-                            {{ item.status == 2 ? $t('buyerHasPaid') : '' }}
-                            {{item.totalPrice}}SAR
-                          </h4>
-                          <p>
-                            {{ $t('waitForTime') }}
-                            <span class="text-primary" v-if="item.status == 1">{{ item.limitTime | date }}</span>
-                            <span class="text-primary" v-if="item.status == 2">{{ item.confirmLimitTime | date }}</span>
-                          </p>
-                        </template>
-                        <template v-else>
-                          <h4>{{ $t('orderOutOfDate') }}</h4>
-                          <p>{{ $t('seekForCustomService') }</p>
-                        </template>
-                      </i-col>
-                      <i-col span="6" class="text-right">
-                        <a class="order-dropdown-view" :href="'otc_wait_pay.html?sequence='+item.sequence">{{ $t('viewOrder') }}</a>
-                      </i-col>
-                    </Row>
+                    <pending-order-item :id="userInfo.id" :data="item" :locale="locale"></pending-order-item>
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
@@ -2650,7 +2701,7 @@ var o_header = {
             <li class="items" v-if="logined">
               <Dropdown class="text-center">
                 <a href="javascript:void(0)">
-                  {{ userInfo.nickName }}
+                  <span class="text-dir-ltr">{{ userInfo.nickName }}</span>
                   <Icon type="arrow-down-b"></Icon>
                 </a>
                 <DropdownMenu slot="list">
@@ -2700,10 +2751,18 @@ var o_header = {
     </div>
   `,
   i18n: i18nComponents,
+  components: {
+    mylogin: o_my_login,
+    myloginnext: o_my_loginNext,
+    myregister: o_my_register,
+    myregistergoogle: o_my_registerGoogle,
+    myFindPassword: o_find_password,
+    pendingOrderItem: pendingOrderItem,
+  },
   data() {
     return {
       orders: [],
-      ws: null,
+      locale: '',
       logined: false,
       isLoginShow: false,
       isregister: false,
@@ -2759,18 +2818,12 @@ var o_header = {
       });
     },
   },
-  components: {
-    mylogin: o_my_login,
-    myloginnext: o_my_loginNext,
-    myregister: o_my_register,
-    myregistergoogle: o_my_registerGoogle,
-    myFindPassword: o_find_password,
-  },
   mounted() {
     if (!localStorage.getItem('country')) {
       this.getCountry();
     }
     var locale = localStorage.getItem('locale') || 'ar';
+    this.locale = locale;
     this.$i18n.locale = locale;
     document.documentElement.lang = locale;
     document.body.dir = locale === 'ar' ? 'rtl' : 'ltr';
@@ -2858,7 +2911,7 @@ var row_my_assets = {
             </Col>
         </Row>
      </div>
-`,
+  `,
   props: {
     row: Object
   }
