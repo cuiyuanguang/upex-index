@@ -1,9 +1,18 @@
+Vue.locale = () => {};
+var messagesTransformed = utils.transform(messages);
+var messagesAll = {
+  zh: Object.assign(messagesTransformed.zh, iview.langs['zh']),
+  en: Object.assign(messagesTransformed.en, iview.langs['en']),
+  ar: Object.assign(messagesTransformed.ar, iview.langs['ar']),
+};
 
 var i18n = new VueI18n({
   locale: 'zh', // set locale
   fallbackLocale: 'zh',
-  messages: utils.transform(messages),
+  messages: messagesAll,
 });
+
+iview.i18n((key, value) => i18n.t(key, value));
 
 var recharge = new Vue({
   el: '#recharge',
@@ -100,7 +109,7 @@ var recharge = new Vue({
       this.$copyText(this.rechargeAddressString).then(function (e) {
         Toast.show(that.$t('copySucceed'), { icon: 'ok' });
       }, function (e) {
-        Toast.show(that.$t('copyFailed'), { icon: 'warn' });
+        Toast.show(that.$t('copyFailed'), { icon: 'error' });
       });
     },
     getRechargeInfo() {
