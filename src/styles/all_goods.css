@@ -1,10 +1,10 @@
 html[lang='zh'] .banner,
 html[lang='en'] .banner {
-  background-image: url('../../images/topbanner-en.png');
+  background-image: url('../images/topbanner-en.png');
 }
 
 html[lang='ar'] .banner {
-  background-image: url('../../images/topbanner-ar.png');
+  background-image: url('../images/topbanner-ar.png');
 }
 
 .btn-show-release {
@@ -13,6 +13,7 @@ html[lang='ar'] .banner {
 }
 
 .btn-show-release:hover {
+  color: #b24e00;
   border-color: transparent;
   background-color: #fff;
 }
@@ -154,16 +155,14 @@ html[lang='ar'] .banner {
   padding: 0;
 }
 .order-modal .ivu-modal-close {
-  top: -10px;
-  right: -10px;
+  top: -12px;
+  right: -12px;
 }
-.order-modal .ivu-modal-close .ivu-icon {
-  background-color: #fff;
-  border-radius: 10px;
-  overflow: hidden;
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
+.order-modal .order-modal-close {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url('../images/close-circle.png');
 }
 .order-modal .ivu-input {
   border: 0;
@@ -245,7 +244,7 @@ html[lang='ar'] .banner {
 }
 
 body[dir='rtl'] .order-modal .ivu-modal-close {
-  left: -10px;
+  left: -12px;
 }
 
 body[dir='rtl'] .o-input-number.append .ivu-input-number {

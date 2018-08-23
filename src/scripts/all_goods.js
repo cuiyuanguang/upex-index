@@ -13,9 +13,8 @@ var allGoods = new Vue({
   },
   data: function() {
     var validateGoogle = (rule, value, callback) => {
-      var valueTrim = value.trim();
       if (!this[rule.name].phone) {
-        if (!/\d+$/g.test(valueTrim)) {
+        if (!/\d+$/g.test(value)) {
           callback(new Error(this.$t('sixLengthNumericRequired')));
         } else {
           callback();
@@ -25,13 +24,27 @@ var allGoods = new Vue({
       }
     };
     var validatePhone = (rule, value, callback) => {
-      var valueTrim = value.trim();
       if (!this[rule.name].google) {
-        if (!/\d+$/g.test(valueTrim)) {
+        if (!/\d+$/g.test(value)) {
           callback(new Error(this.$t('sixLengthNumericRequired')));
         } else {
           callback();
         }
+      } else {
+        callback();
+      }
+    };
+    var validateEmpty = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('canNotBeEmpty')));
+      } else {
+        callback();
+      }
+    };
+    var validateFormat = (rule, value, callback) => {
+      var reg = /\w{8,64}/g;
+      if (!reg.test(value)) {
+        callback(new Error(this.$t('eight2SixtyFour')));
       } else {
         callback();
       }
@@ -136,10 +149,10 @@ var allGoods = new Vue({
         ibanNo: '',
       },
       ruleBankInfo: {
-        bankName: [{ required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
-        name: [{ required: true, pattern: /\w+$/g, message: this.$t('bankFormatError'), trigger: 'change' }],
-        cardNo: [{ required: true, pattern: /\w+$/g, message: this.$t('bankFormatError'), trigger: 'change' }],
-        ibanNo: [{ required: true, pattern: /\w+$/g, message: this.$t('bankFormatError'), trigger: 'change' }],
+        bankName: [{ validator: validateEmpty, trigger: 'change' }],
+        name: [{ validator: validateFormat, trigger: 'change' }],
+        cardNo: [{ validator: validateFormat, trigger: 'change' }],
+        ibanNo: [{ validator: validateFormat, trigger: 'change' }],
       },
       modalBankConfirmTitle: '',
       modalBankConfirmCancel: '',
@@ -166,7 +179,7 @@ var allGoods = new Vue({
         maxTrade: '',
       },
       ruleRelease: {
-        side: [{ name: 'formRelease', required: true, message: this.$t('canNotBeEmpty'), trigger: 'change' }],
+        side: [{ name: 'formRelease', validator: validateEmpty, trigger: 'change' }],
         price: [{ name: 'formRelease', validator: validatePrice, trigger: 'change' }],
         volume: [{ name: 'formRelease', validator: validateVolume, trigger: 'change' }],
         minTrade: [{ name: 'formRelease', validator: validateMinTrade, trigger: 'change' }],
@@ -454,11 +467,10 @@ var allGoods = new Vue({
           var buyCount = obj.BUY;
           var sellCount = obj.SELL;
           if (buyCount >= 2 && sellCount >= 2) {
-            Toast.show(that.$t('dealOrderBeforeRelease'), { icon: 'warning' });
+            Toast.show(that.$t('dealOrderBeforeRelease'), { icon: 'error' });
           } else if (buyCount >= 2 && sellCount < 2) {
             Toast.show(that.$t('releaseSellOnly'), {
-              icon: 'warning',
-              duration: 1500,
+              icon: 'error',
               callback: function() {
                 that.buyDisabled = true;
                 that.formRelease.side = 'SELL';
@@ -467,8 +479,7 @@ var allGoods = new Vue({
             });
           } else if (buyCount < 2 && sellCount >= 2) {
             Toast.show(that.$t('releaseBuyOnly'), {
-              icon: 'warning',
-              duration: 1500,
+              icon: 'error',
               callback: function() {
                 that.sellDisabled = true;
                 that.formRelease.side = 'BUY';
@@ -560,7 +571,7 @@ var allGoods = new Vue({
           if (name === 'formReleaseConfirm') {
             if (that.formRelease.side === 'SELL') {
               if (!that.selectedCardIds.length) {
-                Toast.show(that.$t('atLeastOneBank'), { icon: 'warn' });
+                Toast.show(that.$t('atLeastOneBank'), { icon: 'error' });
                 return;
               }
               that.formRelease.paymentBanks = that.selectedCardIds.map(function(item) { return { id: item } });
