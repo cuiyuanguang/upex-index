@@ -91,14 +91,28 @@
 }
 
 .order-wrap-top-li-bottom-wrap .left-wrap {
-  width: 134px;
-  margin-right: 12px;
+  margin-right: 20px;
   float: left;
 }
 
+body[dir='rtl'] .order-wrap-top-li-bottom-wrap .left-wrap{
+  float: right;
+  margin-right: 0;
+  margin-left: 20px;
+}
+
 .order-wrap-top-li-bottom-wrap .right-wrap {
-  width: 150px;
   float: left;
+}
+
+body[dir='rtl'] .order-wrap-top-li-bottom-wrap .right-wrap{
+  float: right;
+}
+
+body[dir='rtl'] .order-wrap-total-ar{
+  unicode-bidi: plaintext;
+  margin-left: 8px;
+  margin-right: 0;
 }
 
 .li-usdt-wrap {

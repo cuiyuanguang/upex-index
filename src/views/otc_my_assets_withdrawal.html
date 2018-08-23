@@ -36,9 +36,9 @@
             <i-select v-show="addressList.length" class="address-select-wrap" @on-change="addressChange(modelAddress)"
                       v-model="modelAddress" style="width:400px" :placeholder="$t('pleaseChoose')"
                       size="large">
-              <i-option v-for="address in addressList" :value="address.address" :label="address.label + ' ' + address.address">
+              <i-option v-for="address in addressList" :value="address.address" :label="address.label + ': ' + address.address">
                 <div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 350px;margin: 0;">
-                  <span>{{address.label}}</span>
+                  <span class="my-select-label">{{address.label}}:</span>
                   <span class="my-select-address">{{address.address}}</span></div>
                 <span @click.stop="delAddress(address.address)" class="my-select-address-del font_family" :class="!delStatus?'delColor':''">
                     &#xe62a;</span>
@@ -222,7 +222,7 @@
       </div>
     </div>
     <div slot="footer">
-      <i-button type="primary" size="large" long :loading="withdrawalLoading" @click="withdrawalCancelTrue">ok</i-button>
+      <i-button type="primary" size="large" long :loading="withdrawalLoading" @click="withdrawalCancelTrue">{{ $t('iKnow') }}</i-button>
     </div>
   </modal>
 </div>

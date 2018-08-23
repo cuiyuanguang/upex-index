@@ -307,7 +307,7 @@ var myAssetsWithdrawal = new Vue({
       data = {
         "coinSymbol": that.modelCurrency,
         "address": that.WithdrawalAddress,
-        "label": that.AddressTag || that.WithdrawalAddress
+        "label": that.AddressTag || Date.parse(new Date())
       };
       post('api/addr/add_withdraw_addr', JSON.stringify(data), false).then((res) => {
         if (res) {

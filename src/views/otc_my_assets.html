@@ -26,7 +26,7 @@
             </div>
           </div>
           <div class="order-wrap-total" v-show="balance.USDT.normal_balance">
-            <span>{{ $t('total') }}</span>{{(Number(balance.USDT.normal_balance) + Number(balance.USDT.lock_balance)).toFixed(2)}} USDT
+            <span class="order-wrap-total-ar">{{ $t('total') }}</span>{{(Number(balance.USDT.normal_balance) + Number(balance.USDT.lock_balance)).toFixed(2)}} USDT
           </div>
           <div class="order-wrap-top-li-bottom-wrap">
             <div class="left-wrap">
@@ -50,7 +50,7 @@
             </div>
           </div>
           <div class="order-wrap-total">
-            <span>{{ $t('total') }}</span>{{balance.BTC.total_balance}} BTC
+            <span class="order-wrap-total-ar">{{ $t('total') }}</span>{{balance.BTC.total_balance}} BTC
           </div>
           <div class="order-wrap-top-li-bottom-wrap">
             <div class="left-wrap">
@@ -74,7 +74,7 @@
             </div>
           </div>
           <div class="order-wrap-total">
-            <span>{{ $t('total') }}</span>{{balance.ETH.total_balance}} ETH
+            <span class="order-wrap-total-ar">{{ $t('total') }}</span>{{balance.ETH.total_balance}} ETH
           </div>
           <div class="order-wrap-top-li-bottom-wrap">
             <div class="left-wrap">

@@ -127,16 +127,28 @@
   position: relative;
 }
 
-.address-select-wrap.ivu-select-large .ivu-select-item:last-child {
+.address-select-wrap .ivu-select-large .ivu-select-item:last-child {
   padding: 0
 }
 
-.ivu-select-item-selected.ivu-select-item-focus {
-  background: #4297F1;
+.address-select-wrap .ivu-select-item-selected.ivu-select-item-focus {
+  background: #fff;
 }
 
-.ivu-select-item-selected.ivu-select-item-focus .my-select-address {
-  color: #fff;
+.address-select-wrap .ivu-select-item-selected.ivu-select-item-focus .my-select-address {
+  color: #5C95EA !important;
+}
+
+.address-select-wrap .ivu-select-item-selected.ivu-select-item-focus .my-select-label{
+  color: #5C95EA !important;
+}
+
+.address-select-wrap .ivu-select-item:hover .my-select-address{
+  color: #333;
+}
+
+.address-select-wrap .ivu-select-item:nth-last-child(1):hover{
+  background: #fff;
 }
 
 .address {
@@ -147,7 +159,7 @@
 }
 
 .my-select-address {
-  color: #ccc;
+  color: #999;
 }
 
 .ivu-modal-header {
@@ -208,6 +220,11 @@
   transform:scale(.7);
   color:#999;
 }
+body[dir='rtl'] .my-select-address-del{
+  right: auto;
+  left: 15px;
+}
+
 .my-select-address-del.delColor{
   color:#ddd;
 }
@@ -327,7 +344,15 @@ body[dir='rtl'] .withdrawal-container .loginNext-input .ivu-input-group-append{
   float: left;
   width:160px;
 }
+
+body[dir='rtl'] .withdrawalTrue-text-left{
+  float: right;
+}
 .withdrawalTrue-text-right{
   float: left;
   width: 240px;
+}
+
+body[dir='rtl'] .withdrawalTrue-text-right{
+  float: right;
 }

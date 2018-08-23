@@ -209,4 +209,9 @@ var messages = {
     en: 'Application for withdraw has been submitted, please be patient.',
     ar: 'تم تقديم طلب السحب ، الرجاء الإنتظار '
   },
+  iKnow:{
+    zh: '我知道了',
+    en: '',
+    ar: ''
+  }
 };

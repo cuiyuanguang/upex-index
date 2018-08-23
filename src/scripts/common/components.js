@@ -637,7 +637,7 @@ var i18nLoginRegisterMsg = {
   googleValidate: {
     zh: '谷歌验证码',
     en: 'google verification code',
-    ar: ''
+    ar: 'رمز التحقق من جوجل'
   },
   getValidateCode: {
     zh:'获取验证码',
