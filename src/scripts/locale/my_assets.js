@@ -148,5 +148,56 @@ var messages = {
     zh: '已撤销',
     en: '',
     ar: ''
+  },
+  buyType: {
+    zh: '买入',
+    en: '',
+    ar: ''
+  },
+  tradeType: {
+    zh: '交易',
+    en: '',
+    ar: ''
+  },
+  sellType: {
+    zh: '卖出',
+    en: '',
+    ar: ''
+  },
+  presentType: {
+    zh: '赠币',
+    en: '',
+    ar: ''
+  },
+  createSellType: {
+    zh: '挂单-锁币',
+    en: '',
+    ar: ''
+  },
+  transferSellType: {
+    zh: '挂单-卖出',
+    en: '',
+    ar: ''
+  },
+  transferBuyType: {
+    zh: '挂单-买入',
+    en: '',
+    ar: ''
+  },
+  closeType: {
+    zh: '取消订单-解除锁币',
+    en: '',
+    ar: ''
+  },
+  sellOrderType: {
+    zh: '卖出-锁币',
+    en: '',
+    ar: ''
+  },
+  transferCommonType: {
+    zh: '转账',
+    en: '',
+    ar: ''
   }
+
 };

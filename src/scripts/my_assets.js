@@ -13,8 +13,8 @@ var myAssets = new Vue({
     row_my_assets,
     row_my_assets_with
   },
-  data (){
-    return{
+  data() {
+    return {
       locale: 'zh',
       showGoogleAuth: false,
       balance: {
@@ -24,8 +24,8 @@ var myAssets = new Vue({
       },
       userInfo: JSON.parse(localStorage.getItem('user')),
       AssetFoldingBTC: 0,
-      AssetFoldingBTCText:'',
-      getBTCToSARLoding:false,
+      AssetFoldingBTCText: '',
+      getBTCToSARLoding: false,
       orderWrapTable: '',
       columns1: [
         {
@@ -193,22 +193,22 @@ var myAssets = new Vue({
       tableLoading2: true,
       tableLoading3: true,
       tableLoading4: true,
-      BTCToSAR:''
+      BTCToSAR: ''
     }
   },
   methods: {
     //跳转With
-    runWithdrawal(type){
-      if(this.userInfo.googleStatus !== 1){
+    runWithdrawal(type) {
+      if (this.userInfo.googleStatus !== 1) {
         this.showGoogleAuth = true;
         return;
       }
-      window.location.href= "otc_my_assets_withdrawal.html";
+      window.location.href = "otc_my_assets_withdrawal.html";
       localStorage.setItem("asset_type", type);
     },
 
-    runRecharge(){
-      window.location.href= "otc_my_assets_recharge.html";
+    runRecharge() {
+      window.location.href = "otc_my_assets_recharge.html";
     },
     //获取头部数据
     getUserBalance() {
@@ -235,13 +235,13 @@ var myAssets = new Vue({
       })
     },
     //获取btc--sar汇率
-    getBTCToSAR(){
+    getBTCToSAR() {
       var that = this;
       post('api/common/rate', {}, false).then((res) => {
         that.getBTCToSARLoding = true;
         that.BTCToSAR = res.rate.BTC2SAR;
-        that.AssetFoldingBTC =(that.balance.BTC.total_balance / res.rate.BTC2SAR).toFixed(2);
-        that.AssetFoldingBTCText = that.balance.BTC.total_balance+ 'BTC ≈ '+that.AssetFoldingBTC+'SAR';
+        that.AssetFoldingBTC = (that.balance.BTC.total_balance / res.rate.BTC2SAR).toFixed(2);
+        that.AssetFoldingBTCText = that.balance.BTC.total_balance + 'BTC ≈ ' + that.AssetFoldingBTC + 'SAR';
       })
     },
     //全部
@@ -257,13 +257,45 @@ var myAssets = new Vue({
         that.tableLoading1 = false;
         that.data1 = res.financeList;
         that.data1Page = res.count;
-        for(let i = 0; i < res.financeList.length; i++){
-          switch (res.financeList[i].type){
+        for (let i = 0; i < res.financeList.length; i++) {
+          switch (res.financeList[i].type) {
             case 'buy':
-              that.$set(that.data1[i], 'status', that.$t('unAuditStatus'))
+              that.$set(that.data1[i], 'type', that.$t('buyType'));
               break;
-            case 1:
+            case 'trade':
+              that.$set(that.data1[i], 'type', that.$t('tradeType'));
+              break;
+            case 'sell':
+              that.$set(that.data1[i], 'type', that.$t('sellType'));
+              break;
+            case 'present_coin':
+              that.$set(that.data1[i], 'type', that.$t('presentType'));
+              break;
+            case 'deposit':
+              that.$set(that.data1[i], 'type', that.$t('deposit'));
+              break;
+            case 'withdraw_success':
+              that.$set(that.data1[i], 'type', that.$t('withdrawal'));
+              break;
 
+            case 'create_sell_ad':
+              that.$set(that.data1[i], 'type', that.$t('createSellType'));
+              break;
+            case 'otc_transfer_sellad':
+              that.$set(that.data1[i], 'type', that.$t('transferSellType'));
+              break;
+            case 'otc_transfer_buyad':
+              that.$set(that.data1[i], 'type', that.$t('transferBuyType'));
+              break;
+            case 'otc_advert_close':
+              that.$set(that.data1[i], 'type', that.$t('closeType'));
+              break;
+            case 'otc_sell_order':
+              that.$set(that.data1[i], 'type', that.$t('sellOrderType'));
+              break;
+            case 'transfer_common':
+              that.$set(that.data1[i], 'type', that.$t('transferCommonType'));
+              break;
           }
         }
       })
@@ -285,11 +317,11 @@ var myAssets = new Vue({
         that.data2 = res.financeList;
         that.data2Page = res.count;
         for (var i = 0; i < res.financeList.length; i++) {
-          if(res.financeList[i].status === 0){
+          if (res.financeList[i].status === 0) {
             that.$set(that.data2[i], 'status', that.$t('unConfirmStatus'))
-          }else if(res.financeList[i].status === 1){
+          } else if (res.financeList[i].status === 1) {
             that.$set(that.data2[i], 'status', that.$t('completeStatus'))
-          }else if(res.financeList[i].status === 2){
+          } else if (res.financeList[i].status === 2) {
             that.$set(that.data2[i], 'status', that.$t('errorStatus'))
           }
           that.$set(that.data2[i], 'type', that.$t('deposit'))
@@ -313,19 +345,19 @@ var myAssets = new Vue({
         that.tableLoading3 = false;
         that.data3Page = res.count;
         for (var i = 0; i < res.financeList.length; i++) {
-          if(res.financeList[i].status === 0){
+          if (res.financeList[i].status === 0) {
             that.$set(that.data3[i], 'status', that.$t('unAuditStatus'))
-          }else if(res.financeList[i].status === 1){
+          } else if (res.financeList[i].status === 1) {
             that.$set(that.data3[i], 'status', that.$t('auditSuccessStatus'))
-          }else if(res.financeList[i].status === 2){
+          } else if (res.financeList[i].status === 2) {
             that.$set(that.data3[i], 'status', that.$t('auditFailStatus'))
-          }else if(res.financeList[i].status === 3){
+          } else if (res.financeList[i].status === 3) {
             that.$set(that.data3[i], 'status', that.$t('inPayStatus'))
-          }else if(res.financeList[i].status === 4){
+          } else if (res.financeList[i].status === 4) {
             that.$set(that.data3[i], 'status', that.$t('auditFailStatus'))
-          }else if(res.financeList[i].status === 5){
+          } else if (res.financeList[i].status === 5) {
             that.$set(that.data3[i], 'status', that.$t('completeStatus'))
-          }else if(res.financeList[i].status === 6){
+          } else if (res.financeList[i].status === 6) {
             that.$set(that.data3[i], 'status', that.$t('dismissStatus'))
           }
           that.$set(that.data3[i], 'type', that.$t('withdrawal'))
@@ -361,14 +393,14 @@ var myAssets = new Vue({
       this.$i18n.locale = locale;
     }
     var that = this;
-    this.$on('locale', function(i) {
+    this.$on('locale', function (i) {
       that.locale = i;
     });
 
     this.$on('cancelGoogleModal', (i) => {
       this.showGoogleAuth = false;
     });
-    this.$on('toGoogleAuth',(i) => {
+    this.$on('toGoogleAuth', (i) => {
       this.showGoogleAuth = false;
       this.$refs.header.$data.isRegisterGoogleShow = true;
     });

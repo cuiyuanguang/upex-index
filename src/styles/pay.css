@@ -96,7 +96,6 @@
 
 .pay .pay-info .info-header {
   padding-left: 20px;
-  font-weight: 600;
   background: #f8f8f8;
   height: 50px;
   line-height: 50px;
@@ -110,17 +109,20 @@ body[dir='rtl'] .pay .pay-info .info-header{
   padding-right: 20px;
 }
 
-.pay .pay-info .bankcard li {
+.pay .pay-info .bankcard li .ivu-row:not(:last-child){
+  margin-bottom: 12px ;
+}
+
+.pay .pay-box-right{
   padding-top: 24px;
 }
 
-.pay .pay-info .bankcard li .ivu-row:not(:last-child){
+.pay .pay-box-right .ivu-row:not(:last-child){
   margin-bottom: 12px ;
 }
 
 .pay .pay-info > .ivu-row {
   border: 1px solid rgba(244, 244, 244, 1);
-  padding-bottom: 14px;
 }
 
 .pay .pay-info .info-items {
@@ -148,6 +150,15 @@ body[dir='rtl'] .pay .pay-info .info-items > .ivu-row{
 
 .pay .pay-box-left{
   padding-top: 24px;
+  padding-bottom: 14px;
+  border-right: 1px solid #f4f4f4;
+}
+
+body[dir='rtl'] .pay .pay-box-left{
+  padding-top: 24px;
+  padding-bottom: 14px;
+  border-left: 1px solid #f4f4f4;
+  border-right: 0;
 }
 
 .pay .pay-box-right .ivu-row{
@@ -180,12 +191,12 @@ body[dir='rtl'] .pay .pay-box-right .ivu-row{
   min-width: 140px;
 }
 
-.pay .bankcard .pay-image{
+.pay .pay-image{
   vertical-align: -2px;
   margin-right: 12px;
 }
 
-body[dir='rtl'] .pay .bankcard .pay-image{
+body[dir='rtl'] .pay .pay-image{
   margin-right: 0;
   margin-left: 12px;
 }
@@ -218,12 +229,12 @@ body[dir='rtl'] .pay .pay-info .ivu-row .contact .whatup{
 .pay-notice {
   margin-bottom: 14px;
   font-size: 18px;
-  font-weight: bold;
   line-height: 40px;
 }
 
 .pay .pay-notice .text-success, .pay .pay-notice .text-error{
   margin: 0 8px;
+  font-weight: bold;
 }
 
 .pay-action {
