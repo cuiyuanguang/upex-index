@@ -22,6 +22,7 @@ var recharge = new Vue({
   },
   data() {
     return {
+      locale: '',
       rechargeAddressQR: '',
       rechargeAddressString: '',
       rechargeColumn: [
@@ -138,16 +139,26 @@ var recharge = new Vue({
     },
   },
   mounted() {
+    this.$on('locale', function(i) {
+      this.locale = i;
+      this.$i18n.locale = locale;
+    });
+    var locale = localStorage.getItem('locale');
+    if (locale) {
+      this.locale = locale;
+      this.$i18n.locale = locale;
+    }
     this.getRechargeInfo();
-    // var that = this;
-    // new QRCode(document.getElementById('rechargeQR'), {
-    //   text: that.rechargeAddress,
-    //   width: 96,
-    //   height: 96,
-    //   colorDark : '#000000',
-    //   colorLight : '#ffffff',
-    //   correctLevel : QRCode.CorrectLevel.H,
-    // });
     this.getRechargeData(1);
   },
+  watch: {
+    locale: {
+      handler: function(newVal, oldVal) {
+        if (newVal !== oldVal) {
+          this.$i18n.locale = newVal;
+        }
+      },
+      immediate: true
+    },
+  }
 });
