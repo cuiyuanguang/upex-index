@@ -68,6 +68,11 @@
   background-color: #fff;
 }
 
+body[dir='rtl'] .recharge-info-qr {
+  margin-left: 20px;
+  margin-right: 0;
+}
+
 .recharge-info-qr > img {
   max-width: 100%;
   vertical-align: middle;
