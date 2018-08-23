@@ -118,6 +118,14 @@ body[dir='rtl'] .pay .pay-info .info-header{
   margin-bottom: 12px ;
 }
 
+.pay .pay-box-right{
+  padding-top: 24px;
+}
+
+.pay .pay-box-right .ivu-row:not(:last-child){
+  margin-bottom: 12px ;
+}
+
 .pay .pay-info > .ivu-row {
   border: 1px solid rgba(244, 244, 244, 1);
   padding-bottom: 14px;
@@ -180,12 +188,12 @@ body[dir='rtl'] .pay .pay-box-right .ivu-row{
   min-width: 140px;
 }
 
-.pay .bankcard .pay-image{
+.pay .pay-image{
   vertical-align: -2px;
   margin-right: 12px;
 }
 
-body[dir='rtl'] .pay .bankcard .pay-image{
+body[dir='rtl'] .pay .pay-image{
   margin-right: 0;
   margin-left: 12px;
 }
@@ -218,12 +226,12 @@ body[dir='rtl'] .pay .pay-info .ivu-row .contact .whatup{
 .pay-notice {
   margin-bottom: 14px;
   font-size: 18px;
-  font-weight: bold;
   line-height: 40px;
 }
 
 .pay .pay-notice .text-success, .pay .pay-notice .text-error{
   margin: 0 8px;
+  font-weight: bold;
 }
 
 .pay-action {
