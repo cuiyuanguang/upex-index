@@ -482,6 +482,9 @@ var account = new Vue({
     getUserInfo() {
       var that = this;
       post('api/common/user_info', '', false).then(function(res) {
+        if (!res.googleStatus && res.isOpenMobileCheck) {
+          that.tabVerifyActive = 2;
+        }
         that.user = res;
         localStorage.setItem('user', JSON.stringify(res));
       });
@@ -697,7 +700,11 @@ var account = new Vue({
       }
       this.modalBankConfirmTitle = data ? this.$t('delete') + this.$t('bankCard') : this.$t('confirm') + this.$t('bind');
       this.modalBankConfirmCancel = data ? this.$t('cancel') : this.$t('change');
-      this.tabVerifyActive = 1;
+      if (!this.user.googleStatus && this.user.isOpenMobileCheck) {
+        this.tabVerifyActive = 2;
+      } else {
+        this.tabVerifyActive = 1;
+      }
       if (data) {
         this.formBankInfo = JSON.parse(JSON.stringify(data));
         this.modalBankConfirm = true;

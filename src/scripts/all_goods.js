@@ -382,6 +382,9 @@ var allGoods = new Vue({
           return;
         }
         if (!this.cardList.length) {
+          if (!this.userInfo.googleStatus && this.userInfo.isOpenMobileCheck) {
+            that.tabVerifyActive = 2;
+          }
           this.modalBankInfo = true;
           return;
         }
