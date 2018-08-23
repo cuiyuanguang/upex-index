@@ -60,7 +60,7 @@ Vue.filter('date', function (utc) {
     if (new RegExp("(" + k + ")").test(format)) format = format.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
   return format;
 });
-
+var globalTimers = {};
 
 var i18nComponentsMessages = {
   login: {
@@ -2574,7 +2574,7 @@ var o_header = {
                 <Badge :count="orders.length">
                   <a href="otc_my_order.html">{{ $t('allOrder') }}</a>
                 </Badge>
-                <DropdownMenu slot="list" class="text-left" style="width:360px;">
+                <DropdownMenu slot="list" class="text-left" style="width:400px;">
                   <DropdownItem name="header">
                     <Row>
                       <i-col span="12">{{ $t('ongoingOrders') }}</i-col>
@@ -2599,7 +2599,11 @@ var o_header = {
                           {{ item.status == 2 ? $t('waitForSellerReceive') : '' }}
                           {{item.totalPrice}}SAR
                           </h4>
-                          <p>{{ $t('payInTime') }} {{item.ctime | date }}</p>
+                          <p>
+                            {{ $t('payInTime') }}
+                            <span class="text-error" v-if="item.status == 1">{{ item.limitTime | date }}</span>
+                            <span class="text-error" v-if="item.status == 2">{{ item.confirmLimitTime | date }}</span>
+                          </p>
                         </template>
                         <template v-else>
                           <h4>{{ $t('orderOutOfDate') }}</h4>
@@ -2621,7 +2625,11 @@ var o_header = {
                             {{ item.status == 2 ? $t('buyerHasPaid') : '' }}
                             {{item.totalPrice}}SAR
                           </h4>
-                          <p>{{ $t('waitForTime') }} {{item.ctime | date }}</p>
+                          <p>
+                            {{ $t('waitForTime') }}
+                            <span class="text-primary" v-if="item.status == 1">{{ item.limitTime | date }}</span>
+                            <span class="text-primary" v-if="item.status == 2">{{ item.confirmLimitTime | date }}</span>
+                          </p>
                         </template>
                         <template v-else>
                           <h4>{{ $t('orderOutOfDate') }}</h4>
@@ -2825,6 +2833,20 @@ var o_header = {
       this.isretrievePwdShow = i;
     });
   },
+  filters: {
+    countdown: function (utc) {
+      globalTimers['t' + utc] = setInterval(function() {
+        var now = Date.now();
+        var period = utc - now;
+        if (period > 0) {
+          return utils.MillisecondToDate(period);
+        } else {
+          clearInterval(globalTimers['t' + period]);
+          return 0;
+        }
+      }, 1000);
+    },
+  }
 };
 var row_my_assets = {
   template: `
