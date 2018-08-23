@@ -11,7 +11,7 @@ var Toast = {
     // icon => 图标类型，具体可对应Icon组件内的样式
     // duration => toast展示时间
     var icon = options.icon || '';
-    var duration = options.duration || 2000;
+    var duration = options.duration || 1500;
     var callback = options.callback;
     if (content) {
       var htmlStr = '<div class="toast-content">';
@@ -42,8 +42,6 @@ var Toast = {
     }
   },
 };
-
-Vue.use(VueI18n);
 
 Vue.filter('date', function (utc) {
   var date = new Date(utc);
@@ -447,10 +445,17 @@ var i18nComponentsMessages = {
   },
 };
 
+var i18nComponentsMessagesTransformed = utils.transform(i18nComponentsMessages);
+var i18nComponentsMessagesAll = {
+  zh: Object.assign(i18nComponentsMessagesTransformed.zh, iview.langs['zh']),
+  en: Object.assign(i18nComponentsMessagesTransformed.en, iview.langs['en']),
+  ar: Object.assign(i18nComponentsMessagesTransformed.ar, iview.langs['ar']),
+}
+
 var i18nComponents = new VueI18n({
   locale: 'zh', // set locale
   fallbackLocale: 'zh',
-  messages: utils.transform(i18nComponentsMessages),
+  messages: i18nComponentsMessagesAll,
 });
 
 // notice component
@@ -2323,13 +2328,12 @@ var o_find_password = {
   },
   data() {
     const validateEmail = (rule, value, callback) => {
-      const valueTrim = value.trim();
       // eslint-disable-next-line
       const reg = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
       if (this.formFind.phone === '') {
-        if (valueTrim === '') {
+        if (value === '') {
           callback(new Error(this.$t('emailErrorEmpty')));
-        } else if (!reg.test(valueTrim)) {
+        } else if (!reg.test(value)) {
           callback(new Error(this.$t('emailErrorFormat')));
         } else {
           callback();
@@ -2339,7 +2343,7 @@ var o_find_password = {
       }
     };
     const validatePhone = (rule, value, callback) => {
-      if (this.formFind.email.trim() === '') {
+      if (this.formFind.email === '') {
         if (value === '') {
           callback(new Error(this.$t('phoneErrorEmpty')));
         } else if (!/\d+$/g.test(value)) {
@@ -2352,10 +2356,9 @@ var o_find_password = {
       }
     };
     const validatePassword = (rule, value, callback) => {
-      const valueTrim = value.trim();
-      if (valueTrim === '') {
+      if (value === '') {
         callback(new Error(this.$t('passwordErrorEmpty')));
-      } else if (valueTrim.length > 18 || valueTrim.length < 6) {
+      } else if (value.length > 18 || value.length < 6) {
         callback(new Error(this.$t('passwordErrorFormat')));
       } else {
         if (this.formReset.password !== '') {
@@ -2366,7 +2369,7 @@ var o_find_password = {
       }
     };
     const validatePasswordAgain = (rule, value, callback) => {
-      if (value.trim() === '') {
+      if (value === '') {
         callback(new Error(this.$t('repeatPasswordHolder')));
       } else if (value !== this.formReset.password) {
         callback(new Error(this.$t('repeatPasswordError')));
@@ -2581,7 +2584,7 @@ var o_header = {
                     </Row>
                   </DropdownItem>
                   <DropdownItem class="order-dropdown-empty text-center" v-if="orders.length <= 0">
-                    <Icon type="ios-list-outline" size="30"></Icon>
+                    <img src="../images/no-pending-order.png" />
                     <p>{{ $t('noOrderForNow') }}</p>
                   </DropdownItem>
                   <DropdownItem v-for="item in orders" :key="item.sequence">
@@ -2721,7 +2724,6 @@ var o_header = {
     },
     toggleLanguage(name) {
       this.$i18n.locale = name;
-      utils.loadScript('../scripts/locale/' + name + '.js', 'iview');
       document.documentElement.lang = name;
       document.body.dir = name === 'ar' ? 'rtl' : 'ltr';
       document.body.style.fontSize = name === 'ar' ? '12px' : '14px';
@@ -2762,13 +2764,11 @@ var o_header = {
     }
     var locale = localStorage.getItem('locale') || 'ar';
     this.$i18n.locale = locale;
-    utils.loadScript('../scripts/locale/' + locale + '.js', 'iview');
     document.documentElement.lang = locale;
     document.body.dir = locale === 'ar' ? 'rtl' : 'ltr';
     document.body.style.fontSize = locale === 'ar' ? '12px' : '14px';
     localStorage.setItem('locale', locale);
     this.$parent.$emit('locale', locale);
-    // utils.loadScript('https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit&hl=' + locale);
 
     if (localStorage.getItem('token')) {
       this.logined = true;

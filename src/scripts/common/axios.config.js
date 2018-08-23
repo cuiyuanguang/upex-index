@@ -31,9 +31,8 @@ $http.interceptors.response.use(
     if (result) {
       if (result.code != 0) {
         // 接口错误码判断
-        // Toast.show(toastMsg[result.code][locale], { icon: 'warning' });
         Toast.show(toastMsg[result.code][locale], {
-          icon: 'warning',
+          icon: 'error',
           callback: function() {
             if (result.code == 2048 || result.code == 10002) {
               localStorage.removeItem('user');
@@ -45,7 +44,6 @@ $http.interceptors.response.use(
         return false;
       }
       if (response.config && response.config.method === 'post' && response.config.showToast) {
-        // Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
         Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
       }
       return result.data ? result.data : true;
@@ -54,15 +52,15 @@ $http.interceptors.response.use(
   function(error) {
     // http错误码判断
     if (error.code === 'ECONNABORTED') {
-      Toast.show('请求超时，请稍后再试', { icon: 'warn', duration: 2500 });
+      Toast.show('请求超时，请稍后再试', { icon: 'error' });
     }
     // location.href = 'otc_error.html?code=' + error.response.status;
-    if (error.response.status >= 500) {
-      location.href = '500.html';
-    }
-    if (error.response.status >= 400) {
-      location.href = '404.html';
-    }
+    // if (error.response.status >= 500) {
+    //   location.href = '500.html';
+    // }
+    // if (error.response.status >= 400) {
+    //   location.href = '404.html';
+    // }
     // 返回 response 里的错误信息
     return Promise.reject(error.response.statusText);
   }
