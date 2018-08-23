@@ -331,7 +331,7 @@ var myAssetsWithdrawal = new Vue({
         return;
       }
       if(!this.modelAddress){
-        Toast.show(this.$t('chooseAddress'), { icon: 'warn' });
+        Toast.show(this.$t('chooseAddress'), { icon: 'error' });
         return;
       }
       if (this.loading) {

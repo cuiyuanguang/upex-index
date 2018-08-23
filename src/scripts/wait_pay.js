@@ -45,7 +45,9 @@ var waitPay = new Vue({
       var that = this;
       this.$Modal.confirm({
         title: that.$t('confirmReceive'),
-        content: that.$t('receiveAll'),
+        render: function(h) {
+          return h('span', that.$t('receiveAll'));
+        },
         onOk: function() {
           var data = {
             sequence: that.sequence,

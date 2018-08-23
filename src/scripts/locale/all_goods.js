@@ -347,10 +347,10 @@ var messages = {
     en: 'Bank name',
     ar: 'اسم البنك',
   },
-  bankFormatError: {
-    zh: '长度在1-64之间，只能包含字符、数字',
-    en: 'password length is between 1 to 64, and can only contains characters and numbers',
-    ar: 'طول كلمة السر ما بين 1 الى 64 ، و تحتوي فقط على أحرف وأرقام'
+  eight2SixtyFour: {
+    zh: '请输入长度在8到64位之间的字符',
+    en: 'Please enter 8 to 64 characters ',
+    ar: 'يرجى إدخال من 8 إلى 64 حرفًا',
   },
   AlRajhiBank: {
     zh: 'Al Rajhi Bank',

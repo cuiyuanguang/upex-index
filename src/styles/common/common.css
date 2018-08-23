@@ -2,14 +2,14 @@
 
 @font-face {
   font-family: 'HelveticaNeueLTArabic';
-  src: url('../../fonts/HelveticaNeueLTArabic-Roman.ttf') format('truetype');
+  src: url('../../fonts/DROIDKUFI-REGULAR.TTF') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'HelveticaNeueLTArabicBold';
-  src: url('../../fonts/HelveticaNeueLTArabic-Bold.ttf') format('truetype');
+  src: url('../../fonts/DROIDKUFI-BOLD.TTF') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -446,12 +446,13 @@ input::-webkit-inner-spin-button {
 }
 
 .order-dropdown .ivu-badge-count{
-  top: 0;
+  top: 8px;
   padding: 0;
   min-width: 16px;
   width: 16px;
   height: 16px;
-  line-height: 12px;
+  text-align: center;
+  line-height: 14px;
   box-shadow: none;
 }
 
@@ -463,8 +464,8 @@ input::-webkit-inner-spin-button {
 }
 
 .order-dropdown .ivu-dropdown-item.order-dropdown-empty {
-  padding: 120px 0;
-  height: 300px;
+  padding: 40px 0;
+  height: 170px;
 }
 
 .order-dropdown .ivu-dropdown-item.order-dropdown-empty:hover {
@@ -615,33 +616,31 @@ body[dir='rtl'] .googleAuth-modal .content-wrapper .pay-modal-content .paid{
 
 .toast-content {
   position: absolute;
-  top: 35%;
+  top: 40%;
   left: 50%;
   transform: translateX(-50%);
-  padding: 15px;
-  min-width: 220px;
-  height: 100px;
+  padding: 24px 50px;
+  max-width: 410px;
   text-align: center;
-  font-size: 16px;
+  font-size: 14px;
   color: #ffffff;
   background-color: rgba(0, 0, 0, 0.8);
-  border-radius: 8px;
+  border-radius: 5px;
 }
 
 .toast-content .toast-content-image {
+  padding-bottom: 10px;
   height: 40px;
-  line-height: 40px;
+  line-height: 30px;
 }
 .toast-content .toast-content-text {
-  height: 30px;
-  padding-top: 10px;
-  line-height: 20px;
+  line-height: 18px;
 }
 
 .toast-content .toast-content-image img {
   vertical-align: middle;
-  max-width: 40px;
-  max-height: 40px;
+  max-width: 30px;
+  max-height: 30px;
 }
 
 .expand-row{
