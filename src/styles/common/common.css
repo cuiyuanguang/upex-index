@@ -1,14 +1,14 @@
 @charset "UTF-8";
 
 @font-face {
-  font-family: 'HelveticaNeueLTArabic';
+  font-family: 'DROIDKUFI';
   src: url('../../fonts/DROIDKUFI-REGULAR.TTF') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'HelveticaNeueLTArabicBold';
+  font-family: 'DROIDKUFIBold';
   src: url('../../fonts/DROIDKUFI-BOLD.TTF') format('truetype');
   font-weight: normal;
   font-style: normal;
@@ -30,7 +30,7 @@
 
 html,
 body {
-  font-family: 'HelveticaNeueLTArabic', 'HelveticaNeueLTArabicBold', 'SanFranciscoDisplay', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'DROIDKUFI', 'DROIDKUFIBold', 'SanFranciscoDisplay', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 html[lang='en'],
@@ -40,25 +40,25 @@ body[dir='ltr'] {
 
 html[lang='ar'],
 body[dir='rtl'] {
-  font-family: 'HelveticaNeueLTArabic', 'HelveticaNeueLTArabicBold';
+  font-family: 'DROIDKUFI', 'DROIDKUFIBold';
 }
 
 * {
   direction: inherit;
+  unicode-bidi: embed;
 }
 
 body[dir='rtl'] * {
   direction: rtl;
-  unicode-bidi: embed;
 }
 
 body[dir='ltr'] * {
   direction: ltr;
-  unicode-bidi: embed;
 }
 
-.text-dir-plain {
-  unicode-bidi: plaintext !important;
+.text-dir-ltr {
+  text-align: right;
+  direction: ltr !important;
 }
 
 *[dir='ltr'] {
@@ -69,6 +69,13 @@ body[dir='ltr'] * {
   direction: rtl;
 }
 
+.ml-8 {
+  margin-left: 8px;
+}
+
+.mr-8 {
+  margin-right: 8px;
+}
 .ml-10 {
   margin-left: 10px;
 }
@@ -79,6 +86,16 @@ body[dir='ltr'] * {
 
 .text-white {
   color: #fff;
+}
+
+body[dir='rtl'] .ml-8 {
+  margin-left: 0;
+  margin-right: 8px;
+}
+
+body[dir='rtl'] .mr-8 {
+  margin-right: 0;
+  margin-left: 8px;
 }
 
 body[dir='rtl'] .ml-10 {
@@ -460,7 +477,7 @@ input::-webkit-inner-spin-button {
   padding: 16px 22px;
   height: 66px;
   line-height: 16px;
-  border-top: 1px solid #e6e6e6;
+  border-top: 1px solid #eeeeee;
 }
 
 .order-dropdown .ivu-dropdown-item.order-dropdown-empty {
@@ -621,6 +638,7 @@ body[dir='rtl'] .googleAuth-modal .content-wrapper .pay-modal-content .paid{
   transform: translateX(-50%);
   padding: 24px 50px;
   max-width: 410px;
+  min-width: 260px;
   text-align: center;
   font-size: 14px;
   color: #ffffff;
