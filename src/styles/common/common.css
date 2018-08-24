@@ -56,11 +56,6 @@ body[dir='ltr'] * {
   direction: ltr;
 }
 
-.text-dir-ltr {
-  text-align: right;
-  direction: ltr !important;
-}
-
 *[dir='ltr'] {
   direction: ltr;
 }
@@ -106,6 +101,11 @@ body[dir='rtl'] .ml-10 {
 body[dir='rtl'] .mr-10 {
   margin-right: 0;
   margin-left: 10px;
+}
+
+body[dir='rtl'] .text-dir-ltr {
+  text-align: right;
+  direction: ltr !important;
 }
 
 body[dir='rtl'] .ivu-radio {
