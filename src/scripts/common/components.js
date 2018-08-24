@@ -790,11 +790,11 @@ var o_my_login = {
       width="500"
     >
       <vue-recaptcha
-        ref="invisibleRecaptcha"
+        ref="invisibleRecaptchaLogin"
         size="invisible"
         @expired="onExpired"
         @verify="onVerify"
-        sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi"
+        sitekey="6LftDFYUAAAAACU6S_TVV3d8k2AYQJV7IAihBwGl"
       >
       </vue-recaptcha>
       <Tabs v-model="loginWrap" @on-click="loginEmailChange" v-if="login1">
@@ -904,7 +904,7 @@ var o_my_login = {
   props: ['login','langStatus'],
   methods: {
     onExpired() {
-      this.$refs.invisibleRecaptcha.reset()
+      this.$refs.invisibleRecaptchaLogin.reset()
     },
     onVerify(res) {
       var that = this;
@@ -936,7 +936,7 @@ var o_my_login = {
                 that.clear()
               } else {
                 that.highLightForget = true;
-                that.$refs.invisibleRecaptcha.reset()
+                that.$refs.invisibleRecaptchaLogin.reset()
                 that.modal_loading = false;
               }
             });
@@ -960,13 +960,13 @@ var o_my_login = {
                 that.$parent.$emit('islogin', false);
                 that.clear()
               } else {
-                that.$refs.invisibleRecaptcha.reset()
+                that.$refs.invisibleRecaptchaLogin.reset()
                 that.modal_loading = false;
               }
             });
           }
         } else {
-          that.$refs.invisibleRecaptcha.reset()
+          that.$refs.invisibleRecaptchaLogin.reset()
           that.modal_loading = false;
         }
       });
@@ -1051,7 +1051,7 @@ var o_my_login = {
             that.loginPhonePasswordError = true;
             that.loginPhonePasswordErrorText = this.$t('canNotBeEmpty');
           } else {
-            this.$refs.invisibleRecaptcha.execute();
+            this.$refs.invisibleRecaptchaLogin.execute();
           }
         } else {
           //email
@@ -1068,7 +1068,7 @@ var o_my_login = {
             that.loginEmailPasswordError = true;
             that.loginEmailPasswordErrorText = this.$t('canNotBeEmpty');
           } else {
-            this.$refs.invisibleRecaptcha.execute();
+            this.$refs.invisibleRecaptchaLogin.execute();
 
           }
         }
@@ -1345,9 +1345,13 @@ var o_my_register = {
       width="500"
       :title="$t('registerTitle')"
       >
-                  <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
- @expired="onExpired" @verify="onVerify" sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi">
-            </vue-recaptcha>
+        <vue-recaptcha
+          ref="invisibleRecaptchaRegister"
+          size="invisible"
+          @expired="onExpired"
+          @verify="onVerify"
+          sitekey="6LftDFYUAAAAACU6S_TVV3d8k2AYQJV7IAihBwGl">
+        </vue-recaptcha>
       <Tabs v-model="registerWrap" @on-click="tabChange" v-if="register">
         <TabPane :label="$t('email')" name="tabEmail">
           <Input
@@ -1545,7 +1549,7 @@ var o_my_register = {
       }
     },
     onExpired() {
-      this.$refs.invisibleRecaptcha.reset()
+      this.$refs.invisibleRecaptchaRegister.reset()
     },
     onVerify(res) {
       var that = this;
@@ -1578,7 +1582,7 @@ var o_my_register = {
                   }
                 });
               } else {
-                that.$refs.invisibleRecaptcha.reset()
+                that.$refs.invisibleRecaptchaRegister.reset()
               }
             });
 
@@ -1603,12 +1607,12 @@ var o_my_register = {
                   }
                 });
               } else {
-                that.$refs.invisibleRecaptcha.reset()
+                that.$refs.invisibleRecaptchaRegister.reset()
               }
             });
           }
         } else {
-          that.$refs.invisibleRecaptcha.reset();
+          that.$refs.invisibleRecaptchaRegister.reset();
           that.modal_loading = false;
         }
       });
@@ -1796,7 +1800,7 @@ var o_my_register = {
             that.phonePasswordAgainError = true;
             that.phonePasswordAgainErrorText = this.$t('errorNoSamePwd');
           } else {
-            this.$refs.invisibleRecaptcha.execute();
+            this.$refs.invisibleRecaptchaRegister.execute();
           }
         } else if (that.registerWrap === 'tabEmail') {
           if (that.emailVal === '') {
@@ -1828,7 +1832,7 @@ var o_my_register = {
             that.emailPasswordAgainError = true;
             that.emailPasswordAgainErrorText = this.$t('errorNoSamePwd');
           } else {
-            this.$refs.invisibleRecaptcha.execute();
+            this.$refs.invisibleRecaptchaRegister.execute();
           }
         }
       }
