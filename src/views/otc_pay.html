@@ -215,22 +215,13 @@
       </div>
     </div>
     <!--订单超时END-->
-    <div class="o-modal pay-modal" :class="isPayDialogShow?'is-show':'is-not-show'">
-      <div class="content">
-        <div class="content-wrapper" style="width:440px; height: 223px;">
-          <div class="pay-modal-title">
-            <h3>{{ $t('hasPaid') }}</h3>
-            <p>{{ $t('notPayWarn') }}</p>
-          </div>
-          <Row class="pay-modal-content">
-              <button @click="paid" class="paid">{{ $t('alreadyPaid') }}</button>
-              <i-button type="text" size="large" @click.native="isPayDialogShow = false" class="cancel-btn">
-                {{ $t('cancel') }}
-              </i-button>
-          </Row>
-        </div>
+    <Modal :title="$t('hasPaid')" v-model="isPayDialogShow">
+      <p>{{ $t('notPayWarn') }}</p>
+      <div slot="footer">
+        <i-button type="link" @click="isPayDialogShow = false">{{ $t('cancel') }}</i-button>
+        <i-button type="primary" @click="paid">{{ $t('alreadyPaid') }}</i-button>
       </div>
-    </div>
+    </Modal>
     <!-- -->
     <div class="o-modal pay-info-modal" :class="isPayInfoDialogShow? 'is-show': 'is-not-show'">
       <div class="content">

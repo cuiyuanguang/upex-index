@@ -27,36 +27,42 @@ var recharge = new Vue({
       rechargeAddressString: '',
       rechargeColumn: [
         {
-          title: this.$t('time'),
+          title: 'time',
+          renderHeader: (h) => h('span', this.$t('time')),
           key: 'time',
           align: 'center',
         },
         {
-          title: this.$t('currency'),
+          title: 'currency',
+          renderHeader: (h) => h('span', this.$t('currency')),
           key: 'currency',
           align: 'center',
         },
         {
-          title: this.$t('type'),
+          title: 'type',
+          renderHeader: (h) => h('span', this.$t('type')),
           key: 'type',
           align: 'center',
           render: (h, params) =>
            h('span', params.row.type === 1 ? this.$t('recharge') : this.$t('deposit')),
         },
         {
-          title: this.$t('amount'),
+          title: 'amount',
+          renderHeader: (h) => h('span', this.$t('amount')),
           key: 'amount',
           align: 'center',
         },
         {
-          title: this.$t('status'),
+          title: 'status',
+          renderHeader: (h) => h('span', this.$t('status')),
           key: 'status',
           align: 'center',
           render: (h, params) =>
             h('span', params.row.status === 1 ? this.$t('success') : this.$t('fail')),
         },
         {
-          title: this.$t('operation'),
+          title: 'operation',
+          renderHeader: (h) => h('span', this.$t('operation')),
           type: 'expand',
           render: (h, params) => {
             return h('p', [
@@ -141,7 +147,7 @@ var recharge = new Vue({
   mounted() {
     this.$on('locale', function(i) {
       this.locale = i;
-      this.$i18n.locale = locale;
+      this.$i18n.locale = i;
     });
     var locale = localStorage.getItem('locale');
     if (locale) {

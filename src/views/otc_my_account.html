@@ -33,7 +33,7 @@
                   <Icon type="social-whatsapp" color="#cfcfcf" size="16" class="mr-10"></Icon>
                   WhatsApp
                 </i-col>
-                <i-col span="14" class="text-strong">{{ user.watchapp ? user.watchapp : $t('unBound') }}</i-col>
+                <i-col span="14" class="text-strong text-dir-ltr">{{ user.watchapp ? user.watchapp : $t('unBound') }}</i-col>
                 <i-col span="4" class="text-right">
                   <i-button type="link" size="small" @click="modifyWhatsApp">{{ user.watchapp ? $t('change') : $t('bind') }}</i-button>
                 </i-col>
@@ -99,7 +99,7 @@
                   <Icon type="android-phone-portrait" color="#cfcfcf" size="20" class="mr-10"></Icon>
                   {{ $t('phoneVerification') }}
                 </i-col>
-                <i-col span="12" class="text-strong">{{ user.isOpenMobileCheck ? user.mobileNumber : $t('unBound') }}</i-col>
+                <i-col span="12" class="text-strong text-dir-ltr">{{ user.isOpenMobileCheck ? user.mobileNumber : $t('unBound') }}</i-col>
                 <i-col span="4" class="text-right" v-if="user.isOpenMobileCheck">
                   <i-button type="link" size="small" @click="modifyPhone">{{ $t('change') }}</i-button>
                 </i-col>
@@ -127,7 +127,18 @@
         </i-col>
       </Row>
       <!-- 登录/操作历史 -->
-      <div class="container-row">
+      <Row class="container-row">
+        <i-col span="24">
+          <Row class="account-row">
+            <i-col span="24">
+              <span class="account-row-title">{{ $t('loginHistory') }}</span>
+            </i-col>
+          </Row>
+          <i-table size="small" :columns="loginColumn" :data="loginData"></i-table>
+          <Page :total="loginDataTotalCount" size="small" @on-change="loginPageChange"></Page>
+        </i-col>
+      </Row>
+      <!-- <div class="container-row">
         <Tabs v-model="tabLogActive">
           <tab-pane :label="$t('loginHistory')" name="loginHistory">
             <i-table size="small" :columns="loginColumn" :data="loginData"></i-table>
@@ -138,7 +149,7 @@
             <Page :total="securityDataTotalCount" size="small" @on-change="securityPageChange"></Page>
           </tab-pane>
         </Tabs>
-      </div>
+      </div> -->
     </div>
     <!-- 修改WhatsApp -->
     <Modal :title="$t('changeWhatsApp')" :mask-closable="false" v-model="modalWhatsApp" @on-cancel="handleReset('formWhatsApp')">
@@ -254,7 +265,10 @@
     <!-- 修改手机 -->
     <Modal :title="$t('changePhone')" :mask-closable="false" v-model="modalPhone" @on-cancel="handleReset('formPhone')">
       <i-form ref="formPhone" :model="formPhone" :rules="rulePhone" label-position="top">
-        <form-item :label="$t('phoneVerification') + '(' + $t('originPhone') + ' : ' + user.mobileNumber + ')'" prop="oldVerify" v-show="user.isOpenMobileCheck">
+        <form-item prop="oldVerify" v-show="user.isOpenMobileCheck">
+          <div slot="label">
+            {{ $t('phoneVerification') }} ({{ $t('originPhone') }} : <span class="text-dir-ltr"></span>{{ user.mobileNumber }}</span>)
+          </div>
           <i-input v-model="formPhone.oldVerify" :maxlength="6" :placeholder="$t('phoneVerificationHolder')">
             <i-button slot="append" @click="sendMessageSecurity('OldPhone', 3)" :disabled="sendDisabledOldPhone">{{ sendPlaceholderOldPhone }}</i-button>
           </i-input>

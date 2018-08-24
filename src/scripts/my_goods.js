@@ -12,7 +12,7 @@ var myGoods = new Vue({
   },
   data: function() {
     return {
-      locale: 'zh',
+      locale: '',
       current: 1,
       pageSize: 10,
       pendingOrdersList: [],
@@ -99,11 +99,12 @@ var myGoods = new Vue({
   mounted() {
     var locale = localStorage.getItem('locale');
     if (locale) {
+      this.locale = locale;
       this.$i18n.locale = locale;
     }
-    var that = this;
     this.$on('locale', function(i) {
-      that.locale = i;
+      this.locale = i;
+      this.$i18n.locale = i;
     });
     this.getAdvert();
   },

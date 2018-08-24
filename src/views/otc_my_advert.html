@@ -48,14 +48,8 @@
         <div class="pager">
           <Page :total="pendingOrdersCount" @on-change="getAdvert" :current="current" :page-size="pageSize" size="small"></Page>
         </div>
-        <Modal v-model="showModal" width="500" class="pend-order_modal">
-          <div class="g-body">
-            <div class="g-body_title">
-              <i class="pend-icon icon-wait"></i>
-              {{ modalMsg.title }}
-            </div>
-            <div class="g-body_desc">{{ modalMsg.desc }}</div>
-          </div>
+        <Modal :title="modalMsg.title" v-model="showModal">
+          <div>{{ modalMsg.desc }}</div>
           <div slot="footer">
             <i-button type="link" @click="showModal = false">{{ $t('cancel') }}</i-button>
             <i-button type="primary" @click="manualAction">{{ modalMsg.confirmText }}</i-button>

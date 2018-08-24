@@ -332,29 +332,7 @@ var account = new Vue({
           },
         },
       ],
-      bankData: [
-        // {
-        //   bankName: '中国工商银行',
-        //   name: 'AFHKFHWIEHRIEWNFLKFL',
-        //   cardNo: '6217993989993322',
-        //   ibanNo: '12312332432',
-        //   enabled: true,
-        // },
-        // {
-        //   bankName: '中国建设银行',
-        //   name: 'KSAKKSAIUEIHROQASDHK',
-        //   cardNo: '6219993989993322',
-        //   ibanNo: '12312332432',
-        //   enabled: false,
-        // },
-        // {
-        //   bankName: '中国招商银行',
-        //   name: 'RUIWROERIOREIURIOREID',
-        //   cardNo: '6117993989993322',
-        //   ibanNo: '12312332432',
-        //   enabled: true,
-        // },
-      ],
+      bankData: [],
       // tab激活项
       tabLogActive: 'loginHistory',
       // 登录历史表格
@@ -387,26 +365,7 @@ var account = new Vue({
           },
         },
       ],
-      loginData: [
-        // {
-        //   time: 1533549358281,
-        //   platform: 'Web',
-        //   ipAddress: '192.223.12.143',
-        //   status: 1,
-        // },
-        // {
-        //   time: 1533106474000,
-        //   platform: 'iOS',
-        //   ipAddress: '82.231.112.134',
-        //   status: 1,
-        // },
-        // {
-        //   time: 1532593464005,
-        //   platform: 'Android',
-        //   ipAddress: '92.123.122.34',
-        //   status: 0,
-        // },
-      ],
+      loginData: [],
       loginDataTotalCount: 0,
       // 操作记录表格
       securityColumn: [
@@ -444,29 +403,7 @@ var account = new Vue({
           },
         },
       ],
-      securityData: [
-        // {
-        //   time: 1533549358281,
-        //   platform: 'Web',
-        //   ipAddress: '192.223.12.143',
-        //   operation: '修改密码',
-        //   status: 1,
-        // },
-        // {
-        //   time: 1533106474000,
-        //   platform: 'iOS',
-        //   ipAddress: '82.231.112.134',
-        //   operation: '绑定银行卡',
-        //   status: 1,
-        // },
-        // {
-        //   time: 1532593464005,
-        //   platform: 'Android',
-        //   ipAddress: '92.123.122.34',
-        //   operation: '修改WahtsApp',
-        //   status: 0,
-        // },
-      ],
+      securityData: [],
       securityDataTotalCount: 0,
     };
   },
@@ -684,7 +621,7 @@ var account = new Vue({
     getAllCard: function() {
       var that = this;
       get('api/allBankCard').then(function(res) {
-        if (res.length > 0) {
+        if (res) {
           that.bankData = res;
         }
       });
@@ -812,7 +749,7 @@ var account = new Vue({
     }
     this.$on('locale', function(i) {
       this.locale = i;
-      this.$i18n.locale = locale;
+      this.$i18n.locale = i;
     });
     this.$on('googleBound', function(i) {
       if (i) {
@@ -822,7 +759,7 @@ var account = new Vue({
     this.getUserInfo();
     this.getAllCard();
     this.getLoginData(1);
-    this.getSecurityData(1);
+    // this.getSecurityData(1);
   },
   watch: {
     locale: {

@@ -1,107 +1,119 @@
 var messages = {
   recharge: {
-    zh: '充值',
-    en: 'recharge',
-    ar: '',
+    zh: '充币',
+    en: 'Recharge currency',
+    ar: 'شحن العملة',
+
   },
   myAssets: {
     zh: '我的资产',
-    en: 'My assets',
-    ar: '',
+    en: 'My Assets',
+    ar: 'الأصول الخاص بي',
+
   },
   rechargeAddress: {
-    zh: '充值地址',
-    en: 'Recharge Address',
-    ar: '',
+    zh: '充币地址',
+    en: 'Recharge currency address',
+    ar: 'عنوان شحن العملة',
   },
   copy: {
     zh: '复制到剪贴板',
     en: 'Copy to clipboard',
-    ar: '',
+    ar: 'نسخ إلى الحافظة',
   },
   copySucceed: {
     zh: '复制成功',
-    en: 'Copied successfully',
-    ar: '',
+    en: 'Copied',
+    ar: 'تم النسخ',
   },
   copyFailed: {
     zh: '复制失败，请手动选中复制',
-    en: 'Copied unsuccessfully, select the text above and copy manually please',
-    ar: '',
+    en: 'copy failed, please select the text manually to copy',
+    ar: 'لم يتم النسخ ، يرجى تحديد النص يدوياً للنسخ',
   },
   attention: {
     zh: '注意事项',
-    en: 'Attention',
-    ar: '',
+    en: 'Attentions',
+    ar: 'انتباهات',
   },
   attentionFirst: {
-    zh: '禁止使用USDT以外的资产对USDT地址进行充值。填入USDT地址的任何非USDT资产都不可识别。',
-    en: 'It is forbidden to recharge the USDT address with assets other than USDT. Any non-USDT assets that are filled into the USDT address will not be retrievable. ',
-    ar: '',
+    zh: '禁止使用USDT以外的资产对USDT地址进行充币。填入USDT地址的任何非USDT资产都不可识别。',
+    en: 'It is prohibited to use other than USDT assets to recharge the USDT address. The USDT recharge address can not identify any non-USDT assets. ',
+    ar: 'يحظر استخدام أصول أخرى غير الـ USDT لشحن عنوان الـ USDT. عنوان الشحن الخاص بالـ  USDT لا يمكنه التعرُّف على أي أصول غير الـ USDT. ',
   },
   attentionSecond: {
-    zh: '使用USDT地址充值需要3次网络确认方可到达。',
-    en: 'Recharging with USDT address requires 3 network confirmations to arrive.',
-    ar: '',
+    zh: '使用USDT地址充币需要3次网络确认才能到达。',
+    en: 'Using USDT address to recharge currency requires 3 network confirmations to arrive.',
+    ar: 'شحن العملة باستخدام عنوان الـ USDT يتطلب 3  تأكيدات الشبكة لحتى تصل. ',
   },
   attentionThird: {
-    zh: '单笔充值USDT最少为3.5个，少于3.5将不可充值。',
-    en: 'The minimum amount of recharge is 3.5 USDT, less than 3.5 USDT will not be available',
-    ar: '',
+    zh: '单笔充币USDT最少为3.5个，少于3.5将不可充值。',
+    en: 'The minimum amount of recharge is 3.5 USDT,less than 3.5 will not be available.',
+    ar: 'الحد الأدنى للشحن  3.5 USDT ، أقل من 3.5 لن تكون قابلة للشحن. ',
   },
   rechargeRecord: {
-    zh: '充值记录',
+    zh: '充币记录',
     en: 'Recharge Record',
-    ar: '',
+    ar: 'سجل الشحن',
   },
   allRecords: {
     zh: '所有记录',
     en: 'All records',
-    ar: '',
+    ar: 'كل السجلات',
   },
   time: {
     zh: '时间',
     en: 'Time',
-    ar: '',
+    ar: 'الوقت',
   },
   currency: {
     zh: '货币',
     en: 'Currency',
-    ar: '',
+    ar: 'العملة',
   },
   type: {
     zh: '类型',
     en: 'type',
-    ar: '',
+    ar: 'النوع',
   },
   amount: {
     zh: '数量',
     en: 'Amount',
-    ar: '',
+    ar: 'الكمية',
   },
   status: {
     zh: '状态',
     en: 'Status',
-    ar: '',
+    ar: 'الحالة',
   },
   operation: {
     zh: '操作',
     en: 'Operation',
-    ar: '',
+    ar: 'العملية',
   },
   deposit: {
-    zh: '提现',
-    en: 'deposit',
-    ar: '',
+    zh: '提币',
+    en: 'withdraw',
+    ar: 'سحب العملة',
   },
   success: {
     zh: '成功',
-    en: 'succeed',
-    ar: '',
+    en: 'succeeded',
+    ar: 'تم بنجاح',
   },
   fail: {
     zh: '失败',
     en: 'failed',
-    ar: '',
+    ar: 'فشل',
   },
+
+iKnow:{
+  
+ zh: '我知道了',
+ 
+ en: 'Clear',
+ 
+ ar: 'واضح'
+
+}
 };

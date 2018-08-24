@@ -18,7 +18,7 @@ var myAssetsWithdrawal = new Vue({
   data (){
     return{
       showGoogleAuth: false,
-      locale: {},
+      locale: '',
       dailyRateStore: {},
       userInfo: JSON.parse(localStorage.getItem('user')),
       data3: [],
@@ -538,12 +538,12 @@ var myAssetsWithdrawal = new Vue({
   mounted() {
     var locale = localStorage.getItem('locale');
     if (locale) {
-      document.body.dir = locale === 'zh' ? 'ltr' : 'rtl';
+      this.locale = locale;
       this.$i18n.locale = locale;
     }
-    var that = this;
     this.$on('locale', function(i) {
-      that.locale = i;
+      this.locale = i;
+      this.$i18n.locale = i;
     });
     this.$on('cancelGoogleModal', (i) => {
       this.showGoogleAuth = false;
