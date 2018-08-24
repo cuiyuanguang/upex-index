@@ -297,10 +297,18 @@ var myAssetsWithdrawal = new Vue({
       this.AddressTag = '';
     },
     withdrawalAddressFocus() {
-      this.WithdrawalAddressError = false
+      this.WithdrawalAddressErrorText = '';
     },
     //添加地址
     addressFun() {
+      if(!this.WithdrawalAddress){
+        this.WithdrawalAddressErrorText = this.$t('noEmpty');
+        return;
+      }
+      if(!this.AddressTag){
+        this.AddressTagErrorText = this.$t('noEmpty');
+        return;
+      }
       var that = this;
       this.modal_loading = true;
       var data;
@@ -320,7 +328,7 @@ var myAssetsWithdrawal = new Vue({
     },
 
     AddressTagFocus() {
-      this.AddressTagError = false
+      this.AddressTagErrorText = '';
     },
     AddressTagFun() {
       this.modal_loading = true;

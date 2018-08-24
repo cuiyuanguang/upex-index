@@ -787,7 +787,7 @@ var o_my_login = {
         size="invisible"
         @expired="onExpired"
         @verify="onVerify"
-        sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi"
+        sitekey="6LftDFYUAAAAACU6S_TVV3d8k2AYQJV7IAihBwGl"
       >
       </vue-recaptcha>
       <Tabs v-model="loginWrap" @on-click="loginEmailChange" v-if="login1">
@@ -1312,6 +1312,7 @@ var o_my_loginNext = {
     langStatus: function (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
+        this.sendSms = this.$t('getValidateCode');
       }
     },
     isLoginNextType: function (a, b) {
@@ -1339,7 +1340,7 @@ var o_my_register = {
       :title="$t('registerTitle')"
       >
                   <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
- @expired="onExpired" @verify="onVerify" sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi">
+ @expired="onExpired" @verify="onVerify" sitekey="6LftDFYUAAAAACU6S_TVV3d8k2AYQJV7IAihBwGl">
             </vue-recaptcha>
       <Tabs v-model="registerWrap" @on-click="tabChange" v-if="register">
         <TabPane :label="$t('email')" name="tabEmail">

@@ -92,7 +92,7 @@
     <p class="modal-title">{{ $t('withdrawAddress') }}</p>
     <i-input
       size="large"
-      :class="WithdrawalAddressError?'is-red':'is-gray'"
+      :class="WithdrawalAddressErrorText?'is-red':'is-gray'"
       v-model="WithdrawalAddress"
       type="text"
       :placeholder="$t('enterWithdraw')"
@@ -104,7 +104,7 @@
     <p class="modal-title">{{ $t('addressTag') }}</p>
     <i-input
       size="large"
-      :class="AddressTagError?'is-red':'is-gray'"
+      :class="AddressTagErrorText?'is-red':'is-gray'"
       v-model="AddressTag"
       type="text"
       placeholder="Example：Binance"

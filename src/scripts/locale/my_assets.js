@@ -106,98 +106,98 @@ var messages = {
   },
   unConfirmStatus: {
     zh: '未确认',
-    en: '',
-    ar: ''
+    en: 'unconfirmed',
+    ar: 'لم يتم التأكيد'
   },
   completeStatus: {
     zh: '已完成',
-    en: '',
-    ar: ''
+    en: 'confirmed',
+    ar: 'تم التأكيد'
   },
   errorStatus: {
     zh: '异常',
-    en: '',
-    ar: ''
+    en: 'Error',
+    ar: 'خطأ'
   },
   unAuditStatus: {
     zh: '未审核',
-    en: '',
-    ar: ''
+    en: 'Unaudited',
+    ar: 'لم يتم التدقيق'
   },
-  auditSuccessStatus:{
+  auditSuccessStatus: {
     zh: '审核成功',
-    en: '',
-    ar: ''
+    en: 'audit succeeded',
+    ar: 'تم التدقيق'
   },
   auditFailStatus: {
     zh: '审核失败',
-    en: '',
-    ar: ''
+    en: 'Audit failed',
+    ar: 'فشل التدقيق'
   },
   inPayStatus: {
-    zh: '支付中已经打币',
-    en: '',
-    ar: ''
+    zh: '成功',
+    en: 'succeeded',
+    ar: 'نجح'
   },
   payFailStatus: {
     zh: '支付失败',
-    en: '',
-    ar: ''
+    en: 'Payment failed',
+    ar: 'لم يتم الدفع'
   },
   dismissStatus: {
     zh: '已撤销',
-    en: '',
-    ar: ''
+    en: 'cancelled',
+    ar: 'تم الإلغاء '
   },
   buyType: {
     zh: '买入',
-    en: '',
-    ar: ''
+    en: 'Buy',
+    ar: 'شراء'
   },
   tradeType: {
     zh: '交易',
-    en: '',
-    ar: ''
+    en: 'transaction',
+    ar: 'الصفقة'
   },
   sellType: {
     zh: '卖出',
-    en: '',
-    ar: ''
+    en: 'Sell',
+    ar: 'بيع'
   },
   presentType: {
     zh: '赠币',
-    en: '',
-    ar: ''
+    en: 'Gift currencies',
+    ar: 'عملات هدية'
   },
   createSellType: {
-    zh: '挂单-锁币',
-    en: '',
-    ar: ''
+    zh: '挂单，锁币',
+    en: 'Pending order then lock the currency',
+    ar: 'إجراء الطلب ثم قفل العملة'
   },
   transferSellType: {
-    zh: '挂单-卖出',
-    en: '',
-    ar: ''
+    zh: '挂单，卖出',
+    en: 'Pending order then sell',
+    ar: 'إجراء الطلب ثم البيع'
   },
   transferBuyType: {
-    zh: '挂单-买入',
-    en: '',
-    ar: ''
+    zh: '挂单，买入',
+    en: 'Pending order then Buy',
+    ar: 'إجراء الطلب ثم الشراء'
   },
   closeType: {
-    zh: '取消订单-解除锁币',
-    en: '',
-    ar: ''
+    zh: '取消订单，解除锁币',
+    en: 'Cancel order then unlock the currency',
+    ar: 'إلغاء الطلب ثم فتح العملة'
   },
   sellOrderType: {
-    zh: '卖出-锁币',
-    en: '',
-    ar: ''
+    zh: '卖出，锁币',
+    en: 'Buy then lock the currency',
+    ar: 'شراء ثم قفل العملة'
   },
   transferCommonType: {
     zh: '转账',
-    en: '',
-    ar: ''
+    en: 'Transfer',
+    ar: 'تحويل'
   }
 
 };

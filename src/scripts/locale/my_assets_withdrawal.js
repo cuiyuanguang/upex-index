@@ -216,37 +216,37 @@ var messages = {
   },
   iKnow:{
     zh: '我知道了',
-    en: '',
-    ar: ''
+    en: 'Clear',
+    ar: 'واضح'
   },
   unAuditStatus: {
     zh: '未审核',
-    en: '',
-    ar: ''
+    en: 'Unaudited',
+    ar: 'لم يتم التدقيق'
   },
   auditSuccessStatus:{
     zh: '审核成功',
-    en: '',
-    ar: ''
+    en: 'audit succeeded',
+    ar: 'تم التدقيق'
   },
   auditFailStatus: {
     zh: '审核失败',
-    en: '',
-    ar: ''
+    en: 'Audit failed',
+    ar: 'فشل التدقيق'
   },
   inPayStatus: {
-    zh: '支付中已经打币',
-    en: '',
-    ar: ''
+    zh: '成功',
+    en: 'succeeded',
+    ar: 'نجح'
   },
   payFailStatus: {
     zh: '支付失败',
-    en: '',
-    ar: ''
+    en: 'Payment failed',
+    ar: 'لم يتم الدفع'
   },
   dismissStatus: {
     zh: '已撤销',
-    en: '',
-    ar: ''
+    en: 'cancelled',
+    ar: 'تم الإلغاء '
   }
 };
