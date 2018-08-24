@@ -356,3 +356,11 @@ body[dir='rtl'] .withdrawalTrue-text-left{
 body[dir='rtl'] .withdrawalTrue-text-right{
   float: right;
 }
+
+.is-red .ivu-input{
+  border: 1px solid #ff2e2e;
+}
+
+.is-grey .ivu-input{
+  border: 1px solid #eee;
+}

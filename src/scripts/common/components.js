@@ -1319,6 +1319,7 @@ var o_my_loginNext = {
     langStatus: function (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
+        this.sendSms = this.$t('getValidateCode');
       }
     },
     isLoginNextType: function (a, b) {
