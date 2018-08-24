@@ -3,13 +3,11 @@ var messages = {
     zh: '充币',
     en: 'Recharge currency',
     ar: 'شحن العملة',
-
   },
   myAssets: {
     zh: '我的资产',
     en: 'My Assets',
     ar: 'الأصول الخاص بي',
-
   },
   rechargeAddress: {
     zh: '充币地址',
@@ -38,8 +36,10 @@ var messages = {
   },
   attentionFirst: {
     zh: '禁止使用USDT以外的资产对USDT地址进行充币。填入USDT地址的任何非USDT资产都不可识别。',
-    en: 'It is prohibited to use other than USDT assets to recharge the USDT address. The USDT recharge address can not identify any non-USDT assets. ',
-    ar: 'يحظر استخدام أصول أخرى غير الـ USDT لشحن عنوان الـ USDT. عنوان الشحن الخاص بالـ  USDT لا يمكنه التعرُّف على أي أصول غير الـ USDT. ',
+    en:
+      'It is prohibited to use other than USDT assets to recharge the USDT address. The USDT recharge address can not identify any non-USDT assets. ',
+    ar:
+      'يحظر استخدام أصول أخرى غير الـ USDT لشحن عنوان الـ USDT. عنوان الشحن الخاص بالـ  USDT لا يمكنه التعرُّف على أي أصول غير الـ USDT. ',
   },
   attentionSecond: {
     zh: '使用USDT地址充币需要3次网络确认才能到达。',
@@ -106,14 +106,9 @@ var messages = {
     en: 'failed',
     ar: 'فشل',
   },
-
-iKnow:{
-  
- zh: '我知道了',
- 
- en: 'Clear',
- 
- ar: 'واضح'
-
-}
+  iKnow: {
+    zh: '我知道了',
+    en: 'Clear',
+    ar: 'واضح',
+  },
 };

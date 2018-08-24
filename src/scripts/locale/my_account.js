@@ -9,10 +9,35 @@ var messages = {
     en: 'Account information',
     ar: 'معلومات الحساب',
   },
-  accountFrozen: {
-    zh: '冻结',
-    en: 'frozen',
-    ar: 'تجميد',
+  accountFrozenAll: {
+    zh: '账户冻结',
+    en: 'Account frozen',
+    ar: 'تجميد الحساب',
+  },
+  accountFrozenAllTips: {
+    zh: '账户冻结登录，请联系客服',
+    en: 'login account has been frozen, please contact customer service',
+    ar: 'تم تجميد حساب تسجيل الدخول ، يرجى الاتصال بخدمة العملاء',
+  },
+  accountFrozenTrade: {
+    zh: '冻结交易',
+    en: 'Trading frozen',
+    ar: 'تجميد التداول',
+  },
+  accountFrozenTradeTips: {
+    zh: '冻结交易，请联系客服',
+    en: ' Transaction has been frozen, please contact customer service ',
+    ar: 'تم تجميد الصفقة ، يرجى الاتصال بخدمة العملاء',
+  },
+  accountFrozenDeposit: {
+    zh: '冻结提现',
+    en: 'Deposit frozen',
+    ar: 'تجميد الحالي',
+  },
+  accountFrozenDepositTips: {
+    zh: '冻结提币，请联系客服',
+    en: 'currency withdraw has been frozen, please contact customer service',
+    ar: 'تم تجميد سحب العملة ، يرجى الاتصال بخدمة العملاء',
   },
   loginOut: {
     zh: '退出',
@@ -352,7 +377,7 @@ var messages = {
   bankFormatError: {
     zh: '长度在1-64之间，只能包含字符、数字',
     en: 'password length is between 1 to 64, and can only contains characters and numbers',
-    ar: 'طول كلمة السر ما بين 1 الى 64 ، و تحتوي فقط على أحرف وأرقام'
+    ar: 'طول كلمة السر ما بين 1 الى 64 ، و تحتوي فقط على أحرف وأرقام',
   },
   AlRajhiBank: {
     zh: 'Al Rajhi Bank',

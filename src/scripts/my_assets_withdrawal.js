@@ -1,8 +1,19 @@
+
+Vue.locale = () => {};
+var messagesTransformed = utils.transform(messages);
+var messagesAll = {
+  zh: Object.assign(messagesTransformed.zh, iview.langs['zh']),
+  en: Object.assign(messagesTransformed.en, iview.langs['en']),
+  ar: Object.assign(messagesTransformed.ar, iview.langs['ar']),
+};
+
 var i18n = new VueI18n({
-  locale: 'zh', // set locale
-  fallbackLocale: 'zh',
-  messages: utils.transform(messages),
+  locale: 'ar', // set locale
+  fallbackLocale: 'ar',
+  messages: messagesAll,
 });
+
+iview.i18n((key, value) => i18n.t(key, value));
 
 var myAssetsWithdrawal = new Vue({
   el: '#app',

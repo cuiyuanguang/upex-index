@@ -1,3 +1,4 @@
+
 Vue.locale = () => {};
 var messagesTransformed = utils.transform(messages);
 var messagesAll = {
@@ -7,8 +8,8 @@ var messagesAll = {
 };
 
 var i18n = new VueI18n({
-  locale: 'zh', // set locale
-  fallbackLocale: 'zh',
+  locale: 'ar', // set locale
+  fallbackLocale: 'ar',
   messages: messagesAll,
 });
 

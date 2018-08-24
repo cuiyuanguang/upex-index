@@ -118,22 +118,26 @@ var messages = {
     zh: '到账时间受不可抗力因素如跨行，大额转账影响，且银行系统并不受买方或卖方控制，请耐心等待。',
     en:
       'Due to cross-bank services or large amounts transfer or other reasons caused delay in arrival time,is out of  seller or buyer control, so please wait patiently',
-    ar: 'بسبب الخدمات المصرفية بين البنوك المختلفة أو دفع المبالغ الكبيرة أوعوامل أخرى تسبب في تأخير وقت وصول المبلغ الى الحساب، هو خارج عن نطاق سيطرة البائع والمشتري ، لذلك يرجى الانتظار بالصبر',
+    ar:
+      'بسبب الخدمات المصرفية بين البنوك المختلفة أو دفع المبالغ الكبيرة أوعوامل أخرى تسبب في تأخير وقت وصول المبلغ الى الحساب، هو خارج عن نطاق سيطرة البائع والمشتري ، لذلك يرجى الانتظار بالصبر',
   },
   helpTipsSecond: {
     zh: '如当天取消订单次数达到三次，支付功能将会被锁定。',
-    en: 'If order cancellation reached three times in the same day, the payment function will be closed',
+    en:
+      'If order cancellation reached three times in the same day, the payment function will be closed',
     ar: 'إذا بلغ إلغاء الطلب ثلاث مرات في نفس اليوم ، فسيتم إغلاق وظيفة الدفع',
   },
   helpTipsThird: {
     zh: '如您24小时内未收到法币或法币金额不正确，请联系客服',
     en:
       'If you do not receive the currency or the amount of the currency is incorrect within 24 hours, please contact customer service',
-    ar: 'إذا لم يتم استلام العملة أو مبلغ العملة غير صحيح خلال 24 ساعة ، يرجى الاتصال بخدمة العملاء',
+    ar:
+      'إذا لم يتم استلام العملة أو مبلغ العملة غير صحيح خلال 24 ساعة ، يرجى الاتصال بخدمة العملاء',
   },
   helpTipsFourth: {
     zh: '若订单超时未处理，客服将会介入协助交易。',
-    en: 'If order timeout is not processed，the customer service will be involved in assisting to complete the transaction',
+    en:
+      'If order timeout is not processed，the customer service will be involved in assisting to complete the transaction',
     ar: 'إذا نفذ الوقت لم يتم معالجة الطلب ، سوف تتدخل خدمة العملاء للمساعدة في إتمام الصفقة',
   },
   cancel: {

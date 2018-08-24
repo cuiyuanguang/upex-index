@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="zh">
+<html lang="ar">
 
 <head>
   <title>UPEX</title>
@@ -14,15 +14,15 @@
     <o-header ref="header"></o-header>
     <div class="banner"></div>
 
-    <div class="list wrapper">
-      <Row>
-        <i-col class="tags" :span="4" :class="showListTag == 'BUY' ? 'act' :'disact' ">
+    <div class="container">
+      <Row class="list-tabs">
+        <i-col class="list-tabs-title" :span="4" :class="showListTag == 'BUY' ? 'active' : '' ">
           <span @click="showListTag='BUY'">{{ $t('buy') }} USDT</span>
         </i-col>
-        <i-col class="tags" :span="4" :class="showListTag == 'SELL' ? 'act' :'disact' ">
+        <i-col class="list-tabs-title" :span="4" :class="showListTag == 'SELL' ? 'active' : '' ">
           <span @click="showListTag='SELL'">{{ $t('sell') }} USDT</span>
         </i-col>
-        <i-col span="16" style="margin-top:10px;width:68.7%">
+        <i-col span="16" class="list-tabs-extra">
           <div class="text-right">
             <span class="mr-10">{{ $t('notSatisfied') }} ?</span>
             <i-button type="ghost" shape="circle" size="small" class="btn-show-release" :loading="modalReleaseLoading" @click="showModalRelease">
@@ -32,10 +32,10 @@
           </div>
         </i-col>
       </Row>
-      <div>
+      <div class="list-content">
         <div v-show="showListTag == 'BUY'">
           <div class="list-table">
-            <table class="buylist">
+            <table>
               <thead>
                 <tr>
                   <th>{{ $t('seller') }}</th>
@@ -91,16 +91,12 @@
             </table>
           </div>
           <div class="page">
-            <div class="wrapper">
-              <div>
-                <Page @on-change="getAdvertList('SELL', $event)" :total="buyTotal" :page-size="1" :current="buyCurrentPage" size="small"></Page>
-              </div>
-            </div>
+            <Page @on-change="getAdvertList('SELL', $event)" :total="buyTotal" :current="buyCurrentPage" size="small"></Page>
           </div>
         </div>
         <div v-show="showListTag == 'SELL'">
           <div class="list-table">
-            <table class="buylist">
+            <table>
               <thead>
                 <tr>
                   <th>{{ $t('buyer') }}</th>
@@ -154,18 +150,14 @@
             </table>
           </div>
           <div class="page">
-            <div class="wrapper">
-              <div>
-                <Page @on-change="getAdvertList('BUY', $event)" :total="sellTotal" :current="sellCurrentPage" size="small"></Page>
-              </div>
-            </div>
+            <Page @on-change="getAdvertList('BUY', $event)" :total="sellTotal" :current="sellCurrentPage" size="small"></Page>
           </div>
         </div>
       </div>
     </div>
 
     <!-- 下单信息 -->
-    <Modal v-model="modalOrder" width="1200" footer-hide class="order-modal">
+    <Modal v-model="modalOrder" width="1200" :mask-closable="false" footer-hide class="order-modal">
       <span class="order-modal-close" slot="close"></span>
       <Row>
         <i-col span="6">
@@ -429,7 +421,7 @@
               <i-input v-model="formBankInfo.cardNo" :maxlength="64" :placeholder="$t('cardNoHolder')"></i-input>
             </Poptip>
           </form-item>
-          <form-item :label="'iban' + $t('number')" prop="ibanNo">
+          <form-item label="iban" prop="ibanNo">
             <i-input v-model="formBankInfo.ibanNo" :maxlength="64" :placeholder="$t('ibanNoHolder')"></i-input>
           </form-item>
         </i-form>
@@ -453,7 +445,7 @@
             <i-col span="16" class="text-strong">{{ formBankInfo.cardNo }}</i-col>
           </Row>
           <Row>
-            <i-col span="8" class="text-secondary">iban{{ $t('number') }}</i-col>
+            <i-col span="8" class="text-secondary">iban</i-col>
             <i-col span="16" class="text-strong">{{ formBankInfo.ibanNo }}</i-col>
           </Row>
         </div>
@@ -483,7 +475,7 @@
     </div>
 
     <acontact :show="modalWhatsApp" :isWatchupBind="userInfo.watchapp" :locale="locale"></acontact>
-    <Modal class="google-modal" v-model="modalGoogle" footer-hide>
+    <Modal class="google-modal" v-model="modalGoogle" :mask-closable="false" footer-hide>
       <dl class="text-center">
         <dt><img src="../images/warn.png"/></dt>
         <dd>{{ $t('bindGoogleAuthMsg') }}</dd>
@@ -494,7 +486,7 @@
         </dd>
       </dl>
     </Modal>
-    <Modal :title="modalMsg.title" v-model="modalOperationOrder">
+    <Modal :title="modalMsg.title" v-model="modalOperationOrder" :mask-closable="false">
       <div>{{ modalMsg.desc }}</div>
       <div slot="footer">
         <i-button type="link" @click="modalOperationOrder = false">{{ $t('cancel') }}</i-button>

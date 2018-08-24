@@ -215,16 +215,6 @@ body[dir='rtl'] .ivu-radio-group-button .ivu-radio-wrapper:last-child {
 }
 
 /* 下面是原来的样式 */
-
-div,
-ul {
-  margin: 0 auto;
-}
-
-ul > li {
-  list-style: none;
-}
-
 .flex-wrapper {
   width: 100%;
   padding-left: 40px;
@@ -243,24 +233,9 @@ input[type='number'] {
 [v-cloak] {
   display: none;
 }
-@font-face {
-  font-family: 'font_family';
-  src: url('../../fonts/iconfont.ttf');
-}
-.font_family{
-  font-family:"font_family" !important;
-  font-size:16px;font-style:normal;
-  -webkit-font-smoothing: antialiased;
-  -webkit-text-stroke-width: 0.2px;
-  -moz-osx-font-smoothing: grayscale;
-}
 body {
   font-size: 14px;
   background-color: #ebebeb;
-}
-
-button {
-  cursor: pointer;
 }
 
 input::-webkit-inner-spin-button {
@@ -475,8 +450,8 @@ input::-webkit-inner-spin-button {
 
 .order-dropdown .ivu-dropdown-item:not(:first-child) {
   padding: 16px 22px;
-  height: 66px;
-  line-height: 16px;
+  min-height: 66px;
+  line-height: 14px;
   border-top: 1px solid #eeeeee;
 }
 
@@ -495,7 +470,11 @@ input::-webkit-inner-spin-button {
 }
 
 .order-dropdown .ivu-col h4 {
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+}
+
+.order-dropdown .ivu-col p {
+  white-space: normal;
 }
 
 .order-dropdown .ivu-col .ivu-avatar-string {

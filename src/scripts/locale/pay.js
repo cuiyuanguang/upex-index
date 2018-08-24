@@ -304,9 +304,11 @@ var messages = {
   outOfTimeToPay: {
     zh: '买家超时未付款',
     en: 'Buyer has not paid for overtime',
+    ar: 'لم يدفع المشتري مقابل العمل الإضافي',
   },
   outOfTimeToConfirm: {
     zh: '卖家超时未确认',
     en: 'Seller has not confirmed for overtime',
+    ar: 'البائع انتهت مهلة غير مؤكدة',
   },
 };

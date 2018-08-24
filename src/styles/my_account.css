@@ -39,6 +39,11 @@ html[lang='ar'] .banner {
   padding: 0 40px;
 }
 
+.ivu-tooltip-inner {
+  max-width: 200%;
+  width: auto;
+}
+
 .account-row-title {
   padding-right: 10px;
   display: inline-block;

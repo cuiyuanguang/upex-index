@@ -26,7 +26,7 @@ $http.interceptors.request.use(
 $http.interceptors.response.use(
   function(response) {
     // 处理响应数据
-    const locale = localStorage.getItem('locale') || 'zh';
+    const locale = localStorage.getItem('locale') || 'ar';
     const result = response.data;
     if (result) {
       if (result.code != 0) {
@@ -54,13 +54,13 @@ $http.interceptors.response.use(
     if (error.code === 'ECONNABORTED') {
       Toast.show('请求超时，请稍后再试', { icon: 'error' });
     }
-    // location.href = 'otc_error.html?code=' + error.response.status;
-    // if (error.response.status >= 500) {
-    //   location.href = '500.html';
-    // }
-    // if (error.response.status >= 400) {
-    //   location.href = '404.html';
-    // }
+    location.href = 'otc_error.html?code=' + error.response.status;
+    if (error.response.status >= 500) {
+      location.href = '500.html';
+    }
+    if (error.response.status >= 400) {
+      location.href = '404.html';
+    }
     // 返回 response 里的错误信息
     return Promise.reject(error.response.statusText);
   }

@@ -66,7 +66,7 @@ var messages = {
   },
   saUser: {
     zh: '沙特用户',
-    en: 'Saudi users',
+    en: 'Saudi user',
     ar: 'المستخدمون السعوديون',
   },
   amount: {
@@ -269,7 +269,7 @@ var messages = {
   minNoLessThanSysMin: {
     zh: '最小限额不能小于系统限制',
     en: 'The minimum limit cannot be less than the system limit',
-    ar: 'لا يمكن ان يكون الحد الأدنى اقل من حد النظام'
+    ar: 'لا يمكن ان يكون الحد الأدنى اقل من حد النظام',
   },
   maxNoLessThanMin: {
     zh: '最大限额不能小于最小限额',
@@ -284,7 +284,7 @@ var messages = {
   maxNoMoreThanSysMax: {
     zh: '最大限额不能大于系统限制',
     en: 'The maximum limit cannot be greater than the system limit',
-    ar: 'لا يمكن ان يكون الحد الأقصى أكبر من حد النظام'
+    ar: 'لا يمكن ان يكون الحد الأقصى أكبر من حد النظام',
   },
   sysLimitIs: {
     zh: '系统限额',

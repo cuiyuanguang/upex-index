@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="zh">
+<html lang="ar">
 
 <head>
   <title>UPEX</title>
@@ -48,7 +48,7 @@
         <div class="pager">
           <Page :total="pendingOrdersCount" @on-change="getAdvert" :current="current" :page-size="pageSize" size="small"></Page>
         </div>
-        <Modal :title="modalMsg.title" v-model="showModal">
+        <Modal :title="modalMsg.title" v-model="showModal" :mask-closable="false">
           <div>{{ modalMsg.desc }}</div>
           <div slot="footer">
             <i-button type="link" @click="showModal = false">{{ $t('cancel') }}</i-button>
