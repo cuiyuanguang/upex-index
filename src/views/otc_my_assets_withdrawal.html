@@ -53,13 +53,13 @@
           <div class="row-left">{{ $t('amount') }}</div>
           <div class="row-right amount-input">
             <i-input style="width: 400px" v-model="valueAmount" size="large"
-                     :placeholder="pricePlaceholder"
+                     :placeholder="$t('minWithdraw') + pricePlaceholder"
                      :class="withdrawalErrorText != ''?'red':''"
                      @on-focus="withdrawalErrorText = ''"
             ></i-input>
             <p class="amount-p">
-              <span class="amount-p-title">{{ $t('extractable') }}:</span><span>{{balanceExtractable}}</span>
-              <span class="amount-p-title" style="margin-left: 20px">{{ $t('dailyLimit') }}:</span><span>{{dailyLimit}}</span>
+              <span class="amount-p-title">{{ $t('extractable') }}: </span><span> {{balanceExtractable}}</span>
+              <span class="amount-p-title amount-p-margin">{{ $t('dailyLimit') }}: </span><span> {{dailyLimit}}</span>
             </p>
             <p class="amount-p amount-error-p">{{withdrawalErrorText}}</p>
           </div>
@@ -71,7 +71,7 @@
       </div>
     </div>
   </div>
-  <div class="container">
+  <div class="container order-wrap">
     <div class="bg-white">
       <h1 class="h1-text" style="margin-bottom: 30px">{{ $t('withdrawalRecord') }}</h1>
       <i-table :columns="columns3" :data="data3" size="small" :no-data-text="$t('noData')" :loading="tableLoading3"></i-table>
@@ -139,7 +139,7 @@
     </div>
     <div class="tabs-wrap">
         <tabs :value="tabsName" @on-click="tabChange">
-          <tab-pane :label="$t('emailValidate')" :disabled="disabledEmail" name="loginEmail">
+          <tab-pane :label="$t('email')" :disabled="disabledEmail" name="loginEmail">
             <i-input
               v-model="emailSmsCode"
               type="text"
@@ -158,7 +158,7 @@
             <p class="my-loginNext-error">{{emailSmsCodeErrorText}}</p>
 
           </tab-pane>
-          <tab-pane :label="$t('phoneValidate')" :disabled="disabledPhone" name="loginPhone">
+          <tab-pane :label="$t('phone')" :disabled="disabledPhone" name="loginPhone">
             <i-input
               v-model="phoneSmsCode"
               type="text"
@@ -185,6 +185,7 @@
           maxLength="6"
           @on-change="checkNum('google')"
           :placeholder="$t('googleValidateCode')"
+          @on-enter="okWithdrawal"
           class="loginNext-input loginNext-sms-input" @on-focus="googleCodeFocus" :class="googleCodeError?'loginNext-input-red':' '">
           </span>
         </i-input>

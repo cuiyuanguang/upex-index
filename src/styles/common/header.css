@@ -212,7 +212,7 @@ body[dir='rtl'] .my-login .ivu-input-group-prepend{
 }
 
 body[dir='rtl'] .my-login .iview-input-countryPhone .ivu-input:hover, body[dir='rtl'] .my-login .iview-input-countryPhone .ivu-input:focus{
-  border-right: 1px solid #7daaee;
+  border: 1px solid #7daaee;
 }
 
 .my-login .ivu-select-item{

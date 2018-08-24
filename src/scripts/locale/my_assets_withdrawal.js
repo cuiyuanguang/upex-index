@@ -1,4 +1,14 @@
 var messages = {
+  email: {
+    zh: '邮箱',
+    en: 'E-mail',
+    ar: 'البريد الالكتروني'
+  },
+  phone: {
+    zh: '手机',
+    en: 'Phone',
+    ar: 'الهاتف'
+  },
   withdrawal: {
     zh: '提币',
     en: 'withdraw ',

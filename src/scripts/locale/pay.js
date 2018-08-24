@@ -251,7 +251,7 @@ var messages = {
   },
   alreadyPaid: {
     zh: '已支付',
-    en: 'Aready paid',
+    en: 'Already paid',
     ar: 'تم الدفع',
   },
   myTransferInfo: {

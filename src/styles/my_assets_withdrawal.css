@@ -111,6 +111,15 @@
   color: #999;
 }
 
+.amount-p-margin{
+  margin-left: 20px;
+}
+
+body[dir='rtl'] .amount-p-margin{
+  margin-right: 20px;
+  margin-left: 0;
+}
+
 .withdrawal-button {
   width: 170px;
   cursor: pointer;
@@ -363,4 +372,60 @@ body[dir='rtl'] .withdrawalTrue-text-right{
 
 .is-grey .ivu-input{
   border: 1px solid #eee;
+}
+
+.order-wrap .ivu-table-wrapper {
+  margin-top: 20px;
+  border: none;
+}
+
+.order-wrap .ivu-table {
+  font-size: 14px;
+}
+
+.order-wrap .ivu-table:before {
+  background-color: #f5f5f5;
+}
+
+.order-wrap .ivu-table:after {
+  background-color: transparent;
+}
+
+.order-wrap .ivu-table .ivu-table-row:after {
+  content: '';
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  background-color: #f5f5f5;
+  z-index: 1;
+}
+
+.order-wrap .ivu-table th {
+  background-color: #ffffff;
+  font-size: 14px;
+}
+
+.order-wrap .ivu-table td,
+.order-wrap .ivu-table th {
+  border-bottom-color: transparent;
+}
+
+.order-wrap .ivu-tabs-bar {
+  margin-bottom: 0;
+}
+
+.order-wrap .ivu-tabs-nav {
+  margin-left: 40px;
+}
+
+.order-wrap .ivu-tabs-nav .ivu-tabs-tab {
+  height: 60px;
+  line-height: 40px;
+  font-weight: bold;
+}
+
+.order-wrap .ivu-page {
+  margin-top: 20px;
+  text-align: center;
 }
