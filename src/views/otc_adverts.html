@@ -341,7 +341,7 @@
           </Row>
           <Row>
             <i-col span="6">{{ $t('limit') }}</i-col>
-            <i-col span="18" class="text-strong">{{ formRelease.minTrade }} SAR -- {{ formRelease.maxTrade }} SAR</i-col>
+            <i-col span="18" class="text-strong">{{ formRelease.minTrade }} -- {{ formRelease.maxTrade }} SAR</i-col>
           </Row>
           <Row>
             <i-col span="6">{{ $t('totalPrice') }}</i-col>
@@ -351,7 +351,7 @@
       <div class="modal-notice-header border-top-dashed" v-show="formRelease.side === 'SELL'">
         <Row>
         <i-col span="6">WhatsApp</i-col>
-        <i-col span="18" class="text-strong">{{ userInfo.watchapp }}</i-col>
+        <i-col span="18" class="text-strong text-dir-ltr">{{ userInfo.watchapp }}</i-col>
         </Row>
         <Row>
           <i-col span="6">{{ $t('bankCard') }}</i-col>

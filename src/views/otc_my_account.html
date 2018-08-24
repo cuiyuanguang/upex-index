@@ -245,7 +245,8 @@
     <!-- 修改邮箱 -->
     <Modal :title="$t('changeEmail')" :mask-closable="false" v-model="modalEmail" @on-cancel="handleReset('formEmail')">
       <i-form ref="formEmail" :model="formEmail" :rules="ruleEmail" label-position="top">
-        <form-item :label="$t('originEmail') + ' : ' + user.email" prop="oldEmail" v-show="user.email">
+        <form-item prop="oldEmail" v-show="user.email">
+          <div slot="label">{{ $t('originEmail') }}: {{ user.email }}</div>
           <i-input v-model="formEmail.oldEmail" :maxlength="6" :placeholder="$t('emailVerificationHolder')">
             <i-button slot="append" @click="sendMessageSecurity('OldEmail', 15)" :disabled="sendDisabledOldEmail">{{ sendPlaceholderOldEmail }}</i-button>
           </i-input>
