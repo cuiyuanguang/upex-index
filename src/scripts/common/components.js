@@ -1083,7 +1083,7 @@ var o_my_login = {
     let locale = localStorage.getItem('locale');
     if (locale) {
       this.$i18n.locale = locale;
-      this.selectCountry = locale === 'ar' ? '+966' : newVal === 'en' ? '+1' : '+86'
+      this.selectCountry = locale === 'ar' ? '+966' : locale === 'en' ? '+1' : '+86'
     }
   },
   watch: {
@@ -1524,7 +1524,7 @@ var o_my_register = {
     let locale = localStorage.getItem('locale');
     if (locale) {
       this.$i18n.locale = locale;
-      this.selectCountry = locale === 'ar' ? '+966' : newVal === 'en' ? '+1' : '+86'
+      this.selectCountry = locale === 'ar' ? '+966' : locale === 'en' ? '+1' : '+86'
     }
   },
   components: {VueRecaptcha},
