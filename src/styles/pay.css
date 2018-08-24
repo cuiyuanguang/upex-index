@@ -416,7 +416,7 @@ body[dir='rtl'] #app .pay-info-modal .content .content-wrapper .p-i-header .clos
   padding: 0 50px;
 }
 
-#app .pay-info-modal .content .content-wrapper .p-i-content label {
+.pay-info-modal .p-i-content label {
   display: block;
   font-size: 14px;
   color: rgba(51, 51, 51, 1);
@@ -431,10 +431,6 @@ body[dir='rtl'] #app .pay-info-modal .content .content-wrapper .p-i-header .clos
   border-radius: 2px;
 }
 
-#app .pay-info-modal .content .content-wrapper .p-i-content li {
-
-}
-
 #app .pay-info-modal .content .content-wrapper .p-i-content .confirm {
   border: none;
   width: 400px;
@@ -445,10 +441,32 @@ body[dir='rtl'] #app .pay-info-modal .content .content-wrapper .p-i-header .clos
   color: #fff;
 }
 
+.pay-info-modal .confirm{
+  width: 100%;
+}
+
+.pay-info-modal .tips{
+  color: #999;
+  font-size: 12px;
+  margin-top: 12px;
+  text-align: left;
+}
+
+body[dir='rtl'] .pay-info-modal .tips{
+  text-align: right;
+}
+.pay-info-modal .ivu-modal-body{
+  padding-bottom: 0;
+  padding-top: 30px;
+}
+
+.pay-info-modal .ivu-modal-footer{
+  padding-bottom: 50px;
+}
+
 .pay-info-modal .p-i-content .error{
   color: #ff2e2e;
   font-size: 14px;
-  width: 400px;
   margin: 0 auto;
   height: 30px;
   line-height: 30px;
@@ -456,8 +474,4 @@ body[dir='rtl'] #app .pay-info-modal .content .content-wrapper .p-i-header .clos
 
 .pay-info-modal .p-i-content .is-red .ivu-input{
   border: 1px solid #ff2e2e;
-}
-
-.pay-info-modal .p-i-content .is-grey .ivu-input{
-  border: 1px solid #eee;
 }

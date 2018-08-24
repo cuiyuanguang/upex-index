@@ -215,50 +215,74 @@
       </div>
     </div>
     <!--订单超时END-->
-    <Modal :title="$t('hasPaid')" v-model="isPayDialogShow">
+    <Modal :title="$t('hasPaid')" v-model="isPayDialogShow" :mask-closable="false">
       <p>{{ $t('notPayWarn') }}</p>
       <div slot="footer">
         <i-button type="link" @click="isPayDialogShow = false">{{ $t('cancel') }}</i-button>
         <i-button type="primary" @click="paid">{{ $t('alreadyPaid') }}</i-button>
       </div>
     </Modal>
-    <!-- -->
-    <div class="o-modal pay-info-modal" :class="isPayInfoDialogShow? 'is-show': 'is-not-show'">
-      <div class="content">
-        <div class="content-wrapper" style="width:500px; height: 424px ;">
-          <div class="p-i-header">
-            {{ $t('myTransferInfo') }}
-            <Icon @click="close" type="close" class="close"></Icon>
-          </div>
-
-          <div class="p-i-content">
-            <ul>
-              <li style="margin-top: 30px;">
-                <label>{{ $t('lastFourNumber') }}</label>
-                <i-input type="text" maxlength="4"
-                         @on-focus="cardFocus"
-                         v-model="card" :class="cardErrorTips?'is-red':'is-grey'"></i-input>
-                  <p class="error">{{ cardErrorTips }}</p>
-              </li>
-              <li>
-                <label>{{ $t('lastFourNumber') }}</label>
-                <i-input type="text" maxlength="4"
-                         @on-focus="recardFocus"
-                         v-model="recard" :class="recardErrorTips?'is-red':'is-grey'"></i-input>
-                <p class="error">{{ recardErrorTips }}</p>
-              </li>
-              <li style="margin-bottom: 12px;">
-                <button @click="confirm" class="confirm">{{ $t('confirm') }}</button>
-              </li>
-              <li style="margin: 0;color: #999">
-                <p> {{ $t('transferTips') }} </p>
-                <p class="error" v-if="infoError">{{ infoError }}</p>
-              </li>
-            </ul>
-          </div>
-        </div>
+    <!--支付信息Modal-->
+    <Modal :title="$t('myTransferInfo')" v-model="isPayInfoDialogShow" :mask-closable="false" class="pay-info-modal">
+      <div class="p-i-content">
+        <ul>
+          <li>
+            <label>{{ $t('lastFourNumber') }}</label>
+            <i-input type="text" maxlength="4"
+                     @on-focus="cardFocus"
+                     v-model="card" :class="cardErrorTips?'is-red':'is-grey'"></i-input>
+            <p class="error">{{ cardErrorTips }}</p>
+          </li>
+          <li>
+            <label>{{ $t('lastFourNumber') }}</label>
+            <i-input type="text" maxlength="4"
+                     @on-focus="recardFocus"
+                     v-model="recard" :class="recardErrorTips?'is-red':'is-grey'"></i-input>
+            <p class="error">{{ recardErrorTips }}</p>
+          </li>
+        </ul>
       </div>
-    </div>
+      <div slot="footer">
+        <i-button @click="confirm" type="primary" class="confirm">{{ $t('confirm') }}</i-button>
+        <p class="tips"> {{ $t('transferTips') }} </p>
+      </div>
+    </Modal>
+    <!--<div class="o-modal pay-info-modal" :class="isPayInfoDialogShow? 'is-show': 'is-not-show'">-->
+      <!--<div class="content">-->
+        <!--<div class="content-wrapper" style="width:500px; height: 424px ;">-->
+          <!--<div class="p-i-header">-->
+            <!--{{ $t('myTransferInfo') }}-->
+            <!--<Icon @click="close" type="close" class="close"></Icon>-->
+          <!--</div>-->
+
+          <!--<div class="p-i-content">-->
+            <!--<ul>-->
+              <!--<li style="margin-top: 30px;">-->
+                <!--<label>{{ $t('lastFourNumber') }}</label>-->
+                <!--<i-input type="text" maxlength="4"-->
+                         <!--@on-focus="cardFocus"-->
+                         <!--v-model="card" :class="cardErrorTips?'is-red':'is-grey'"></i-input>-->
+                  <!--<p class="error">{{ cardErrorTips }}</p>-->
+              <!--</li>-->
+              <!--<li>-->
+                <!--<label>{{ $t('lastFourNumber') }}</label>-->
+                <!--<i-input type="text" maxlength="4"-->
+                         <!--@on-focus="recardFocus"-->
+                         <!--v-model="recard" :class="recardErrorTips?'is-red':'is-grey'"></i-input>-->
+                <!--<p class="error">{{ recardErrorTips }}</p>-->
+              <!--</li>-->
+              <!--<li style="margin-bottom: 12px;">-->
+                <!--<button @click="confirm" class="confirm">{{ $t('confirm') }}</button>-->
+              <!--</li>-->
+              <!--<li style="margin: 0;color: #999">-->
+                <!--<p> {{ $t('transferTips') }} </p>-->
+                <!--<p class="error" v-if="infoError">{{ infoError }}</p>-->
+              <!--</li>-->
+            <!--</ul>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
   </div>
   @@include('footer.html')
   <script src="../scripts/locale/pay.js?rev=@@hash"></script>
