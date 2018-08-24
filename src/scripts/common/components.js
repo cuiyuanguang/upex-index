@@ -60,7 +60,6 @@ Vue.filter('date', function (utc) {
     if (new RegExp("(" + k + ")").test(format)) format = format.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
   return format;
 });
-var globalTimers = {};
 
 var i18nComponentsMessages = {
   login: {
@@ -453,8 +452,8 @@ var i18nComponentsMessagesAll = {
 }
 
 var i18nComponents = new VueI18n({
-  locale: 'zh', // set locale
-  fallbackLocale: 'zh',
+  locale: 'ar', // set locale
+  fallbackLocale: 'ar',
   messages: i18nComponentsMessagesAll,
 });
 
@@ -794,7 +793,7 @@ var o_my_login = {
         size="invisible"
         @expired="onExpired"
         @verify="onVerify"
-        sitekey="6LftDFYUAAAAACU6S_TVV3d8k2AYQJV7IAihBwGl"
+        sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi"
       >
       </vue-recaptcha>
       <Tabs v-model="loginWrap" @on-click="loginEmailChange" v-if="login1">
@@ -1351,7 +1350,7 @@ var o_my_register = {
           size="invisible"
           @expired="onExpired"
           @verify="onVerify"
-          sitekey="6LftDFYUAAAAACU6S_TVV3d8k2AYQJV7IAihBwGl">
+          sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi">
         </vue-recaptcha>
       <Tabs v-model="registerWrap" @on-click="tabChange" v-if="register">
         <TabPane :label="$t('email')" name="tabEmail">
@@ -2335,7 +2334,7 @@ var o_find_password = {
     },
     locale: {
       type: String,
-      default: 'zh',
+      default: 'ar',
     },
   },
   data() {
@@ -2566,11 +2565,11 @@ var o_find_password = {
 var pendingOrderItem = {
   template: `
     <Row v-if="data.buyer.id == id">
-      <i-col span="4">
+      <i-col span="3">
         <Avatar style="background:#FF2E2E;">{{ data.status < 7 ? $t('buy') : $t('expired') }}</Avatar>
       </i-col>
-      <i-col span="14">
-        <template v-if="data.status < 7">
+      <i-col span="18">
+        <template v-if="timeStr != 0">
           <h4>
           {{ data.status == 1 ? $t('waitForBuyerPay') : '' }}
           {{ data.status == 2 ? $t('waitForSellerReceive') : '' }}
@@ -2578,24 +2577,24 @@ var pendingOrderItem = {
           </h4>
           <p>
             {{ $t('payInTime') }}
-            <span class="text-error text-strong">{{ timeStr != 0 ? timeStr : $t('expired') }}</span>
+            <span class="text-error text-strong">{{ timeStr }}</span>
           </p>
         </template>
         <template v-else>
-          <h4>{{ $t('orderExpired') }}</h4>
-          <p>{{ $t('seekForCustomService') }</p>
+          <h4 class="text-error">{{ $t('orderExpired') }}</h4>
+          <p>{{ $t('seekForCustomService') }}</p>
         </template>
       </i-col>
-      <i-col span="6" class="text-right">
+      <i-col span="3" class="text-right">
         <a class="order-dropdown-view" :href="'otc_pay.html?sequence='+data.sequence">{{ $t('viewOrder') }}</a>
       </i-col>
     </Row>
     <Row v-else>
-      <i-col span="4">
+      <i-col span="3">
         <Avatar style="background:#5C95EA;">{{ data.status < 7 ? $t('sell') : $t('expired') }}</Avatar>
       </i-col>
-      <i-col span="14">
-        <template v-if="data.status < 7">
+      <i-col span="18">
+        <template v-if="timeStr != 0">
           <h4>
             {{ data.status == 1 ? $t('waitForBuyerPay') : '' }}
             {{ data.status == 2 ? $t('buyerHasPaid') : '' }}
@@ -2603,15 +2602,15 @@ var pendingOrderItem = {
           </h4>
           <p>
             {{ $t('waitForTime') }}
-            <span class="text-primary text-strong">{{ timeStr != 0 ? timeStr : $t('expired') }}</span>
+            <span class="text-primary text-strong">{{ timeStr }}</span>
           </p>
         </template>
         <template v-else>
-          <h4>{{ $t('orderexpired') }}</h4>
-          <p>{{ $t('seekForCustomService') }</p>
+          <h4 class="text-error">{{ $t('orderExpired') }}</h4>
+          <p>{{ $t('seekForCustomService') }}</p>
         </template>
       </i-col>
-      <i-col span="6" class="text-right">
+      <i-col span="3" class="text-right">
         <a class="order-dropdown-view" :href="'otc_wait_pay.html?sequence='+data.sequence">{{ $t('viewOrder') }}</a>
       </i-col>
     </Row>
@@ -2628,7 +2627,7 @@ var pendingOrderItem = {
     },
     locale: {
       type: String,
-      default: 'zh',
+      default: 'ar',
     },
   },
   data: function() {
@@ -2891,20 +2890,6 @@ var o_header = {
       this.isretrievePwdShow = i;
     });
   },
-  filters: {
-    countdown: function (utc) {
-      globalTimers['t' + utc] = setInterval(function() {
-        var now = Date.now();
-        var period = utc - now;
-        if (period > 0) {
-          return utils.MillisecondToDate(period);
-        } else {
-          clearInterval(globalTimers['t' + period]);
-          return 0;
-        }
-      }, 1000);
-    },
-  }
 };
 var row_my_assets = {
   template: `
@@ -2943,7 +2928,7 @@ var row_my_assets_with = {
             </Col>
         </Row>
      </div>
-`,
+  `,
   props: {
     row: Object
   }

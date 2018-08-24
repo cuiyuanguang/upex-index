@@ -1,4 +1,4 @@
-var toastMsg = {
+﻿var toastMsg = {
   '0': {
     zh: '成功',
     en: 'succeeded',
@@ -115,9 +115,9 @@ var toastMsg = {
     ar: 'تم قفل تسجيل دخول المستخدم',
   },
   '10018': {
-    zh: '用户被冻结',
-    en: 'User been frozen',
-    ar: 'تم تجميد المستخدم',
+    zh: '账户冻结登录，请联系客服',
+    en: 'login account has been frozen, please contact customer service',
+    ar: 'تم تجميد حساب تسجيل الدخول ، يرجى الاتصال بخدمة العملاء',
   },
   '10019': {
     zh: '用户名或密码错误',
@@ -165,9 +165,9 @@ var toastMsg = {
     ar: 'استرجاع كلمة السر انتهت صلاحية Token',
   },
   '10032': {
-    zh: '提现被冻结',
-    en: 'withdraw frozen',
-    ar: 'تم تجميد السحب',
+    zh: '冻结提币，请联系客服',
+    en: 'currency withdraw has been frozen, please contact customer service',
+    ar: 'تم تجميد سحب العملة ، يرجى الاتصال بخدمة العملاء',
   },
   '10033': {
     zh: '请先进行实名认证',
@@ -179,6 +179,21 @@ var toastMsg = {
     en: ' Insufficient available balance ',
     ar: 'الرصيد المتاح غير كاف',
   },
+  '10036': {
+    zh: '下单失败',
+    en: 'Order failed ',
+    ar: 'فشل الطلب',
+  },
+  '10037': {
+    zh: '订单取消失败',
+    en: 'Order cancellation failed  ',
+    ar: 'فشل إلغاء الطلب',
+  },
+  '10038': {
+    zh: '冻结交易，请联系客服',
+    en: ' Transaction has been frozen, please contact customer service ',
+    ar: 'تم تجميد الصفقة ، يرجى الاتصال بخدمة العملاء',
+  },
   '10039': {
     zh: '未知的货币代号',
     en: 'Unknown currency code',
@@ -186,18 +201,24 @@ var toastMsg = {
   },
   '10040': {
     zh: '地址需以1，3开头，无空格，包含大小写字母+数字，长度大于24位',
-    en: 'The address must start with 1, 3, no spaces, including upper and lowercase letters + numbers, and the length is longer than 24 digits',
-    ar: 'يجب أن يبدأ العنوان بـ 1 ، 3 ، بدون مسافات ، بما في ذلك الأحرف الكبيرة والصغيرة + الأرقام ، ويكون الطول أكبر من 24 رقمًا.',
+    en:
+      'The address must start with 1, 3, no spaces, including upper and lowercase letters + numbers, and the length is longer than 24 digits',
+    ar:
+      'يجب أن يبدأ العنوان بـ 1 ، 3 ، بدون مسافات ، بما في ذلك الأحرف الكبيرة والصغيرة + الأرقام ، ويكون الطول أكبر من 24 رقمًا.',
   },
   '10041': {
-    zh: '地址需以\'0x\'开头，无空格，包含小写字母+数字，长度42位',
-    en: 'The address must start with \'0x\', no spaces, including lowercase letters + numbers, length 42 digits',
-    ar: 'يجب أن يبدأ العنوان بـ \'0x \' ، بدون مسافات ، بما في ذلك الأحرف الصفيرة + الأرقام  ، والطول لا يتعدى42 رقماً',
+    zh: "地址需以'0x'开头，无空格，包含小写字母+数字，长度42位",
+    en:
+      "The address must start with '0x', no spaces, including lowercase letters + numbers, length 42 digits",
+    ar:
+      "يجب أن يبدأ العنوان بـ '0x ' ، بدون مسافات ، بما في ذلك الأحرف الصفيرة + الأرقام  ، والطول لا يتعدى42 رقماً",
   },
   '10042': {
     zh: '地址需以L,M开头，无空格，包含大小写字母+数字，长度大于24位',
-    en: 'The address should start with L, M, without spaces, including upper and lowercase letters + numbers, and the length is longer than 24 digits',
-    ar: 'يجب أن يبدأ العنوان بـ L ، M ، بدون مسافات ، بما في ذلك الأحرف الكبيرة والصغيرة + الأرقام ، وأن الطول أطول من 24 رقمًا',
+    en:
+      'The address should start with L, M, without spaces, including upper and lowercase letters + numbers, and the length is longer than 24 digits',
+    ar:
+      'يجب أن يبدأ العنوان بـ L ، M ، بدون مسافات ، بما في ذلك الأحرف الكبيرة والصغيرة + الأرقام ، وأن الطول أطول من 24 رقمًا',
   },
   '10050': {
     zh: '密码错误',
@@ -466,7 +487,8 @@ var toastMsg = {
   },
   '2063': {
     zh: '操作被限制,当日取消订单数量超过3次',
-    en: 'The operation is limited, and the number of cancelled orders on the same day exceeds 3 times.',
+    en:
+      'The operation is limited, and the number of cancelled orders on the same day exceeds 3 times.',
     ar: 'عدد الطلبات المعلقة محدود ، وعدد الطلبات الملغاة في نفس اليوم يتجاوز 3 مرات.',
   },
   '2066': {

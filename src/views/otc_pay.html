@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="zh">
+<html lang="ar">
 
 <head>
   <title>UPEX</title>
@@ -159,7 +159,7 @@
           <i-button type="text" size="large" class="cancel-order" @click.native="cancelPay">{{ $t('cancelOrder') }}</i-button>
         </div>
         <div class="pay-status" v-if="step==2">
-          <p class="pay-notice" v-if="limitTime > 0">
+          <p class="pay-notice" v-if="limitTime != 0">
             {{ $t('sellerNotConfirmIn') }}<span class="text-success">{{ (confirmLimit / 60).toFixed(2) }}</span> {{ $t('hour') }}<br>
             {{ $t('restTime') }}<span class="text-success">{{leftTime}}</span>
           </p>

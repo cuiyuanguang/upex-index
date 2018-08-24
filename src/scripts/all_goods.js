@@ -1,8 +1,19 @@
+
+Vue.locale = () => {};
+var messagesTransformed = utils.transform(messages);
+var messagesAll = {
+  zh: Object.assign(messagesTransformed.zh, iview.langs['zh']),
+  en: Object.assign(messagesTransformed.en, iview.langs['en']),
+  ar: Object.assign(messagesTransformed.ar, iview.langs['ar']),
+};
+
 var i18n = new VueI18n({
-  locale: 'zh', // set locale
-  fallbackLocale: 'zh',
-  messages: utils.transform(messages),
+  locale: 'ar', // set locale
+  fallbackLocale: 'ar',
+  messages: messagesAll,
 });
+
+iview.i18n((key, value) => i18n.t(key, value));
 
 var allGoods = new Vue({
   el: '#app',
@@ -95,16 +106,11 @@ var allGoods = new Vue({
     };
     return {
       locale: '',
-      //挂单相关数据
       showListTag: 'BUY',
-      postOrderTag: 'BUY',
       marketPrice: '',
-      //END挂单相关数据
-      //bank card status
       cardList: [],
       balance: 0,
-      //END user info
-      //triggers
+      // 下单
       modalOrder: false,
       selectedAdvert: {},
       legalCurrency: 0,
@@ -130,12 +136,11 @@ var allGoods = new Vue({
       modalMsg: {
         title: '',
         desc: '',
-        confirmText: '确认',
+        confirmText: '',
       },
       action: '',
       advertId: '',
       sequence: '',
-      whatsApp: '',
       // 新添加的绑定银行卡代码
       userInfo: '',
       sendPlaceholderBank: '',

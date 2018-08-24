@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="zh">
+<html lang="ar">
 
 <head>
   <title>UPEX</title>
@@ -18,11 +18,19 @@
           <dl class="account-card">
             <dt>
               <Row class="account-row">
-                <i-col span="12">
+                <i-col span="18">
                   <span class="account-row-title">{{ $t('accountInfo') }}</span>
-                  <Tag color="#ff4d4d" v-if="user.accountStatus > 0">{{ $t('accountFrozen') }}</Tag>
+                  <Tooltip transfer v-if="user.accountStatus == 1" :content="$t('accountFrozenAllTips')" placement="top">
+                    <Tag color="#ff4d4d">{{ $t('accountFrozenAll') }}</Tag>
+                  </Tooltip>
+                  <Tooltip transfer v-if="user.accountStatus == 2" content="$t('accountFrozenTradeTips')" placement="top">
+                    <Tag color="#ff4d4d">{{ $t('accountFrozenTrade') }}</Tag>
+                  </Tooltip>
+                  <Tooltip transfer v-if="user.accountStatus == 3" content="$t('accountFrozenDepositTips')" placement="top">
+                    <Tag color="#ff4d4d">{{ $t('accountFrozenDeposit') }}</Tag>
+                  </Tooltip>
                 </i-col>
-                <i-col span="12" class="text-right">
+                <i-col span="6" class="text-right">
                   <i-button type="link" size="small" @click="loginOut">{{ $t('loginOut') }}</i-button>
                 </i-col>
               </Row>
@@ -59,7 +67,9 @@
               <Row class="account-row">
                 <i-col span="24">
                   <span class="account-row-title">{{ $t('securitySet') }}</span>
-                  <Badge :count="$t('unsafe')" v-if="!user.googleStatus || !user.isOpenEmailCheck || !user.isOpenMobileCheck"></Badge>
+                    <Tag type="border" color="#ff4d4d" v-if="user.googleStatus || !user.isOpenEmailCheck || !user.isOpenMobileCheck">
+                      {{ $t('unsafe') }}
+                    </Tag>
                 </i-col>
               </Row>
             </dt>
@@ -336,7 +346,7 @@
               <i-input v-model="formBankInfo.cardNo" :maxlength="64" :placeholder="$t('cardNoHolder')"></i-input>
             </Poptip>
           </form-item>
-          <form-item :label="'iban' + $t('number')" prop="ibanNo">
+          <form-item label="iban" prop="ibanNo">
             <i-input v-model="formBankInfo.ibanNo" :maxlength="64" :placeholder="$t('ibanNoHolder')"></i-input>
           </form-item>
         </i-form>
@@ -360,7 +370,7 @@
             <i-col span="16" class="text-strong">{{ formBankInfo.cardNo }}</i-col>
           </Row>
           <Row>
-            <i-col span="8" class="text-secondary">iban{{ $t('number') }}</i-col>
+            <i-col span="8" class="text-secondary">iban</i-col>
             <i-col span="16" class="text-strong">{{ formBankInfo.ibanNo }}</i-col>
           </Row>
         </div>
