@@ -181,9 +181,6 @@ body[dir='rtl'] .ivu-radio-group-button .ivu-radio-wrapper:last-child {
   width: 100% !important;
   overflow-x: hidden;
 }
-.country-select .ivu-select-item {
-  height: 26px;
-}
 
 
 .modal-notice .ivu-modal-body {
