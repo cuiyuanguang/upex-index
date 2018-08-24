@@ -794,7 +794,7 @@ var o_my_login = {
         size="invisible"
         @expired="onExpired"
         @verify="onVerify"
-        sitekey="6LftDFYUAAAAACU6S_TVV3d8k2AYQJV7IAihBwGl"
+        sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi"
       >
       </vue-recaptcha>
       <Tabs v-model="loginWrap" @on-click="loginEmailChange" v-if="login1">

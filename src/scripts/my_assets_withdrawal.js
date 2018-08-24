@@ -133,7 +133,7 @@ var myAssetsWithdrawal = new Vue({
       disabledEmail: this.userInfo.isOpenEmailCheck === 0,
       disabledPhone: this.userInfo.isOpenMobileCheck === 0,
       dailyLimit: '',
-      pricePlaceholder: this.$t('minWithdraw')
+      pricePlaceholder: ''
     }
   },
   methods: {
@@ -233,7 +233,7 @@ var myAssetsWithdrawal = new Vue({
       let balanceLimit = this.balance[val].withdraw_min + ' ' + val;
       this.balanceDefaultFee = this.balance[val].defaultFee;
 
-      this.pricePlaceholder = this.$t('minWithdraw') + balanceLimit;
+      this.pricePlaceholder = balanceLimit;
     },
     //打开添加地址页面
     addressClick() {

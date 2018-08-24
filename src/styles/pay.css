@@ -431,20 +431,6 @@ body[dir='rtl'] #app .pay-info-modal .content .content-wrapper .p-i-header .clos
   border-radius: 2px;
 }
 
-#app .pay-info-modal .content .content-wrapper .p-i-content .confirm {
-  border: none;
-  width: 400px;
-  height: 44px;
-  background: #5C95EA;
-  border-radius: 5px;
-  font-size: 16px;
-  color: #fff;
-}
-
-.pay-info-modal .confirm{
-  width: 100%;
-}
-
 .pay-info-modal .tips{
   color: #999;
   font-size: 12px;
