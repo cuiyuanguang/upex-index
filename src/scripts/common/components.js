@@ -881,7 +881,7 @@ var o_my_login = {
       loginPhoneErrorText: '',
       //country
       // countryArr: [],
-      selectCountry: '+86',
+      selectCountry: '+966',
       highLightForget: false,
       //password
       loginPhonePassword: '',
@@ -1083,6 +1083,7 @@ var o_my_login = {
     let locale = localStorage.getItem('locale');
     if (locale) {
       this.$i18n.locale = locale;
+      this.selectCountry = locale === 'ar' ? '+966' : newVal === 'en' ? '+1' : '+86'
     }
   },
   watch: {
@@ -1095,6 +1096,7 @@ var o_my_login = {
     langStatus: function (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
+        this.selectCountry = newVal === 'ar' ? '+966' : newVal === 'en' ? '+1' : '+86'
       }
     }
   },
@@ -1488,7 +1490,7 @@ var o_my_register = {
       phoneVal: '',
       phoneValError: false,
       phoneValErrorText: '',
-      selectCountry: '+86',
+      selectCountry: '+966',
       // countryArr: [],
       phoneSmsCode: '',
       phoneSmsCodeError: false,
@@ -1522,6 +1524,7 @@ var o_my_register = {
     let locale = localStorage.getItem('locale');
     if (locale) {
       this.$i18n.locale = locale;
+      this.selectCountry = locale === 'ar' ? '+966' : newVal === 'en' ? '+1' : '+86'
     }
   },
   components: {VueRecaptcha},
@@ -1875,6 +1878,7 @@ var o_my_register = {
         this.sendSmsEmail = this.$t('getValidateCode');
         this.sendSmsPhone = this.$t('getValidateCode');
         this.$i18n.locale = newVal;
+        this.selectCountry = newVal === 'ar' ? '+966' : newVal === 'en' ? '+1' : '+86'
       }
     }
   }
