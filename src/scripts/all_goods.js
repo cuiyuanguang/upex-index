@@ -464,6 +464,7 @@ var allGoods = new Vue({
           return;
         }
         that.getBalance();
+        that.getMarketPrice();
         // 获取发单数量及类型
         get('api/personAdverts/cnt').then(function(obj) {
           that.modalReleaseLoading = false;
@@ -550,25 +551,20 @@ var allGoods = new Vue({
             });
           }
           if (name === 'formRelease') {
-            get('api/rate').then(function(res) {
-              if (res) {
-                that.marketPrice = res;
-                that.formRelease.minTrade = res.trade_min_price;
-                that.formRelease.maxTrade = res.trade_max_price;
-                if (parseFloat(that.formRelease.price) > res.exchange_rate * 1.5) {
+                if (parseFloat(that.formRelease.price) > Math.max(that.marketPrice.exchange_rate, that.marketPrice.exchange_buy_max) * 1.5) {
                   that.modalRelease = false;
                   that.releaseWarning = that.$t('moreThan50Percent');
                   that.modalReleaseWarning = true;
                   return;
                 }
-                if (parseFloat(that.formRelease.price) < res.exchange_rate * 0.5) {
+                if (parseFloat(that.formRelease.price) < Math.min(that.marketPrice.exchange_rate, that.marketPrice.exchange_sell_min) * 0.5) {
                   that.modalRelease = false;
                   that.releaseWarning = that.$t('lessThan50Percent');
                   that.modalReleaseWarning = true;
                   return;
                 }
                 if (that.formRelease.side == 'BUY') {
-                  if (parseFloat(that.formRelease.price) > res.exchange_sell_max) {
+                  if (parseFloat(that.formRelease.price) > that.marketPrice.exchange_sell_max) {
                     that.modalRelease = false;
                     that.releaseWarning = that.$t('lessThanHighestPurchase');
                     that.modalReleaseWarning = true;
@@ -576,7 +572,7 @@ var allGoods = new Vue({
                   }
                 }
                 if (that.formRelease.side == 'SELL') {
-                  if (parseFloat(that.formRelease.price) > res.exchange_buy_min) {
+                  if (parseFloat(that.formRelease.price) > that.marketPrice.exchange_buy_min) {
                     that.modalRelease = false;
                     that.releaseWarning = that.$t('moreThanLowestPrice');
                     that.modalReleaseWarning = true;
@@ -585,8 +581,6 @@ var allGoods = new Vue({
                 }
                 that.modalRelease = false;
                 that.modalReleaseConfirm = true;
-              }
-            });
           }
           if (name === 'formReleaseConfirm') {
             if (that.formRelease.side === 'SELL') {
@@ -602,12 +596,13 @@ var allGoods = new Vue({
             : that.formReleaseConfirm.phone;
             post('api/advert', that.formRelease).then(function(res) {
               if (res) {
+                var side = that.formRelease.side;
                 that.handleReset('formRelease');
                 that.handleReset('formReleaseConfirm');
                 that.modalReleaseWarning = false;
                 that.modalReleaseConfirm = false;
-                that.showListTag = that.formRelease.side === 'SELL' ? 'BUY' : 'SELL';
-                that.getAdvertList(that.formRelease.side);
+                that.showListTag = side == 'SELL' ? 'BUY' : 'SELL';
+                that.getAdvertList(side);
               }
             });
           }
@@ -707,8 +702,8 @@ var allGoods = new Vue({
       this.getUserInfo();
       this.getAvailableCardList();
     }
-    this.getAdvertList('SELL', 1);
-    this.getAdvertList('BUY', 1);
+    this.getAdvertList('SELL');
+    this.getAdvertList('BUY');
     this.getMarketPrice();
   },
   watch: {

@@ -93,7 +93,7 @@
           <div class="page">
             <div class="wrapper">
               <div>
-                <Page @on-change="getAdvertList('BUY', $event)" :total="buyTotal" :current="buyCurrentPage" size="small"></Page>
+                <Page @on-change="getAdvertList('SELL', $event)" :total="buyTotal" :page-size="1" :current="buyCurrentPage" size="small"></Page>
               </div>
             </div>
           </div>
@@ -156,7 +156,7 @@
           <div class="page">
             <div class="wrapper">
               <div>
-                <Page @on-change="getAdvertList('SELL', $event)" :total="sellTotal" :current="sellCurrentPage" size="small"></Page>
+                <Page @on-change="getAdvertList('BUY', $event)" :total="sellTotal" :current="sellCurrentPage" size="small"></Page>
               </div>
             </div>
           </div>
