@@ -1,5 +1,4 @@
 
-Vue.locale = () => {};
 var messagesTransformed = utils.transform(messages);
 var messagesAll = {
   zh: Object.assign(messagesTransformed.zh, iview.langs['zh']),

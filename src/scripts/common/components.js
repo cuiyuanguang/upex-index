@@ -444,181 +444,6 @@ var i18nComponentsMessages = {
   },
 };
 
-var i18nComponentsMessagesTransformed = utils.transform(i18nComponentsMessages);
-var i18nComponentsMessagesAll = {
-  zh: Object.assign(i18nComponentsMessagesTransformed.zh, iview.langs['zh']),
-  en: Object.assign(i18nComponentsMessagesTransformed.en, iview.langs['en']),
-  ar: Object.assign(i18nComponentsMessagesTransformed.ar, iview.langs['ar']),
-}
-
-var i18nComponents = new VueI18n({
-  locale: 'ar', // set locale
-  fallbackLocale: 'ar',
-  messages: i18nComponentsMessagesAll,
-});
-
-// notice component
-var om_notice = {
-  template: `
-    <div class="o-modal notice-modal" :class="show?'is-show':'is-not-show'"   >
-      <div class="content">
-        <div class="content-wrapper" style="background-color: #fff;width: 500px;height: 320px;border-radius: 5px;" >
-          <Icon @click="close" type="close" class="close" style="position: absolute;right: 20px;"></Icon>
-          <div class="header" style=" text-align: center;padding: 28px 0;">
-            <img src="../images/arrive.png" alt="">
-          </div>
-          <div class="main-content" style=" text-align: center;margin-top: 33px;">
-            <h3> {{amount}} USDT {{ $t('received') }}</h3>
-          </div>
-          <div class="foot" style="text-align: center;">
-            <a
-              class="view"
-              @click="view"
-              href="#"
-              style="font-size: 14px;
-              color: rgba(51, 51, 51, 1);
-              margin-right: 20px;"
-            >{{ $t('viewAccount') }}</a>
-            <a
-              class="current"
-              @click="current"
-              href="#"
-              style="display: inline-block;
-              width: 251px;
-              height: 44px;
-              line-height: 44px;
-              text-align: center;
-              background: #5C95EA;
-              border-radius: 5px;
-              font-size: 16px;
-              color: rgba(51, 51, 51, 1);
-              text-decoration: none;"
-            >{{ $t('continueTrade') }}</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
-  i18n: i18nComponents,
-  props: ['amount', 'show', 'locale'],
-  methods: {
-    close() {
-      this.$parent.$emit('isNoticeShow', false);
-    },
-    view() {
-      this.$parent.$emit('isNoticeShow', false);
-    },
-    current() {
-      this.$parent.$emit('isNoticeShow', false);
-    },
-  },
-  watch: {
-    locale: function (newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.$i18n.locale = newVal;
-      }
-    }
-  }
-};
-//---------------------------------END-----------------------------------------------------
-
-//------------------------add contact----------------------------------------------------
-var addContact = {
-  template: `
-    <Modal :title="$t('addContact')" class="modal-notice" v-model="show" width="420" @on-cancel="handleClose('formWhatsApp')">
-      <div class="modal-notice-footer">
-        <Row style="padding-bottom: 20px">
-          <i-col span="3"><img src="../images/whatup.png" /></i-col>
-          <i-col span="1">&nbsp;</i-col>
-          <i-col span="20">{{ $t('addContactTips') }}</i-col>
-        </Row>
-        <i-form ref="formWhatsApp" :model="formWhatsApp" :rules="ruleWhatsApp" label-position="top">
-          <form-item label="WhatsApp" prop="number">
-            <i-input
-              number
-              v-model="formWhatsApp.number"
-              maxlength="30"
-              :placeholder="$t('whatsAppHolder')"
-            >
-              <i-select class="country-select" v-model="selectCountry" slot="prepend" filterable>
-                <i-option
-                  v-for="(country, index) in countryArr"
-                  :key="index"
-                  :value="country.dialingCode"
-                  :label="country.dialingCode"
-                  style="width:100%;"
-                >
-                  <span class="float-left">{{country.dialingCode}}</span>
-                  <span class="float-right" style="color:#aaaaaa;">{{country.enName}}</span>
-                </i-option>
-              </i-select>
-            </i-input>
-          </form-item>
-        </i-form>
-      </div>
-      <div slot="footer">
-        <i-button type="primary" long @click="handleSubmit('formWhatsApp')">{{ $t('confirm') }}</i-button>
-      </div>
-    </Modal>
-  `,
-  i18n: i18nComponents,
-  data() {
-    var validateNumeric = (rule, value, callback) => {
-      if (!/\d+$/g.test(value)) {
-        callback(new Error(this.$t('numericRequired')));
-      } else {
-        callback();
-      }
-    };
-    return {
-      formWhatsApp: {
-        number: '',
-      },
-      ruleWhatsApp: {
-        number: [
-          { validator: validateNumeric, trigger: 'change' },
-        ],
-      },
-      selectCountry: '+86',
-    };
-  },
-  props: ['show', 'locale'],
-  computed: {
-    countryArr: function() {
-      return JSON.parse(localStorage.getItem('country'));
-    },
-  },
-  methods: {
-    handleSubmit(name) {
-      var that = this;
-      this.$refs[name].validate(function(valid){
-        if (valid) {
-          post('api/watchapp', that.selectCountry + '-' + that.formWhatsApp.number).then(function (res) {
-            if (res) {
-              post('api/common/user_info', '', false).then(function (result) {
-                localStorage.setItem('user', JSON.stringify(result));
-                that.handleClose(name);
-              });
-            }
-          });
-        }
-      });
-    },
-    handleClose(name) {
-      this.$refs[name].resetFields();
-      this.$parent.$emit('isContactShow', false);
-    },
-  },
-  watch: {
-    locale: function (newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.$i18n.locale = newVal;
-      }
-    }
-  }
-};
-//-----------------END----------------------------------------------------------
-
 var i18nLoginRegisterMsg = {
   loginTitle: {
     zh: '欢迎登录',
@@ -772,11 +597,286 @@ var i18nLoginRegisterMsg = {
     ar: 'تقديم',
   },
 };
-var i18nLoginNRegister = new VueI18n({
-  locale: 'zh', // set locale
-  fallbackLocale: 'zh',
-  messages: utils.transform(i18nLoginRegisterMsg),
+
+var i18nComponentsMsg = {
+  bindGoogleAuthMsg: {
+    zh: '为了您的账户安全，我们强烈推荐您进行谷歌验证',
+    en: 'For your account security, we strongly recommend recommend you to verify Google',
+    ar: 'من أجل ضمان أمن حسابك ، نوصيك بشدة على التحقق من جوجل',
+  },
+  googleAuthBtn: {
+    zh: '身份验证',
+    en: 'Identity verification',
+    ar: 'التحقق من الهوية',
+  },
+  noEmpty: {
+    zh: '此处不能为空',
+    en: 'This place cannot be empty',
+    ar: 'لا يمكن أن يكون هذا المكان فارغًا'
+  },
+  onlyNum: {
+    zh: '验证码只包含数字',
+    en: 'Verification code only contains numbers',
+    ar: 'رمز التحقق  فقط  يحتوي على أرقام'
+  },
+  copySuccess: {
+    zh: '复制成功',
+    en: 'Copied',
+    ar: 'تم النسخ'
+  },
+  StrengthenTitle: {
+    zh: '增强你的账户安全性',
+    en: 'Strengthen your account security',
+    ar: 'تعزيز أمن حسابك'
+  },
+  bindGoogle: {
+    zh: '3步绑定谷歌认证',
+    en: 'Step 3 bind google authentication',
+    ar: 'الخطوة 3 ربط مصادقة جوجل'
+  },
+  downloadGoogle: {
+    zh: '下载谷歌身份验证器',
+    en: 'Download google authenticator',
+    ar: 'تحميل مصادقة جوجل'
+  },
+  scanCode: {
+    zh: '使用谷歌认证器扫描条形码',
+    en: 'Use google authenticator to scan a barcode:',
+    ar: 'استخدم أداة مصادقة جوجل لفحص الباركود'
+  },
+  enterKey: {
+    zh: '输入提供的key',
+    en: 'Enter the provided key',
+    ar: 'أدخل المفتاح المقدم'
+  },
+  copy: {
+    zh: '复制',
+    en: 'copy',
+    ar: 'نسخ'
+  },
+  completeBind: {
+    zh: '完成绑定',
+    en: 'Complete the binding',
+    ar: 'استكمال الربط'
+  },
+  enterPwd: {
+    zh: '请输入登录密码',
+    en: 'Please enter the login password',
+    ar: 'يرجى إدخال كلمة السر لتسجيل الدخول'
+  },
+  enterGoogleRecieved: {
+    zh: '请输入谷歌验证码',
+    en: 'please enter Google verification code',
+    ar: 'يرجى إدخال رمز تحقق الجوجل'
+  },
+  sixInform: {
+    zh: '验证码为6位数字',
+    en: 'The verification code should be 6 digits',
+    ar: 'رمز التحقق يكون من 6 ارقام '
+  },
+  or: {
+    zh: '或者',
+    en: 'or',
+    ar: ' أو '
+  },
+  cancel: {
+    zh: '取消',
+    en: 'cancel',
+    ar: 'إلغاء',
+  },
+  secureTitle:{
+    zh: '安全提醒',
+    en: 'Security reminder',
+    ar: 'تذكير الأمان'
+  },
+  secureSure:{
+    zh: '立即绑定',
+    en: 'Bind now',
+    ar: 'اربط الآن'
+  }
+};
+
+var i18nComponentsMessagesTransformed = utils.transform(i18nComponentsMessages);
+var i18nLoginRegisterMsgTransformed = utils.transform(i18nLoginRegisterMsg);
+var i18nComponentsMsgTransformed = utils.transform(i18nComponentsMsg);
+var i18nComponentsZh = Object.assign(i18nComponentsMessagesTransformed.zh, i18nLoginRegisterMsgTransformed.zh, i18nComponentsMsgTransformed.zh);
+var i18nComponentsEn = Object.assign(i18nComponentsMessagesTransformed.en, i18nLoginRegisterMsgTransformed.en, i18nComponentsMsgTransformed.en);
+var i18nComponentsAr = Object.assign(i18nComponentsMessagesTransformed.ar, i18nLoginRegisterMsgTransformed.ar, i18nComponentsMsgTransformed.ar);
+var i18nComponentsMessagesAll = {
+  zh: Object.assign(i18nComponentsZh, iview.langs['zh']),
+  en: Object.assign(i18nComponentsEn, iview.langs['en']),
+  ar: Object.assign(i18nComponentsAr, iview.langs['ar']),
+}
+Vue.locale = () => {};
+var i18nComponents = new VueI18n({
+  locale: 'ar', // set locale
+  fallbackLocale: 'ar',
+  messages: i18nComponentsMessagesAll,
 });
+iview.i18n((key, value) => i18nComponents.t(key, value));
+
+// notice component
+var om_notice = {
+  template: `
+    <div class="o-modal notice-modal" :class="show?'is-show':'is-not-show'"   >
+      <div class="content">
+        <div class="content-wrapper" style="background-color: #fff;width: 500px;height: 320px;border-radius: 5px;" >
+          <Icon @click="close" type="close" class="close" style="position: absolute;right: 20px;"></Icon>
+          <div class="header" style=" text-align: center;padding: 28px 0;">
+            <img src="../images/arrive.png" alt="">
+          </div>
+          <div class="main-content" style=" text-align: center;margin-top: 33px;">
+            <h3> {{amount}} USDT {{ $t('received') }}</h3>
+          </div>
+          <div class="foot" style="text-align: center;">
+            <a
+              class="view"
+              @click="view"
+              href="#"
+              style="font-size: 14px;
+              color: rgba(51, 51, 51, 1);
+              margin-right: 20px;"
+            >{{ $t('viewAccount') }}</a>
+            <a
+              class="current"
+              @click="current"
+              href="#"
+              style="display: inline-block;
+              width: 251px;
+              height: 44px;
+              line-height: 44px;
+              text-align: center;
+              background: #5C95EA;
+              border-radius: 5px;
+              font-size: 16px;
+              color: rgba(51, 51, 51, 1);
+              text-decoration: none;"
+            >{{ $t('continueTrade') }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+  i18n: i18nComponents,
+  props: ['amount', 'show', 'locale'],
+  methods: {
+    close() {
+      this.$parent.$emit('isNoticeShow', false);
+    },
+    view() {
+      this.$parent.$emit('isNoticeShow', false);
+    },
+    current() {
+      this.$parent.$emit('isNoticeShow', false);
+    },
+  },
+  watch: {
+    locale: function (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+      }
+    }
+  }
+};
+//---------------------------------END-----------------------------------------------------
+
+//------------------------add contact----------------------------------------------------
+var addContact = {
+  template: `
+    <Modal :title="$t('addContact')" v-model="show" @on-cancel="handleClose('formWhatsApp')">
+      <div>
+        <Row style="padding-bottom: 20px">
+          <i-col span="3"><img src="../images/whatup.png" /></i-col>
+          <i-col span="1">&nbsp;</i-col>
+          <i-col span="20">{{ $t('addContactTips') }}</i-col>
+        </Row>
+        <i-form ref="formWhatsApp" :model="formWhatsApp" :rules="ruleWhatsApp" label-position="top">
+          <form-item label="WhatsApp" prop="number">
+            <i-input
+              number
+              v-model="formWhatsApp.number"
+              maxlength="30"
+              :placeholder="$t('whatsAppHolder')"
+            >
+              <i-select class="country-select" v-model="selectCountry" slot="prepend" filterable>
+                <i-option
+                  v-for="(country, index) in countryArr"
+                  :key="index"
+                  :value="country.dialingCode"
+                  :label="country.dialingCode"
+                  style="width:100%;"
+                >
+                  <span class="float-left">{{country.dialingCode}}</span>
+                  <span class="float-right">{{country.enName}}</span>
+                </i-option>
+              </i-select>
+            </i-input>
+          </form-item>
+        </i-form>
+      </div>
+      <div slot="footer">
+        <i-button type="primary" long @click="handleSubmit('formWhatsApp')">{{ $t('confirm') }}</i-button>
+      </div>
+    </Modal>
+  `,
+  i18n: i18nComponents,
+  data() {
+    var validateNumeric = (rule, value, callback) => {
+      if (!/\d+$/g.test(value)) {
+        callback(new Error(this.$t('numericRequired')));
+      } else {
+        callback();
+      }
+    };
+    return {
+      formWhatsApp: {
+        number: '',
+      },
+      ruleWhatsApp: {
+        number: [
+          { validator: validateNumeric, trigger: 'change' },
+        ],
+      },
+      selectCountry: '+86',
+    };
+  },
+  props: ['show', 'locale'],
+  computed: {
+    countryArr: function() {
+      return JSON.parse(localStorage.getItem('country'));
+    },
+  },
+  methods: {
+    handleSubmit(name) {
+      var that = this;
+      this.$refs[name].validate(function(valid){
+        if (valid) {
+          post('api/watchapp', that.selectCountry + '-' + that.formWhatsApp.number).then(function (res) {
+            if (res) {
+              post('api/common/user_info', '', false).then(function (result) {
+                localStorage.setItem('user', JSON.stringify(result));
+                that.handleClose(name);
+              });
+            }
+          });
+        }
+      });
+    },
+    handleClose(name) {
+      this.$refs[name].resetFields();
+      this.$parent.$emit('isContactShow', false);
+    },
+  },
+  watch: {
+    locale: function (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+      }
+    }
+  }
+};
+//-----------------END----------------------------------------------------------
+
 var o_my_login = {
   template: `
     <Modal
@@ -862,7 +962,7 @@ var o_my_login = {
       </div>
     </Modal>
   `,
-  i18n: i18nLoginNRegister,
+  i18n: i18nComponents,
   data() {
     return {
       locale: 'zh',
@@ -1082,7 +1182,7 @@ var o_my_login = {
     let locale = localStorage.getItem('locale');
     if (locale) {
       this.$i18n.locale = locale;
-      this.selectCountry = locale === 'ar' ? '+966' : newVal === 'en' ? '+1' : '+86'
+      this.selectCountry = locale === 'ar' ? '+966' : locale === 'en' ? '+1' : '+86'
     }
   },
   watch: {
@@ -1182,7 +1282,7 @@ var o_my_loginNext = {
       </div>
     </Modal>
   `,
-  i18n: i18nLoginNRegister,
+  i18n: i18nComponents,
   props: ['loginNext', 'isLoginNextType', 'isLoginNextCookie', 'isLoginNextPhone', 'isLoginNextEmail','langStatus'],
   data() {
     return {
@@ -1469,7 +1569,7 @@ var o_my_register = {
       </div>
       </Modal>
     `,
-  i18n: i18nLoginNRegister,
+  i18n: i18nComponents,
   data() {
     return {
       //email
@@ -1523,7 +1623,7 @@ var o_my_register = {
     let locale = localStorage.getItem('locale');
     if (locale) {
       this.$i18n.locale = locale;
-      this.selectCountry = locale === 'ar' ? '+966' : newVal === 'en' ? '+1' : '+86'
+      this.selectCountry = locale === 'ar' ? '+966' : locale === 'en' ? '+1' : '+86'
     }
   },
   components: {VueRecaptcha},
@@ -1883,108 +1983,6 @@ var o_my_register = {
   }
 };
 
-var i18nRegisterGoogleMsg = {
-  bindGoogleAuthMsg: {
-    zh: '为了您的账户安全，我们强烈推荐您进行谷歌验证',
-    en: 'For your account security, we strongly recommend recommend you to verify Google',
-    ar: 'من أجل ضمان أمن حسابك ، نوصيك بشدة على التحقق من جوجل',
-  },
-  googleAuthBtn: {
-    zh: '身份验证',
-    en: 'Identity verification',
-    ar: 'التحقق من الهوية',
-  },
-  noEmpty: {
-    zh: '此处不能为空',
-    en: 'This place cannot be empty',
-    ar: 'لا يمكن أن يكون هذا المكان فارغًا'
-  },
-  onlyNum: {
-    zh: '验证码只包含数字',
-    en: 'Verification code only contains numbers',
-    ar: 'رمز التحقق  فقط  يحتوي على أرقام'
-  },
-  copySuccess: {
-    zh: '复制成功',
-    en: 'Copied',
-    ar: 'تم النسخ'
-  },
-  StrengthenTitle: {
-    zh: '增强你的账户安全性',
-    en: 'Strengthen your account security',
-    ar: 'تعزيز أمن حسابك'
-  },
-  bindGoogle: {
-    zh: '3步绑定谷歌认证',
-    en: 'Step 3 bind google authentication',
-    ar: 'الخطوة 3 ربط مصادقة جوجل'
-  },
-  downloadGoogle: {
-    zh: '下载谷歌身份验证器',
-    en: 'Download google authenticator',
-    ar: 'تحميل مصادقة جوجل'
-  },
-  scanCode: {
-    zh: '使用谷歌认证器扫描条形码',
-    en: 'Use google authenticator to scan a barcode:',
-    ar: 'استخدم أداة مصادقة جوجل لفحص الباركود'
-  },
-  enterKey: {
-    zh: '输入提供的key',
-    en: 'Enter the provided key',
-    ar: 'أدخل المفتاح المقدم'
-  },
-  copy: {
-    zh: '复制',
-    en: 'copy',
-    ar: 'نسخ'
-  },
-  completeBind: {
-    zh: '完成绑定',
-    en: 'Complete the binding',
-    ar: 'استكمال الربط'
-  },
-  enterPwd: {
-    zh: '请输入登录密码',
-    en: 'Please enter the login password',
-    ar: 'يرجى إدخال كلمة السر لتسجيل الدخول'
-  },
-  enterGoogleRecieved: {
-    zh: '请输入谷歌验证码',
-    en: 'please enter Google verification code',
-    ar: 'يرجى إدخال رمز تحقق الجوجل'
-  },
-  sixInform: {
-    zh: '验证码为6位数字',
-    en: 'The verification code should be 6 digits',
-    ar: 'رمز التحقق يكون من 6 ارقام '
-  },
-  or: {
-    zh: '或者',
-    en: 'or',
-    ar: ' أو '
-  },
-  cancel: {
-    zh: '取消',
-    en: 'cancel',
-    ar: 'إلغاء',
-  },
-  secureTitle:{
-    zh: '安全提醒',
-    en: 'Security reminder',
-    ar: 'تذكير الأمان'
-  },
-  secureSure:{
-    zh: '立即绑定',
-    en: 'Bind now',
-    ar: 'اربط الآن'
-  }
-};
-var i18nRegisterGoogle = new VueI18n({
-  locale: 'zh', // set locale
-  fallbackLocale: 'zh',
-  messages: utils.transform(i18nRegisterGoogleMsg),
-});
 var o_my_registerGoogle = {
   template: `
     <Modal
@@ -2082,7 +2080,7 @@ var o_my_registerGoogle = {
       bindGoogleCodeErrorText: '',
     };
   },
-  i18n: i18nRegisterGoogle,
+  i18n: i18nComponents,
   props: ['registerGoogle', 'registerCookie','langStatus'],
   methods: {
     doCopy: function () {
@@ -2196,7 +2194,7 @@ var o_my_googleAuth = {
         </div>
       </div>
     </Modal>`,
-  i18n: i18nRegisterGoogle,
+  i18n: i18nComponents,
   props: {
     googleAuthShow:{
       type: Boolean,

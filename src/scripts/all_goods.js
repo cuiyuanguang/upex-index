@@ -1,5 +1,5 @@
 
-Vue.locale = () => {};
+
 var messagesTransformed = utils.transform(messages);
 var messagesAll = {
   zh: Object.assign(messagesTransformed.zh, iview.langs['zh']),
@@ -53,7 +53,7 @@ var allGoods = new Vue({
       }
     };
     var validateFormat = (rule, value, callback) => {
-      var reg = /\w{8,64}/g;
+      var reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,64}$/g;
       if (!reg.test(value)) {
         callback(new Error(this.$t('eight2SixtyFour')));
       } else {
@@ -72,7 +72,7 @@ var allGoods = new Vue({
       value = Number(value);
       if (!value) {
         callback(new Error(this.$t('noZeroNumericRequired')));
-      } else if (value < this.marketPrice.trade_min_volume || value > this.marketPrice.trade_max_volume) {
+      } else if (value < Number(this.marketPrice.trade_min_volume) || value > Number(this.marketPrice.trade_max_volume)) {
         callback(new Error(this.$t('sysLimitIs') + this.marketPrice.trade_min_volume + '--' + this.marketPrice.trade_max_volume));
       } else if (this.formRelease.side === 'SELL' && value > this.balance) {
         callback(new Error(this.$t('balanceNotEnough')));
@@ -267,8 +267,8 @@ var allGoods = new Vue({
       get('api/rate').then(function(res) {
         if (res) {
           that.marketPrice = res;
-          that.formRelease.minTrade = res.trade_min_price;
-          that.formRelease.maxTrade = res.trade_max_price;
+          that.formRelease.minTrade = Number(res.trade_min_price);
+          that.formRelease.maxTrade = Number(res.trade_max_price);
         }
       });
     },
@@ -643,10 +643,13 @@ var allGoods = new Vue({
       } else {
         this.$refs.formBankInfo.resetFields();
       }
-      if (name === 'formReleaseConfirm' && action === 'modify') {
+      if (name === 'formReleaseConfirm') {
         this.modalReleaseConfirm = false;
-        this.modalRelease = true;
-        return;
+        if (action === 'modify') {
+          this.modalRelease = true;
+        } else {
+          this.$refs.formRelease.resetFields();
+        }
       }
       var sufix = name.substr(4);
       this['modal' + sufix] = false;

@@ -1,5 +1,5 @@
 
-Vue.locale = () => {};
+
 var messagesTransformed = utils.transform(messages);
 var messagesAll = {
   zh: Object.assign(messagesTransformed.zh, iview.langs['zh']),
@@ -98,7 +98,7 @@ var account = new Vue({
       }
     };
     var validatePass = (rule, value, callback) => {
-      var reg = /^(?=.*[a-z])(?=.*\d)[\s\S]{8,64}$/g;
+      var reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,64}$/g;
       if (value === '') {
         callback(new Error(this.$t('canNotBeEmpty')));
       } else if (!reg.test(value)) {
@@ -135,7 +135,7 @@ var account = new Vue({
       }
     };
     var validateFormat = (rule, value, callback) => {
-      var reg = /\w{8,64}/g;
+      var reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,64}$/g;
       if (!reg.test(value)) {
         callback(new Error(this.$t('eight2SixtyFour')));
       } else {
@@ -181,7 +181,7 @@ var account = new Vue({
         phone: '',
       },
       rulePassword: {
-        password: [{ validator: validateEmpty, trigger: 'change' }],
+        password: [{ validator: validateFormat, trigger: 'change' }],
         passwordNew: [{ validator: validatePass, trigger: 'change' }],
         passwordReNew: [{ validator: validatePassCheck, trigger: 'change' }],
         email: [{ validator: validateNumeric, trigger: 'change' }],
@@ -763,21 +763,18 @@ var account = new Vue({
     // this.getSecurityData(1);
   },
   watch: {
-    locale: {
-      handler: function(newVal, oldVal) {
-        if (newVal !== oldVal) {
-          this.$i18n.locale = newVal;
-          var sendVerify = this.$t('sendVerify');
-          this.sendPlaceholderPassword = sendVerify;
-          this.sendPlaceholderGoogle = sendVerify;
-          this.sendPlaceholderOldEmail = sendVerify;
-          this.sendPlaceholderEmail = sendVerify;
-          this.sendPlaceholderOldPhone = sendVerify;
-          this.sendPlaceholderNewPhone = sendVerify;
-          this.sendPlaceholderBank = sendVerify;
-        }
-      },
-      immediate: true
+    locale(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$i18n.locale = newVal;
+        var sendVerify = this.$t('sendVerify');
+        this.sendPlaceholderPassword = sendVerify;
+        this.sendPlaceholderGoogle = sendVerify;
+        this.sendPlaceholderOldEmail = sendVerify;
+        this.sendPlaceholderEmail = sendVerify;
+        this.sendPlaceholderOldPhone = sendVerify;
+        this.sendPlaceholderNewPhone = sendVerify;
+        this.sendPlaceholderBank = sendVerify;
+      }
     },
   },
   filters: {
