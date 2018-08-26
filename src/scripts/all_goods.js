@@ -20,7 +20,6 @@ var allGoods = new Vue({
   i18n: i18n,
   components: {
     oHeader: o_header,
-    acontact: addContact,
   },
   data: function() {
     var validateGoogle = (rule, value, callback) => {
@@ -48,6 +47,13 @@ var allGoods = new Vue({
     var validateEmpty = (rule, value, callback) => {
       if (value === '') {
         callback(new Error(this.$t('canNotBeEmpty')));
+      } else {
+        callback();
+      }
+    };
+    var validateNumeric = (rule, value, callback) => {
+      if (!/\d+$/g.test(value)) {
+        callback(new Error(this.$t('numericRequired')));
       } else {
         callback();
       }
@@ -121,6 +127,15 @@ var allGoods = new Vue({
       digitalCurrencyError: false,
       modalGoogle: false,
       modalWhatsApp: false,
+      selectCountry: '+996',
+      formWhatsApp: {
+        number: '',
+      },
+      ruleWhatsApp: {
+        number: [
+          { validator: validateNumeric, trigger: 'change' },
+        ],
+      },
       // 广告列表
       totalPage: 0,
       buyTotal: 0,
@@ -206,6 +221,9 @@ var allGoods = new Vue({
     };
   },
   computed: {
+    countryArr: function() {
+      return JSON.parse(localStorage.getItem('country'));
+    },
     selectedAdvertBanks() {
       var that = this;
       var banks;
@@ -555,6 +573,16 @@ var allGoods = new Vue({
               }
             });
           }
+          if (name === 'formWhatsApp') {
+            post('api/watchapp', that.selectCountry + '-' + that.formWhatsApp.number).then(function (res) {
+              if (res) {
+                post('api/common/user_info', '', false).then(function (result) {
+                  localStorage.setItem('user', JSON.stringify(result));
+                  that.handleReset(name);
+                });
+              }
+            });
+          }
           if (name === 'formRelease') {
                 if (parseFloat(that.formRelease.price) > Math.max(that.marketPrice.exchange_rate, that.marketPrice.exchange_buy_max) * 1.5) {
                   that.modalRelease = false;
@@ -691,20 +719,18 @@ var allGoods = new Vue({
     },
   },
   mounted: function() {
-    var that = this;
     var locale = localStorage.getItem('locale');
     if (locale) {
       this.locale = locale;
       this.$i18n.locale = locale;
+      this.selectCountry = locale === 'ar' ? '+966' : (locale === 'en' ? '+1' : '+86');
       this.sendPlaceholderBank = this.$t('sendVerify');
     }
-    this.$on('locale', function(i) {
-      this.locale = i;
-      this.$i18n.locale = i;
+    this.$on('locale', function(value) {
+      this.locale = value;
+      this.$i18n.locale = value;
+      this.selectCountry = value === 'ar' ? '+966' : (value === 'en' ? '+1' : '+86');
       this.sendPlaceholderBank = this.$t('sendVerify');
-    });
-    this.$on('isContactShow', function(i) {
-      that.modalWhatsApp = i;
     });
     if (localStorage.getItem('token')) {
       this.getUserInfo();

@@ -473,8 +473,43 @@
         </div>
       </Modal>
     </div>
-
-    <acontact :show="modalWhatsApp" :isWatchupBind="userInfo.watchapp" :locale="locale"></acontact>
+    <!-- 绑定WhatsApp -->
+    <Modal :title="$t('addContact')" v-model="modalWhatsApp" @on-cancel="handleReset('formWhatsApp')">
+      <div>
+        <Row style="padding-bottom: 20px">
+          <i-col span="3"><img src="../images/whatup.png" /></i-col>
+          <i-col span="1">&nbsp;</i-col>
+          <i-col span="20">{{ $t('addContactTips') }}</i-col>
+        </Row>
+        <i-form ref="formWhatsApp" :model="formWhatsApp" :rules="ruleWhatsApp" label-position="top">
+          <form-item label="WhatsApp" prop="number">
+            <i-input
+              v-model="formWhatsApp.number"
+              maxlength="30"
+              :placeholder="$t('whatsAppHolder')"
+            >
+              <i-select class="country-select" v-model="selectCountry" slot="prepend" filterable>
+                <i-option
+                  v-for="(country, index) in countryArr"
+                  :key="index"
+                  :value="country.dialingCode"
+                  :label="country.dialingCode"
+                  style="width:100%;"
+                >
+                  <span class="float-left">{{country.dialingCode}}</span>
+                  <span class="float-right">{{country.enName}}</span>
+                </i-option>
+              </i-select>
+            </i-input>
+          </form-item>
+        </i-form>
+      </div>
+      <div slot="footer">
+        <i-button type="primary" long @click="handleSubmit('formWhatsApp')">{{ $t('confirm') }}</i-button>
+      </div>
+    </Modal>
+    <!-- <acontact :show="modalWhatsApp" :isWatchupBind="userInfo.watchapp" :locale="locale"></acontact> -->
+    <!-- 谷歌绑定提示 -->
     <Modal class="google-modal" v-model="modalGoogle" :mask-closable="false" footer-hide>
       <dl class="text-center">
         <dt><img src="../images/warn.png"/></dt>
@@ -486,6 +521,7 @@
         </dd>
       </dl>
     </Modal>
+    <!-- 暂停/取消接单 -->
     <Modal :title="modalMsg.title" v-model="modalOperationOrder" :mask-closable="false">
       <div>{{ modalMsg.desc }}</div>
       <div slot="footer">

@@ -24,6 +24,21 @@ var messages = {
     en: 'Identity verification',
     ar: 'التحقق من الهوية',
   },
+  addContact: {
+    zh: '添加whatsapp账号',
+    en: 'Add whatsapp account',
+    ar: 'أضف حساب الواتساب',
+  },
+  addContactTips: {
+    zh: '请留下您的联系方式以便通知支付信息',
+    en: 'Please leave your contact information for easy to inform you about the payment information',
+    ar: 'يرجى ترك معلومات التواصل الخاصة بك لسهولة إبلاغك عن معلومات الدفع',
+  },
+  whatsAppHolder: {
+    zh: '请输入WhatsApp号码',
+    en: 'Please enter the WhatsApp number',
+    ar: 'يرجى إدخال رقم WhatsApp',
+  },
   dealOrderBeforeRelease: {
     zh: '请处理完现有订单再发布',
     en: 'please deal with your current order before releasing',
@@ -295,6 +310,11 @@ var messages = {
     zh: '余额不足',
     en: 'Insufficient balance',
     ar: 'عدم كفاية الرصيد',
+  },
+  numericRequired: {
+    zh: '必须输入数字',
+    en: 'Must enter numbers',
+    ar: 'يجب إدخال أرقام'
   },
   noZeroNumericRequired: {
     zh: '请输入大于0的数字',
