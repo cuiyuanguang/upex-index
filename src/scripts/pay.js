@@ -20,7 +20,6 @@ var pay = new Vue({
   i18n: i18n,
   components: {
     oHeader: o_header,
-    om_notice: om_notice,
   },
   data: function () {
     return {

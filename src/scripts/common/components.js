@@ -192,16 +192,6 @@ var i18nComponentsMessages = {
     en: 'Transaction deadline',
     ar: 'الموعد النهائي للصفقة',
   },
-  addContact: {
-    zh: '添加whatsapp账号',
-    en: 'Add whatsapp account',
-    ar: 'أضف حساب الواتساب',
-  },
-  addContactTips: {
-    zh: '请留下您的联系方式以便通知支付信息',
-    en: 'Please leave your contact information for easy to inform you about the payment information',
-    ar: 'يرجى ترك معلومات التواصل الخاصة بك لسهولة إبلاغك عن معلومات الدفع',
-  },
   cancel: {
     zh: '取消',
     en: 'cancel',
@@ -598,7 +588,7 @@ var i18nLoginRegisterMsg = {
   },
 };
 
-var i18nComponentsMsg = {
+var i18nGoogleAuthMsg = {
   bindGoogleAuthMsg: {
     zh: '为了您的账户安全，我们强烈推荐您进行谷歌验证',
     en: 'For your account security, we strongly recommend recommend you to verify Google',
@@ -698,10 +688,10 @@ var i18nComponentsMsg = {
 
 var i18nComponentsMessagesTransformed = utils.transform(i18nComponentsMessages);
 var i18nLoginRegisterMsgTransformed = utils.transform(i18nLoginRegisterMsg);
-var i18nComponentsMsgTransformed = utils.transform(i18nComponentsMsg);
-var i18nComponentsZh = Object.assign(i18nComponentsMessagesTransformed.zh, i18nLoginRegisterMsgTransformed.zh, i18nComponentsMsgTransformed.zh);
-var i18nComponentsEn = Object.assign(i18nComponentsMessagesTransformed.en, i18nLoginRegisterMsgTransformed.en, i18nComponentsMsgTransformed.en);
-var i18nComponentsAr = Object.assign(i18nComponentsMessagesTransformed.ar, i18nLoginRegisterMsgTransformed.ar, i18nComponentsMsgTransformed.ar);
+var i18nGoogleAuthMsgTransformed = utils.transform(i18nGoogleAuthMsg);
+var i18nComponentsZh = Object.assign(i18nComponentsMessagesTransformed.zh, i18nLoginRegisterMsgTransformed.zh, i18nGoogleAuthMsgTransformed.zh);
+var i18nComponentsEn = Object.assign(i18nComponentsMessagesTransformed.en, i18nLoginRegisterMsgTransformed.en, i18nGoogleAuthMsgTransformed.en);
+var i18nComponentsAr = Object.assign(i18nComponentsMessagesTransformed.ar, i18nLoginRegisterMsgTransformed.ar, i18nGoogleAuthMsgTransformed.ar);
 var i18nComponentsMessagesAll = {
   zh: Object.assign(i18nComponentsZh, iview.langs['zh']),
   en: Object.assign(i18nComponentsEn, iview.langs['en']),
@@ -715,167 +705,6 @@ var i18nComponents = new VueI18n({
 });
 iview.i18n((key, value) => i18nComponents.t(key, value));
 
-// notice component
-var om_notice = {
-  template: `
-    <div class="o-modal notice-modal" :class="show?'is-show':'is-not-show'"   >
-      <div class="content">
-        <div class="content-wrapper" style="background-color: #fff;width: 500px;height: 320px;border-radius: 5px;" >
-          <Icon @click="close" type="close" class="close" style="position: absolute;right: 20px;"></Icon>
-          <div class="header" style=" text-align: center;padding: 28px 0;">
-            <img src="../images/arrive.png" alt="">
-          </div>
-          <div class="main-content" style=" text-align: center;margin-top: 33px;">
-            <h3> {{amount}} USDT {{ $t('received') }}</h3>
-          </div>
-          <div class="foot" style="text-align: center;">
-            <a
-              class="view"
-              @click="view"
-              href="#"
-              style="font-size: 14px;
-              color: rgba(51, 51, 51, 1);
-              margin-right: 20px;"
-            >{{ $t('viewAccount') }}</a>
-            <a
-              class="current"
-              @click="current"
-              href="#"
-              style="display: inline-block;
-              width: 251px;
-              height: 44px;
-              line-height: 44px;
-              text-align: center;
-              background: #5C95EA;
-              border-radius: 5px;
-              font-size: 16px;
-              color: rgba(51, 51, 51, 1);
-              text-decoration: none;"
-            >{{ $t('continueTrade') }}</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
-  i18n: i18nComponents,
-  props: ['amount', 'show', 'locale'],
-  methods: {
-    close() {
-      this.$parent.$emit('isNoticeShow', false);
-    },
-    view() {
-      this.$parent.$emit('isNoticeShow', false);
-    },
-    current() {
-      this.$parent.$emit('isNoticeShow', false);
-    },
-  },
-  watch: {
-    locale: function (newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.$i18n.locale = newVal;
-      }
-    }
-  }
-};
-//---------------------------------END-----------------------------------------------------
-
-//------------------------add contact----------------------------------------------------
-var addContact = {
-  template: `
-    <Modal :title="$t('addContact')" v-model="show" @on-cancel="handleClose('formWhatsApp')">
-      <div>
-        <Row style="padding-bottom: 20px">
-          <i-col span="3"><img src="../images/whatup.png" /></i-col>
-          <i-col span="1">&nbsp;</i-col>
-          <i-col span="20">{{ $t('addContactTips') }}</i-col>
-        </Row>
-        <i-form ref="formWhatsApp" :model="formWhatsApp" :rules="ruleWhatsApp" label-position="top">
-          <form-item label="WhatsApp" prop="number">
-            <i-input
-              number
-              v-model="formWhatsApp.number"
-              maxlength="30"
-              :placeholder="$t('whatsAppHolder')"
-            >
-              <i-select class="country-select" v-model="selectCountry" slot="prepend" filterable>
-                <i-option
-                  v-for="(country, index) in countryArr"
-                  :key="index"
-                  :value="country.dialingCode"
-                  :label="country.dialingCode"
-                  style="width:100%;"
-                >
-                  <span class="float-left">{{country.dialingCode}}</span>
-                  <span class="float-right">{{country.enName}}</span>
-                </i-option>
-              </i-select>
-            </i-input>
-          </form-item>
-        </i-form>
-      </div>
-      <div slot="footer">
-        <i-button type="primary" long @click="handleSubmit('formWhatsApp')">{{ $t('confirm') }}</i-button>
-      </div>
-    </Modal>
-  `,
-  i18n: i18nComponents,
-  data() {
-    var validateNumeric = (rule, value, callback) => {
-      if (!/\d+$/g.test(value)) {
-        callback(new Error(this.$t('numericRequired')));
-      } else {
-        callback();
-      }
-    };
-    return {
-      formWhatsApp: {
-        number: '',
-      },
-      ruleWhatsApp: {
-        number: [
-          { validator: validateNumeric, trigger: 'change' },
-        ],
-      },
-      selectCountry: '+86',
-    };
-  },
-  props: ['show', 'locale'],
-  computed: {
-    countryArr: function() {
-      return JSON.parse(localStorage.getItem('country'));
-    },
-  },
-  methods: {
-    handleSubmit(name) {
-      var that = this;
-      this.$refs[name].validate(function(valid){
-        if (valid) {
-          post('api/watchapp', that.selectCountry + '-' + that.formWhatsApp.number).then(function (res) {
-            if (res) {
-              post('api/common/user_info', '', false).then(function (result) {
-                localStorage.setItem('user', JSON.stringify(result));
-                that.handleClose(name);
-              });
-            }
-          });
-        }
-      });
-    },
-    handleClose(name) {
-      this.$refs[name].resetFields();
-      this.$parent.$emit('isContactShow', false);
-    },
-  },
-  watch: {
-    locale: function (newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.$i18n.locale = newVal;
-      }
-    }
-  }
-};
-//-----------------END----------------------------------------------------------
 
 var o_my_login = {
   template: `
@@ -1200,7 +1029,6 @@ var o_my_login = {
     }
   },
 };
-
 var o_my_loginNext = {
   template: `
     <Modal
@@ -1437,6 +1265,7 @@ var o_my_loginNext = {
     },
   },
 };
+
 var o_my_register = {
   template: `
       <Modal
@@ -2893,6 +2722,7 @@ var o_header = {
     });
   },
 };
+
 var row_my_assets = {
   template: `
      <div>
