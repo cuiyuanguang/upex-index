@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+li{
+  list-style: none;
+}
+
 @font-face {
   font-family: 'DROIDKUFI';
   src: url('../../fonts/DROIDKUFI-REGULAR.TTF') format('truetype');
