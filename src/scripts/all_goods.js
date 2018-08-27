@@ -119,10 +119,10 @@ var allGoods = new Vue({
       // 下单
       modalOrder: false,
       selectedAdvert: {},
-      legalCurrency: 0,
+      legalCurrency: '',
       legalCurrencyAll: false,
       legalCurrencyError: false,
-      digitalCurrency: 0,
+      digitalCurrency: '',
       digitalCurrencyAll: false,
       digitalCurrencyError: false,
       modalGoogle: false,
@@ -253,7 +253,11 @@ var allGoods = new Vue({
     },
     digitalCurrencyMax() {
       const amount = (this.selectedAdvert.maxTrade / this.selectedAdvert.price).toFixed(4);
-      return Math.min(amount, this.digitalCurrencyAvailable);
+      if (this.selectedAdvert.side === 'SELL') {
+        return Math.min(amount, this.digitalCurrencyAvailable);
+      } else {
+        return Math.min(amount, this.balance);
+      }
     },
     digitalCurrencyTips() {
       return `
@@ -386,11 +390,19 @@ var allGoods = new Vue({
     },
     tradeAll(type) {
       if (type === 'legalCurrency') {
-        this.legalCurrency = this.selectedAdvert.maxTrade;
+        if (this.selectedAdvert.side === 'SELL') {
+          this.digitalCurrency = Math.min(this.balance * this.marketPrice.exchange_rate, this.selectedAdvert.maxTrade);
+        } else {
+          this.legalCurrency = this.selectedAdvert.maxTrade;
+        }
         this.changeLegalCurrency();
       }
       if (type === 'digitalCurrency') {
-        this.digitalCurrency = this.digitalCurrencyMax;
+        if (this.selectedAdvert.side === 'SELL') {
+          this.digitalCurrency = Math.min(this.digitalCurrencyMax, this.balance);
+        } else {
+          this.digitalCurrency = this.digitalCurrencyMax;
+        }
         this.changeDigitalCurrency();
       }
     },
@@ -747,11 +759,13 @@ var allGoods = new Vue({
         this.sendPlaceholderBank = this.$t('sendVerify');
       }
     },
-    legalCurrency(newVal) {
+    legalCurrency(newVal, oldVal) {
       this.legalCurrencyError = !newVal === true;
+      this.legalCurrency = newVal ? Number(newVal).toFixed(2) : oldVal;
     },
-    digitalCurrency(newVal) {
+    digitalCurrency(newVal, oldVal) {
       this.digitalCurrencyError = !newVal === true;
+      this.digitalCurrency = newVal ? Number(newVal).toFixed(4) : oldVal;
     },
     releaseTotalPrice: function(newVal, oldVal) {
       var value = Number(newVal);

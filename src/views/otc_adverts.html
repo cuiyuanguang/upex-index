@@ -162,18 +162,18 @@
       <Row>
         <i-col span="6">
           <Row>
-            <i-col span="12">{{ $t('amount') }}:</i-col>
-            <i-col span="12" class="text-strong">
+            <i-col span="8">{{ $t('amount') }}:</i-col>
+            <i-col span="16" class="text-strong">
               {{ digitalCurrencyAvailable }} {{ selectedAdvert.coin }}
             </i-col>
           </Row>
           <Row v-show="showListTag === 'SELL'">
-            <i-col span="12">{{ $t('balance') }}:</i-col>
-            <i-col span="12" class="text-strong">{{ balance }}</i-col>
+            <i-col span="8">{{ $t('balance') }}:</i-col>
+            <i-col span="16" class="text-strong">{{ balance }} {{ selectedAdvert.coin }}</i-col>
           </Row>
           <Row v-show="showListTag === 'BUY'">
-            <i-col span="12">{{ $t('payment') }}:</i-col>
-            <i-col span="12" class="text-strong">{{ selectedAdvertBanks }}</i-col>
+            <i-col span="8">{{ $t('payment') }}:</i-col>
+            <i-col span="16" class="text-strong">{{ selectedAdvertBanks }}</i-col>
           </Row>
         </i-col>
         <i-col span="14">
@@ -186,7 +186,7 @@
                   v-model="legalCurrency"
                   :min="legalCurrencyMin"
                   :max="legalCurrencyMax"
-                  ref="inputNumberlegalCurrency"
+                  :step="0.01"
                   @on-focus="legalCurrencyAll = true"
                   @on-blur="legalCurrencyAll = false"
                   @on-change="changeLegalCurrency"
@@ -214,7 +214,7 @@
                   v-model="digitalCurrency"
                   :min="digitalCurrencyMin"
                   :max="digitalCurrencyMax"
-                  ref="inputNumberlegalCurrency"
+                  :step="0.0001"
                   @on-focus="digitalCurrencyAll = true"
                   @on-blur="digitalCurrencyAll = false"
                   @on-change="changeDigitalCurrency"
