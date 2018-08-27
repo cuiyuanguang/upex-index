@@ -783,7 +783,7 @@ var o_my_login = {
         </TabPane>
       </Tabs>
       <div slot="footer">
-        <Button type="primary" size="large" long :loading="modal_loading" @click="mySubmit">{{ $t('login') }}</Button>
+        <Button type="primary" long :loading="modal_loading" @click="mySubmit">{{ $t('login') }}</Button>
         <div class="login-footer-wrap">
           <span class="black">{{ $t('noAccount') }}</span>
           <span class="blue" @click="runRegister">{{ $t('registerAccount') }}</span>
@@ -1390,7 +1390,7 @@ var o_my_register = {
         </TabPane>
       </Tabs>
       <div slot="footer">
-        <Button type="primary" size="large" long :loading="modal_loading" @click="mySubmit" >{{ $t('register') }}</Button>
+        <Button type="primary" long :loading="modal_loading" @click="mySubmit" >{{ $t('register') }}</Button>
         <div class="login-footer-wrap">
           <span class="black">{{ $t('haveAccount') }}</span>
           <span class="blue" @click="runLogin">{{ $t('login') }}</span>

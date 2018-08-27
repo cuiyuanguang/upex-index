@@ -495,7 +495,7 @@ var myAssetsWithdrawal = new Vue({
       let data = {
         symbol: this.changeCoin,
         addressId: this.addressListID,
-        amount: this.valueAmount,
+        amount: this.valueAmountCalc,
         fee: this.balanceDefaultFee,
         googleCode: this.googleCode,
       };
