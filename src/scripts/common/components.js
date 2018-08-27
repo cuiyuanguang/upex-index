@@ -609,6 +609,11 @@ var i18nGoogleAuthMsg = {
     en: 'Verification code only contains numbers',
     ar: 'رمز التحقق  فقط  يحتوي على أرقام'
   },
+  loginVerify: {
+    zh: '登陆验证',
+    en: 'Login verification',
+    ar: 'التحقق من تسجيل الدخول'
+  },
   copySuccess: {
     zh: '复制成功',
     en: 'Copied',
@@ -848,51 +853,41 @@ var o_my_login = {
               mobileNumber: that.loginPhoneVal,
               loginPword: that.loginPhonePassword,
             };
-            post('api/user/login_in', JSON.stringify(data), false).then(function (res) {
-              if (res) {
-                if (res.type === '2') {
-                  that.$parent.$emit(
-                    'isLoginNextPhone',
-                    that.selectCountry + ' ' + that.loginPhoneVal
-                  );
-                }
-                that.$parent.$emit('isLoginNext', true);
-                that.$parent.$emit('isLoginNextType', res.type);
-                that.$parent.$emit('isLoginNextCookie', res.token);
-                that.$parent.$emit('islogin', false);
-                that.modal_loading = false;
-                that.clear()
-              } else {
-                that.highLightForget = true;
-                that.$refs.invisibleRecaptchaLogin.reset()
-                that.modal_loading = false;
-              }
-            });
-
           } else {
             data = {
               mobileNumber: that.loginEmailVal,
               loginPword: that.loginEmailPassword,
             };
-            post('api/user/login_in', JSON.stringify(data), false).then(function (res) {
-              if (res) {
-                if (res.type === '3') {
+          }
+          post('api/user/login_in', JSON.stringify(data), false).then(function (res) {
+            if (res) {
+              if(res.mobileAuthenticatorStatus === 1){
+                that.$parent.$emit(
+                  'isLoginNextPhone',
+                  that.selectCountry + ' ' + that.loginPhoneVal
+                );
+              }
+              if(res.emailAuthenticatorStatus === 1){
                   that.$parent.$emit(
                     'isLoginNextEmail',
                     that.loginPhoneVal
                   );
-                }
-                that.$parent.$emit('isLoginNext', true);
-                that.$parent.$emit('isLoginNextType', res.type);
-                that.$parent.$emit('isLoginNextCookie', res.token);
-                that.$parent.$emit('islogin', false);
-                that.clear()
-              } else {
-                that.$refs.invisibleRecaptchaLogin.reset()
-                that.modal_loading = false;
               }
-            });
-          }
+              that.$parent.$emit('isLoginNextStatus',{
+                mobileStatus: res.mobileAuthenticatorStatus,
+                emailStatus: res.emailAuthenticatorStatus,
+                googleStatus: res.googleAuthenticatorStatus
+              });
+              that.$parent.$emit('isLoginNext', true);
+              that.$parent.$emit('isLoginNextCookie', res.token);
+              that.$parent.$emit('islogin', false);
+              that.clear()
+            } else {
+              that.$refs.invisibleRecaptchaLogin.reset()
+              that.modal_loading = false;
+            }
+          });
+
         } else {
           that.$refs.invisibleRecaptchaLogin.reset()
           that.modal_loading = false;
@@ -1035,74 +1030,72 @@ var o_my_loginNext = {
       v-model="loginNext"
       @on-ok="ok"
       :mask-closable="false"
+      :title="$t('loginVerify')"
       class-name="vertical-center-modal"
       @on-cancel="asyncCancel" class="my-login my-loginNext"
-      width="500"
     >
-      <div class="loginNext-title" v-if="isLoginNextTypeNum === '1'">{{ $t('googleValidate') }}</div>
-      <div class="loginNext-title" v-if="isLoginNextTypeNum === '2'">{{ $t('phoneValidate') }}</div>
-      <div class="loginNext-title" v-if="isLoginNextTypeNum === '3'">{{ $t('emailValidate') }}</div>
-      <div v-if="isLoginNextTypeNum === '1'">
-      <Input
-        v-model="loginNextSmsCode"
-        type="text"
-        :maxlength="6"
-        @on-change="checkNum"
-        :placeholder="$t('enterGoogleRecieve')"
-        @on-enter="loginNextSubmit"
-        class="loginNext-input"  @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':''">
-      </Input>
-       <p class="my-loginNext-error">{{loginNextErrorText}}</p>
-      </div>
-      <div v-if="isLoginNextTypeNum === '2'">
-        <p class="loginNextSmsText">
-            <span>{{isLoginNextPhoneNum}}</span>
-        </p>
-        <Input
-          v-model="loginNextSmsCode"
-          type="text"
-          @on-change="checkNum"
-          :maxlength="6"
-          :placeholder="$t('enterSMSRecieve')"
-          @on-enter="loginNextSubmit"
-          class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':' '">
-          <span slot="append"
-            class="my-slot-append"
-            @click="runSendSms('phone')"
-            :class="timer?'my-slot-append-gary':'my-slot-append'"
-          >
-            {{sendSms}}
-          </span>
-        </Input>
-        <p class="my-loginNext-error" style="margin-bottom: 38px">{{loginNextErrorText}}</p>
-      </div>
-         <div v-if="isLoginNextTypeNum === '3'">
-        <p class="loginNextSmsText">
-          {{ $t('enterEmailRecieve') }}
-            <span>{{isLoginNextEmailNum}}</span>
-        </p>
-        <Input
-          v-model="loginNextSmsCode"
-          type="text"
-          @on-change="checkNum"
-          :maxlength="6"
-          :placeholder="$t('enterEmailRecieve')"
-          @on-enter="loginNextSubmit"
-          class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextError?'loginNext-input-red':' '">
-          <span slot="append"
-            class="my-slot-append"
-            @click="runSendSms('email')"
-            :class="timer?'my-slot-append-gary':'my-slot-append'"
-          >
-            {{sendSms}}
-          </span>
-        </Input>
-        <p class="my-loginNext-error" style="margin-bottom: 38px">{{loginNextErrorText}}</p>
-      </div>
+     <Tabs @on-click="nextTabChange" v-model="nextTabName">
+        <TabPane :label="$t('googleValidate')" v-if="showGoogleTab" name="nextGoogle">     
+         <div v-if="showGoogleTab">
+          <Input
+            v-model="loginNextGoogleCode"
+            type="text"
+            :maxlength="6"
+            @on-change="checkNum"
+            :placeholder="$t('enterGoogleRecieve')"
+            @on-enter="loginNextSubmit"
+            class="loginNext-input"  @on-focus="loginNextFocus" :class="loginNextGoogleErrorText?'loginNext-input-red':''">
+          </Input>
+           <p class="my-loginNext-error">{{loginNextGoogleErrorText}}</p>
+          </div>
+        </TabPane>
+        <TabPane :label="$t('emailValidate')" v-if="showEmailTab" name="nextEmail">
+          <div v-if="showEmailTab">        
+           <Input
+              v-model="loginNextEmailCode"
+              type="text"
+              @on-change="checkNum"
+              :maxlength="6"
+              :placeholder="$t('enterEmailRecieve')"
+              @on-enter="loginNextSubmit"
+              class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextEmailErrorText?'loginNext-input-red':' '">
+              <span slot="append"
+                class="my-slot-append"
+                @click="runSendSms('email')"
+                :class="timers['email']?'my-slot-append-gary':'my-slot-append'"
+              >
+                {{sendSms['email']}}
+              </span>
+            </Input>
+            <p class="my-loginNext-error">{{loginNextEmailErrorText}}</p>
+          </div>
+        </TabPane>
+        <TabPane :label="$t('phoneValidate')" v-if="showMobileTab" name="nextPhone">
+           <div v-if="showMobileTab">     
+            <Input
+              v-model="loginNextPhoneCode"
+              type="text"
+              @on-change="checkNum"
+              :maxlength="6"
+              :placeholder="$t('enterSMSRecieve')"
+              @on-enter="loginNextSubmit"
+              class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextPhoneErrorText?'loginNext-input-red':' '">
+              <span slot="append"
+                class="my-slot-append"
+                @click="runSendSms('phone')"
+                :class="timers['phone']?'my-slot-append-gary':'my-slot-append'"
+              >
+                {{sendSms['phone']}}
+              </span>
+            </Input>
+            <p class="my-loginNext-error">{{loginNextPhoneErrorText}}</p>
+          </div>
+        </TabPane>
+     
+      </Tabs>
       <div slot="footer">
         <Button
           type="primary"
-          size="large"
           long
           :loading="modal_loading"
           @click="loginNextSubmit"
@@ -1111,57 +1104,105 @@ var o_my_loginNext = {
     </Modal>
   `,
   i18n: i18nComponents,
-  props: ['loginNext', 'isLoginNextType', 'isLoginNextCookie', 'isLoginNextPhone', 'isLoginNextEmail','langStatus'],
+  props: ['loginNext', 'isLoginNextCookie', 'isLoginNextPhone', 'isLoginNextEmail','langStatus','isLoginNextStatus'],
   data() {
     return {
-      loginNextError: false,
-      loginNextErrorText: '',
-      sendSms: this.$t('getValidateCode'),
+      nextTabName: '',
+      loginNextGoogleErrorText: '',
+      loginNextEmailErrorText: '',
+      loginNextPhoneErrorText: '',
+      sendSms: {
+        phone: this.$t('getValidateCode'),
+        email: this.$t('getValidateCode')
+      },
       loginNextGoogleCode: '',
-      loginNextSmsCode: '',
+      loginNextEmailCode: '',
+      loginNextPhoneCode: '',
       modal_loading: false,
-      isLoginNextTypeNum: '',
       isLoginNextCookieNum: '',
       isLoginNextPhoneNum: '',
       isLoginNextEmailNum: '',
       show: true,
       count: '',
-      timer: null,
+      timers: {},
       isLogined: false,
+      showGoogleTab: false,
+      showEmailTab: false,
+      showMobileTab: false,
+
     };
   },
   methods: {
+    nextTabChange(name) {
+      this.nextTabName = name;
+    },
     loginNextFocus() {
-      if(!isNaN(this.loginNextSmsCode)){
-        this.loginNextError = false;
-        this.loginNextErrorText = ''
-      }
+
     },
     checkNum() {
-      if(isNaN(this.loginNextSmsCode)){
-        this.loginNextError = true;
-        this.loginNextErrorText = this.$t('onlyNum');
-      }else{
-        this.loginNextError = false;
-        this.loginNextErrorText = '';
-        if(this.loginNextSmsCode.length === 6){
-          this.loginNextSubmit();
-        }
+      switch (this.nextTabName){
+        case 'nextGoogle':
+          if(isNaN(this.loginNextGoogleCode)){
+            this.loginNextGoogleErrorText = this.$t('onlyNum');
+          }else{
+            this.loginNextGoogleErrorText = '';
+            if(this.loginNextGoogleCode.length === 6){
+              this.loginNextSubmit();
+            }
+          }
+          break;
+        case 'nextEmail':
+          if(isNaN(this.loginNextEmailCode)){
+            this.loginNextEmailErrorText = this.$t('onlyNum');
+          }else{
+            this.loginNextEmailErrorText = '';
+            if(this.loginNextEmailCode.length === 6){
+              this.loginNextSubmit();
+            }
+          }
+          break;
+        case 'nextPhone':
+          if(isNaN(this.loginNextPhoneCode)){
+            this.loginNextPhoneErrorText = this.$t('onlyNum');
+          }else{
+            this.loginNextPhoneErrorText = '';
+            if(this.loginNextPhoneCode.length === 6){
+              this.loginNextSubmit();
+            }
+          }
+          break;
       }
     },
     loginNextSubmit() {
-      if(isNaN(this.loginNextSmsCode) || this.loginNextSmsCode.length !== 6){
-        this.loginNextError = true;
-        this.loginNextErrorText = this.$t('sixInform');
-        return;
+      const data = {
+        token: this.isLoginNextCookieNum,
+      };
+      switch (this.nextTabName){
+        case 'nextGoogle':
+          if(isNaN(this.loginNextGoogleCode) || this.loginNextGoogleCode.length !== 6){
+            this.loginNextGoogleErrorText = this.$t('sixInform');
+            return;
+          }
+          data.authCode = this.loginNextGoogleCode;
+          break;
+        case 'nextEmail':
+          if(isNaN(this.loginNextEmailCode) || this.loginNextEmailCode.length !== 6){
+            this.loginNextEmailErrorText = this.$t('sixInform');
+            return;
+          }
+          data.authCode = this.loginNextEmailCode;
+          break;
+        case 'nextPhone':
+          if(isNaN(this.loginNextPhoneCode) || this.loginNextPhoneCode.length !== 6){
+            this.loginNextPhoneErrorText = this.$t('sixInform');
+            return;
+          }
+          data.authCode = this.loginNextPhoneCode;
+          break;
       }
       var that = this;
       if (!this.modal_loading) {
         that.modal_loading = true;
-        const data = {
-          authCode: this.loginNextSmsCode,
-          token: this.isLoginNextCookieNum,
-        };
         post('api/user/confirm_login', JSON.stringify(data)).then(function (res) {
           if (res) {
             that.modal_loading = false;
@@ -1183,7 +1224,7 @@ var o_my_loginNext = {
     },
     runSendSms(type) {
       const TIME_COUNT = 90;
-      if (!this.timer) {
+      if (!this.timers[type]) {
         const isLoginNextPhoneNumArr = this.isLoginNextPhoneNum.split(' ');
         const isLoginNextPhoneNumCountry = isLoginNextPhoneNumArr[0].substring(1);
         const isLoginNextPhoneNumPhone = isLoginNextPhoneNumArr[1];
@@ -1197,6 +1238,7 @@ var o_my_loginNext = {
           };
           post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
             if (res) {
+              console.log(res);
             } else {
             }
           });
@@ -1215,17 +1257,16 @@ var o_my_loginNext = {
           });
         }
         this.count = TIME_COUNT;
-        this.sendSms = this.count + 's';
+        this.sendSms[type] = this.count + 's';
         this.show = false;
-        this.timer = setInterval(() => {
+        this.timers[type] = setInterval(() => {
           if (this.count > 0 && this.count <= TIME_COUNT) {
             this.count--;
-            this.sendSms = this.count + ' s';
+            this.sendSms[type] = this.count + ' s';
           } else {
-            this.sendSms = this.$t('Reacquire');
-            this.show = true;
-            clearInterval(this.timer);
-            this.timer = null;
+            this.sendSms[type] = this.$t('Reacquire');
+            clearInterval(this.timers[type]);
+            this.timers[type] = null;
           }
         }, 1000);
       }
@@ -1248,11 +1289,17 @@ var o_my_loginNext = {
     langStatus: function (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.$i18n.locale = newVal;
-        this.sendSms = this.$t('getValidateCode');
+        this.sendSms = {
+          phone: this.$t('getValidateCode'),
+          email: this.$t('getValidateCode')
+        }
       }
     },
-    isLoginNextType: function (a, b) {
-      this.isLoginNextTypeNum = a;
+    isLoginNextStatus: function (a) {
+      this.showGoogleTab = a.googleStatus ? a.googleStatus === 1 :false;
+      this.showEmailTab = a.emailStatus ? a.emailStatus === 1 : false;
+      this.showMobileTab = a.mobileStatus ? a.mobileStatus === 1 : false;
+      this.nextTabName = this.showGoogleTab ? 'nextGoogle' : this.showEmailTab ? 'nexEmail' : 'nextPhone';
     },
     isLoginNextCookie: function (a, b) {
       this.isLoginNextCookieNum = a;
@@ -2575,10 +2622,10 @@ var o_header = {
       <myloginnext
         :langStatus="$i18n.locale"
         :login-next="isLoginNextShow"
-        :is-login-next-type="isLoginNextType"
         :is-login-next-cookie="isLoginNextCookie"
         :is-login-next-phone="isLoginNextPhone"
         :is-login-next-email="isLoginNextEmail"
+        :is-login-next-status="isLoginNextStatus"
       ></myloginnext>
       <myregister :register="isregister" :langStatus="$i18n.locale"></myregister>
       <myregistergoogle :register-google="isRegisterGoogleShow" :register-cookie="isregisterCookie" :langStatus="$i18n.locale"></myregistergoogle>
@@ -2605,10 +2652,10 @@ var o_header = {
       isRegisterGoogleShow: false,
       isretrievePwdShow: false,
       isregisterCookie: '',
-      isLoginNextType: '',
       isLoginNextCookie: '',
       isLoginNextPhone: '',
       isLoginNextEmail: '',
+      isLoginNextStatus: ''
     };
   },
   computed: {
@@ -2699,9 +2746,6 @@ var o_header = {
     this.$on("isLoginNext", function (i) {
       this.isLoginNextShow = i;
     });
-    this.$on("isLoginNextType", function (i) {
-      this.isLoginNextType = i;
-    });
     this.$on("isLoginNextCookie", function (i) {
       this.isLoginNextCookie = i;
     });
@@ -2720,6 +2764,9 @@ var o_header = {
     this.$on("isretrievePwdShow", function (i) {
       this.isretrievePwdShow = i;
     });
+    this.$on('isLoginNextStatus',function(i) {
+      this.isLoginNextStatus = i;
+    })
   },
 };
 
