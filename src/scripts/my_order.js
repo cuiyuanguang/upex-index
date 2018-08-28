@@ -37,7 +37,7 @@ var myOrder = new Vue({
           key: 'type',
           align: 'center',
           renderHeader: (h) => h('span', this.$t('tradingType')),
-          render: (h, params) => h('span', this.userInfo.id === params.row.buyId ? this.$t('buy') : this.$t('sell')),
+          render: (h, params) => h('span', this.userInfo.id === params.row.buyerId ? this.$t('buy') : this.$t('sell')),
         },
         {
           key: 'volume',
@@ -92,6 +92,7 @@ var myOrder = new Vue({
         },
       ],
       orderData: [],
+      orderDataLoading: false,
       total: 0,
     }
   },
@@ -102,7 +103,9 @@ var myOrder = new Vue({
         pageSize: this.pageSize,
         pageNum: page || 1,
       };
+      that.orderDataLoading = true;
       get('api/personOrders', data).then(function(res) {
+        that.orderDataLoading = false;
         if (res) {
           that.orderData = res.rsts || [];
           that.current = page;
@@ -111,7 +114,7 @@ var myOrder = new Vue({
       });
     },
     convertStatus: function(status) {
-      // 订单状态 待支付1 已支付2 交易成功3 取消4 申诉5  打币中6  异常订单7
+      // 订单状态 待支付1 已支付2 交易成功3 取消4 申诉5 打币中6 异常订单7
       if (status == 1) {
         return this.$t('toBePaid');
       }

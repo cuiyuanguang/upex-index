@@ -15,7 +15,7 @@
         <div class="header">
           <h3>{{ $t('myOrder') }}</h3>
         </div>
-        <i-table size="large" :columns="orderColumn" :data="orderData"></i-table>
+        <i-table size="large" :columns="orderColumn" :data="orderData" :loading="orderDataLoading"></i-table>
         <div class="pager">
           <Page @on-change="getMyOrder" :page-size="pageSize" :total="total" :current="current" size="small"></Page>
         </div>
