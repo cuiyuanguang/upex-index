@@ -29,17 +29,10 @@
 
 .my-login .ivu-modal-header {
   border-bottom: none;
-  padding-top: 27px;
-  padding-bottom: 27px;
 }
 
 .my-loginNext .ivu-modal-header{
   border-bottom: 1px solid #f4f4f4;
-}
-
-.my-login .ivu-modal-close {
-  right: 30px;
-  top: 20px;
 }
 
 .my-login .iview-input {
@@ -126,8 +119,6 @@ body[dir='rtl'] .my-login .iview-input-countryPhone .ivu-input{
 
 .my-login .ivu-modal-footer {
   display: block;
-  width: 460px;
-  margin-left: 20px;
 }
 
 .my-login .ivu-btn-primary {

@@ -1184,6 +1184,7 @@ var o_my_loginNext = {
             return;
           }
           data.authCode = this.loginNextGoogleCode;
+          data.checkType = "1";
           break;
         case 'nextEmail':
           if(isNaN(this.loginNextEmailCode) || this.loginNextEmailCode.length !== 6){
@@ -1191,12 +1192,14 @@ var o_my_loginNext = {
             return;
           }
           data.authCode = this.loginNextEmailCode;
+          data.checkType = "3";
           break;
         case 'nextPhone':
           if(isNaN(this.loginNextPhoneCode) || this.loginNextPhoneCode.length !== 6){
             this.loginNextPhoneErrorText = this.$t('sixInform');
             return;
           }
+          data.checkType = "2";
           data.authCode = this.loginNextPhoneCode;
           break;
       }
