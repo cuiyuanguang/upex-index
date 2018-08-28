@@ -9,174 +9,136 @@
 
 <body>
   <div id="app" v-cloak>
-    <o-header ref="header"></o-header>
-    <div class="wrapper" style="margin-bottom: 70px;margin-top:30px;" v-show="orderInfo.sequence">
-      <div class="pay" v-if="step < 4">
-        <div class="pay-header">
-          <h3 v-if="step == 1">
-            {{ $t('waitForBuyer') }}
-          </h3>
-          <h3 v-if="step == 2">
-            {{ $t('buyerPaid') }} {{orderInfo.totalPrice}} SAR
-          </h3>
-          <h3 v-if="step == 3">
-            {{ $t('transactionSuccessful') }} - {{ $t('received') }}
-            <span style="color:#0CBF48">{{orderInfo.totalPrice}} SAR</span>
-          </h3>
-          <div class="step-wrapper">
-            <Steps :current="step">
-              <Step :content="$t('orderSuccess')"></Step>
-              <Step :content="$t('waitForBuyer')"></Step>
-              <Step :content="$t('payAndConfirm')"></Step>
-              <Step :content="$t('tradeDone')"></Step>
-            </Steps>
-          </div>
-        </div>
-        <div class="pay-info">
-          <Row>
-            <i-col span="10">
-              <div class="info-header">{{ $t('orderInfo') }}</div>
-              <ul v-if="step < 3" class="pay-box-left">
-                <li class="info-items">
-                  <Row>
-                    <i-col span="6" class="info-key">{{ $t('orderNo') }} :</i-col>
-                    <i-col span="18" class="info-value">{{orderInfo.sequence}}</i-col>
-                  </Row>
-                </li>
-                <li class="info-items">
-                  <Row>
-                    <i-col span="6" class="info-key">{{ $t('totalPurchase') }} :</i-col>
-                    <i-col span="18" class="info-value">{{orderInfo.volume}} USDT</i-col>
-                  </Row>
-                </li>
-                <li class="info-items">
-                  <Row>
-                    <i-col span="6" class="info-key">{{ $t('totalPrice') }} :</i-col>
-                    <i-col span="18" class="info-value">{{orderInfo.totalPrice}} SAR</i-col>
-                  </Row>
-                </li>
-              </ul>
-              <ul v-if="step == 3" class="pay-box-left">
-                <li class="info-items">
-                  <Row>
-                    <i-col span="6" class="info-key">{{ $t('orderNo') }} :</i-col>
-                    <i-col span="18" class="info-value">{{orderInfo.sequence}}</i-col>
-                  </Row>
-                </li>
-                <li class="info-items">
-                  <Row>
-                    <i-col span="6" class=" info-key">{{ $t('received') }} :</i-col>
-                    <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.totalPrice}} SAR</i-col>
-                  </Row>
-                </li>
-                <li class="info-items">
-                  <Row>
-                    <i-col span="6" class="info-key">{{ $t('sold') }} :</i-col>
-                    <i-col span="18" style="color: #0CBF48" class="info-value">{{orderInfo.volume}} USDT</i-col>
-                  </Row>
-                </li>
-              </ul>
-            </i-col>
-            <i-col span="14">
-              <div class="info-header">{{ $t('buyInfo') }}</div>
-              <div class="pay-box-right">
-                <Row>
-                  <i-col span="6">
-                    <img src="../images/pay_user.png" class="pay-image">
-                    {{ $t('buyName') }}
-                  </i-col>
-                  <i-col span="15" class="info-value">
-                    {{orderInfo.buyer.showNickName}}
-                  </i-col>
-                </Row>
-                <Row>
-                  <i-col span="6">
-                    <img src="../images/pay_phone.png" class="pay-image">
-                    {{ $t('phone') }}
-                  </i-col>
-                  <i-col span="15" class="info-value">
-                    {{orderInfo.buyer.hideMobileNumber}}
-                  </i-col>
-                </Row>
-                <Row>
-                  <i-col span="6">
-                    <img src="../images/pay_whatsapp.png" class="pay-image">
-                    Whatsapp
-                  </i-col>
-                  <i-col span="15" class="info-value">
-                    <!--<input type="text" name="Social Number" readonly class="input-copy" :value="orderInfo.socialNumber" @click="copy($event)">-->
-                    <a class="contact" :href="'https://api.whatsapp.com/send?phone='+whatsAppLink" target="_blank">
-                      <img class="whatup" src="../images/whatup-white.png" />{{ $t('contactBuyer') }}</a>
-                  </i-col>
-                </Row>
-              </div>
-            </i-col>
-          </Row>
-        </div>
-        <div class="pay-status" v-if="step == 1" v-cloak>
+    <o-header ref="header" style="margin-bottom: 30px"></o-header>
+    <div class="wrapper pay" v-show="orderInfo.sequence">
+      <div class="pay-header">
+        <h3 v-if="orderInfo.status == 1">
+          {{ $t('waitForBuyer') }}
+        </h3>
+        <h3 v-if="orderInfo.status == 2">
+          {{ $t('buyerPaid') }} {{orderInfo.totalPrice}} SAR
+        </h3>
+        <h3 v-if="orderInfo.status == 3">
+          {{ $t('transactionSuccessful') }} - {{ $t('received') }}
+          <span class="text-success">{{orderInfo.totalPrice}} SAR</span>
+        </h3>
+        <h3 v-if="orderInfo.status == 4" class="text-error">
+          {{ $t('orderCanceled') }}
+        </h3>
+        <h3 v-if="orderInfo.status == 7" class="text-error">
+          {{ $t('orderExpired') }}
+        </h3>
+      </div>
+      <div class="pay-steps">
+        <Steps :current="currentStep">
+          <Step :title="$t('orderSuccess')"></Step>
+          <Step :title="$t('payAndConfirm')" :content="$t(payStatus)" :status="payStatus ? 'error' : ''"></Step>
+          <Step :title="$t('receivePayment')" :content="$t(confirmStatus)" :status="confirmStatus ? 'error' : ''"></Step>
+          <Step :title="$t('tradeDone')"></Step>
+        </Steps>
+      </div>
+      <div class="pay-info">
+        <Row>
+          <i-col span="10">
+            <div class="info-header">{{ $t('orderInfo') }}</div>
+            <div class="info-body">
+              <Row>
+                <i-col span="6">{{ $t('orderNo') }} :</i-col>
+                <i-col span="18" class="text-strong">{{orderInfo.sequence}}</i-col>
+              </Row>
+              <Row>
+                <i-col span="6">{{ orderInfo.status == 3 ? $t('sold') : $t('totalPurchase') }} :</i-col>
+                <i-col span="18" class="text-strong" :class="orderInfo.status == 3 ? 'text-success' : ''">
+                  {{orderInfo.volume}} USDT
+                </i-col>
+              </Row>
+              <Row>
+                <i-col span="6">{{ orderInfo.status == 3 ? $t('received') : $t('totalPrice') }} :</i-col>
+                <i-col span="18" class="text-strong" class="text-strong" :class="orderInfo.status == 3 ? 'text-success' : ''">
+                  {{orderInfo.totalPrice}} SAR
+                </i-col>
+              </Row>
+            </div>
+          </i-col>
+          <i-col span="14">
+            <div class="info-header">{{ $t('buyInfo') }}</div>
+            <div class="info-body">
+              <Row>
+                <i-col span="6">
+                  <img src="../images/pay_user.png" class="pay-image">
+                  {{ $t('buyName') }}
+                </i-col>
+                <i-col span="18" class="text-strong">
+                  {{orderInfo.buyer.showNickName}}
+                </i-col>
+              </Row>
+              <Row>
+                <i-col span="6">
+                  <img src="../images/pay_phone.png" class="pay-image">
+                  {{ $t('phone') }}
+                </i-col>
+                <i-col span="18" class="text-strong">
+                  {{orderInfo.buyer.hideMobileNumber}}
+                </i-col>
+              </Row>
+              <Row>
+                <i-col span="6">
+                  <img src="../images/pay_whatsapp.png" class="pay-image">
+                  Whatsapp
+                </i-col>
+                <i-col span="18" class="text-strong">
+                  <a class="contact" :href="'https://api.whatsapp.com/send?phone='+whatsAppLink" target="_blank">
+                  <img class="whatup" src="../images/whatup-white.png" />{{ $t('contactBuyer') }}</a>
+                </i-col>
+              </Row>
+            </div>
+          </i-col>
+        </Row>
+      </div>
+      <div class="pay-status" v-if="orderInfo.status < 2">
+        <p class="pay-notice">
+          {{ $t('waitForBuyer') }}<br>
+          {{ $t('restTime') }}: <span class="text-success">{{leftTime}}</span>
+        </p>
+        <p class="pay-tips">
+          1. {{ $t('helpTipsFirst') }}<br>
+          2. {{ $t('helpTipsSecond') }}
+        </p>
+      </div>
+      <div class="pay-status" v-if="orderInfo.status == 2">
+        <template v-if="leftTime != 0" v-cloak>
           <p class="pay-notice">
-            {{ $t('waitForBuyer') }}<br>
-            {{ $t('restTime') }}: <span class="text-error">{{leftTime}}</span>
-          </p>
-          <p class="pay-tips">
-            1. {{ $t('helpTipsFirst') }}<br>
-            2. {{ $t('helpTipsSecond') }}
-          </p>
-        </div>
-        <div class="pay-status" v-if="step == 2" v-cloak>
-          <p class="pay-notice" v-if="leftTime != 0">
             {{ $t('lastFourNumber') }} {{ orderInfo.bankCardLastNum }}, {{ $t('payYou') }}
             <span class="text-warn"> {{orderInfo.totalPrice}}</span> SAR , {{ $t('receiveAll') }}<br>
             {{ $t('notReceiveAndWait') }}<br>
             {{ $t('restTime') }}: <span class="text-error"> {{ leftTime }}</span>
           </p>
-          <p class="pay-notice" v-else>
-            <span class="text-error"> {{ $t('orderExpired') }}</span>
-          </p>
           <div class="pay-action" v-if="leftTime != 0">
-            <button @click="confirmOrder" class="pay-action-btn">{{ $t('confirm') }}</button>
+            <i-button type="primary" @click="confirmOrder">{{ $t('confirm') }}</i-button>
           </div>
-          <p class="pay-tips">
-            1. {{ $t('helpTipsThird') }}<br>
-            2. {{ $t('helpTipsFourth') }}
-          </p>
-          <div v-if="leftTime == 0" class="pay-tips">
-            <a href="otc_adverts.html">{{ $t('backToHome') }}</a>
-          </div>
-        </div>
-        <div class="pay-status" v-if="step == 3">
-          <p class="pay-notice text-success">{{ $t('tradeDone') }}</p>
-          <p class="pay-tips">
-            <a href="otc_adverts.html">{{ $t('backToHome') }}</a>
-          </p>
-        </div>
+        </template>
+        <p class="pay-notice" v-if="leftTime == 0">
+          <span class="text-error"> {{ $t('orderExpired') }}</span>
+        </p>
+        <p class="pay-tips">
+          1. {{ $t('helpTipsThird', { hours: confirmLimit }) }}<br>
+          2. {{ $t('helpTipsFourth') }}
+        </p>
       </div>
-      <div v-if="step==4 || step==7" class="wrapper">
-        <div class="expired">
-          <h2 style="color:red;">{{ step == 4 ? $t('orderCanceledTips') : $t('orderExpiredTips') }}</h2>
-          <ul>
-            <li>
-              <span>{{ $t('reasonForFailure') }} :</span>
-              <span v-if="step == 4">{{ $t('orderCanceled') }}</span>
-              <span v-if="step == 7">{{ orderInfo.paymentTime ? $t('outOfTimeToConfirm') : $t('outOfTimeToPay') }}</span>
-            </li>
-            <li>
-              <span>{{ $t('orderNo') }} :</span>
-              <span>{{ orderInfo.sequence }}</span>
-            </li>
-            <li>
-              <span>{{ $t('totalPurchase') }} :</span>
-              <span>{{ orderInfo.volume }} USDT</span>
-            </li>
-            <li>
-              <span>{{ $t('totalPrice') }} :</span>
-              <span>{{ orderInfo.totalPrice }} SAR</span>
-            </li>
-          </ul>
-          <div class="return">
-            <a href="otc_adverts.html">{{ $t('backToHome') }}</a>
-          </div>
-        </div>
+      <div class="pay-status" v-if="orderInfo.status == 3">
+        <p class="pay-notice text-success">{{ $t('tradeDone') }}</p>
+      </div>
+      <div class="pay-status" v-if="orderInfo.status > 3">
+        <h3>
+          {{ $t('reasonForFailure') }} :
+          <span v-if="orderInfo.status == 4">{{ $t('orderCanceled') }}</span>
+          <span v-if="orderInfo.status == 7">{{ orderInfo.paymentTime ? $t('outOfTimeToConfirm') : $t('outOfTimeToPay') }}</span>
+        </h3>
+      </div>
+      <div class="pay-status">
+        <p class="pay-tips">
+          <a href="otc_adverts.html">{{ $t('backToHome') }}</a>
+        </p>
       </div>
     </div>
   </div>

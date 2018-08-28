@@ -22,27 +22,57 @@ var pay = new Vue({
     oHeader: o_header,
   },
   data: function () {
+    var validateEmpty = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('canNotBeEmpty')));
+      } else {
+        callback();
+      }
+    };
+    var validateCard = (rule, value, callback) => {
+      var reg = /\w{4}$/g;
+      if (value === '') {
+        callback(new Error(this.$t('canNotBeEmpty')));
+      } else if (!reg.test(value)) {
+        callback(new Error(this.$t('lengthshouldBe4')));
+      } else {
+        if (this.formTransferInfo.recard !== '') {
+          // 对第二个密码框单独验证
+          this.$refs.formTransferInfo.validateField('recard');
+        }
+        callback();
+      }
+    };
+    var validateCardCheck = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('canNotBeEmpty')));
+      } else if (value !== this.formTransferInfo.card) {
+        callback(new Error(this.$t('twiceNotEqual')));
+      } else {
+        callback();
+      }
+    };
     return {
       locale: '',
       sequence: '',
-      //trigger of pay modal
-      isPayDialogShow: false,
-      //trigger of pay info modal
-      isPayInfoDialogShow: false,
-      //step of pay
+      modalPaid: false,
+      modalTransferInfo: false,
+      modalTransferInfoLoading: false,
+      formTransferInfo: {
+        name: '',
+        card: '',
+        recard: '',
+      },
+      ruleTransferInfo: {
+        name: [{ validator: validateEmpty, trigger: 'change' }],
+        card: [{ validator: validateCard, trigger: 'change' }],
+        recard: [{ validator: validateCardCheck, trigger: 'change' }],
+      },
       step: 1,
-      //left time for pay
       timer: null,
       leftTime: 0,
-      //create time
       payLimit: 0,
       confirmLimit: 0,
-      card: '',
-      cardErrorTips: '',
-      recard: '',
-      recardErrorTips: '',
-      infoError: "",
-      //-----------order info-----------------//
       orderInfo: {
         advert: {},
         buyer: {
@@ -57,27 +87,40 @@ var pay = new Vue({
     }
   },
   computed: {
-    arrivalTime: function() {
-      var date = new Date(this.orderInfo.paymentTime);
-      return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-    },
     limitTime: function() {
       if (this.orderInfo) {
         return Math.ceil(this.orderInfo.countDownTime / 1000 / 60 / 60);
       }
     },
+    payStatus: function() {
+      var statusText = '';
+      if (this.orderInfo.status == 4) {
+        statusText = 'orderCanceled';
+      }
+      if (this.orderInfo.status == 7 && !this.orderInfo.paymentTime) {
+        statusText = 'outOfTimeToPay';
+      }
+      return statusText;
+    },
+    confirmStatus: function() {
+      var statusText = '';
+      if (this.orderInfo.status == 7 && this.orderInfo.paymentTime) {
+        statusText = 'outOfTimeToConfirm';
+      }
+      return statusText;
+    },
+    currentStep: function() {
+      var step = this.orderInfo.status;
+      if (this.payStatus !== '') {
+        step = 1;
+      }
+      if (this.confirmStatus !== '') {
+        step = 2;
+      }
+      return step;
+    }
   },
   methods: {
-    //pay modal methods-------------
-    toPay() {
-      this.isPayDialogShow = true;
-    },
-    cardFocus() {
-      this.cardErrorTips = '';
-    },
-    recardFocus() {
-      this.recardErrorTips = '';
-    },
     cancelPay() {
       var that = this;
       that.$Modal.confirm({
@@ -102,44 +145,38 @@ var pay = new Vue({
       });
     },
     paid() {
-      this.isPayDialogShow = false;
-      this.isPayInfoDialogShow = true;
+      this.modalPaid = false;
+      this.modalTransferInfo = true;
     },
-    close: function () {
-      this.isPayInfoDialogShow = false;
-    },
-    confirm: function () {
-      if (!this.card) {
-        this.cardErrorTips = this.$t('canNotBeEmpty');
-        return;
-      }
-      if (!this.recard) {
-        this.recardErrorTips = this.$t('canNotBeEmpty');
-        return;
-      }
-      if (this.cardErrorTips || this.recardErrorTips) {
-        return;
-      }
-      var data = {
-        card: this.card,
-        sequence: this.sequence,
-      }
+    handleSubmit: function (name) {
       var that = this;
-      post("api/orderPayed", data).then(function (res) {
-        if (res) {
-          clearInterval(that.timer);
-          that.isPayInfoDialogShow = false;
-          that.getOrderInfo(that.sequence);
+      this.$refs[name].validate(function(valid) {
+        if (valid) {
+          that.modalTransferInfoLoading = true;
+          var data = {
+            name: that.formTransferInfo.name,
+            card: that.formTransferInfo.card,
+            sequence: that.sequence,
+          };
+          post('api/orderPayed', data).then(function(res) {
+            if (res) {
+              clearInterval(that.timer);
+              that.modalTransferInfo = false;
+              that.modalTransferInfoLoading = false;
+              that.getOrderInfo(that.sequence);
+            }
+          });
         }
       });
+    },
+    handleReset: function(name) {
+      this.$refs[name].resetFields();
+      this.modalTransferInfo = false;
     },
     copy: function (e) {
       e.target.select();
       document.execCommand('copy');
       Toast.show(e.target.name + this.$t('copied'), { icon: 'ok', duration: 1500 });
-    },
-    next() {
-      this.step += 1;
     },
     getOrderInfo: function (sequence) {
       var that = this;
@@ -151,8 +188,6 @@ var pay = new Vue({
               location.href = 'otc_wait_pay.html?sequence=' + sequence;
               return;
             }
-            //to make sure the status of the order
-            that.step = res.status;
             that.orderInfo = res;
             var whatsAppStr = res.seller.userExtView.watchapp;
             that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1).replace(/\s+/g, '');
@@ -201,29 +236,5 @@ var pay = new Vue({
         this.$i18n.locale = newVal;
       }
     },
-    card: function (n, o) {
-      if (!n) {
-        this.cardErrorTips = this.$t('canNotBeEmpty');
-      } else if (!/(\d|\w)+$/.test(n)) {
-        this.cardErrorTips = this.$t('numericOrLetter');
-      } else if (n.length !== 4) {
-        this.cardErrorTips = this.$t('lengthshouldBe4');
-      } else {
-        this.cardErrorTips = '';
-      }
-    },
-    recard: function (n, o) {
-      if (!n) {
-        this.recardErrorTips = this.$t('canNotBeEmpty');
-      } else if (!/(\d|\w)+$/.test(n)) {
-        this.recardErrorTips = this.$t('numericOrLetter');
-      } else if (n != this.card) {
-        this.recardErrorTips = this.$t('twiceNotEqual');
-      } else if (n.length !== 4) {
-        this.recardErrorTips = this.$t('lengthshouldBe4');
-      } else {
-        this.recardErrorTips = '';
-      }
-    }
   },
 });

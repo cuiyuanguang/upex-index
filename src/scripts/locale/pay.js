@@ -200,7 +200,7 @@ var messages = {
     ar: 'إذا كنت قد دفعت للبائع بالفعل ، يرجى عدم إلغاء الطلب',
   },
   orderExpired: {
-    zh: '订单过期',
+    zh: '订单已过期',
     en: 'order expired',
     ar: 'انتهت صلاحية الطلب',
   },
@@ -297,9 +297,9 @@ var messages = {
     ar: 'يرجى إدخال أرقام أو حروف',
   },
   lengthshouldBe4: {
-    zh: '请输入4位字符',
-    en: 'Please enter 4 characters',
-    ar: 'يرجى إدخال 4 أحرف',
+    zh: '请输入4位数字或字母',
+    en: 'Please enter a 4-digit number or letter',
+    ar: 'الرجاء إدخال 4 أرقام أو حروف',
   },
   outOfTimeToPay: {
     zh: '买家超时未付款',
