@@ -22,6 +22,111 @@ var allGoods = new Vue({
     oHeader: o_header,
   },
   data: function() {
+    var buyColumn = [
+      {
+        key: 'user',
+        align: 'center',
+        renderHeader: (h) => h('span', this.showListTag === 'BUY' ? this.$t('seller') : this.$t('buyer')),
+        render: (h, params) => h(
+          'div',
+          [
+            h('div',
+              {
+                'class': this.userInfo.id === params.row.userId ? 'avatar mr-10 mine' : 'avatar mr-10',
+              },
+              this.userInfo.id == params.row.userId ? this.$t('mine') : (this.showListTag === 'BUY' ? this.$t('seller') : this.$t('buyer')),
+            ),
+            h('span', this.$t('saUser')),
+          ]
+        ),
+      },
+      {
+        key: 'amount',
+        align: 'center',
+        renderHeader: (h) => h('span', this.$t('amount')),
+        render: (h, params) => h('span', (params.row.volume - params.row.sell).toFixed(4) + 'USDT'),
+      },
+      {
+        key: 'limit',
+        align: 'center',
+        renderHeader: (h) => h(
+          'p',
+          [
+            h('span', this.$t('limit')),
+            h('br'),
+            h('span', { 'class': 'limit-tips' }, this.$t('min2maxPurchase')),
+          ]
+        ),
+        render: (h, params) => h('span', params.row.minTrade + ' - ' + params.row.maxTrade),
+      },
+      {
+        key: 'price',
+        align: 'center',
+        renderHeader: (h) => h('span', this.$t('unitPrice')),
+      },
+      {
+        key: 'payment',
+        align: 'center',
+        renderHeader: (h) => h('span', this.$t('payment')),
+        render: (h, params) => h('span', params.row.paymentBanks && params.row.paymentBanks[0].bankName),
+      },
+      {
+        key: 'operation',
+        align: 'center',
+        renderHeader: (h) => h('span', this.$t('operation')),
+        render: (h, params) => h(
+          'div',
+          this.userInfo.id === params.row.userId ?
+          [
+            h('Button',
+              {
+                props: {
+                  type: 'link',
+                  size: 'small',
+                  disabled: params.row.status === 3 || params.row.status === 4 || params.row.status === 5,
+                },
+                on: {
+                  'click': () => { this.pause(params.row) },
+                },
+              },
+              params.row.status === 6 ? this.$t('start') : this.$t('pause'),
+            ),
+            h('Button',
+              {
+                props: {
+                  type: 'link',
+                  size: 'small',
+                  disabled: params.row.status === 4 || params.row.status === 5,
+                },
+                on: {
+                  'click': () => { this.cancel(params.row) },
+                },
+              },
+              this.$t('cancel'),
+            ),
+          ]
+          :
+          [
+            h(
+              'Button',
+              {
+                props: {
+                  type: 'primary',
+                  size: 'small',
+                },
+                on: {
+                  click: () => {
+                    this.showModalOrder(params.row, this.showListTag);
+                  },
+                },
+              },
+              this.$t(this.showListTag.toLowerCase()),
+            ),
+          ]
+        ),
+      },
+    ];
+    var sellColumn = buyColumn.filter(item => item.key !== 'payment');
     var validateGoogle = (rule, value, callback) => {
       if (!this[rule.name].phone) {
         if (!/\d+$/g.test(value)) {
@@ -54,14 +159,6 @@ var allGoods = new Vue({
     var validateNumeric = (rule, value, callback) => {
       if (!/\d+$/g.test(value)) {
         callback(new Error(this.$t('numericRequired')));
-      } else {
-        callback();
-      }
-    };
-    var validateFormat = (rule, value, callback) => {
-      var reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,64}$/g;
-      if (!reg.test(value)) {
-        callback(new Error(this.$t('eight2SixtyFour')));
       } else {
         callback();
       }
@@ -144,8 +241,12 @@ var allGoods = new Vue({
       sellTotal: 0,
       buyCurrentPage: 1,
       sellCurrentPage: 1,
-      selllist: [],
+      buyColumn: buyColumn,
       buylist: [],
+      buylistLoading: false,
+      sellColumn: sellColumn,
+      selllist: [],
+      selllistLoading: false,
       // 暂停/取消接单
       modalOperationOrder: false,
       cancelable: false,
@@ -172,9 +273,9 @@ var allGoods = new Vue({
       },
       ruleBankInfo: {
         bankName: [{ validator: validateEmpty, trigger: 'change' }],
-        name: [{ validator: validateFormat, trigger: 'change' }],
-        cardNo: [{ validator: validateFormat, trigger: 'change' }],
-        ibanNo: [{ validator: validateFormat, trigger: 'change' }],
+        name: [{ validator: validateEmpty, trigger: 'change' }],
+        cardNo: [{ validator: validateEmpty, trigger: 'change' }],
+        ibanNo: [{ validator: validateEmpty, trigger: 'change' }],
       },
       modalBankConfirmTitle: '',
       modalBankConfirmCancel: '',
@@ -253,11 +354,18 @@ var allGoods = new Vue({
       return (this.selectedAdvert.volume - this.selectedAdvert.sell).toFixed(4);
     },
     digitalCurrencyMin() {
-      return Number((this.selectedAdvert.minTrade / this.selectedAdvert.price).toFixed(4));
+      var amount = Number((this.selectedAdvert.minTrade / this.selectedAdvert.price).toFixed(4));
+      if (this.showListTag === 'BUY') {
+        return Math.max(amount, Number(this.marketPrice.trade_min_volume));
+      }
+      return Math.max(amount, this.digitalCurrencyAvailable, Number(this.marketPrice.trade_max_volume));
     },
     digitalCurrencyMax() {
       var amount = (this.selectedAdvert.maxTrade / this.selectedAdvert.price).toFixed(4);
-      return Math.min(amount, this.digitalCurrencyAvailable);
+      if (this.showListTag === 'BUY') {
+        return Math.min(amount, Number(this.marketPrice.trade_max_volume));
+      }
+      return Math.min(amount, this.digitalCurrencyAvailable, Number(this.marketPrice.trade_max_volume));
     },
     digitalCurrencyTips() {
       return `
@@ -302,7 +410,9 @@ var allGoods = new Vue({
         page: page || 1,
         pageSize: 10,
       };
+      that[type.toLowerCase() + 'listLoading'] = true;
       get('api/adverts', data).then(function(res) {
+        that[type.toLowerCase() + 'listLoading'] = false;
         if (res) {
           that.totalPage = Math.round(res.count / 10);
           if (type === 'SELL') {
