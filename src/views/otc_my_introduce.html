@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UPEX</title>
+  @@include('header.html')
+  <link rel="stylesheet" href="../styles/my_introduce.css">
+</head>
+<body>
+<div id="intro" v-cloak>
+  <o-header ref="header"></o-header>
+  <div class="intro-box intro-box-one"></div>
+  <div class="intro-box bg-dark-blue">
+    <div class="intro-box-inner intro-box-two">
+      <img src="../images/intro-one-bg.png" class="intro-two-left">
+      <div class="intro-two-right">
+        <div class="intro-two-right-text">
+          {{ $t('certify') }}
+        </div>
+        <div class="intro-two-right-img"></div>
+      </div>
+    </div>
+  </div>
+  <div class="intro-box bg-light-blue">
+    <div class="intro-box-inner">
+      <div class="intro-three-left"></div>
+      <div class="intro-three-right">
+        <p class="intro-three-right-text-1">{{ $t('platOne') }}</p>
+        <p class="intro-three-right-text-2">{{ $t('platTwo') }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="intro-box bg-dark-blue">
+    <div class="intro-box-inner intro-box-four">
+      <div class="intro-four-left">
+        <p class="intro-four-left-text-1">{{ $t('btcOne') }}</p>
+        <p class="intro-four-left-text-2">{{ $t('btcTwo') }}</p>
+        <button class="intro-btn intro-four-btn-1">{{ $t('btcBtnOne') }}</button>
+        <button class="intro-btn intro-four-btn-2">{{ $t('btcBtnTwo') }}</button>
+      </div>
+      <div class="intro-four-right"></div>
+    </div>
+  </div>
+  <div class="intro-box bg-light-blue">
+    <div class="intro-box-inner">
+      <p class="intro-five-title">{{ $t('introFiveTitle') }}</p>
+      <div class="intro-box-five-wrap">
+        <div class="intro-box-five-item">
+          <img src="../images/intro-five-1.png" alt="">
+          <p class="intro-five-text-1">{{ $t('fiveLOne') }}</p>
+          <p class="intro-five-text-2">{{ $t('fiveLTwo') }}</p>
+        </div>
+        <div class="intro-box-five-item">
+          <img src="../images/intro-five-2.png" alt="">
+          <p class="intro-five-text-1">{{ $t('fiveMOne') }}</p>
+          <p class="intro-five-text-2">{{ $t('fiveMTwo') }}</p>
+        </div>
+        <div class="intro-box-five-item">
+          <img src="../images/intro-five-3.png" alt="">
+          <p class="intro-five-text-1">{{ $t('fiveROne') }}</p>
+          <p class="intro-five-text-2">{{ $t('fiveRTwo') }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="intro-box bg-dark-blue intro-six-bg">
+    <div class="intro-box-inner">
+      <p class="intro-five-title">{{ $t('sixTitle') }}</p>
+      <div class="intro-box-five-wrap intro-box-six-wrap">
+        <div class="intro-box-six-item">
+
+          <p class="intro-six-text-1">{{ $t('sixLOne') }}</p>
+          <p class="intro-six-text-2"><img src="../images/intro-loc.png" class="loc">{{ $t('sixLTwo') }}</p>
+          <p class="intro-six-text-3">{{ $t('sixLThree') }}</p>
+          <img src="../images/intro-six-1.png" alt="" class="six-bg">
+        </div>
+        <div class="intro-box-six-item">
+          <p class="intro-six-text-1">{{ $t('sixMOne') }}</p>
+          <p class="intro-six-text-2"><img src="../images/intro-loc.png" class="loc">{{ $t('sixMTwo') }}</p>
+          <p class="intro-six-text-3">{{ $t('sixMThree') }}</p>
+          <img src="../images/intro-six-2.png" alt="" class="six-bg">
+        </div>
+        <div class="intro-box-six-item">
+          <p class="intro-six-text-1">{{ $t('sixROne') }}</p>
+          <p class="intro-six-text-2"><img src="../images/intro-loc.png" class="loc">{{ $t('sixRTwo') }}</p>
+          <p class="intro-six-text-3">{{ $t('sixRThree') }}</p>
+          <img src="../images/intro-six-3.png" alt="" class="six-bg">
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="intro-box-last bg-dark-blue">
+    <div class="intro-box-inner">
+      <p class="intro-five-title" style="margin-bottom: 40px;">{{ $t('lastTitle') }}</p>
+      <button class="intro-last-btn">
+        {{ $t('startTrade') }}
+        <span class="arrow"></span>
+      </button>
+    </div>
+  </div>
+</div>
+@@include('footer.html')
+<script src="../scripts/locale/my_introduce.js?rev=@@hash"></script>
+<script src="../scripts/my_introduce.js?rev=@@hash"></script>
+</body>
+</html>

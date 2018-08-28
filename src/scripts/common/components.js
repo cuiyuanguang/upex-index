@@ -1042,21 +1042,21 @@ var o_my_loginNext = {
             type="text"
             :maxlength="6"
             @on-change="checkNum"
-            :placeholder="$t('enterGoogleRecieve')"
+            :placeholder="$t('phoneVerificationHolder')"
             @on-enter="loginNextSubmit"
             class="loginNext-input"  @on-focus="loginNextFocus" :class="loginNextGoogleErrorText?'loginNext-input-red':''">
           </Input>
            <p class="my-loginNext-error">{{loginNextGoogleErrorText}}</p>
           </div>
         </TabPane>
-        <TabPane :label="$t('emailValidate')" v-if="showEmailTab" name="nextEmail">
+        <TabPane :label="$t('email')" v-if="showEmailTab" name="nextEmail">
           <div v-if="showEmailTab">        
            <Input
               v-model="loginNextEmailCode"
               type="text"
               @on-change="checkNum"
               :maxlength="6"
-              :placeholder="$t('enterEmailRecieve')"
+              :placeholder="$t('phoneVerificationHolder')"
               @on-enter="loginNextSubmit"
               class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextEmailErrorText?'loginNext-input-red':' '">
               <span slot="append"
@@ -1070,14 +1070,14 @@ var o_my_loginNext = {
             <p class="my-loginNext-error">{{loginNextEmailErrorText}}</p>
           </div>
         </TabPane>
-        <TabPane :label="$t('phoneValidate')" v-if="showMobileTab" name="nextPhone">
+        <TabPane :label="$t('phone')" v-if="showMobileTab" name="nextPhone">
            <div v-if="showMobileTab">     
             <Input
               v-model="loginNextPhoneCode"
               type="text"
               @on-change="checkNum"
               :maxlength="6"
-              :placeholder="$t('enterSMSRecieve')"
+              :placeholder="$t('phoneVerificationHolder')"
               @on-enter="loginNextSubmit"
               class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextPhoneErrorText?'loginNext-input-red':' '">
               <span slot="append"
