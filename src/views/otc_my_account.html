@@ -67,7 +67,7 @@
               <Row class="account-row">
                 <i-col span="24">
                   <span class="account-row-title">{{ $t('securitySet') }}</span>
-                    <Tag type="border" color="#ff4d4d" v-if="user.googleStatus || !user.isOpenEmailCheck || !user.isOpenMobileCheck">
+                    <Tag type="border" color="#ff4d4d" v-if="!user.googleStatus || !user.isOpenEmailCheck || !user.isOpenMobileCheck">
                       {{ $t('unsafe') }}
                     </Tag>
                 </i-col>
@@ -133,7 +133,7 @@
               <i-button type="link" size="small" icon="plus" @click="modifyBankInfo('')">{{ $t('addBankCard') }}</i-button>
             </i-col>
           </Row>
-          <i-table size="small" :columns="bankColumn" :data="bankData"></i-table>
+          <i-table size="small" :columns="bankColumn" :data="bankData" :loading="bankDataLoading" min-height="160"></i-table>
         </i-col>
       </Row>
       <!-- 登录/操作历史 -->
@@ -144,7 +144,7 @@
               <span class="account-row-title">{{ $t('loginHistory') }}</span>
             </i-col>
           </Row>
-          <i-table size="small" :columns="loginColumn" :data="loginData"></i-table>
+          <i-table size="small" :columns="loginColumn" :data="loginData" :loading="loginDataLoading"></i-table>
           <Page :total="loginDataTotalCount" size="small" @on-change="loginPageChange"></Page>
         </i-col>
       </Row>
@@ -188,7 +188,9 @@
       </i-form>
       <div slot="footer">
         <i-button type="link" @click="handleReset('formWhatsApp')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
-        <i-button type="primary" @click="handleSubmit('formWhatsApp')">{{ $t('confirm') }}</i-button>
+        <i-button type="primary" @click="handleSubmit('formWhatsApp')" :loading="formWhatsAppLoading">
+          {{ $t('confirm') }}
+        </i-button>
       </div>
     </Modal>
     <!-- 修改密码 -->
@@ -219,7 +221,9 @@
       </i-form>
       <div slot="footer">
         <i-button type="link" @click="handleReset('formPassword')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
-        <i-button type="primary" @click="handleSubmit('formPassword')">{{ $t('confirm') }}</i-button>
+        <i-button type="primary" @click="handleSubmit('formPassword')" :loading="formPasswordLoading">
+          {{ $t('confirm') }}
+        </i-button>
       </div>
     </Modal>
     <!-- 修改谷歌 -->
@@ -239,7 +243,9 @@
       </i-form>
       <div slot="footer">
         <i-button type="link" @click="handleReset('formGoogle')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
-        <i-button type="primary" @click="handleSubmit('formGoogle')">{{ $t('confirm') }}</i-button>
+        <i-button type="primary" @click="handleSubmit('formGoogle')" :loading="formGoogleLoading">
+          {{ $t('confirm') }}
+        </i-button>
       </div>
     </Modal>
     <!-- 修改邮箱 -->
@@ -270,7 +276,9 @@
       </i-form>
       <div slot="footer">
         <i-button type="link" @click="handleReset('formEmail')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
-        <i-button type="primary" @click="handleSubmit('formEmail')">{{ $t('confirm') }}</i-button>
+        <i-button type="primary" @click="handleSubmit('formEmail')" :loading="formEmailLoading">
+          {{ $t('confirm') }}
+        </i-button>
       </div>
     </Modal>
     <!-- 修改手机 -->
@@ -316,7 +324,9 @@
       </i-form>
       <div slot="footer">
         <i-button type="link" @click="handleReset('formPhone')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
-        <i-button type="primary" @click="handleSubmit('formPhone')">{{ $t('confirm') }}</i-button>
+        <i-button type="primary" @click="handleSubmit('formPhone')" :loading="formPhoneLoading">
+          {{ $t('confirm') }}
+        </i-button>
       </div>
     </Modal>
     <!-- 添加/修改银行卡 -->
@@ -395,7 +405,9 @@
         </div>
         <div slot="footer">
           <i-button type="link" @click="handleReset('formBankConfirm')" style="margin-left: 8px">{{ modalBankConfirmCancel }}</i-button>
-          <i-button type="primary" @click="handleSubmit('formBankConfirm')">{{ $t('confirm') }}</i-button>
+          <i-button type="primary" @click="handleSubmit('formBankConfirm')" :loading="formBankConfirmLoading">
+            {{ $t('confirm') }}
+          </i-button>
         </div>
       </Modal>
     </div>
