@@ -26,7 +26,7 @@
             </div>
           </div>
           <div class="order-wrap-total" v-show="balance.USDT.normal_balance">
-            <span class="order-wrap-total-ar">{{ $t('total') }}</span>{{(Number(balance.USDT.normal_balance) + Number(balance.USDT.lock_balance)).toFixed(2)}} USDT
+            <span class="order-wrap-total-ar">{{ $t('total') }}</span>{{(Number(balance.USDT.normal_balance) + Number(balance.USDT.lock_balance)).toFixed(8)}} USDT
           </div>
           <div class="order-wrap-top-li-bottom-wrap">
             <div class="left-wrap">

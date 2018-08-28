@@ -19,19 +19,20 @@
   text-align: center;
 }
 
+.my-loginNext .ivu-modal-header-inner{
+  text-align: left;
+}
+
 .my-login .ivu-modal {
   top: 0;
 }
 
 .my-login .ivu-modal-header {
   border-bottom: none;
-  padding-top: 27px;
-  padding-bottom: 27px;
 }
 
-.my-login .ivu-modal-close {
-  right: 30px;
-  top: 20px;
+.my-loginNext .ivu-modal-header{
+  border-bottom: 1px solid #f4f4f4;
 }
 
 .my-login .iview-input {
@@ -151,8 +152,16 @@ body[dir='rtl'] .my-login .iview-input-countryPhone .ivu-input{
   margin-bottom: 30px;
 }
 
+.my-loginNext .ivu-tabs-bar{
+  margin: 16px 0;
+}
+
 .my-login .ivu-tabs-nav .ivu-tabs-tab {
   padding: 8px 0;
+}
+
+.my-loginNext .ivu-tabs-nav .ivu-tabs-tab {
+  padding: 12px 0;
 }
 
 .my-login .ivu-tabs {
@@ -378,20 +387,16 @@ body[dir='rtl'] .my-login .ivu-select-dropdown{
   position: static;
 }
 
-.my-loginNext .loginNext-title {
-  padding-top: 27px;
-  padding-bottom: 27px;
-  text-align: center;
-  font-weight: bold;
+.my-loginNext .ivu-modal-footer{
+  padding-bottom: 50px;
 }
 
 .loginNext-input {
   text-align: center;
-  margin: 50px 0 0;
+  margin: 0 0 0;
 }
 
 .loginNext-sms-input {
-  margin: 20px 0 0;
   position: relative;
 }
 
@@ -417,7 +422,7 @@ body[dir='rtl'] .my-login .ivu-select-dropdown{
 }
 
 .my-loginNext-error {
-  margin: 0 0 48px 50px;
+  margin: 0 0 0 50px;
   height: 30px;
   line-height: 30px;
   color: #ff2e2e;
@@ -426,7 +431,6 @@ body[dir='rtl'] .my-login .ivu-select-dropdown{
 .loginNextSmsText {
   text-align: left;
   padding-left: 50px;
-  margin-top: 40px;
   color: #999;
 }
 
