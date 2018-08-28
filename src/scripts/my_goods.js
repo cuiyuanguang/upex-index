@@ -32,10 +32,8 @@ var myGoods = new Vue({
           render: (h, params) => h(
             'Avatar',
             {
-              attrs: {
-                style: {
-                  'background-color': '#5C95EA',
-                },
+              style: {
+                backgroundColor: '#5C95EA',
               },
             },
             this.$t(params.row.side.toLowerCase())
@@ -54,17 +52,17 @@ var myGoods = new Vue({
         {
           align: 'center',
           renderHeader: (h) => h('span', this.$t('limit')),
-          render: (h) => h('span', params.row.minTrade + ' - ' + params.row.maxTrade),
+          render: (h, params) => h('span', params.row.minTrade + ' - ' + params.row.maxTrade),
         },
         {
           align: 'center',
           renderHeader: (h) => h('span', this.$t('time')),
-          render: (h) => h('span', utils.dateFormat(params.row.ctime)),
+          render: (h, params) => h('span', utils.dateFormat(params.row.ctime)),
         },
         {
           align: 'center',
           renderHeader: (h) => h('span', this.$t('operation')),
-          render: (h, params) => h([
+          render: (h, params) => h('div', [
             h('Button',
               {
                 props: {
@@ -95,6 +93,7 @@ var myGoods = new Vue({
         }
       ],
       pendingOrdersData: [],
+      pendingOrdersDataLoading: false,
       pendingOrdersCount: 0,
       showModal: false,
       cancelable: false,
@@ -117,7 +116,9 @@ var myGoods = new Vue({
         pageNum: page || 1,
         pageSize: this.pageSize,
       };
+      that.pendingOrdersDataLoading = true;
       get('api/personAdverts/processing', data).then(function(res) {
+        that.pendingOrdersDataLoading = false;
         that.pendingOrdersData = res.rsts || [];
         that.pendingOrdersCount = res.count;
       });

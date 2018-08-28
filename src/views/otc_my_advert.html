@@ -15,7 +15,7 @@
         <div class="header">
           <h3>{{ $t('pendingOrder') }}</h3>
         </div>
-        <i-table size="large" :columns="pendingOrdersColumn" :data="pendingOrdersData"></i-table>
+        <i-table size="large" :columns="pendingOrdersColumn" :data="pendingOrdersData" :loading="pendingOrdersDataLoading"></i-table>
         <div class="pager">
           <Page :total="pendingOrdersCount" @on-change="getAdvert" :current="current" :page-size="pageSize" size="small"></Page>
         </div>
