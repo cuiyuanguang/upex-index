@@ -229,11 +229,6 @@ body[dir='rtl'] .ivu-radio-group-button .ivu-radio-wrapper:last-child {
 input[type='number'] {
   -moz-appearance: textfield;
 }
-
-.wrapper {
-  width: 1200px;
-}
-
 /* to avoid {{}}  expression when render dom*/
 [v-cloak] {
   display: none;
