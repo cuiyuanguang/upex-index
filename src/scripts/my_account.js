@@ -98,10 +98,9 @@ var account = new Vue({
       }
     };
     var validatePass = (rule, value, callback) => {
-      var reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,64}$/g;
       if (value === '') {
         callback(new Error(this.$t('canNotBeEmpty')));
-      } else if (!reg.test(value)) {
+      } else if (value.length < 8 || value.length > 64) {
         callback(new Error(this.$t('eight2SixtyFour')));
       } else {
         if (this.formPassword.passwordNew !== '') {
@@ -135,8 +134,7 @@ var account = new Vue({
       }
     };
     var validateFormat = (rule, value, callback) => {
-      var reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,64}$/g;
-      if (!reg.test(value)) {
+      if (value.length < 8 || value.length > 64) {
         callback(new Error(this.$t('eight2SixtyFour')));
       } else {
         callback();
@@ -247,9 +245,9 @@ var account = new Vue({
       },
       ruleBankInfo: {
         bankName: [{ validator: validateEmpty, trigger: 'change' }],
-        name: [{ validator: validateFormat, trigger: 'change' }],
-        cardNo: [{ validator: validateFormat, trigger: 'change' }],
-        ibanNo: [{ validator: validateFormat, trigger: 'change' }],
+        name: [{ validator: validateEmpty, trigger: 'change' }],
+        cardNo: [{ validator: validateEmpty, trigger: 'change' }],
+        ibanNo: [{ validator: validateEmpty, trigger: 'change' }],
       },
       modalBankConfirmTitle: '',
       modalBankConfirmCancel: '',

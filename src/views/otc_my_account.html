@@ -170,6 +170,7 @@
             v-model="formWhatsApp.number"
             :maxlength="30"
             :placeholder="$t('whatsAppHolder')"
+            @on-enter="handleSubmit('formWhatsApp')"
           >
             <i-select class="country-select" v-model="selectCountry" slot="prepend" filterable>
               <i-option
@@ -187,7 +188,7 @@
         </form-item>
       </i-form>
       <div slot="footer">
-        <i-button type="link" @click="handleReset('formWhatsApp')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
+        <i-button type="link" @click="handleReset('formWhatsApp')">{{ $t('cancel') }}</i-button>
         <i-button type="primary" @click="handleSubmit('formWhatsApp')" :loading="formWhatsAppLoading">
           {{ $t('confirm') }}
         </i-button>
@@ -197,30 +198,67 @@
     <Modal :title="$t('changePassword')" :mask-closable="false" v-model="modalPassword" @on-cancel="handleReset('formPassword')">
       <i-form ref="formPassword" :model="formPassword" :rules="rulePassword" label-position="top">
         <form-item :label="$t('originPassword')" prop="password">
-          <i-input type="password" v-model="formPassword.password" :maxlength="64" :placeholder="$t('passwordHolder')"></i-input>
+          <i-input
+            type="password"
+            v-model="formPassword.password"
+            :minlength="8"
+            :maxlength="64"
+            :placeholder="$t('passwordHolder')"
+            @on-enter="handleSubmit('formPassword')"></i-input>
         </form-item>
         <form-item :label="$t('newPassword')" prop="passwordNew">
-          <i-input type="password" v-model="formPassword.passwordNew" :maxlength="64" :placeholder="$t('passwordNewHolder')"></i-input>
+          <i-input
+            type="password"
+            v-model="formPassword.passwordNew"
+            :minlength="8"
+            :maxlength="64"
+            :placeholder="$t('passwordNewHolder')"
+            @on-enter="handleSubmit('formPassword')"></i-input>
         </form-item>
         <form-item :label="$t('repeatPassword')" prop="passwordReNew">
-          <i-input type="password" v-model="formPassword.passwordReNew" :maxlength="64" :placeholder="$t('passwordRepeatHolder')"></i-input>
+          <i-input
+            type="password"
+            v-model="formPassword.passwordReNew"
+            :minlength="8"
+            :maxlength="64"
+            :placeholder="$t('passwordRepeatHolder')"
+            @on-enter="handleSubmit('formPassword')"></i-input>
         </form-item>
         <form-item :label="$t('phoneVerification')" prop="phone" v-if="user.isOpenMobileCheck">
-          <i-input v-model="formPassword.phone" :maxlength="6" :placeholder="$t('phoneVerificationHolder')">
-            <i-button slot="append" @click="sendMessageSecurity('Password', 5)" :disabled="sendDisabledPassword">{{ sendPlaceholderPassword }}</i-button>
+          <i-input
+            v-model="formPassword.phone"
+            :maxlength="6"
+            :placeholder="$t('phoneVerificationHolder')"
+            @on-enter="handleSubmit('formPassword')"
+            >
+            <i-button slot="append" @click="sendMessageSecurity('Password', 5)" :disabled="sendDisabledPassword">
+              {{ sendPlaceholderPassword }}
+            </i-button>
           </i-input>
         </form-item>
         <form-item label="Email" prop="email" v-else-if="user.email">
-          <i-input v-model="formPassword.email" :maxlength="6" :placeholder="$t('emailVerificationHolder')">
-            <i-button slot="append" @click="sendMessageSecurity('Email', 15)" :disabled="sendDisabledEmail">{{ sendPlaceholderEmail }}</i-button>
+          <i-input
+            v-model="formPassword.email"
+            :maxlength="6"
+            :placeholder="$t('emailVerificationHolder')"
+            @on-enter="handleSubmit('formPassword')"
+            >
+            <i-button slot="append" @click="sendMessageSecurity('Email', 15)" :disabled="sendDisabledEmail">
+              {{ sendPlaceholderEmail }}
+            </i-button>
           </i-input>
         </form-item>
         <form-item :label="$t('googleVerification')" prop="google" v-if="user.googleStatus">
-          <i-input v-model="formPassword.google" :maxlength="6" :placeholder="$t('googleVerificationHolder')"></i-input>
+          <i-input
+            v-model="formPassword.google"
+            :maxlength="6"
+            :placeholder="$t('googleVerificationHolder')"
+            @on-enter="handleSubmit('formPassword')"
+          ></i-input>
         </form-item>
       </i-form>
       <div slot="footer">
-        <i-button type="link" @click="handleReset('formPassword')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
+        <i-button type="link" @click="handleReset('formPassword')">{{ $t('cancel') }}</i-button>
         <i-button type="primary" @click="handleSubmit('formPassword')" :loading="formPasswordLoading">
           {{ $t('confirm') }}
         </i-button>
@@ -230,19 +268,38 @@
     <Modal :title="$t('closeGoogleVerification')" :mask-closable="false" v-model="modalGoogle" @on-cancel="handleReset('formGoogle')">
       <i-form ref="formGoogle" :model="formGoogle" :rules="rulePassword" label-position="top">
         <form-item :label="$t('phoneVerification')" prop="phone">
-          <i-input v-model="formGoogle.phone" :maxlength="6" :placeholder="$t('phoneVerificationHolder')">
-            <i-button slot="append" @click="sendMessageSecurity('Google', 30)" :disabled="sendDisabledGoogle">{{ sendPlaceholderGoogle }}</i-button>
+          <i-input
+            v-model="formGoogle.phone"
+            :maxlength="6"
+            :placeholder="$t('phoneVerificationHolder')"
+            @on-enter="handleSubmit('formGoogle')">
+            <i-button slot="append" @click="sendMessageSecurity('Google', 30)" :disabled="sendDisabledGoogle">
+              {{ sendPlaceholderGoogle }}
+            </i-button>
           </i-input>
         </form-item>
         <form-item :label="$t('password')" prop="password">
-          <i-input type="password" v-model="formGoogle.password" :maxlength="64" :placeholder="$t('passwordHolder')"></i-input>
+          <i-input
+            type="password"
+            v-model="formGoogle.password"
+            :maxlength="64"
+            :placeholder="$t('passwordHolder')"
+            @on-enter="handleSubmit('formGoogle')"
+          ></i-input>
         </form-item>
         <form-item :label="$t('googleVerification')" prop="google">
-          <i-input v-model="formGoogle.google" :maxlength="6" :placeholder="$t('googleVerificationHolder')"></i-input>
+          <i-input
+            v-model="formGoogle.google"
+            :maxlength="6"
+            :placeholder="$t('googleVerificationHolder')"
+            @on-enter="handleSubmit('formGoogle')"
+          ></i-input>
         </form-item>
       </i-form>
       <div slot="footer">
-        <i-button type="link" @click="handleReset('formGoogle')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
+        <i-button type="link" @click="handleReset('formGoogle')">
+          {{ $t('cancel') }}
+        </i-button>
         <i-button type="primary" @click="handleSubmit('formGoogle')" :loading="formGoogleLoading">
           {{ $t('confirm') }}
         </i-button>
@@ -253,29 +310,60 @@
       <i-form ref="formEmail" :model="formEmail" :rules="ruleEmail" label-position="top">
         <form-item prop="oldEmail" v-show="user.email">
           <div slot="label">{{ $t('originEmail') }}: {{ user.email }}</div>
-          <i-input v-model="formEmail.oldEmail" :maxlength="6" :placeholder="$t('emailVerificationHolder')">
-            <i-button slot="append" @click="sendMessageSecurity('OldEmail', 15)" :disabled="sendDisabledOldEmail">{{ sendPlaceholderOldEmail }}</i-button>
+          <i-input
+            v-model="formEmail.oldEmail"
+            :maxlength="6"
+            :placeholder="$t('emailVerificationHolder')"
+            @on-enter="handleSubmit('formEmail')"
+            >
+            <i-button slot="append" @click="sendMessageSecurity('OldEmail', 15)" :disabled="sendDisabledOldEmail">
+              {{ sendPlaceholderOldEmail }}
+            </i-button>
           </i-input>
         </form-item>
         <form-item :label="$t('email')" prop="email">
-          <i-input v-model="formEmail.email" :maxlength="64" :placeholder="$t('emailHolder')"></i-input>
+          <i-input
+            v-model="formEmail.email"
+            :maxlength="64"
+            :placeholder="$t('emailHolder')"
+            @on-enter="handleSubmit('formEmail')"
+          ></i-input>
         </form-item>
         <form-item :label="$t('emailVerification')" prop="verify">
-          <i-input v-model="formEmail.verify" :maxlength="6" :placeholder="$t('emailVerificationHolder')">
-            <i-button slot="append" @click="sendMessageSecurity('Email', 15)" :disabled="sendDisabledEmail">{{ sendPlaceholderEmail }}</i-button>
+          <i-input
+            v-model="formEmail.verify"
+            :maxlength="6"
+            :placeholder="$t('emailVerificationHolder')"
+            @on-enter="handleSubmit('formEmail')"
+            >
+            <i-button slot="append" @click="sendMessageSecurity('Email', 15)" :disabled="sendDisabledEmail">
+              {{ sendPlaceholderEmail }}
+            </i-button>
           </i-input>
         </form-item>
         <form-item :label="$t('phoneVerification')" prop="phone" v-if="user.isOpenMobileCheck">
-          <i-input v-model="formEmail.phone" :maxlength="6" :placeholder="$t('phoneVerificationHolder')">
-            <i-button slot="append" @click="sendMessageSecurity('OldPhone', 4)" :disabled="sendDisabledOldPhone">{{ sendPlaceholderOldPhone }}</i-button>
+          <i-input
+            v-model="formEmail.phone"
+            :maxlength="6"
+            :placeholder="$t('phoneVerificationHolder')"
+            @on-enter="handleSubmit('formEmail')"
+            >
+            <i-button slot="append" @click="sendMessageSecurity('OldPhone', 4)" :disabled="sendDisabledOldPhone">
+              {{ sendPlaceholderOldPhone }}
+            </i-button>
           </i-input>
         </form-item>
         <form-item :label="$t('googleVerification')" prop="google" v-if="user.googleStatus">
-          <i-input v-model="formEmail.google" :maxlength="6" :placeholder="$t('googleVerificationHolder')"></i-input>
+          <i-input
+            v-model="formEmail.google"
+            :maxlength="6"
+            :placeholder="$t('googleVerificationHolder')"
+            @on-enter="handleSubmit('formEmail')"
+          ></i-input>
         </form-item>
       </i-form>
       <div slot="footer">
-        <i-button type="link" @click="handleReset('formEmail')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
+        <i-button type="link" @click="handleReset('formEmail')">{{ $t('cancel') }}</i-button>
         <i-button type="primary" @click="handleSubmit('formEmail')" :loading="formEmailLoading">
           {{ $t('confirm') }}
         </i-button>
@@ -286,14 +374,26 @@
       <i-form ref="formPhone" :model="formPhone" :rules="rulePhone" label-position="top">
         <form-item prop="oldVerify" v-show="user.isOpenMobileCheck">
           <div slot="label">
-            {{ $t('phoneVerification') }} ({{ $t('originPhone') }} : <span class="text-dir-ltr"></span>{{ user.mobileNumber }}</span>)
+            {{ $t('phoneVerification') }} ({{ $t('originPhone') }} : <span class="text-dir-ltr">{{ user.mobileNumber }}</span>)
           </div>
-          <i-input v-model="formPhone.oldVerify" :maxlength="6" :placeholder="$t('phoneVerificationHolder')">
-            <i-button slot="append" @click="sendMessageSecurity('OldPhone', 3)" :disabled="sendDisabledOldPhone">{{ sendPlaceholderOldPhone }}</i-button>
+          <i-input 
+            v-model="formPhone.oldVerify"
+            :maxlength="6"
+            :placeholder="$t('phoneVerificationHolder')"
+            @on-enter="handleSubmit('formPhone')"
+            >
+            <i-button slot="append" @click="sendMessageSecurity('OldPhone', 3)" :disabled="sendDisabledOldPhone">
+              {{ sendPlaceholderOldPhone }}
+            </i-button>
           </i-input>
         </form-item>
         <form-item :label="$t('newPhone')" prop="phone">
-          <i-input v-model="formPhone.phone" :maxlength="30" :placeholder="$t('phoneHolder')">
+          <i-input 
+            v-model="formPhone.phone"
+            :maxlength="30"
+            :placeholder="$t('phoneHolder')"
+            @on-enter="handleSubmit('formPhone')"
+            >
             <i-select class="country-select" v-model="selectCountry" slot="prepend" filterable>
               <i-option
                 v-for="(country, index) in countryArr"
@@ -309,21 +409,40 @@
           </i-input>
         </form-item>
         <form-item :label="$t('phoneVerification')" prop="verify">
-          <i-input v-model="formPhone.verify" :maxlength="6" :placeholder="$t('phoneVerificationHolder')">
-            <i-button slot="append" @click="sendMessageSecurity('NewPhone', 2)" :disabled="sendDisabledNewPhone">{{ sendPlaceholderNewPhone }}</i-button>
+          <i-input 
+            v-model="formPhone.verify"
+            :maxlength="6"
+            :placeholder="$t('phoneVerificationHolder')"
+            @on-enter="handleSubmit('formPhone')"
+            >
+            <i-button slot="append" @click="sendMessageSecurity('NewPhone', 2)" :disabled="sendDisabledNewPhone">
+              {{ sendPlaceholderNewPhone }}
+            </i-button>
           </i-input>
         </form-item>
         <form-item :label="$t('emailVerification')" prop="email" v-if="user.email">
-          <i-input v-model="formPhone.email" :maxlength="6" :placeholder="$t('emailVerificationHolder')">
-            <i-button slot="append" @click="sendMessageSecurity('OldEmail', 15)" :disabled="sendDisabledOldEmail">{{ sendPlaceholderOldEmail }}</i-button>
+          <i-input 
+            v-model="formPhone.email"
+            :maxlength="6"
+            :placeholder="$t('emailVerificationHolder')"
+            @on-enter="handleSubmit('formPhone')"
+            >
+            <i-button slot="append" @click="sendMessageSecurity('OldEmail', 15)" :disabled="sendDisabledOldEmail">
+              {{ sendPlaceholderOldEmail }}
+            </i-button>
           </i-input>
         </form-item>
         <form-item :label="$t('googleVerification')" prop="google" v-if="user.googleStatus">
-          <i-input v-model="formPhone.google" :maxlength="6" :placeholder="$t('googleVerificationHolder')"></i-input>
+          <i-input 
+            v-model="formPhone.google"
+            :maxlength="6"
+            :placeholder="$t('googleVerificationHolder')"
+            @on-enter="handleSubmit('formPhone')"
+          ></i-input>
         </form-item>
       </i-form>
       <div slot="footer">
-        <i-button type="link" @click="handleReset('formPhone')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
+        <i-button type="link" @click="handleReset('formPhone')">{{ $t('cancel') }}</i-button>
         <i-button type="primary" @click="handleSubmit('formPhone')" :loading="formPhoneLoading">
           {{ $t('confirm') }}
         </i-button>
@@ -331,7 +450,7 @@
     </Modal>
     <!-- 添加/修改银行卡 -->
     <div>
-      <Modal :title="$t('changeBankcard')" :mask-closable="false" v-model="modalBankInfo" @on-cancel="handleReset('formBankInfo')">
+      <Modal :title="$t('addBankCard')" :mask-closable="false" v-model="modalBankInfo" @on-cancel="handleReset('formBankInfo')">
         <i-form ref="formBankInfo" :model="formBankInfo" :rules="ruleBankInfo" label-position="top">
           <form-item :label="$t('bankName')" prop="bankName">
             <i-select v-model="formBankInfo.bankName" :placeholder="$t('bankNameHolder')">
@@ -350,19 +469,34 @@
             </i-select>
           </form-item>
           <form-item :label="$t('accountName')" prop="name">
-            <i-input v-model="formBankInfo.name" :maxlength="64" :placeholder="$t('accountNameHolder')"></i-input>
+            <i-input
+              v-model="formBankInfo.name"
+              :maxlength="64"
+              :placeholder="$t('accountNameHolder')"
+              @on-enter="handleSubmit('formBankInfo')"
+            ></i-input>
           </form-item>
           <form-item :label="$t('cardNo')" prop="cardNo">
             <Poptip trigger="focus" :content="formBankInfo.cardNo | card" class="poptip-card">
-              <i-input v-model="formBankInfo.cardNo" :maxlength="64" :placeholder="$t('cardNoHolder')"></i-input>
+              <i-input
+                v-model="formBankInfo.cardNo"
+                :maxlength="64"
+                :placeholder="$t('cardNoHolder')"
+                @on-enter="handleSubmit('formBankInfo')"
+              ></i-input>
             </Poptip>
           </form-item>
           <form-item label="iban" prop="ibanNo">
-            <i-input v-model="formBankInfo.ibanNo" :maxlength="64" :placeholder="$t('ibanNoHolder')"></i-input>
+            <i-input
+              v-model="formBankInfo.ibanNo"
+              :maxlength="64"
+              :placeholder="$t('ibanNoHolder')"
+              @on-enter="handleSubmit('formBankInfo')"
+            ></i-input>
           </form-item>
         </i-form>
         <div slot="footer">
-          <i-button type="link" @click="handleReset('formBankInfo')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
+          <i-button type="link" @click="handleReset('formBankInfo')">{{ $t('cancel') }}</i-button>
           <i-button type="primary" @click="handleSubmit('formBankInfo')">{{ $t('nextStep') }}</i-button>
         </div>
       </Modal>
@@ -390,13 +524,27 @@
             <Tabs v-model="tabVerifyActive" v-if="modalBankConfirm">
               <tab-pane :label="$t('googleVerification')" :name="1" v-if="user.googleStatus">
                 <form-item label="" prop="google">
-                  <i-input v-model="formBankConfirm.google" :maxlength="6" @on-change="autoSubmit($event, 'formBankConfirm')" :placeholder="$t('googleVerificationHolder')"></i-input>
+                  <i-input
+                    v-model="formBankConfirm.google"
+                    :maxlength="6"
+                    @on-change="autoSubmit($event, 'formBankConfirm')"
+                    :placeholder="$t('googleVerificationHolder')"
+                    @on-enter="handleSubmit('formBankConfirm')"
+                  ></i-input>
                 </form-item>
               </tab-pane>
               <tab-pane :label="$t('phoneVerification')" :name="2" v-if="user.isOpenMobileCheck">
                 <form-item label="" prop="phone">
-                  <i-input v-model="formBankConfirm.phone" :maxlength="6" @on-change="autoSubmit($event, 'formBankConfirm')" :placeholder="$t('phoneVerificationHolder')">
-                    <i-button slot="append" @click="sendMessage('Bank', 3)" :disabled="sendDisabledBank">{{ sendPlaceholderBank }}</i-button>
+                  <i-input
+                    v-model="formBankConfirm.phone"
+                    :maxlength="6"
+                    @on-change="autoSubmit($event, 'formBankConfirm')"
+                    :placeholder="$t('phoneVerificationHolder')"
+                    @on-enter="handleSubmit('formBankConfirm')"
+                    >
+                    <i-button slot="append" @click="sendMessage('Bank', 3)" :disabled="sendDisabledBank">
+                      {{ sendPlaceholderBank }}
+                    </i-button>
                   </i-input>
                 </form-item>
               </tab-pane>
@@ -404,7 +552,7 @@
           </i-form>
         </div>
         <div slot="footer">
-          <i-button type="link" @click="handleReset('formBankConfirm')" style="margin-left: 8px">{{ modalBankConfirmCancel }}</i-button>
+          <i-button type="link" @click="handleReset('formBankConfirm')">{{ modalBankConfirmCancel }}</i-button>
           <i-button type="primary" @click="handleSubmit('formBankConfirm')" :loading="formBankConfirmLoading">
             {{ $t('confirm') }}
           </i-button>
