@@ -118,11 +118,12 @@ var allGoods = new Vue({
       balance: 0,
       // 下单
       modalOrder: false,
+      modalOrderLoading: false,
       selectedAdvert: {},
-      legalCurrency: '',
+      legalCurrency: 0,
       legalCurrencyAll: false,
       legalCurrencyError: false,
-      digitalCurrency: '',
+      digitalCurrency: 0,
       digitalCurrencyAll: false,
       digitalCurrencyError: false,
       modalGoogle: false,
@@ -136,6 +137,7 @@ var allGoods = new Vue({
           { validator: validateNumeric, trigger: 'change' },
         ],
       },
+      formWhatsAppLoading: false,
       // 广告列表
       totalPage: 0,
       buyTotal: 0,
@@ -186,6 +188,7 @@ var allGoods = new Vue({
         phone: [{ name: 'formBankConfirm', validator: validatePhone, trigger: 'change' }],
         google: [{ name: 'formBankConfirm', validator: validateGoogle, trigger: 'change' }],
       },
+      formBankConfirmLoading: false,
       // 发布挂单
       modalReleaseLoading: false,
       modalRelease: false,
@@ -217,6 +220,7 @@ var allGoods = new Vue({
         phone: [{ name: 'formReleaseConfirm', validator: validatePhone, trigger: 'change' }],
         google: [{ name: 'formReleaseConfirm', validator: validateGoogle, trigger: 'change' }],
       },
+      formReleaseConfirmLoading: false,
       timers: {},
     };
   },
@@ -252,12 +256,8 @@ var allGoods = new Vue({
       return Number((this.selectedAdvert.minTrade / this.selectedAdvert.price).toFixed(4));
     },
     digitalCurrencyMax() {
-      const amount = (this.selectedAdvert.maxTrade / this.selectedAdvert.price).toFixed(4);
-      if (this.selectedAdvert.side === 'SELL') {
-        return Math.min(amount, this.digitalCurrencyAvailable);
-      } else {
-        return Math.min(amount, this.balance);
-      }
+      var amount = (this.selectedAdvert.maxTrade / this.selectedAdvert.price).toFixed(4);
+      return Math.min(amount, this.digitalCurrencyAvailable);
     },
     digitalCurrencyTips() {
       return `
@@ -377,7 +377,7 @@ var allGoods = new Vue({
       });
     },
     changeLegalCurrency() {
-      const digitalCurrencyCalc =
+      var digitalCurrencyCalc =
         Number((this.legalCurrency / this.selectedAdvert.price).toFixed(4));
       this.digitalCurrency = Math.min(digitalCurrencyCalc, this.digitalCurrencyMax);
       if (digitalCurrencyCalc > this.digitalCurrencyMax) {
@@ -390,19 +390,11 @@ var allGoods = new Vue({
     },
     tradeAll(type) {
       if (type === 'legalCurrency') {
-        if (this.selectedAdvert.side === 'SELL') {
-          this.digitalCurrency = Math.min(this.balance * this.marketPrice.exchange_rate, this.selectedAdvert.maxTrade);
-        } else {
-          this.legalCurrency = this.selectedAdvert.maxTrade;
-        }
+        this.legalCurrency = this.selectedAdvert.maxTrade;
         this.changeLegalCurrency();
       }
       if (type === 'digitalCurrency') {
-        if (this.selectedAdvert.side === 'SELL') {
-          this.digitalCurrency = Math.min(this.digitalCurrencyMax, this.balance);
-        } else {
-          this.digitalCurrency = this.digitalCurrencyMax;
-        }
+        this.digitalCurrency = this.digitalCurrencyMax;
         this.changeDigitalCurrency();
       }
     },
@@ -445,6 +437,11 @@ var allGoods = new Vue({
         this.digitalCurrencyError = true;
         return;
       }
+      if (type === 'SELL' && this.balance < this.digitalCurrencyMin) {
+        Toast.show(this.$t('balanceNotEnough'), { icon: 'error' });
+        return;
+      }
+      this.modalOrderLoading = true;
       var data = {
         advertId: this.selectedAdvert.id,
         volume: Number(this.digitalCurrency),
@@ -458,6 +455,7 @@ var allGoods = new Vue({
         payUrl = 'otc_wait_pay.html?sequence=';
       }
       post(api, data).then(function(res) {
+        that.modalOrderLoading = false;
         if (res) {
           that.modalOrder = false;
           window.location.href = payUrl + res.sequence;
@@ -562,6 +560,7 @@ var allGoods = new Vue({
             that.modalBankConfirm = true;
           }
           if (name === 'formBankConfirm') {
+            that.formBankConfirmLoading = true;
             var checkType = that.tabVerifyActive;
             post('api/bankCard', {
               id: that.formBankInfo.id,
@@ -575,6 +574,7 @@ var allGoods = new Vue({
                   ? that.formBankConfirm.google
                   : that.formBankConfirm.phone,
             }).then(function(res) {
+              that.formBankConfirmLoading = false;
               if (res) {
                 that.clearTimers();
                 that.$refs.formBankInfo.resetFields();
@@ -586,7 +586,9 @@ var allGoods = new Vue({
             });
           }
           if (name === 'formWhatsApp') {
+            that.formWhatsAppLoading = true;
             post('api/watchapp', that.selectCountry + '-' + that.formWhatsApp.number).then(function (res) {
+              that.formWhatsAppLoading = false;
               if (res) {
                 post('api/common/user_info', '', false).then(function (result) {
                   localStorage.setItem('user', JSON.stringify(result));
@@ -596,36 +598,36 @@ var allGoods = new Vue({
             });
           }
           if (name === 'formRelease') {
-                if (parseFloat(that.formRelease.price) > Math.max(that.marketPrice.exchange_rate, that.marketPrice.exchange_buy_max) * 1.5) {
-                  that.modalRelease = false;
-                  that.releaseWarning = that.$t('moreThan50Percent');
-                  that.modalReleaseWarning = true;
-                  return;
-                }
-                if (parseFloat(that.formRelease.price) < Math.min(that.marketPrice.exchange_rate, that.marketPrice.exchange_sell_min) * 0.5) {
-                  that.modalRelease = false;
-                  that.releaseWarning = that.$t('lessThan50Percent');
-                  that.modalReleaseWarning = true;
-                  return;
-                }
-                if (that.formRelease.side == 'BUY') {
-                  if (parseFloat(that.formRelease.price) > that.marketPrice.exchange_sell_max) {
-                    that.modalRelease = false;
-                    that.releaseWarning = that.$t('lessThanHighestPurchase');
-                    that.modalReleaseWarning = true;
-                    return;
-                  }
-                }
-                if (that.formRelease.side == 'SELL') {
-                  if (parseFloat(that.formRelease.price) > that.marketPrice.exchange_buy_min) {
-                    that.modalRelease = false;
-                    that.releaseWarning = that.$t('moreThanLowestPrice');
-                    that.modalReleaseWarning = true;
-                    return;
-                  }
-                }
+            if (parseFloat(that.formRelease.price) > Math.max(that.marketPrice.exchange_rate, that.marketPrice.exchange_buy_max) * 1.5) {
+              that.modalRelease = false;
+              that.releaseWarning = that.$t('moreThan50Percent');
+              that.modalReleaseWarning = true;
+              return;
+            }
+            if (parseFloat(that.formRelease.price) < Math.min(that.marketPrice.exchange_rate, that.marketPrice.exchange_sell_min) * 0.5) {
+              that.modalRelease = false;
+              that.releaseWarning = that.$t('lessThan50Percent');
+              that.modalReleaseWarning = true;
+              return;
+            }
+            if (that.formRelease.side == 'BUY') {
+              if (parseFloat(that.formRelease.price) > that.marketPrice.exchange_sell_max) {
                 that.modalRelease = false;
-                that.modalReleaseConfirm = true;
+                that.releaseWarning = that.$t('lessThanHighestPurchase');
+                that.modalReleaseWarning = true;
+                return;
+              }
+            }
+            if (that.formRelease.side == 'SELL') {
+              if (parseFloat(that.formRelease.price) > that.marketPrice.exchange_buy_min) {
+                that.modalRelease = false;
+                that.releaseWarning = that.$t('moreThanLowestPrice');
+                that.modalReleaseWarning = true;
+                return;
+              }
+            }
+            that.modalRelease = false;
+            that.modalReleaseConfirm = true;
           }
           if (name === 'formReleaseConfirm') {
             if (that.formRelease.side === 'SELL') {
@@ -639,7 +641,9 @@ var allGoods = new Vue({
             that.formRelease.checkValue = that.tabVerifyActive == 1
             ? that.formReleaseConfirm.google
             : that.formReleaseConfirm.phone;
+            that.formReleaseConfirmLoading = true;
             post('api/advert', that.formRelease).then(function(res) {
+              that.formReleaseConfirmLoading = false;
               if (res) {
                 var side = that.formRelease.side;
                 that.handleReset('formRelease');

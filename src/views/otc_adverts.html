@@ -234,8 +234,13 @@
           </Row>
         </i-col>
         <i-col span="4" class="text-right">
-          <i-button type="warning" v-show="showListTag == 'BUY'" @click="confirmOrder('BUY')">{{ $t('buy') }}</i-button>
-          <i-button type="warning" v-show="showListTag == 'SELL'" @click="confirmOrder('SELL')">{{ $t('sell') }}</i-button>
+          <i-button
+            type="warning"
+            @click="confirmOrder(showListTag)"
+            :loading="modalOrderLoading"
+            >
+            {{ showListTag == 'BUY' ? $t('buy') : $t('sell') }}
+          </i-button>
         </i-col>
       </Row>
     </Modal>
@@ -389,7 +394,9 @@
       </div>
       <div slot="footer">
         <i-button type="link" @click="handleReset('formReleaseConfirm', 'modify')">{{ $t('backEdit') }}</i-button>
-        <i-button type="primary" @click="handleSubmit('formReleaseConfirm')">{{ $t('confirmRelease') }}</i-button>
+        <i-button type="primary" @click="handleSubmit('formReleaseConfirm')" :loading="formReleaseConfirmLoading">
+          {{ $t('confirmRelease') }}
+        </i-button>
       </div>
     </Modal>
 
@@ -469,7 +476,7 @@
         </div>
         <div slot="footer">
           <i-button type="link" @click="handleReset('formBankConfirm', 'modify')" style="margin-left: 8px">{{ $t('backEdit') }}</i-button>
-          <i-button type="primary" @click="handleSubmit('formBankConfirm')">{{ $t('confirmBind') }}</i-button>
+          <i-button type="primary" @click="handleSubmit('formBankConfirm')" :loading="formBankConfirmLoading">{{ $t('confirmBind') }}</i-button>
         </div>
       </Modal>
     </div>
@@ -505,7 +512,9 @@
         </i-form>
       </div>
       <div slot="footer">
-        <i-button type="primary" long @click="handleSubmit('formWhatsApp')">{{ $t('confirm') }}</i-button>
+        <i-button type="primary" long @click="handleSubmit('formWhatsApp')" :loading="formWhatsAppLoading">
+          {{ $t('confirm') }}
+        </i-button>
       </div>
     </Modal>
     <!-- <acontact :show="modalWhatsApp" :isWatchupBind="userInfo.watchapp" :locale="locale"></acontact> -->
