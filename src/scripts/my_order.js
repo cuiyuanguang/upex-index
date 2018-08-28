@@ -21,13 +21,79 @@ var myOrder = new Vue({
   components: {
     oHeader: o_header,
   },
-  data: {
-    locale: 'ar',
-    pageSize: 10,
-    current: 1,
-    userInfo: {},
-    list: [],
-    total: 0,
+  data() {
+    return {
+      locale: 'ar',
+      pageSize: 10,
+      current: 1,
+      userInfo: {},
+      orderColumn: [
+        {
+          key: 'sequence',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('orderNo')),
+        },
+        {
+          key: 'type',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('tradingType')),
+          render: (h, params) => h('span', this.userInfo.id === params.row.buyId ? this.$t('buy') : this.$t('sell')),
+        },
+        {
+          key: 'volume',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('tradingAmount')),
+        },
+        {
+          key: 'price',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('unitPrice')),
+        },
+        {
+          key: 'totalPrice',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('totalPrice')),
+        },
+        {
+          key: 'time',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('time')),
+          render: (h, params) => h('span', utils.dateFormat(params.row.ctime)),
+        },
+        {
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('tradingObject')),
+          render: (h, params) => h('span', this.userInfo.id == params.row.buyerId ? params.row.seller.showNickName : params.row.buyer.showNickName),
+        },
+        {
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('status')),
+          render: (h, params) => h(
+            'span',
+            {
+              'class': params.row.status == 3 ? 'text-primary' : 'text-error',
+            },
+            this.convertStatus(params.row.status),
+          ),
+        },
+        {
+          align: 'center',
+          renderHeader: (h) => h('span', ''),
+          render: (h, params) => h(
+            'a',
+            {
+              attrs: {
+                href: this.userInfo.id == params.row.buyerId ? 'otc_pay.html?sequence=' + params.row.sequence : 'otc_wait_pay.html?sequence=' + params.row.sequence,
+              },
+              'class': 'view',
+            },
+            this.$t('view'),
+          ),
+        },
+      ],
+      orderData: [],
+      total: 0,
+    }
   },
   methods: {
     getMyOrder: function(page) {
@@ -38,33 +104,33 @@ var myOrder = new Vue({
       };
       get('api/personOrders', data).then(function(res) {
         if (res) {
-          that.list = res.rsts || [];
+          that.orderData = res.rsts || [];
           that.current = page;
           that.total = res.count;
         }
       });
     },
-    statusSemantics: function(v) {
+    convertStatus: function(status) {
       // 订单状态 待支付1 已支付2 交易成功3 取消4 申诉5  打币中6  异常订单7
-      if (v == '1') {
+      if (status == 1) {
         return this.$t('toBePaid');
       }
-      if (v == '2') {
+      if (status == 2) {
         return this.$t('alreadyPaid');
       }
-      if (v == '3') {
+      if (status == 3) {
         return this.$t('orderDone');
       }
-      if (v == '4') {
+      if (status == 4) {
         return this.$t('orderCanceled');
       }
-      if (v == '5') {
+      if (status == 5) {
         return this.$t('appeal');
       }
-      if (v == '6') {
+      if (status == 6) {
         return this.$t('transfering');
       }
-      if (v == '7') {
+      if (status == 7) {
         return this.$t('orderExpired');
       }
     },

@@ -25,7 +25,76 @@ var myGoods = new Vue({
       locale: '',
       current: 1,
       pageSize: 10,
-      pendingOrdersList: [],
+      pendingOrdersColumn: [
+        {
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('type')),
+          render: (h, params) => h(
+            'Avatar',
+            {
+              attrs: {
+                style: {
+                  'background-color': '#5C95EA',
+                },
+              },
+            },
+            this.$t(params.row.side.toLowerCase())
+          )
+        },
+        {
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('amount')),
+          render: (h, params) => h('span', (params.row.volume - params.row.sell).toFixed(4) + '/' + params.row.volume + 'USDT'),
+        },
+        {
+          key: 'price',
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('unitPrice')),
+        },
+        {
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('limit')),
+          render: (h) => h('span', params.row.minTrade + ' - ' + params.row.maxTrade),
+        },
+        {
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('time')),
+          render: (h) => h('span', utils.dateFormat(params.row.ctime)),
+        },
+        {
+          align: 'center',
+          renderHeader: (h) => h('span', this.$t('operation')),
+          render: (h, params) => h([
+            h('Button',
+              {
+                props: {
+                  type: 'link',
+                  size: 'small',
+                  disabled: params.row.status === 3 || params.row.status === 4 || params.row.status === 5,
+                },
+                on: {
+                  'click': () => { this.pause(params.row) },
+                },
+              },
+              params.row.status === 6 ? this.$t('start') : this.$t('pause'),
+            ),
+            h('Button',
+              {
+                props: {
+                  type: 'link',
+                  size: 'small',
+                  disabled: params.row.status === 4 || params.row.status === 5,
+                },
+                on: {
+                  'click': () => { this.cancel(params.row) },
+                },
+              },
+              this.$t('cancel'),
+            ),
+          ])
+        }
+      ],
+      pendingOrdersData: [],
       pendingOrdersCount: 0,
       showModal: false,
       cancelable: false,
@@ -49,7 +118,7 @@ var myGoods = new Vue({
         pageSize: this.pageSize,
       };
       get('api/personAdverts/processing', data).then(function(res) {
-        that.pendingOrdersList = res.rsts || [];
+        that.pendingOrdersData = res.rsts || [];
         that.pendingOrdersCount = res.count;
       });
     },

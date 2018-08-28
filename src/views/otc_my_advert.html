@@ -15,36 +15,7 @@
         <div class="header">
           <h3>{{ $t('pendingOrder') }}</h3>
         </div>
-        <div class="main">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>{{ $t('type') }}</th>
-                <th>{{ $t('amount') }}</th>
-                <th>{{ $t('unitPrice') }}</th>
-                <th>{{ $t('limit') }}</th>
-                <th>{{ $t('time') }}</th>
-                <th>{{ $t('operation') }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in pendingOrdersList" :key="item.id">
-                <td>
-                  <Avatar size="large" style="background-color: #5C95EA">{{$t(item.side.toLowerCase())}}</Avatar>
-                </td>
-                <td>{{ (item.volume - item.sell).toFixed(4) }} / {{ item.volume }} USDT</td>
-                <td>{{item.price}} SAR</td>
-                <td>{{item.minTrade}} - {{item.maxTrade}} SAR</td>
-                <td>{{item.ctime | date}}</td>
-                <td>
-                  <i-button type="link" size="small" @click="pause(item)" :disabled="item.status === 3 || item.status === 4 || item.status === 5" type="text">{{ item.status === 6 ? $t('start') : $t('pause') }}</i-button>
-                  <i-button type="link" size="small" @click="cancel(item)" :disabled="item.status === 4 || item.status === 5" type="text">{{ $t('cancel') }}</i-button>
-                </td>
-              </tr>
-              <tr v-if="!pendingOrdersList.length"><td colspan="9">{{ $t('noData') }}</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <i-table size="large" :columns="pendingOrdersColumn" :data="pendingOrdersData"></i-table>
         <div class="pager">
           <Page :total="pendingOrdersCount" @on-change="getAdvert" :current="current" :page-size="pageSize" size="small"></Page>
         </div>
