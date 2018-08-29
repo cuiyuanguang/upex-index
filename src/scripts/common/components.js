@@ -1035,7 +1035,7 @@ var o_my_loginNext = {
       @on-cancel="asyncCancel" class="my-login my-loginNext"
     >
      <Tabs @on-click="nextTabChange" v-model="nextTabName">
-        <TabPane :label="$t('googleValidate')" v-if="showGoogleTab" name="nextGoogle">     
+        <TabPane label="Google" v-if="showGoogleTab" name="nextGoogle">     
          <div v-if="showGoogleTab">
           <Input
             v-model="loginNextGoogleCode"
@@ -1247,8 +1247,8 @@ var o_my_loginNext = {
           });
         } else if (type === 'email') {
           data = {
-            email: this.isLoginNextEmailNum,
-            operationType: '4',
+            // email: this.isLoginNextEmailNum,
+            operationType: '23',
             token: this.isLoginNextCookieNum,
           };
           post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {

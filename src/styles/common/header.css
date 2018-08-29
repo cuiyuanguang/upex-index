@@ -23,6 +23,10 @@
   text-align: left;
 }
 
+body[dir='rtl'] .my-loginNext .ivu-modal-header-inner{
+  text-align: right;
+}
+
 .my-login .ivu-modal {
   top: 0;
 }
@@ -105,7 +109,7 @@ body[dir='rtl'] .my-login .iview-input-countryPhone .ivu-input{
   background: #fafafa;
   border: none;
   top: 1px;
-  height: 38px;
+  height: 37px;
   line-height: 30px;
   width: auto;
   cursor: pointer;
