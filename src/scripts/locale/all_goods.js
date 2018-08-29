@@ -64,6 +64,11 @@ var messages = {
     en: 'Buy',
     ar: 'شراء',
   },
+  all: {
+    zh: '全部',
+    en: 'All',
+    ar: 'جميع',
+  },
   seller: {
     zh: '卖家',
     en: 'Seller',

@@ -22,6 +22,111 @@ var allGoods = new Vue({
     oHeader: o_header,
   },
   data: function() {
+    var buyColumn = [
+      {
+        key: 'user',
+        align: 'center',
+        renderHeader: (h) => h('span', this.showListTag === 'BUY' ? this.$t('seller') : this.$t('buyer')),
+        render: (h, params) => h(
+          'div',
+          [
+            h('div',
+              {
+                'class': this.userInfo.id === params.row.userId ? 'avatar mr-10 mine' : 'avatar mr-10',
+              },
+              this.userInfo.id == params.row.userId ? this.$t('mine') : (this.showListTag === 'BUY' ? this.$t('seller') : this.$t('buyer')),
+            ),
+            h('span', this.$t('saUser')),
+          ]
+        ),
+      },
+      {
+        key: 'amount',
+        align: 'center',
+        renderHeader: (h) => h('span', this.$t('amount')),
+        render: (h, params) => h('span', (params.row.volume - params.row.sell).toFixed(4) + 'USDT'),
+      },
+      {
+        key: 'limit',
+        align: 'center',
+        renderHeader: (h) => h(
+          'p',
+          [
+            h('span', this.$t('limit')),
+            h('br'),
+            h('span', { 'class': 'limit-tips' }, this.$t('min2maxPurchase')),
+          ]
+        ),
+        render: (h, params) => h('span', params.row.minTrade + ' - ' + params.row.maxTrade),
+      },
+      {
+        key: 'price',
+        align: 'center',
+        renderHeader: (h) => h('span', this.$t('unitPrice')),
+      },
+      {
+        key: 'payment',
+        align: 'center',
+        renderHeader: (h) => h('span', this.$t('payment')),
+        render: (h, params) => h('span', params.row.paymentBanks && params.row.paymentBanks[0].bankName),
+      },
+      {
+        key: 'operation',
+        align: 'center',
+        renderHeader: (h) => h('span', this.$t('operation')),
+        render: (h, params) => h(
+          'div',
+          this.userInfo.id === params.row.userId ?
+          [
+            h('Button',
+              {
+                props: {
+                  type: 'link',
+                  size: 'small',
+                  disabled: params.row.status === 3 || params.row.status === 4 || params.row.status === 5,
+                },
+                on: {
+                  'click': () => { this.pause(params.row) },
+                },
+              },
+              params.row.status === 6 ? this.$t('start') : this.$t('pause'),
+            ),
+            h('Button',
+              {
+                props: {
+                  type: 'link',
+                  size: 'small',
+                  disabled: params.row.status === 4 || params.row.status === 5,
+                },
+                on: {
+                  'click': () => { this.cancel(params.row) },
+                },
+              },
+              this.$t('cancel'),
+            ),
+          ]
+          :
+          [
+            h(
+              'Button',
+              {
+                props: {
+                  type: 'primary',
+                  size: 'small',
+                },
+                on: {
+                  click: () => {
+                    this.showModalOrder(params.row, this.showListTag);
+                  },
+                },
+              },
+              this.$t(this.showListTag.toLowerCase()),
+            ),
+          ]
+        ),
+      },
+    ];
+    var sellColumn = buyColumn.filter(item => item.key !== 'payment');
     var validateGoogle = (rule, value, callback) => {
       if (!this[rule.name].phone) {
         if (!/\d+$/g.test(value)) {
@@ -54,14 +159,6 @@ var allGoods = new Vue({
     var validateNumeric = (rule, value, callback) => {
       if (!/\d+$/g.test(value)) {
         callback(new Error(this.$t('numericRequired')));
-      } else {
-        callback();
-      }
-    };
-    var validateFormat = (rule, value, callback) => {
-      var reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,64}$/g;
-      if (!reg.test(value)) {
-        callback(new Error(this.$t('eight2SixtyFour')));
       } else {
         callback();
       }
@@ -118,6 +215,7 @@ var allGoods = new Vue({
       balance: 0,
       // 下单
       modalOrder: false,
+      modalOrderLoading: false,
       selectedAdvert: {},
       legalCurrency: 0,
       legalCurrencyAll: false,
@@ -136,14 +234,19 @@ var allGoods = new Vue({
           { validator: validateNumeric, trigger: 'change' },
         ],
       },
+      formWhatsAppLoading: false,
       // 广告列表
       totalPage: 0,
       buyTotal: 0,
       sellTotal: 0,
       buyCurrentPage: 1,
       sellCurrentPage: 1,
-      selllist: [],
+      buyColumn: buyColumn,
       buylist: [],
+      buylistLoading: false,
+      sellColumn: sellColumn,
+      selllist: [],
+      selllistLoading: false,
       // 暂停/取消接单
       modalOperationOrder: false,
       cancelable: false,
@@ -170,9 +273,9 @@ var allGoods = new Vue({
       },
       ruleBankInfo: {
         bankName: [{ validator: validateEmpty, trigger: 'change' }],
-        name: [{ validator: validateFormat, trigger: 'change' }],
-        cardNo: [{ validator: validateFormat, trigger: 'change' }],
-        ibanNo: [{ validator: validateFormat, trigger: 'change' }],
+        name: [{ validator: validateEmpty, trigger: 'change' }],
+        cardNo: [{ validator: validateEmpty, trigger: 'change' }],
+        ibanNo: [{ validator: validateEmpty, trigger: 'change' }],
       },
       modalBankConfirmTitle: '',
       modalBankConfirmCancel: '',
@@ -186,6 +289,7 @@ var allGoods = new Vue({
         phone: [{ name: 'formBankConfirm', validator: validatePhone, trigger: 'change' }],
         google: [{ name: 'formBankConfirm', validator: validateGoogle, trigger: 'change' }],
       },
+      formBankConfirmLoading: false,
       // 发布挂单
       modalReleaseLoading: false,
       modalRelease: false,
@@ -217,6 +321,7 @@ var allGoods = new Vue({
         phone: [{ name: 'formReleaseConfirm', validator: validatePhone, trigger: 'change' }],
         google: [{ name: 'formReleaseConfirm', validator: validateGoogle, trigger: 'change' }],
       },
+      formReleaseConfirmLoading: false,
       timers: {},
     };
   },
@@ -249,11 +354,18 @@ var allGoods = new Vue({
       return (this.selectedAdvert.volume - this.selectedAdvert.sell).toFixed(4);
     },
     digitalCurrencyMin() {
-      return Number((this.selectedAdvert.minTrade / this.selectedAdvert.price).toFixed(4));
+      var amount = Number((this.selectedAdvert.minTrade / this.selectedAdvert.price).toFixed(4));
+      if (this.showListTag === 'BUY') {
+        return Math.max(amount, Number(this.marketPrice.trade_min_volume));
+      }
+      return Math.max(amount, this.digitalCurrencyAvailable, Number(this.marketPrice.trade_max_volume));
     },
     digitalCurrencyMax() {
-      const amount = (this.selectedAdvert.maxTrade / this.selectedAdvert.price).toFixed(4);
-      return Math.min(amount, this.digitalCurrencyAvailable);
+      var amount = (this.selectedAdvert.maxTrade / this.selectedAdvert.price).toFixed(4);
+      if (this.showListTag === 'BUY') {
+        return Math.min(amount, Number(this.marketPrice.trade_max_volume));
+      }
+      return Math.min(amount, this.digitalCurrencyAvailable, Number(this.marketPrice.trade_max_volume));
     },
     digitalCurrencyTips() {
       return `
@@ -298,7 +410,9 @@ var allGoods = new Vue({
         page: page || 1,
         pageSize: 10,
       };
+      that[type.toLowerCase() + 'listLoading'] = true;
       get('api/adverts', data).then(function(res) {
+        that[type.toLowerCase() + 'listLoading'] = false;
         if (res) {
           that.totalPage = Math.round(res.count / 10);
           if (type === 'SELL') {
@@ -373,7 +487,7 @@ var allGoods = new Vue({
       });
     },
     changeLegalCurrency() {
-      const digitalCurrencyCalc =
+      var digitalCurrencyCalc =
         Number((this.legalCurrency / this.selectedAdvert.price).toFixed(4));
       this.digitalCurrency = Math.min(digitalCurrencyCalc, this.digitalCurrencyMax);
       if (digitalCurrencyCalc > this.digitalCurrencyMax) {
@@ -433,6 +547,11 @@ var allGoods = new Vue({
         this.digitalCurrencyError = true;
         return;
       }
+      if (type === 'SELL' && this.balance < this.digitalCurrencyMin) {
+        Toast.show(this.$t('balanceNotEnough'), { icon: 'error' });
+        return;
+      }
+      this.modalOrderLoading = true;
       var data = {
         advertId: this.selectedAdvert.id,
         volume: Number(this.digitalCurrency),
@@ -446,6 +565,7 @@ var allGoods = new Vue({
         payUrl = 'otc_wait_pay.html?sequence=';
       }
       post(api, data).then(function(res) {
+        that.modalOrderLoading = false;
         if (res) {
           that.modalOrder = false;
           window.location.href = payUrl + res.sequence;
@@ -550,6 +670,7 @@ var allGoods = new Vue({
             that.modalBankConfirm = true;
           }
           if (name === 'formBankConfirm') {
+            that.formBankConfirmLoading = true;
             var checkType = that.tabVerifyActive;
             post('api/bankCard', {
               id: that.formBankInfo.id,
@@ -563,6 +684,7 @@ var allGoods = new Vue({
                   ? that.formBankConfirm.google
                   : that.formBankConfirm.phone,
             }).then(function(res) {
+              that.formBankConfirmLoading = false;
               if (res) {
                 that.clearTimers();
                 that.$refs.formBankInfo.resetFields();
@@ -574,7 +696,9 @@ var allGoods = new Vue({
             });
           }
           if (name === 'formWhatsApp') {
+            that.formWhatsAppLoading = true;
             post('api/watchapp', that.selectCountry + '-' + that.formWhatsApp.number).then(function (res) {
+              that.formWhatsAppLoading = false;
               if (res) {
                 post('api/common/user_info', '', false).then(function (result) {
                   localStorage.setItem('user', JSON.stringify(result));
@@ -584,36 +708,36 @@ var allGoods = new Vue({
             });
           }
           if (name === 'formRelease') {
-                if (parseFloat(that.formRelease.price) > Math.max(that.marketPrice.exchange_rate, that.marketPrice.exchange_buy_max) * 1.5) {
-                  that.modalRelease = false;
-                  that.releaseWarning = that.$t('moreThan50Percent');
-                  that.modalReleaseWarning = true;
-                  return;
-                }
-                if (parseFloat(that.formRelease.price) < Math.min(that.marketPrice.exchange_rate, that.marketPrice.exchange_sell_min) * 0.5) {
-                  that.modalRelease = false;
-                  that.releaseWarning = that.$t('lessThan50Percent');
-                  that.modalReleaseWarning = true;
-                  return;
-                }
-                if (that.formRelease.side == 'BUY') {
-                  if (parseFloat(that.formRelease.price) > that.marketPrice.exchange_sell_max) {
-                    that.modalRelease = false;
-                    that.releaseWarning = that.$t('lessThanHighestPurchase');
-                    that.modalReleaseWarning = true;
-                    return;
-                  }
-                }
-                if (that.formRelease.side == 'SELL') {
-                  if (parseFloat(that.formRelease.price) > that.marketPrice.exchange_buy_min) {
-                    that.modalRelease = false;
-                    that.releaseWarning = that.$t('moreThanLowestPrice');
-                    that.modalReleaseWarning = true;
-                    return;
-                  }
-                }
+            if (parseFloat(that.formRelease.price) > Math.max(that.marketPrice.exchange_rate, that.marketPrice.exchange_buy_max) * 1.5) {
+              that.modalRelease = false;
+              that.releaseWarning = that.$t('moreThan50Percent');
+              that.modalReleaseWarning = true;
+              return;
+            }
+            if (parseFloat(that.formRelease.price) < Math.min(that.marketPrice.exchange_rate, that.marketPrice.exchange_sell_min) * 0.5) {
+              that.modalRelease = false;
+              that.releaseWarning = that.$t('lessThan50Percent');
+              that.modalReleaseWarning = true;
+              return;
+            }
+            if (that.formRelease.side == 'BUY') {
+              if (parseFloat(that.formRelease.price) > that.marketPrice.exchange_sell_max) {
                 that.modalRelease = false;
-                that.modalReleaseConfirm = true;
+                that.releaseWarning = that.$t('lessThanHighestPurchase');
+                that.modalReleaseWarning = true;
+                return;
+              }
+            }
+            if (that.formRelease.side == 'SELL') {
+              if (parseFloat(that.formRelease.price) > that.marketPrice.exchange_buy_min) {
+                that.modalRelease = false;
+                that.releaseWarning = that.$t('moreThanLowestPrice');
+                that.modalReleaseWarning = true;
+                return;
+              }
+            }
+            that.modalRelease = false;
+            that.modalReleaseConfirm = true;
           }
           if (name === 'formReleaseConfirm') {
             if (that.formRelease.side === 'SELL') {
@@ -627,7 +751,9 @@ var allGoods = new Vue({
             that.formRelease.checkValue = that.tabVerifyActive == 1
             ? that.formReleaseConfirm.google
             : that.formReleaseConfirm.phone;
+            that.formReleaseConfirmLoading = true;
             post('api/advert', that.formRelease).then(function(res) {
+              that.formReleaseConfirmLoading = false;
               if (res) {
                 var side = that.formRelease.side;
                 that.handleReset('formRelease');
@@ -747,11 +873,13 @@ var allGoods = new Vue({
         this.sendPlaceholderBank = this.$t('sendVerify');
       }
     },
-    legalCurrency(newVal) {
+    legalCurrency(newVal, oldVal) {
       this.legalCurrencyError = !newVal === true;
+      this.legalCurrency = newVal ? Number(newVal).toFixed(2) : oldVal;
     },
-    digitalCurrency(newVal) {
+    digitalCurrency(newVal, oldVal) {
       this.digitalCurrencyError = !newVal === true;
+      this.digitalCurrency = newVal ? Number(newVal).toFixed(4) : oldVal;
     },
     releaseTotalPrice: function(newVal, oldVal) {
       var value = Number(newVal);

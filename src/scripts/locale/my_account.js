@@ -49,6 +49,26 @@ var messages = {
     en: 'Security Settings',
     ar: 'إعدادات الأمان',
   },
+  securityWarning: {
+    zh: '账户安全提醒',
+    en: 'Account security reminder',
+    ar: 'تذكيرات أمان الحساب',
+  },
+  yourSecurityLevel: {
+    zh: '您的账户安全级别为 : ',
+    en: 'Your account security level is : ',
+    ar: 'مستوي أمان الحساب الخاص بك هو',
+  },
+  dangerous: {
+    zh: '危险。',
+    en: 'dangerous. ',
+    ar: 'الخطره',
+  },
+  upgradeLevel: {
+    zh: '请及时提升账户安全等级',
+    en: 'Please improve the security level of the account in time',
+    ar: 'الرجاء رفع مستوي أمان الحساب في الوقت المناسب',
+  },
   unsafe: {
     zh: '不安全',
     en: 'Unsafe',

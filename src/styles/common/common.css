@@ -216,6 +216,10 @@ body[dir='rtl'] .ivu-radio-group-button .ivu-radio-wrapper:last-child {
 }
 
 /* 下面是原来的样式 */
+.wrapper {
+  margin: 0 auto;
+  width: 1200px;
+}
 .flex-wrapper {
   width: 100%;
   padding-left: 40px;
@@ -225,11 +229,6 @@ body[dir='rtl'] .ivu-radio-group-button .ivu-radio-wrapper:last-child {
 input[type='number'] {
   -moz-appearance: textfield;
 }
-
-.wrapper {
-  width: 1200px;
-}
-
 /* to avoid {{}}  expression when render dom*/
 [v-cloak] {
   display: none;

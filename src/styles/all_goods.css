@@ -54,37 +54,16 @@ html[lang='ar'] .banner {
   width:68.7%;
 }
 
-.container .list-table {
-  min-height: 500px;
-  background-color: #ffffff;
+.container .list-content {
+  background-color: #fff;
 }
 
-.container .list-table table {
-  border-collapse: collapse;
-  width: 100%;
-  text-align: center;
-  background: white;
-}
-
-.container .list-table table .limit-tips {
+.container .list-content .limit-tips {
   font-size: 11px;
   font-weight: 100;
 }
 
-.container .list-table table tr {
-  height: 70px;
-}
-
-.container .list-table table tr > th:first-child {
-  width: 20%;
-}
-
-.container .list-table table tr > td,
-.container .list-table table tr > th {
-  border-bottom: 1px solid #f4f4f4;
-}
-
-.container .list-table table .avatar {
+.container .list-content .avatar {
   display: inline-block;
   color: rgba(51, 51, 51, 1);
   font-size: 11px;
@@ -97,7 +76,9 @@ html[lang='ar'] .banner {
   border-radius: 50%;
   overflow: hidden;
 }
-.container .list-table table .avatar.mine {
+.container .list-content .mine {
+  font-weight: normal;
+  color: #666666;
   background-color: #EDF4FF;
   border-color: #AEC4F2;
 }

@@ -34,121 +34,13 @@
       </Row>
       <div class="list-content">
         <div v-show="showListTag == 'BUY'">
-          <div class="list-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>{{ $t('seller') }}</th>
-                  <th>{{ $t('amount') }}</th>
-                  <th>
-                    {{ $t('limit') }}
-                    <br/>
-                    <span class="limit-tips">({{ $t('min2maxPurchase') }})</span>
-                  </th>
-                  <th>{{ $t('unitPrice') }}</th>
-                  <th>{{ $t('payment') }}</th>
-                  <th>{{ $t('operation') }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in buylist" :key="item.id">
-                  <td>
-                    <span class="avatar mr-10" :class="userInfo.id == item.userId ? 'mine' : ''">
-                      {{ userInfo.id == item.userId ? $t('mine') : $t('seller') }}
-                    </span>
-                    <span>{{ $t('saUser') }}</span>
-                  </td>
-                  <td>{{(item.volume - item.sell).toFixed(4)}} USDT</td>
-                  <td>
-                    {{item.minTrade}}--{{item.maxTrade}} SAR
-                  </td>
-                  <td class="price">{{item.price}} SAR</td>
-                  <td>{{item.paymentBanks[0].bankName}}</td>
-                  <td>
-                    <template v-if="userInfo.id == item.userId">
-                      <i-button
-                        @click="pause(item)" 
-                        :disabled="item.status === 3 || item.status === 4 || item.status === 5"
-                        type="link"
-                        size="small"
-                      >
-                        {{ item.status === 6 ? $t('start') : $t('pause') }}
-                      </i-button>
-                      <i-button
-                        @click="cancel(item)"
-                        :disabled="item.status === 4 || item.status === 5"
-                        type="link"
-                        size="small"
-                      >
-                        {{ $t('cancel') }}
-                      </i-button>
-                    </template>
-                    <i-button type="primary" size="small" @click="showModalOrder(item, 'BUY')" v-else>{{ $t('buy') }} USDT</i-button>
-                  </td>
-                </tr>
-                <tr v-if="!buylist.length"><td colspan="6">{{ $t('noData') }}</td></tr>
-              </tbody>
-            </table>
-          </div>
+          <i-table size="large" :columns="buyColumn" :data="buylist" :loading="buylistLoading"></i-table>
           <div class="page">
             <Page @on-change="getAdvertList('SELL', $event)" :total="buyTotal" :current="buyCurrentPage" size="small"></Page>
           </div>
         </div>
         <div v-show="showListTag == 'SELL'">
-          <div class="list-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>{{ $t('buyer') }}</th>
-                  <th>{{ $t('amount') }}</th>
-                  <th>
-                    {{ $t('limit') }}
-                    <br/>
-                    <span class="limit-tips">({{ $t('min2maxPurchase') }})</span>
-                  </th>
-                  <th>{{ $t('unitPrice') }}</th>
-                  <th>{{ $t('operation') }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in selllist" :key="item.id">
-                  <td>
-                    <div class="avatar mr-10" :class="userInfo.id == item.userId ? 'mine' : ''">
-                      {{ userInfo.id == item.userId ? $t('mine') : $t('buyer') }}
-                    </div>
-                    <span>{{ $t('saUser') }}</span>
-                  </td>
-                  <td>{{(item.volume - item.sell).toFixed(4)}} USDT</td>
-                  <td>
-                    {{item.minTrade}}--{{item.maxTrade}} SAR
-                  </td>
-                  <td class="price">{{item.price}} SAR</td>
-                  <td>
-                    <template v-if="userInfo.id == item.userId">
-                      <i-button
-                        @click="pause(item)"
-                        :disabled="item.status === 3 || item.status === 4 || item.status === 5"
-                        type="link"
-                        size="small"
-                      >
-                        {{ item.status === 6 ? $t('start') : $t('pause') }}
-                      </i-button>
-                      <i-button
-                        @click="cancel(item)"
-                        :disabled="item.status === 4 || item.status === 5"
-                        type="link"
-                        size="small"
-                      >
-                        {{ $t('cancel') }}
-                      </i-button>
-                    </template>
-                    <i-button type="primary" size="small" @click="showModalOrder(item, 'SELL')" v-else>{{ $t('sell') }} USDT</i-button>
-                  </td>
-                </tr>
-                <tr v-if="!selllist.length"><td colspan="5">{{ $t('noData') }}</td></tr>
-              </tbody>
-            </table>
-          </div>
+          <i-table size="large" :columns="sellColumn" :data="selllist" :loading="selllistLoading"></i-table>
           <div class="page">
             <Page @on-change="getAdvertList('BUY', $event)" :total="sellTotal" :current="sellCurrentPage" size="small"></Page>
           </div>
@@ -162,18 +54,18 @@
       <Row>
         <i-col span="6">
           <Row>
-            <i-col span="12">{{ $t('amount') }}:</i-col>
-            <i-col span="12" class="text-strong">
+            <i-col span="8">{{ $t('amount') }}:</i-col>
+            <i-col span="16" class="text-strong">
               {{ digitalCurrencyAvailable }} {{ selectedAdvert.coin }}
             </i-col>
           </Row>
           <Row v-show="showListTag === 'SELL'">
-            <i-col span="12">{{ $t('balance') }}:</i-col>
-            <i-col span="12" class="text-strong">{{ balance }}</i-col>
+            <i-col span="8">{{ $t('balance') }}:</i-col>
+            <i-col span="16" class="text-strong">{{ balance }} {{ selectedAdvert.coin }}</i-col>
           </Row>
           <Row v-show="showListTag === 'BUY'">
-            <i-col span="12">{{ $t('payment') }}:</i-col>
-            <i-col span="12" class="text-strong">{{ selectedAdvertBanks }}</i-col>
+            <i-col span="8">{{ $t('payment') }}:</i-col>
+            <i-col span="16" class="text-strong">{{ selectedAdvertBanks }}</i-col>
           </Row>
         </i-col>
         <i-col span="14">
@@ -186,7 +78,7 @@
                   v-model="legalCurrency"
                   :min="legalCurrencyMin"
                   :max="legalCurrencyMax"
-                  ref="inputNumberlegalCurrency"
+                  :step="0.01"
                   @on-focus="legalCurrencyAll = true"
                   @on-blur="legalCurrencyAll = false"
                   @on-change="changeLegalCurrency"
@@ -196,7 +88,7 @@
                   class="o-input-number-append"
                   @click="tradeAll('legalCurrency')"
                 >
-                  {{ legalCurrencyAll ? 'All' : selectedAdvert.paycoin }}
+                  {{ legalCurrencyAll ? $t('all') : selectedAdvert.paycoin }}
                 </div>
               </div>
               <span class="input-tips" :class="legalCurrencyError ? 'error' : ''">
@@ -214,7 +106,7 @@
                   v-model="digitalCurrency"
                   :min="digitalCurrencyMin"
                   :max="digitalCurrencyMax"
-                  ref="inputNumberlegalCurrency"
+                  :step="0.0001"
                   @on-focus="digitalCurrencyAll = true"
                   @on-blur="digitalCurrencyAll = false"
                   @on-change="changeDigitalCurrency"
@@ -224,7 +116,7 @@
                   class="o-input-number-append"
                   @click="tradeAll('digitalCurrency')"
                 >
-                  {{ digitalCurrencyAll ? 'All' : selectedAdvert.coin }}
+                  {{ digitalCurrencyAll ? $t('all') : selectedAdvert.coin }}
                 </div>
               </div>
               <span class="input-tips" :class="digitalCurrencyError ? 'error' : ''">
@@ -234,8 +126,13 @@
           </Row>
         </i-col>
         <i-col span="4" class="text-right">
-          <i-button type="warning" v-show="showListTag == 'BUY'" @click="confirmOrder('BUY')">{{ $t('buy') }}</i-button>
-          <i-button type="warning" v-show="showListTag == 'SELL'" @click="confirmOrder('SELL')">{{ $t('sell') }}</i-button>
+          <i-button
+            type="warning"
+            @click="confirmOrder(showListTag)"
+            :loading="modalOrderLoading"
+            >
+            {{ showListTag == 'BUY' ? $t('buy') : $t('sell') }}
+          </i-button>
         </i-col>
       </Row>
     </Modal>
@@ -251,13 +148,16 @@
         </form-item>
         <Row>
           <i-col span="8" class="text-strong">{{ $t('unitPrice') }}</i-col>
-          <i-col span="16" class="text-right">{{ $t('currentPrice') }} {{marketPrice.exchange_sell_min || marketPrice.exchange_rate }} SAR</i-col>
+          <i-col span="16" class="text-right">
+            {{ $t('currentPrice') }} {{marketPrice.exchange_sell_min || marketPrice.exchange_rate }} SAR
+          </i-col>
         </Row>
         <form-item label="" prop="price">
           <i-input
             number
             v-model="formRelease.price"
             :placeholder="$t('pricePlaceholder')"
+            @on-enter="handleSubmit('formRelease')"
           >
             <span slot="prepend">SAR</span>
           </i-input>
@@ -271,6 +171,7 @@
             number
             v-model="formRelease.volume"
             :placeholder="$t('amountPlaceholder')"
+            @on-enter="handleSubmit('formRelease')"
           >
             <span slot="prepend">USDT</span>
           </i-input>
@@ -283,6 +184,7 @@
               <i-input
                 number
                 v-model="formRelease.minTrade"
+                @on-enter="handleSubmit('formRelease')"
               >
                 <span slot="prepend">{{ $t('min') }}</span>
               </i-input>
@@ -294,6 +196,7 @@
               <i-input
                 number
                 v-model="formRelease.maxTrade"
+                @on-enter="handleSubmit('formRelease')"
               >
                 <span slot="prepend">{{ $t('max') }}</span>
               </i-input>
@@ -329,7 +232,13 @@
     </Modal>
 
     <!-- 确认挂单 -->
-    <Modal :title="$t('confirmRelease')" :mask-closable="false" v-model="modalReleaseConfirm" class="modal-notice" @on-cancel="handleReset('formReleaseConfirm')">
+    <Modal
+      :title="$t('confirmRelease')"
+      :mask-closable="false"
+      v-model="modalReleaseConfirm"
+      class="modal-notice"
+      @on-cancel="handleReset('formReleaseConfirm')"
+      >
       <div class="modal-notice-header">
         <Row>
           <i-col span="6">{{ $t('unitPrice') }}</i-col>
@@ -374,13 +283,27 @@
           <Tabs v-model="tabVerifyActive">
             <tab-pane :label="$t('googleVerification')" :name="1">
               <form-item label="" prop="google">
-                <i-input v-model="formReleaseConfirm.google" :maxlength="6" @on-change="autoSubmit($event, 'formReleaseConfirm')" :placeholder="$t('googleVerificationHolder')"></i-input>
+                <i-input
+                  v-model="formReleaseConfirm.google"
+                  :maxlength="6"
+                  @on-change="autoSubmit($event, 'formReleaseConfirm')"
+                  :placeholder="$t('googleVerificationHolder')"
+                  @on-enter="handleSubmit('formReleaseConfirm')"
+                ></i-input>
               </form-item>
             </tab-pane>
             <tab-pane :label="$t('phoneVerification')" :name="2">
               <form-item label="" prop="phone">
-                <i-input v-model="formReleaseConfirm.phone" :maxlength="6" @on-change="autoSubmit($event, 'formReleaseConfirm')" :placeholder="$t('phoneVerificationHolder')">
-                  <i-button slot="append" @click="sendMessage('Bank', 3)" :disabled="sendDisabledBank">{{ sendPlaceholderBank }}</i-button>
+                <i-input
+                  v-model="formReleaseConfirm.phone"
+                  :maxlength="6"
+                  @on-change="autoSubmit($event, 'formReleaseConfirm')"
+                  :placeholder="$t('phoneVerificationHolder')"
+                  @on-enter="handleSubmit('formReleaseConfirm')"
+                  >
+                  <i-button slot="append" @click="sendMessage('Bank', 3)" :disabled="sendDisabledBank">
+                    {{ sendPlaceholderBank }}
+                  </i-button>
                 </i-input>
               </form-item>
             </tab-pane>
@@ -389,7 +312,9 @@
       </div>
       <div slot="footer">
         <i-button type="link" @click="handleReset('formReleaseConfirm', 'modify')">{{ $t('backEdit') }}</i-button>
-        <i-button type="primary" @click="handleSubmit('formReleaseConfirm')">{{ $t('confirmRelease') }}</i-button>
+        <i-button type="primary" @click="handleSubmit('formReleaseConfirm')" :loading="formReleaseConfirmLoading">
+          {{ $t('confirmRelease') }}
+        </i-button>
       </div>
     </Modal>
 
@@ -414,23 +339,44 @@
             </i-select>
           </form-item>
           <form-item :label="$t('accountName')" prop="name">
-            <i-input v-model="formBankInfo.name" :maxlength="64" :placeholder="$t('accountNameHolder')"></i-input>
+            <i-input
+              v-model="formBankInfo.name"
+              :maxlength="64"
+              :placeholder="$t('accountNameHolder')"
+              @on-enter="handleSubmit('formBankInfo')"
+            ></i-input>
           </form-item>
           <form-item :label="$t('cardNo')" prop="cardNo">
             <Poptip trigger="focus" :content="formBankInfo.cardNo | card" class="poptip-card">
-              <i-input v-model="formBankInfo.cardNo" :maxlength="64" :placeholder="$t('cardNoHolder')"></i-input>
+              <i-input
+                v-model="formBankInfo.cardNo"
+                :maxlength="64"
+                :placeholder="$t('cardNoHolder')"
+                @on-enter="handleSubmit('formBankInfo')"
+              ></i-input>
             </Poptip>
           </form-item>
           <form-item label="iban" prop="ibanNo">
-            <i-input v-model="formBankInfo.ibanNo" :maxlength="64" :placeholder="$t('ibanNoHolder')"></i-input>
+            <i-input
+              v-model="formBankInfo.ibanNo"
+              :maxlength="64"
+              :placeholder="$t('ibanNoHolder')"
+              @on-enter="handleSubmit('formBankInfo')"
+            ></i-input>
           </form-item>
         </i-form>
         <div slot="footer">
-          <i-button type="link" @click="handleReset('formBankInfo')" style="margin-left: 8px">{{ $t('cancel') }}</i-button>
+          <i-button type="link" @click="handleReset('formBankInfo')">{{ $t('cancel') }}</i-button>
           <i-button type="primary" @click="handleSubmit('formBankInfo')">{{ $t('nextStep') }}</i-button>
         </div>
       </Modal>
-      <Modal :title="$t('confirmBind')" :mask-closable="false" class="modal-notice info" v-model="modalBankConfirm" @on-cancel="handleReset('formBankConfirm')">
+      <Modal
+        :title="$t('confirmBind')" 
+        :mask-closable="false"
+        class="modal-notice info"
+        v-model="modalBankConfirm"
+        @on-cancel="handleReset('formBankConfirm')"
+        >
         <div class="modal-notice-header">
           <Row>
             <i-col span="8" class="text-secondary">{{ $t('bankName') }}</i-col>
@@ -454,12 +400,24 @@
             <Tabs v-model="tabVerifyActive">
               <tab-pane :label="$t('googleVerification')" :name="1">
                 <form-item label="" prop="google">
-                  <i-input v-model="formBankConfirm.google" :maxlength="6" @on-change="autoSubmit($event, 'formBankConfirm')" :placeholder="$t('googleVerificationHolder')"></i-input>
+                  <i-input
+                    v-model="formBankConfirm.google"
+                    :maxlength="6"
+                    @on-change="autoSubmit($event, 'formBankConfirm')"
+                    :placeholder="$t('googleVerificationHolder')"
+                    @on-enter="handleSubmit('formReleaseConfirm')"
+                    ></i-input>
                 </form-item>
               </tab-pane>
               <tab-pane :label="$t('phoneVerification')" :name="2">
                 <form-item label="" prop="phone">
-                  <i-input v-model="formBankConfirm.phone" :maxlength="6" @on-change="autoSubmit($event, 'formBankConfirm')" :placeholder="$t('phoneVerificationHolder')">
+                  <i-input
+                    v-model="formBankConfirm.phone"
+                    :maxlength="6"
+                    @on-change="autoSubmit($event, 'formBankConfirm')"
+                    :placeholder="$t('phoneVerificationHolder')"
+                    @on-enter="handleSubmit('formReleaseConfirm')"
+                    >
                     <i-button slot="append" @click="sendMessage('Bank', 3)" :disabled="sendDisabledBank">{{ sendPlaceholderBank }}</i-button>
                   </i-input>
                 </form-item>
@@ -468,8 +426,8 @@
           </i-form>
         </div>
         <div slot="footer">
-          <i-button type="link" @click="handleReset('formBankConfirm', 'modify')" style="margin-left: 8px">{{ $t('backEdit') }}</i-button>
-          <i-button type="primary" @click="handleSubmit('formBankConfirm')">{{ $t('confirmBind') }}</i-button>
+          <i-button type="link" @click="handleReset('formBankConfirm', 'modify')">{{ $t('backEdit') }}</i-button>
+          <i-button type="primary" @click="handleSubmit('formBankConfirm')" :loading="formBankConfirmLoading">{{ $t('confirmBind') }}</i-button>
         </div>
       </Modal>
     </div>
@@ -487,6 +445,7 @@
               v-model="formWhatsApp.number"
               maxlength="30"
               :placeholder="$t('whatsAppHolder')"
+              @on-enter="handleSubmit('formWhatsApp')"
             >
               <i-select class="country-select" v-model="selectCountry" slot="prepend" filterable>
                 <i-option
@@ -505,10 +464,11 @@
         </i-form>
       </div>
       <div slot="footer">
-        <i-button type="primary" long @click="handleSubmit('formWhatsApp')">{{ $t('confirm') }}</i-button>
+        <i-button type="primary" long @click="handleSubmit('formWhatsApp')" :loading="formWhatsAppLoading">
+          {{ $t('confirm') }}
+        </i-button>
       </div>
     </Modal>
-    <!-- <acontact :show="modalWhatsApp" :isWatchupBind="userInfo.watchapp" :locale="locale"></acontact> -->
     <!-- 谷歌绑定提示 -->
     <Modal class="google-modal" v-model="modalGoogle" :mask-closable="false" footer-hide>
       <dl class="text-center">

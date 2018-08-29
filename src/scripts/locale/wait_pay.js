@@ -128,11 +128,11 @@ var messages = {
     ar: 'إذا بلغ إلغاء الطلب ثلاث مرات في نفس اليوم ، فسيتم إغلاق وظيفة الدفع',
   },
   helpTipsThird: {
-    zh: '如您24小时内未收到法币或法币金额不正确，请联系客服',
+    zh: '如您{hours}小时内未收到法币或法币金额不正确，请联系客服',
     en:
-      'If you do not receive the currency or the amount of the currency is incorrect within 24 hours, please contact customer service',
+      'If you do not receive the currency or the amount of the currency is incorrect within {hours} hours, please contact customer service',
     ar:
-      'إذا لم يتم استلام العملة أو مبلغ العملة غير صحيح خلال 24 ساعة ، يرجى الاتصال بخدمة العملاء',
+      'إذا لم يتم استلام العملة أو مبلغ العملة غير صحيح خلال {hours} ساعة ، يرجى الاتصال بخدمة العملاء',
   },
   helpTipsFourth: {
     zh: '若订单超时未处理，客服将会介入协助交易。',

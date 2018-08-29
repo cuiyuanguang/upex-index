@@ -108,6 +108,7 @@ var recharge = new Vue({
           TXid: '12312312312312312312312313123',
         },
       ],
+      rechargeDataLoading: false,
       rechargeTotalCount: '',
     };
   },
@@ -131,10 +132,12 @@ var recharge = new Vue({
     },
     getRechargeData(page) {
       var that = this;
+      that.rechargeDataLoading = true;
       post('api/record/deposit_list',{
         pageNum: page,
         coinSymbol: 'USDT',
       }, false).then(function(res) {
+        that.rechargeDataLoading = false;
         if (res) {
           that.rechargeData = res.financeList;
           that.rechargeTotalCount = res.count;

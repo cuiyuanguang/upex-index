@@ -15,40 +15,7 @@
         <div class="header">
           <h3>{{ $t('myOrder') }}</h3>
         </div>
-        <div class="body">
-          <table>
-            <thead>
-              <tr>
-                <th>{{ $t('orderNo') }}</th>
-                <th>{{ $t('tradingType') }}</th>
-                <th>{{ $t('tradingAmount') }}</th>
-                <th>{{ $t('unitPrice') }}</th>
-                <th>{{ $t('totalPrice') }}</th>
-                <th>{{ $t('time') }}</th>
-                <th>{{ $t('tradingObject') }}</th>
-                <th>{{ $t('status') }}</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in list" :key="item.sequence">
-                <td>{{item.sequence}}</td>
-                <td>{{ userInfo.id == item.buyerId ? $t('buy') : $t('sell') }}</td>
-                <td>{{item.volume}} USDT</td>
-                <td>{{item.price}} SAR</td>
-                <td>{{item.totalPrice}} SAR</td>
-                <td>{{item.ctime | date}}</td>
-                <td>{{ userInfo.id == item.buyerId ? item.seller.showNickName : item.buyer.showNickName }}</td>
-                <td :class="item.status=='3'? 'complete' :'abnormal'">{{ statusSemantics(item.status) }}</td>
-                <td>
-                  <a v-if="item.buyerId==userInfo.id" class="view" :href="'otc_pay.html?sequence='+item.sequence">{{ $t('view') }}</a>
-                  <a v-else class="view" :href="'otc_wait_pay.html?sequence='+item.sequence">{{ $t('view') }}</a>
-                </td>
-              </tr>
-              <tr v-if="!list.length"><td colspan="9">{{ $t('noData') }}</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <i-table size="large" :columns="orderColumn" :data="orderData" :loading="orderDataLoading"></i-table>
         <div class="pager">
           <Page @on-change="getMyOrder" :page-size="pageSize" :total="total" :current="current" size="small"></Page>
         </div>

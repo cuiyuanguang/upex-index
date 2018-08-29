@@ -25,18 +25,10 @@ var waitPay = new Vue({
   data: function() {
     return {
       locale: '',
-      //trigger of pay modal
       isPayDialogShow: false,
-      //trigger of pay info modal
-      //trigger of trade success
-      //step of pay
-      step: 1,
-      //left time for pay
-      leftTime: 0,
-      //pay time
-      payLimit: 0,
-      confirmLimit: 0,
-      //-----------order info-----------------//
+      leftTime: '',
+      payLimit: '',
+      confirmLimit: '',
       orderInfo: {
         advert: {},
         buyer: {
@@ -49,6 +41,35 @@ var waitPay = new Vue({
       },
       whatsAppLink: '',
     };
+  },
+  computed: {
+    payStatus: function() {
+      var statusText = '';
+      if (this.orderInfo.status == 4) {
+        statusText = 'orderCanceled';
+      }
+      if (this.orderInfo.status == 7 && !this.orderInfo.paymentTime) {
+        statusText = 'outOfTimeToPay';
+      }
+      return statusText;
+    },
+    confirmStatus: function() {
+      var statusText = '';
+      if (this.orderInfo.status == 7 && this.orderInfo.paymentTime) {
+        statusText = 'outOfTimeToConfirm';
+      }
+      return statusText;
+    },
+    currentStep: function() {
+      var step = this.orderInfo.status;
+      if (this.payStatus !== '') {
+        step = 1;
+      }
+      if (this.confirmStatus !== '') {
+        step = 2;
+      }
+      return step;
+    }
   },
   methods: {
     confirmOrder: function() {
@@ -64,7 +85,6 @@ var waitPay = new Vue({
           };
           post('api/confirmOrder', data).then(function(res) {
             if (res) {
-              that.step = 3;
               that.getOrderInfo(that.sequence);
             }
           });
@@ -79,9 +99,6 @@ var waitPay = new Vue({
       document.execCommand('copy');
       Toast.show(e.target.name + this.$t('copied'), { icon: 'ok', duration: 1500 });
     },
-    next: function() {
-      this.step += 1;
-    },
     getOrderInfo: function(sequence) {
       var that = this;
       var user = JSON.parse(localStorage.getItem('user'));
@@ -93,7 +110,6 @@ var waitPay = new Vue({
           }
           //to make sure the status of the order
           that.orderInfo = res;
-          that.step = res.status;
           that.orderInfo.bankCardLastNum =
             res.description && JSON.parse(res.description).paymentBankCard;
           //to make sure the status of the order
@@ -118,7 +134,7 @@ var waitPay = new Vue({
       var that = this;
       get('/api/rate').then(function(res) {
         that.payLimit = res.payment_limit_time;
-        that.confirmLimit = res.trade_limit_time;
+        that.confirmLimit = res.trade_limit_time / 60;
       });
     },
   },

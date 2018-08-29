@@ -60,7 +60,7 @@
           <a href="#">{{ $t('allRecords') }} <Icon type="ios-arrow-right"></Icon></a>
         </i-col>
       </Row>
-      <i-table :columns="rechargeColumn" :data="rechargeData" size="small"></i-table>
+      <i-table :columns="rechargeColumn" :data="rechargeData" size="small" :loading="rechargeDataLoading"></i-table>
       <div style="padding: 10px 0;">
         <Page class="text-center" :total="rechargeTotalCount" size="small" @on-change="rechargePageChange"></Page>
       </div>
