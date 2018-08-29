@@ -29,9 +29,10 @@ $http.interceptors.response.use(
     const locale = localStorage.getItem('locale') || 'ar';
     const result = response.data;
     if (result) {
+      var errorMessage = toastMsg[result.code] ? toastMsg[result.code][locale] : 'Error: ' + result.code;
       if (result.code != 0) {
         // 接口错误码判断
-        Toast.show(toastMsg[result.code][locale], {
+        Toast.show(errorMessage, {
           icon: 'error',
           callback: function() {
             if (result.code == 2048 || result.code == 10002) {
@@ -44,7 +45,7 @@ $http.interceptors.response.use(
         return false;
       }
       if (response.config && response.config.method === 'post' && response.config.showToast) {
-        Toast.show(toastMsg[result.code][locale], { icon: 'ok' });
+        Toast.show(errorMessage, { icon: 'ok' });
       }
       return result.data ? result.data : true;
     }

@@ -25,7 +25,13 @@
         <i-col span="16" class="list-tabs-extra">
           <div class="text-right">
             <span class="mr-10">{{ $t('notSatisfied') }} ?</span>
-            <i-button type="ghost" shape="circle" size="small" class="btn-show-release" :loading="modalReleaseLoading" @click="showModalRelease">
+            <i-button
+              type="ghost"
+              shape="circle"
+              size="small"
+              class="btn-show-release"
+              :loading="modalReleaseLoading"
+              @click="showModalRelease">
               <Icon type="plus-round" class="mr-8"></Icon>
               {{ $t('releaseAdvert') }}
             </i-button>
@@ -36,105 +42,87 @@
         <div v-show="showListTag == 'BUY'">
           <i-table size="large" :columns="buyColumn" :data="buylist" :loading="buylistLoading"></i-table>
           <div class="page">
-            <Page @on-change="getAdvertList('SELL', $event)" :total="buyTotal" :current="buyCurrentPage" size="small"></Page>
+            <Page @on-change="getAdvertList('SELL', $event)" :total="buyTotal" :current="buyCurrentPage" size="small">
+            </Page>
           </div>
         </div>
         <div v-show="showListTag == 'SELL'">
           <i-table size="large" :columns="sellColumn" :data="selllist" :loading="selllistLoading"></i-table>
           <div class="page">
-            <Page @on-change="getAdvertList('BUY', $event)" :total="sellTotal" :current="sellCurrentPage" size="small"></Page>
+            <Page @on-change="getAdvertList('BUY', $event)" :total="sellTotal" :current="sellCurrentPage" size="small">
+            </Page>
           </div>
         </div>
       </div>
     </div>
 
     <!-- 下单信息 -->
-    <Modal v-model="modalOrder" width="1200" :mask-closable="false" footer-hide class="order-modal">
+    <Modal v-model="modalOrder" width="1200" :mask-closable="false" footer-hide class="order-modal" @on-cancel="handleReset('formOrder')">
       <span class="order-modal-close" slot="close"></span>
-      <Row>
-        <i-col span="6">
-          <Row>
-            <i-col span="8">{{ $t('amount') }}:</i-col>
-            <i-col span="16" class="text-strong">
-              {{ digitalCurrencyAvailable }} {{ selectedAdvert.coin }}
-            </i-col>
-          </Row>
-          <Row v-show="showListTag === 'SELL'">
-            <i-col span="8">{{ $t('balance') }}:</i-col>
-            <i-col span="16" class="text-strong">{{ balance }} {{ selectedAdvert.coin }}</i-col>
-          </Row>
-          <Row v-show="showListTag === 'BUY'">
-            <i-col span="8">{{ $t('payment') }}:</i-col>
-            <i-col span="16" class="text-strong">{{ selectedAdvertBanks }}</i-col>
-          </Row>
-        </i-col>
-        <i-col span="14">
-          <Row>
-            <i-col span="11">
-              <div class="o-input-number append" :class="legalCurrencyError ? 'error' : ''">
-                <input-number
-                  size="large"
-                  handler-hide
-                  v-model="legalCurrency"
-                  :min="legalCurrencyMin"
-                  :max="legalCurrencyMax"
-                  :step="0.01"
-                  @on-focus="legalCurrencyAll = true"
-                  @on-blur="legalCurrencyAll = false"
-                  @on-change="changeLegalCurrency"
-                >
-                </input-number>
-                <div
-                  class="o-input-number-append"
-                  @click="tradeAll('legalCurrency')"
-                >
-                  {{ legalCurrencyAll ? $t('all') : selectedAdvert.paycoin }}
-                </div>
-              </div>
-              <span class="input-tips" :class="legalCurrencyError ? 'error' : ''">
-                {{ legalCurrencyTips }}
-              </span>
-            </i-col>
-            <i-col span="2" style="text-align: center;line-height: 32px;">
-              <Icon type="arrow-swap" size="24" color="#979797" style="margin-top: 10px;"></Icon>
-            </i-col>
-            <i-col span="11">
-              <div class="o-input-number append" :class="digitalCurrencyError ? 'error' : ''">
-                <input-number
-                  size="large"
-                  handler-hide
-                  v-model="digitalCurrency"
-                  :min="digitalCurrencyMin"
-                  :max="digitalCurrencyMax"
-                  :step="0.0001"
-                  @on-focus="digitalCurrencyAll = true"
-                  @on-blur="digitalCurrencyAll = false"
-                  @on-change="changeDigitalCurrency"
-                >
-                </input-number>
-                <div
-                  class="o-input-number-append"
-                  @click="tradeAll('digitalCurrency')"
-                >
-                  {{ digitalCurrencyAll ? $t('all') : selectedAdvert.coin }}
-                </div>
-              </div>
-              <span class="input-tips" :class="digitalCurrencyError ? 'error' : ''">
-                {{ digitalCurrencyTips }}
-              </span>
-            </i-col>
-          </Row>
-        </i-col>
-        <i-col span="4" class="text-right">
-          <i-button
-            type="warning"
-            @click="confirmOrder(showListTag)"
-            :loading="modalOrderLoading"
-            >
-            {{ showListTag == 'BUY' ? $t('buy') : $t('sell') }}
-          </i-button>
-        </i-col>
-      </Row>
+      <i-form ref="formOrder" :model="formOrder" :rules="ruleOrder" :show-message="false">
+        <Row>
+          <i-col span="6">
+            <Row>
+              <i-col span="8">{{ $t('amount') }}:</i-col>
+              <i-col span="16" class="text-strong">
+                {{ digitalCurrencyAvailable }} {{ selectedAdvert.coin }}
+              </i-col>
+            </Row>
+            <Row v-show="showListTag === 'SELL'">
+              <i-col span="8">{{ $t('balance') }}:</i-col>
+              <i-col span="16" class="text-strong">{{ balance }} {{ selectedAdvert.coin }}</i-col>
+            </Row>
+            <Row v-show="showListTag === 'BUY'">
+              <i-col span="8">{{ $t('payment') }}:</i-col>
+              <i-col span="16" class="text-strong">{{ selectedAdvertBanks }}</i-col>
+            </Row>
+          </i-col>
+          <i-col span="14">
+            <Row>
+              <i-col span="11">
+                <form-item prop="legalCurrency">
+                  <i-input
+                    size="large"
+                    type="number"
+                    v-model="formOrder.legalCurrency"
+                    @on-change="changeLegalCurrency">
+                    <div slot="append">{{ selectedAdvert.paycoin }}</div>
+                  </i-input>
+                  <span class="input-tips" :class="legalCurrencyError || legalCurrencyFormat ? 'error' : ''">
+                    {{ legalCurrencyFormat ? '格式错误' : legalCurrencyTips }}
+                  </span>
+                </form-item>
+              </i-col>
+              <i-col span="2" style="text-align: center;line-height: 32px;">
+                <Icon type="arrow-swap" size="24" color="#979797" style="margin-top: 10px;"></Icon>
+              </i-col>
+              <i-col span="11">
+                <form-item prop="digitalCurrency">
+                  <i-input
+                    size="large"
+                    type="number"
+                    v-model="formOrder.digitalCurrency"
+                    @on-change="changeDigitalCurrency">
+                    <div slot="append">{{ selectedAdvert.coin }}</div>
+                  </i-input>
+                  <span class="input-tips" :class="digitalCurrencyError || digitalCurrencyFormat ? 'error' : ''">
+                    {{ digitalCurrencyFormat ? '格式错误' : digitalCurrencyTips }}
+                  </span>
+                </form-item>
+              </i-col>
+            </Row>
+          </i-col>
+          <i-col span="4" class="text-right">
+            <i-button
+              type="warning"
+              @click="handleSubmit('formOrder')"
+              :loading="modalOrderLoading"
+              >
+              {{ showListTag == 'BUY' ? $t('buy') : $t('sell') }}
+            </i-button>
+          </i-col>
+        </Row>
+      </i-form>
     </Modal>
 
     <!-- 填写挂单信息 -->

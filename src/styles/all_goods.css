@@ -111,83 +111,14 @@ html[lang='ar'] .banner {
   height: 24px;
   background-image: url('../images/close-circle.png');
 }
-.order-modal .ivu-input {
-  border: 0;
-  border-radius: 4px;
+.order-modal .ivu-form-item {
+  margin-bottom: 0;
 }
-.order-modal .ivu-input[readonly] {
-  color: #999999;
-  background-color: #fafafa;
-}
-.order-modal .ivu-input-group {
-  position: relative;
-  border: 1px solid #dcdee2;
-  border-radius: 4px;
-}
-.order-modal .ivu-input-group.error {
-  border-color: #ff2e2e;
-}
-.order-modal .ivu-input-group-append {
-  border: 0;
-  background-color: transparent;
-  position: absolute;
-  right: 2px;
-  z-index: 2;
-  padding: 0;
-  width: 50px;
-  height: 32px;
-  line-height: 32px;
-  border-radius: 4px;
-}
+
 .order-modal .input-tips {
   display: block;
   padding-top: 5px;
   text-align: right;
-}
-.order-modal .ivu-btn-warning {
-  min-width: 140px;
-}
-.order-modal .input-tips.error {
-  color: #ff2e2e;
-}
-.o-input-number {
-  border: 1px solid #dcdee2;
-  border-radius: 4px;
-}
-.o-input-number.error {
-  border-color: #ff3300;
-}
-.o-input-number.prepend .ivu-input-number {
-  margin-left: -6px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.o-input-number.append .ivu-input-number {
-  margin-right: -6px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.o-input-number-prepend,
-.o-input-number-append {
-  display: inline-block;
-  vertical-align: top;
-  width: 50px;
-  height: 44px;
-  text-align: center;
-  line-height: 44px;
-  border: none;
-  cursor: pointer;
-}
-.o-input-number-prepend {
-  border-radius: 4px 0 0 4px;
-}
-.o-input-number-append {
-  border-radius: 0 4px 4px 0;
-}
-.o-input-number .ivu-input-number {
-  width: calc(100% - 50px);
-  height: 44px;
-  border: none;
 }
 
 body[dir='rtl'] .order-modal .ivu-modal-close {

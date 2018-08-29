@@ -72,7 +72,7 @@
                   {{orderInfo.buyer.showNickName}}
                 </i-col>
               </Row>
-              <Row>
+              <Row v-if="orderInfo.buyer.hideMobileNumber">
                 <i-col span="6">
                   <img src="../images/pay_phone.png" class="pay-image">
                   {{ $t('phone') }}
