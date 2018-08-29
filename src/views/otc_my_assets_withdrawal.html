@@ -33,7 +33,7 @@
             <div class="address-none" v-show="addressList.length === 0" @click="addressClick">
               <span class="font_family">&#xe629;</span>{{ $t('addAddress') }}
             </div>
-            <i-select v-show="addressList.length" class="address-select-wrap" @on-change="addressChange(modelAddress)"
+            <i-select v-show="addressList.length" class="address-select-wrap"  @on-change="addressChange(modelAddress)"
                       v-model="modelAddress" style="width:400px" :placeholder="$t('pleaseChoose')"
                       size="large">
               <i-option v-for="address in addressList" :value="address.address" :label="address.label + ': ' + address.address">
