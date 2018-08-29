@@ -240,9 +240,9 @@ var messages = {
     ar: 'هل تم الدفع؟',
   },
   notPayWarn: {
-    zh: '若您还没有支付，您将会受到严肃处理',
-    en: 'If you have not paid yet, your account will be closed!',
-    ar: 'إذا لم يتم الدفع بعد، سيتم إغلاق الحساب!',
+    zh: '如果没有付款，会受到封号处理！',
+    en: 'If there’s no payment , your account will be banned!',
+    ar: 'إذا لم يتم الدفع، سيتم حظر الحساب',
   },
   cancel: {
     zh: '取消',
@@ -255,19 +255,19 @@ var messages = {
     ar: 'تم الدفع',
   },
   myTransferInfo: {
-    zh: '我的支付信息',
+    zh: '我的付款信息',
     en: 'My payment information',
     ar: 'معلومات الدفع الخاصة بي',
   },
   payName: {
-    zh: '付款姓名',
-    en: 'payment name',
-    ar: 'اسم الدفع',
+    zh: '付款人姓名',
+    en: 'Buyer’s name',
+    ar: 'إسم المشتري',
   },
   lastFourNumber: {
-    zh: '支付卡号后4位',
-    en: 'Last 4 numbers of the payment card',
-    ar: 'آخر أربعة أرقام من بطاقة الدفع',
+    zh: '付款卡号后4位',
+    en: 'The last 4 numbers of the account number',
+    ar: 'آخر أربعة أرقام من رقم الحساب ',
   },
   confirm: {
     zh: '确认',

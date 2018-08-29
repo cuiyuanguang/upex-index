@@ -79,6 +79,11 @@
     en: 'The old password is incorrect',
     ar: 'كلمة السر القديم غير صحيح',
   },
+  '100112': {
+    zh: '提币数量小于最小提币限制',
+    en: 'the amount of withdrawal is less than the minimum withdrawal limit.',
+    ar: 'كمية السحب أقل من الحد الأدنى للسحب',
+  },
   '100114': {
     zh: '提币数量大于单次提币限制',
     en: 'The amount of coins is greater than the single coin limit',
@@ -416,9 +421,9 @@
     ar: 'خطأ في تحديد حد الصفقة',
   },
   '2048': {
-    zh: '签名错误',
-    en: 'Signature error',
-    ar: 'خطأ في التوقيع',
+    zh: '账户登录过期，请重新登录',
+    en: 'Account login expired, please login again.',
+    ar: 'إنتهت صلاحية الدخول للمنصة، الرجاء الدخول مرة أخرى',
   },
   '2050': {
     zh: '请填写正确的价格',
