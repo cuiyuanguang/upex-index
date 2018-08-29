@@ -36,19 +36,6 @@ var pay = new Vue({
       } else if (!reg.test(value)) {
         callback(new Error(this.$t('lengthshouldBe4')));
       } else {
-        if (this.formTransferInfo.recard !== '') {
-          // 对第二个密码框单独验证
-          this.$refs.formTransferInfo.validateField('recard');
-        }
-        callback();
-      }
-    };
-    var validateCardCheck = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error(this.$t('canNotBeEmpty')));
-      } else if (value !== this.formTransferInfo.card) {
-        callback(new Error(this.$t('twiceNotEqual')));
-      } else {
         callback();
       }
     };
@@ -61,18 +48,16 @@ var pay = new Vue({
       formTransferInfo: {
         name: '',
         card: '',
-        recard: '',
       },
       ruleTransferInfo: {
         name: [{ validator: validateEmpty, trigger: 'change' }],
         card: [{ validator: validateCard, trigger: 'change' }],
-        recard: [{ validator: validateCardCheck, trigger: 'change' }],
       },
       step: 1,
       timer: null,
-      leftTime: 0,
-      payLimit: 0,
-      confirmLimit: 0,
+      leftTime: '',
+      payLimit: '',
+      confirmLimit: '',
       orderInfo: {
         advert: {},
         buyer: {
@@ -92,7 +77,7 @@ var pay = new Vue({
         return Math.ceil(this.orderInfo.countDownTime / 1000 / 60 / 60);
       }
     },
-    payStatus: function() {
+    payStatusText: function() {
       var statusText = '';
       if (this.orderInfo.status == 4) {
         statusText = 'orderCanceled';
@@ -102,9 +87,9 @@ var pay = new Vue({
       }
       return statusText;
     },
-    confirmStatus: function() {
+    confirmStatusText: function() {
       var statusText = '';
-      if (this.orderInfo.status == 2 && !this.leftTime) {
+      if (this.orderInfo.status == 2 && this.leftTime === 0) {
         statusText = 'outOfTimeToConfirm';
       }
       if (this.orderInfo.status == 7 && this.orderInfo.paymentTime) {
@@ -112,12 +97,32 @@ var pay = new Vue({
       }
       return statusText;
     },
+    payStatus: function() {
+      var status = 'process';
+      if (this.payStatusText) {
+        status = 'error';
+      }
+      if (this.confirmStatusText || this.orderInfo.status == 2) {
+        status = 'finish';
+      }
+      return status;
+    },
+    confirmStatus: function() {
+      var status = 'process';
+      if (this.payStatusText || this.orderInfo.status < 2) {
+        status = 'wait';
+      }
+      if (this.confirmStatusText) {
+        status = 'error';
+      }
+      return status;
+    },
     currentStep: function() {
       var step = this.orderInfo.status;
-      if (this.payStatus !== '') {
+      if (this.payStatusText !== '') {
         step = 1;
       }
-      if (this.confirmStatus !== '') {
+      if (this.confirmStatusText !== '') {
         step = 2;
       }
       return step;
@@ -135,8 +140,10 @@ var pay = new Vue({
             h('span', that.$t('helpTipsFourth')),
           ]);
         },
+        loading: true,
         onOk: function () {
           post('api/cancelOrder', that.sequence).then(function (res) {
+            that.$Modal.remove();
             if (res) {
               location.href = 'otc_adverts.html';
             }
@@ -162,10 +169,10 @@ var pay = new Vue({
             sequence: that.sequence,
           };
           post('api/orderPayed', data).then(function(res) {
+            that.modalTransferInfoLoading = false;
             if (res) {
               clearInterval(that.timer);
               that.modalTransferInfo = false;
-              that.modalTransferInfoLoading = false;
               that.getOrderInfo(that.sequence);
             }
           });
@@ -174,6 +181,7 @@ var pay = new Vue({
     },
     handleReset: function(name) {
       this.$refs[name].resetFields();
+      this.modalTransferInfoLoading = false;
       this.modalTransferInfo = false;
     },
     copy: function (e) {
@@ -228,6 +236,8 @@ var pay = new Vue({
       this.locale = i;
       this.$i18n.locale = i;
     });
+  },
+  created() {
     var sequence = utils.getParam('sequence');
     this.sequence = sequence;
     this.getOrderInfo(sequence);

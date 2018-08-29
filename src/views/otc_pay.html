@@ -33,8 +33,8 @@
       <div class="pay-steps">
         <Steps :current="currentStep">
           <Step :title="$t('orderSuccess')"></Step>
-          <Step :title="$t('payAndConfirm')" :content="$t(payStatus)" :status="payStatus ? 'error' : ''"></Step>
-          <Step :title="$t('receiveAndConfirm')" :content="$t(confirmStatus)" :status="confirmStatus ? 'error' : ''"></Step>
+          <Step :title="$t('payAndConfirm')" :content="$t(payStatusText)" :status="payStatus"></Step>
+          <Step :title="$t('receiveAndConfirm')" :content="$t(confirmStatusText)" :status="confirmStatus"></Step>
           <Step :title="$t('USDTArrival')"></Step>
         </Steps>
       </div>
@@ -135,7 +135,7 @@
           4. {{ $t('helpTipsFourth') }}
         </p>
       </div>
-      <div class="pay-status" v-if="orderInfo.status > 3 || leftTime == 0">
+      <div class="pay-status" v-if="orderInfo.status > 3 || (orderInfo.status == 2 && leftTime == 0)">
         <h3>
           {{ $t('reasonForFailure') }} :
           <span v-if="orderInfo.status == 4">{{ $t('orderCanceled') }}</span>
@@ -161,7 +161,7 @@
     <!-- 确认支付信息 -->
     <Modal :title="$t('myTransferInfo')" v-model="modalTransferInfo" :mask-closable="false" @on-calcel="handleReset('formTransferInfo')">
       <i-form ref="formTransferInfo" :model="formTransferInfo" :rules="ruleTransferInfo" label-position="top">
-        <form-item :label="$t('lastFourNumber')" prop="name">
+        <form-item :label="$t('payName')" prop="name">
           <i-input maxlength="64" v-model="formTransferInfo.name" @on-enter="handleSubmit('formTransferInfo')">
           </i-input>
         </form-item>
@@ -169,16 +169,12 @@
           <i-input maxlength="4" v-model="formTransferInfo.card" @on-enter="handleSubmit('formTransferInfo')">
           </i-input>
         </form-item>
-        <form-item :label="$t('lastFourNumber')" prop="recard">
-          <i-input maxlength="4" v-model="formTransferInfo.recard" @on-enter="handleSubmit('formTransferInfo')">
-          </i-input>
-        </form-item>
       </i-form>
       <div slot="footer">
         <i-button @click="handleSubmit('formTransferInfo')" type="primary" long :loading="modalTransferInfoLoading">
           {{ $t('confirm') }}
         </i-button>
-        <p class="tips text-center"> {{ $t('transferTips') }} </p>
+        <p class="text-center text-strong" style="margin-top: 10px"> {{ $t('transferTips') }} </p>
       </div>
     </Modal>
   </div>

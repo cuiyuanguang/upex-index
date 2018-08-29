@@ -259,6 +259,11 @@ var messages = {
     en: 'My payment information',
     ar: 'معلومات الدفع الخاصة بي',
   },
+  payName: {
+    zh: '付款姓名',
+    en: 'payment name',
+    ar: 'اسم الدفع',
+  },
   lastFourNumber: {
     zh: '支付卡号后四位',
     en: 'Last four numbers of the payment card',

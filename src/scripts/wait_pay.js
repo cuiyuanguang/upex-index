@@ -43,7 +43,7 @@ var waitPay = new Vue({
     };
   },
   computed: {
-    payStatus: function() {
+    payStatusText: function() {
       var statusText = '';
       if (this.orderInfo.status == 4) {
         statusText = 'orderCanceled';
@@ -53,15 +53,35 @@ var waitPay = new Vue({
       }
       return statusText;
     },
-    confirmStatus: function() {
+    confirmStatusText: function() {
       var statusText = '';
-      if (this.orderInfo.status == 2 && !this.leftTime) {
+      if (this.orderInfo.status == 2 && this.leftTime === 0) {
         statusText = 'outOfTimeToConfirm';
       }
       if (this.orderInfo.status == 7 && this.orderInfo.paymentTime) {
         statusText = 'outOfTimeToConfirm';
       }
       return statusText;
+    },
+    payStatus: function() {
+      var status = 'process';
+      if (this.payStatusText) {
+        status = 'error';
+      }
+      if (this.confirmStatusText || this.orderInfo.status == 2) {
+        status = 'finish';
+      }
+      return status;
+    },
+    confirmStatus: function() {
+      var status = 'process';
+      if (this.payStatusText || this.orderInfo.status < 2) {
+        status = 'wait';
+      }
+      if (this.confirmStatusText) {
+        status = 'error';
+      }
+      return status;
     },
     currentStep: function() {
       var step = this.orderInfo.status;
@@ -82,11 +102,13 @@ var waitPay = new Vue({
         render: function(h) {
           return h('span', that.$t('receiveAll'));
         },
+        loading: true,
         onOk: function() {
           var data = {
             sequence: that.sequence,
           };
           post('api/confirmOrder', data).then(function(res) {
+            that.$Modal.remove();
             if (res) {
               that.getOrderInfo(that.sequence);
             }
