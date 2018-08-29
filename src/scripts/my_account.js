@@ -445,8 +445,10 @@ var account = new Vue({
         render(h) {
           return h('span', that.$t('confirmLogOut'));
         },
+        loading: true,
         onOk() {
           post('api/user/login_out', '', false).then(function(res) {
+            that.$Modal.remove();
             localStorage.removeItem('user');
             localStorage.removeItem('token');
             location.href = 'otc_adverts.html';
