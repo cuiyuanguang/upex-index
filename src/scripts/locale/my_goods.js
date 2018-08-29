@@ -24,6 +24,11 @@ var messages = {
     en: 'Amount',
     ar: 'المبلغ',
   },
+  cancelToRelease: {
+    zh: '订单余额已低于最小限额，请取消后重新发布',
+    en: 'The order balance is below the minimum limit，Please cancel and try again.',
+    ar: 'الرصيد أقل من الحد الأدنى، يرجى الإلغاء وإعادة المحاولة',
+  },
   unitPrice: {
     zh: '单价',
     en: 'Unit price',

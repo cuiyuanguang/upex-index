@@ -30,17 +30,6 @@
   min-height: 810px;
 }
 
-.pend-order .main {
-  min-height: 600px;
-}
-
-.pend-order .main th,
-.pend-order .main td {
-  padding: 0 20px;
-  text-align: center;
-  border: none;
-}
-
 .pend-order .header {
   padding: 30px;
 }
@@ -50,44 +39,15 @@
   font-size: 25px;
 }
 
-.pend-order .table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.pend-order .table thead {
-  background: rgba(244, 244, 244, 1);
-  box-shadow: 0px 1px 0px 0px rgba(241, 241, 241, 1);
-  line-height: 50px;
-}
-
-.pend-order .table tbody td {
-  line-height: 70px;
-  border-bottom: 1px solid #ebebeb;
-}
-
-.pend-order .table .ivu-avatar-large {
-  width: 36px;
-  height: 36px;
-  line-height: 36px;
-  border-radius: 18px;
-}
-
-.pend-order .table .ivu-avatar-large>* {
-  line-height: 36px;
-  text-transform: capitalize;
-}
-
-.ivu-btn-text {
-  color: #5C95EA;
-}
-
-.pend-order .table .text-primary {
-  color: #5c95ea;
-}
-
 .pend-order .pager {
   text-align: center;
   height: 70px;
   line-height: 70px;
+}
+
+.ivu-tooltip-inner {
+  background-color: #F7E7A6;
+}
+.ivu-tooltip-popper[x-placement^=top] .ivu-tooltip-arrow {
+  border-top-color: #F7E7A6;
 }

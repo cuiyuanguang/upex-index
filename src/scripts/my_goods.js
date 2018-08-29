@@ -41,12 +41,37 @@ var myGoods = new Vue({
         },
         {
           align: 'center',
+          minWidth: 80,
           renderHeader: (h) => h('span', this.$t('amount')),
           render: (h, params) => {
             var balance = (params.row.volume - params.row.sell).toFixed(4);
+            if (params.row.sell == 0) {
+              return h('span', params.row.volume + ' USDT');
+            }
             return h('p', [
-              h('span', params.row.volume + ' USDT'),
-              h('span', { 'class': balance < 30 ? 'text-warning' : '' }, ' / ' + balance + ' USDT'),
+              h('span', params.row.volume),
+              balance > 30 ?
+                h('span', { 'class': 'text-primary' }, ' / ' + balance + ' USDT') :
+                h('span', { 'class': 'text-warning' }, [
+                  h('span', ' / ' + balance + ' USDT'),
+                  h(
+                    'Tooltip',
+                    {
+                      props: { placement: 'top' },
+                    },
+                    [
+                      h('p',
+                      {
+                        slot: 'content',
+                        'class': 'text-warning',
+                        style: { 'white-space': 'normal' }
+                        },
+                        this.$t('cancelToRelease'),
+                      ),
+                      h('Icon', { props: { type: 'information-circled', size: '16' }, 'class': 'ml-10' })
+                    ]
+                  )
+                ]),
             ]);
           },
         },
