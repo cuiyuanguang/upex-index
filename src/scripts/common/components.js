@@ -872,13 +872,13 @@ var o_my_login = {
               if(res.mobileAuthenticatorStatus === 1){
                 that.$parent.$emit(
                   'isLoginNextPhone',
-                  that.selectCountry + ' ' + that.loginPhoneVal
+                  res.countryCode + ' ' + res.mobile
                 );
               }
               if(res.emailAuthenticatorStatus === 1){
                   that.$parent.$emit(
                     'isLoginNextEmail',
-                    that.loginPhoneVal
+                    res.email
                   );
               }
               that.$parent.$emit('isLoginNextStatus',{
@@ -1244,7 +1244,7 @@ var o_my_loginNext = {
           data = {
             countryCode: isLoginNextPhoneNumCountry,
             mobile: isLoginNextPhoneNumPhone,
-            operationType: '23',
+            operationType: '31',
             token: this.isLoginNextCookieNum,
           };
           post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
@@ -1255,8 +1255,8 @@ var o_my_loginNext = {
           });
         } else if (type === 'email') {
           data = {
-            // email: this.isLoginNextEmailNum,
-            operationType: '23',
+            email: this.isLoginNextEmailNum,
+            operationType: '31',
             token: this.isLoginNextCookieNum,
           };
           post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {

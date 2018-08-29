@@ -80,7 +80,7 @@ const messages = {
     ar: 'المقر الرئيسي للشركة'
   },
   sixLTwo:{
-    zh: 'Arcapita-巴林：坐标',
+    zh: '坐标：Arcapita-巴林',
     en: 'Arcapita-Bahrain: coordinates',
     ar: 'أركابيتا-البحرين: الإحداثيات'
   },
@@ -95,7 +95,7 @@ const messages = {
     ar: 'مركز التشغيل'
   },
   sixMTwo:{
-    zh: '开罗-埃及：坐标',
+    zh: '坐标：开罗-埃及',
     en: 'Cairo - Egypt: coordinates',
     ar: 'القاهرة - مصر: الإحداثيات'
   },
@@ -110,7 +110,7 @@ const messages = {
     ar: 'مركز البحث والتطوير'
   },
   sixRTwo:{
-    zh: '中关村-中国北京：坐标',
+    zh: '坐标：中关村-中国北京',
     en: 'Zhongguancun - Beijing, China: Coordinates',
     ar: 'تشونغ قوان تسون - بكين ، الصين: الإحداثيات'
   },
