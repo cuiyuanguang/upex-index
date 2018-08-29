@@ -281,6 +281,7 @@ body[dir='rtl'] .intro-four-right{
   box-shadow: 0 2px 16px 0 #2881F0
 }
 
+
 .intro-last-btn:hover{
   background: #1D5FB0;
   border: 3px solid #2C7FE4;
@@ -306,4 +307,70 @@ body[dir='rtl'] .intro-last-btn .arrow{
   background: url("../images/arrow-left.png");
   right: auto;
   left: 28px;
+}
+
+.detail-modal{
+  /*padding: 40px 0;*/
+}
+
+.detail-modal .ivu-modal-body{
+  padding: 68px 100px 50px;
+  text-align: right;
+  color: #333;
+  margin: 40px 0;
+}
+
+.detail-wrap-top{
+  padding-bottom: 60px;
+  border-bottom: 2px solid #333;
+  text-align: center;
+}
+
+.ivu-modal-mask{
+  background-color: rgba(0,0,0,.6);
+}
+
+.detail-modal .ivu-modal-footer{
+  padding: 0;
+}
+
+.detail-modal .ivu-modal{
+  height: 100%;
+}
+
+.detail-wrap-mid .detail-wrap-mid-title{
+  margin-top: 60px;
+  margin-bottom: 50px;
+  font-size: 32px;
+  text-align: center;
+}
+
+.detail-wrap-mid-1{
+  font-size: 18px;
+  line-height: 34px;
+  font-weight: bold;
+  margin-bottom: 50px;
+}
+
+.detail-wrap-mid-2{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.detail-list-title{
+  margin-top: 50px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 14px;
+  unicode-bidi: plaintext;
+}
+
+.detail-list li{
+  unicode-bidi: plaintext;
+  line-height: 26px;
+  margin-bottom: 14px;
+}
+
+.detail-list-black li{
+  color: #000;
 }

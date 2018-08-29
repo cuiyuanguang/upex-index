@@ -5,12 +5,12 @@ var messages = {
     ar: 'الأصول الخاص بي'
   },
   deposit: {
-    zh: '存款',
+    zh: '充币',
     en: 'Deposit',
     ar: 'إيداع'
   },
   withdrawal: {
-    zh: '提现',
+    zh: '提币',
     en: 'withdraw',
     ar: 'سحب'
   },
