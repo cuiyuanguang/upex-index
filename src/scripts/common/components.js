@@ -2601,14 +2601,14 @@ var o_header = {
                   <Icon type="arrow-down-b"></Icon>
                 </a>
                 <DropdownMenu slot="list">
-                  <DropdownItem name="account">
-                    <a href="otc_my_account.html">{{ $t('myAccount') }}</a>
+                  <DropdownItem name="account" @click.native="location.href='otc_my_account.html'">
+                    <a href="javascript:void(0)">{{ $t('myAccount') }}</a>
                   </DropdownItem>
-                  <DropdownItem name="account">
-                    <a href="otc_my_assets.html">{{ $t('myAssets') }}</a>
+                  <DropdownItem name="account" @click.native="location.href='otc_my_assets.html'">
+                    <a href="javascript:void(0)">{{ $t('myAssets') }}</a>
                   </DropdownItem>
-                   <DropdownItem name="logout">
-                    <a @click="loginOut">{{ $t('loginout') }}</a>
+                   <DropdownItem name="logout" @click.native="loginOut">
+                    <a href="javascript:void(0)">{{ $t('loginout') }}</a>
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
