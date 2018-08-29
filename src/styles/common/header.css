@@ -97,11 +97,6 @@ body[dir='rtl'] .loginGoogle-ul li .li-title .tip-img2{
   background-image: url(../../images/tip-img2-ar.png);
 }
 
-/*登陆注册样式*/
-body[dir='rtl'] .my-login .iview-input-countryPhone .ivu-input{
-  border-right: 1px solid #dddee1;
-}
-
 .my-login .ivu-input-group-append {
   position: absolute;
   right: 1px;
