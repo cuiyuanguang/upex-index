@@ -171,7 +171,10 @@ var myAssets = new Vue({
           title: '',
           key: 'type',
           align: 'center',
-          renderHeader: (h) => h('span', this.$t('type'))
+          renderHeader: (h) => h('span', this.$t('type')),
+          render:(h,params) => {
+            return h('span', this.$t(params.row.type))
+          }
         },
         {
           title: '',
@@ -179,18 +182,6 @@ var myAssets = new Vue({
           align: 'center',
           renderHeader: (h) => h('span', this.$t('amount'))
         },
-        // {
-        //   title: 'Operating',
-        //   type: 'expand',
-        //   render: (h, params) => {
-        //     return h(row_my_assets, {
-        //       props: {
-        //         row: params.row,
-        //       }
-        //     })
-        //   },
-        //   align: 'center'
-        // },
       ],
       data1: [],
       data2: [],
@@ -388,16 +379,6 @@ var myAssets = new Vue({
         that.data4 = res.financeList;
         that.tableLoading4 = false;
         that.data4Page = res.count;
-        for (let i = 0; i < res.financeList.length; i++) {
-          switch (res.financeList[i].type) {
-            case 'transfer_common':
-              that.$set(that.data4[i], 'type', that.$t('transferCommonType'));
-              break;
-            case 'present_coin':
-              that.$set(that.data4[i], 'type', that.$t('presentType'));
-              break;
-          }
-        }
       })
     },
     changeOtherTransfer(page) {
@@ -415,10 +396,10 @@ var myAssets = new Vue({
       this.$i18n.locale = i;
     });
 
-    this.$on('cancelGoogleModal', (i) => {
+    this.$on('cancelGoogleModal', function(i){
       this.showGoogleAuth = false;
     });
-    this.$on('toGoogleAuth', (i) => {
+    this.$on('toGoogleAuth', function(i){
       this.showGoogleAuth = false;
       this.$refs.header.$data.isRegisterGoogleShow = true;
     });
