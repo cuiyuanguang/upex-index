@@ -252,3 +252,8 @@ body[dir='rtl'] .pay .pay-action-tips .triangle{
 body[dir='rtl'] .pay .pay-status .cancel-order{
   text-align: right;
 }
+
+body[dir='rtl'] .text-mobile{
+  text-align: right;
+  unicode-bidi: plaintext;
+}

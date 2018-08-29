@@ -87,7 +87,7 @@
                   <img src="../images/pay_phone.png" class="pay-image">
                   {{ $t('phone') }}
                 </i-col>
-                <i-col span="18" class="text-strong">
+                <i-col span="18" class="text-strong text-mobile">
                   {{orderInfo.seller.hideMobileNumber}}
                 </i-col>
               </Row>
@@ -119,8 +119,8 @@
         <i-button type="link" size="large" @click="cancelPay">{{ $t('cancelOrder') }}</i-button>
       </div>
       <div class="pay-status" v-if="orderInfo.status == 2">
-        <p class="pay-notice" v-if="leftTime != 0">
-          {{ $t('sellerNotConfirmIn') }}<span class="text-success">{{ (confirmLimit / 60).toFixed(2) }}</span> {{ $t('hour') }}<br>
+        <p class="pay-notice" v-if="limitTime != 0">
+          {{ $t('sellerNotConfirmIn') }}<span class="text-success">{{ (confirmLimit / 60).toFixed(0) }}</span> {{ $t('hour') }}<br>
           {{ $t('restTime') }}<span class="text-success">{{leftTime}}</span>
         </p>
       </div>

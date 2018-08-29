@@ -199,4 +199,14 @@ var messages = {
     en: 'Transfer',
     ar: 'تحويل'
   },
+  transfer_common: {
+    zh: '转账',
+    en: 'Transfer',
+    ar: 'تحويل'
+  },
+  present_coin: {
+    zh: '赠币',
+    en: 'Gift currencies',
+    ar: 'عملات هدية'
+  }
 };
