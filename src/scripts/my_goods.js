@@ -42,17 +42,18 @@ var myGoods = new Vue({
         {
           align: 'center',
           renderHeader: (h) => h('span', this.$t('amount')),
-          render: (h, params) => h('span', (params.row.volume - params.row.sell).toFixed(4) + '/' + params.row.volume + 'USDT'),
+          render: (h, params) => h('span', (params.row.volume - params.row.sell).toFixed(4) + '/' + params.row.volume + ' USDT'),
         },
         {
           key: 'price',
           align: 'center',
           renderHeader: (h) => h('span', this.$t('unitPrice')),
+          render: (h, params) => h('span', params.row.price + ' SAR'),
         },
         {
           align: 'center',
           renderHeader: (h) => h('span', this.$t('limit')),
-          render: (h, params) => h('span', params.row.minTrade + ' - ' + params.row.maxTrade),
+          render: (h, params) => h('span', params.row.minTrade + ' - ' + params.row.maxTrade + ' SAR'),
         },
         {
           align: 'center',

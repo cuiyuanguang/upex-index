@@ -43,16 +43,19 @@ var myOrder = new Vue({
           key: 'volume',
           align: 'center',
           renderHeader: (h) => h('span', this.$t('tradingAmount')),
+          render: (h, params) => h('span', params.row.volume + ' USDT'),
         },
         {
           key: 'price',
           align: 'center',
           renderHeader: (h) => h('span', this.$t('unitPrice')),
+          render: (h, params) => h('span', params.row.price + ' SAR'),
         },
         {
           key: 'totalPrice',
           align: 'center',
           renderHeader: (h) => h('span', this.$t('totalPrice')),
+          render: (h, params) => h('span', params.row.totalPrice + ' SAR'),
         },
         {
           key: 'time',
