@@ -10,7 +10,7 @@
 <body>
   <div id="app" v-cloak>
     <o-header ref="header" style="margin-bottom: 30px"></o-header>
-    <div class="wrapper pay" v-show="orderInfo.sequence">
+    <div class="wrapper pay" v-show="orderInfo.status">
       <div class="pay-header">
         <h3 v-if="orderInfo.status == 1">
           {{ $t('payToSeller') }}
@@ -127,7 +127,7 @@
       <div class="pay-status" v-if="orderInfo.status == 3">
         <p class="pay-notice text-success">{{ $t('tradeDone') }}</p>
       </div>
-      <div class="pay-status" v-if="orderInfo.status < 3 && leftTime != 0">
+      <div class="pay-status" v-if="orderInfo.status < 3">
         <p class="pay-tips">
           1. {{ $t('helpTipsFirst') }}<br>
           2. {{ $t('helpTipsSecond') }}<br>
@@ -135,7 +135,7 @@
           4. {{ $t('helpTipsFourth') }}
         </p>
       </div>
-      <div class="pay-status" v-if="orderInfo.status > 3 || (orderInfo.status == 2 && leftTime == 0)">
+      <div class="pay-status" v-if="orderInfo.status > 3">
         <h3>
           {{ $t('reasonForFailure') }} :
           <span v-if="orderInfo.status == 4">{{ $t('orderCanceled') }}</span>

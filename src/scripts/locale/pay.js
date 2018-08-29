@@ -265,8 +265,8 @@ var messages = {
     ar: 'اسم الدفع',
   },
   lastFourNumber: {
-    zh: '支付卡号后四位',
-    en: 'Last four numbers of the payment card',
+    zh: '支付卡号后4位',
+    en: 'Last 4 numbers of the payment card',
     ar: 'آخر أربعة أرقام من بطاقة الدفع',
   },
   confirm: {
@@ -275,7 +275,7 @@ var messages = {
     ar: 'تأكيد',
   },
   transferTips: {
-    zh: '请确认银行卡信息，因填写错误造成的损失一律由您自身承担',
+    zh: '*请务必校对付款信息，因填写错误，导致的交易问题。由用户承担责任。',
     en:
       'Please confirm the bank card information, any losses caused by the mistake of filling in the information will be your responsibility',
     ar:
