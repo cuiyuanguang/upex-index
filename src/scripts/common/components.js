@@ -2457,8 +2457,8 @@ var pendingOrderItem = {
       <i-col span="3">
         <Avatar style="background:#FF2E2E;">{{ data.status < 7 ? $t('buy') : $t('expired') }}</Avatar>
       </i-col>
-      <i-col span="18">
-        <template v-if="timeStr != 0">
+      <i-col span="18" v-show="timeStr !== ''">
+        <template v-if="timeStr !== 0">
           <h4>
           {{ data.status == 1 ? $t('waitForBuyerPay') : '' }}
           {{ data.status == 2 ? $t('waitForSellerReceive') : '' }}
@@ -2469,7 +2469,7 @@ var pendingOrderItem = {
             <span class="text-error text-strong">{{ timeStr }}</span>
           </p>
         </template>
-        <template v-else>
+        <template v-if="timeStr === 0">
           <h4 class="text-error">{{ $t('orderExpired') }}</h4>
           <p>{{ $t('seekForCustomService') }}</p>
         </template>
@@ -2482,8 +2482,8 @@ var pendingOrderItem = {
       <i-col span="3">
         <Avatar style="background:#5C95EA;">{{ data.status < 7 ? $t('sell') : $t('expired') }}</Avatar>
       </i-col>
-      <i-col span="18">
-        <template v-if="timeStr != 0">
+      <i-col span="18" v-show="timeStr !== ''">
+        <template v-if="timeStr !== 0">
           <h4>
             {{ data.status == 1 ? $t('waitForBuyerPay') : '' }}
             {{ data.status == 2 ? $t('buyerHasPaid') : '' }}
@@ -2494,7 +2494,7 @@ var pendingOrderItem = {
             <span class="text-primary text-strong">{{ timeStr }}</span>
           </p>
         </template>
-        <template v-else>
+        <template v-if="timeStr === 0">
           <h4 class="text-error">{{ $t('orderExpired') }}</h4>
           <p>{{ $t('seekForCustomService') }}</p>
         </template>
@@ -2585,7 +2585,7 @@ var o_header = {
                     <img src="../images/no-pending-order.png" />
                     <p>{{ $t('noOrderForNow') }}</p>
                   </DropdownItem>
-                  <DropdownItem v-for="item in orders" :key="item.sequence">
+                  <DropdownItem v-for="item in orders" :key="item.sequence" v-if="orders.length">
                     <pending-order-item :id="userInfo.id" :data="item" :locale="locale"></pending-order-item>
                   </DropdownItem>
                 </DropdownMenu>

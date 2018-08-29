@@ -355,11 +355,11 @@ var account = new Vue({
           align: 'center',
           renderHeader: (h) => h('span', this.$t('loginPlat')),
         },
-        {
-          key: 'lgIp',
-          align: 'center',
-          renderHeader: (h) => h('span', this.$t('ipAddress')),
-        },
+        // {
+        //   key: 'lgIp',
+        //   align: 'center',
+        //   renderHeader: (h) => h('span', this.$t('ipAddress')),
+        // },
         {
           key: 'lgStatus',
           align: 'center',

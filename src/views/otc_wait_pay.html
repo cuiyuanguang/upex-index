@@ -11,7 +11,7 @@
   <div id="app" v-cloak>
     <o-header ref="header" style="margin-bottom: 30px"></o-header>
     <div class="wrapper pay" v-show="orderInfo.status">
-      <div class="pay-header">
+      <div class="pay-header" v-show="leftTime !== ''">
         <h3 v-if="orderInfo.status == 1">
           {{ $t('waitForBuyer') }}
         </h3>
@@ -114,7 +114,7 @@
             {{ $t('notReceiveAndWait') }}<br>
             {{ $t('restTime') }}: <span class="text-error"> {{ leftTime }}</span>
           </p>
-          <div class="pay-action" v-if="leftTime != 0">
+          <div class="pay-action">
             <i-button type="primary" @click="confirmOrder">{{ $t('confirm') }}</i-button>
           </div>
         </template>
@@ -127,10 +127,13 @@
         <p class="pay-notice text-success">{{ $t('tradeDone') }}</p>
       </div>
       <div class="pay-status" v-if="orderInfo.status > 3">
-        <h3>
+        <h3 v-if="leftTime === 0" class="text-error">
+          {{ $t('orderExpired') }}
+        </h3>
+        <h3 v-if="leftTime === 0" style="margin-top:20px">
           {{ $t('reasonForFailure') }} :
           <span v-if="orderInfo.status == 4">{{ $t('orderCanceled') }}</span>
-          <span v-if="orderInfo.status == 7">
+          <span v-if="orderInfo.status == 7 || orderInfo.status == 2">
             {{ orderInfo.paymentTime ? $t('outOfTimeToConfirm') : $t('outOfTimeToPay') }}
           </span>
         </h3>
