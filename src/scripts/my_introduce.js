@@ -27,7 +27,7 @@ const myIntroduce = new Vue({
       window.open('otc_adverts.html');
     },
     safeJump(){
-      window.open('https://etherscan.io/address/0x1E11294Fb95a135adC553A0B6f6c421a3C03705e');
+      window.open('https://etherscan.io/address/0x4b532bb4a4580712750fa378c80b57dd933d1486');
     }
   },
   mounted() {
