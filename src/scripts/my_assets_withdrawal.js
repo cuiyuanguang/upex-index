@@ -556,10 +556,10 @@ var myAssetsWithdrawal = new Vue({
       this.locale = i;
       this.$i18n.locale = i;
     });
-    this.$on('cancelGoogleModal', (i) => {
+    this.$on('cancelGoogleModal', function() {
       this.showGoogleAuth = false;
     });
-    this.$on('toGoogleAuth',(i) => {
+    this.$on('toGoogleAuth',function(i) {
       this.showGoogleAuth = false;
       this.$refs.header.$data.isRegisterGoogleShow = true;
     });
