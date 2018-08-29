@@ -57,12 +57,13 @@ var allGoods = new Vue({
             h('span', { 'class': 'limit-tips' }, this.$t('min2maxPurchase')),
           ]
         ),
-        render: (h, params) => h('span', params.row.minTrade + ' - ' + params.row.maxTrade),
+        render: (h, params) => h('span', params.row.minTrade + ' - ' + params.row.maxTrade + ' SAR'),
       },
       {
         key: 'price',
         align: 'center',
         renderHeader: (h) => h('span', this.$t('unitPrice')),
+        render: (h, params) => h('span', { 'class': 'text-primary' }, params.row.price + ' SAR'),
       },
       {
         key: 'payment',
@@ -358,7 +359,7 @@ var allGoods = new Vue({
       if (this.showListTag === 'BUY') {
         return Math.max(amount, Number(this.marketPrice.trade_min_volume));
       }
-      return Math.max(amount, this.digitalCurrencyAvailable, Number(this.marketPrice.trade_max_volume));
+      return Math.max(amount, this.digitalCurrencyAvailable, Number(this.marketPrice.trade_min_volume));
     },
     digitalCurrencyMax() {
       var amount = (this.selectedAdvert.maxTrade / this.selectedAdvert.price).toFixed(4);
