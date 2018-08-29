@@ -130,7 +130,10 @@ var allGoods = new Vue({
     var validateLegalCurrency = (rule, value, callback) => {
       if (value < this.legalCurrencyMin || value > this.legalCurrencyMax) {
         this.legalCurrencyError = true;
-        callback(new Error());
+        callback(new Error('大小不对'));
+      } else if (!/(^\d+$)|(^0\.\d{2})|(^[1-9]\d+\.\d{2})/g.test(Number(value))) {
+        this.legalCurrencyError = true;
+        callback(new Error('格式不对'));
       } else {
         this.legalCurrencyError = false;
         callback();
@@ -139,7 +142,10 @@ var allGoods = new Vue({
     var validateDigitalCurrency = (rule, value, callback) => {
       if (value < this.digitalCurrencyMin || value > this.digitalCurrencyMax) {
         this.digitalCurrencyError = true;
-        callback(new Error());
+        callback(new Error('大小不对'));
+      } else if (!/(^\d+$)|(^0\.\d{4})|(^[1-9]\d+\.\d{4})/g.test(Number(value))) {
+        this.legalCurrencyError = true;
+        callback(new Error('格式不对'));
       } else {
         this.digitalCurrencyError = false;
         callback();
@@ -510,6 +516,13 @@ var allGoods = new Vue({
         }
       });
     },
+    blurLegalCurrency() {
+      this.digitalCurrencyAll = false;
+      var value = Number(this.formOrder.legalCurrency);
+      if (!/(^\d+$)|(^0\.\d{2})|(^[1-9]\d+\.\d{2})/g.test(value)) {
+        this.legalCurrency = value.toFixed(2);
+      }
+    },
     changeLegalCurrency() {
       var digitalCurrencyCalc =
         Number((this.formOrder.legalCurrency / this.selectedAdvert.price).toFixed(4));
@@ -517,6 +530,13 @@ var allGoods = new Vue({
       if (digitalCurrencyCalc > this.digitalCurrencyMax) {
         this.formOrder.legalCurrency =
           Number((this.digitalCurrencyMax * this.selectedAdvert.price).toFixed(2));
+      }
+    },
+    blurDigitalCurrency() {
+      this.digitalCurrencyAll = false;
+      var value = Number(this.formOrder.digitalCurrency);
+      if (!/(^\d+$)|(^0\.\d{4})|(^[1-9]\d+\.\d{4})/g.test(value)) {
+        this.digitalCurrency = value.toFixed(4);
       }
     },
     changeDigitalCurrency() {

@@ -25,7 +25,13 @@
         <i-col span="16" class="list-tabs-extra">
           <div class="text-right">
             <span class="mr-10">{{ $t('notSatisfied') }} ?</span>
-            <i-button type="ghost" shape="circle" size="small" class="btn-show-release" :loading="modalReleaseLoading" @click="showModalRelease">
+            <i-button
+              type="ghost"
+              shape="circle"
+              size="small"
+              class="btn-show-release"
+              :loading="modalReleaseLoading"
+              @click="showModalRelease">
               <Icon type="plus-round" class="mr-8"></Icon>
               {{ $t('releaseAdvert') }}
             </i-button>
@@ -36,13 +42,15 @@
         <div v-show="showListTag == 'BUY'">
           <i-table size="large" :columns="buyColumn" :data="buylist" :loading="buylistLoading"></i-table>
           <div class="page">
-            <Page @on-change="getAdvertList('SELL', $event)" :total="buyTotal" :current="buyCurrentPage" size="small"></Page>
+            <Page @on-change="getAdvertList('SELL', $event)" :total="buyTotal" :current="buyCurrentPage" size="small">
+            </Page>
           </div>
         </div>
         <div v-show="showListTag == 'SELL'">
           <i-table size="large" :columns="sellColumn" :data="selllist" :loading="selllistLoading"></i-table>
           <div class="page">
-            <Page @on-change="getAdvertList('BUY', $event)" :total="sellTotal" :current="sellCurrentPage" size="small"></Page>
+            <Page @on-change="getAdvertList('BUY', $event)" :total="sellTotal" :current="sellCurrentPage" size="small">
+            </Page>
           </div>
         </div>
       </div>
@@ -51,7 +59,7 @@
     <!-- 下单信息 -->
     <Modal v-model="modalOrder" width="1200" :mask-closable="false" footer-hide class="order-modal">
       <span class="order-modal-close" slot="close"></span>
-      <i-form ref="formOrder" :model="formOrder" :rules="ruleOrder" :show-message="false">
+      <i-form ref="formOrder" :model="formOrder" :rules="ruleOrder" :show-message="true">
         <Row>
           <i-col span="6">
             <Row>
@@ -78,7 +86,7 @@
                     type="number"
                     v-model="formOrder.legalCurrency"
                     @on-focus="legalCurrencyAll = true"
-                    @on-blur="legalCurrencyAll = false"
+                    @on-blur="blurLegalCurrency"
                     @on-change="changeLegalCurrency">
                     <div
                       slot="append"
@@ -102,7 +110,7 @@
                     type="number"
                     v-model="formOrder.digitalCurrency"
                     @on-focus="digitalCurrencyAll = true"
-                    @on-blur="digitalCurrencyAll = false"
+                    @on-blur="blurDigitalCurrency"
                     @on-change="changeDigitalCurrency">
                     <div
                       slot="append"
