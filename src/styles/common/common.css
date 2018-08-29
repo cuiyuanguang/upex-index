@@ -36,6 +36,7 @@ html,
 body {
   font-family: 'DROIDKUFI', 'DROIDKUFIBold', 'SanFranciscoDisplay', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   min-width: 1200px;
+  -webkit-text-size-adjust: none;
 }
 
 html[lang='en'],
@@ -50,7 +51,7 @@ body[dir='rtl'] {
 
 * {
   direction: inherit;
-  unicode-bidi: embed;
+  unicode-bidi: normal;
 }
 
 body[dir='rtl'] * {
@@ -115,6 +116,14 @@ body[dir='rtl'] .text-dir-ltr {
 
 body[dir='rtl'] .ivu-radio {
   margin-left: 6px;
+}
+
+body[dir='rtl'] .ivu-table-large .ivu-table-header {
+  font-size: 12px;
+}
+
+body[dir='rtl'] .ivu-table-large .ivu-table-header .limit-tips{
+  font-size: 10px;
 }
 
 body[dir='rtl'] .ivu-radio-group-button .ivu-radio-wrapper:first-child {
