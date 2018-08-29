@@ -104,6 +104,9 @@ var pay = new Vue({
     },
     confirmStatus: function() {
       var statusText = '';
+      if (this.orderInfo.status == 2 && !this.leftTime) {
+        statusText = 'outOfTimeToConfirm';
+      }
       if (this.orderInfo.status == 7 && this.orderInfo.paymentTime) {
         statusText = 'outOfTimeToConfirm';
       }
