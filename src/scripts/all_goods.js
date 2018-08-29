@@ -57,12 +57,13 @@ var allGoods = new Vue({
             h('span', { 'class': 'limit-tips' }, this.$t('min2maxPurchase')),
           ]
         ),
-        render: (h, params) => h('span', params.row.minTrade + ' - ' + params.row.maxTrade),
+        render: (h, params) => h('span', params.row.minTrade + ' - ' + params.row.maxTrade + ' SAR'),
       },
       {
         key: 'price',
         align: 'center',
         renderHeader: (h) => h('span', this.$t('unitPrice')),
+        render: (h, params) => h('span', { 'class': 'text-primary' }, params.row.price + ' SAR')
       },
       {
         key: 'payment',
@@ -128,26 +129,30 @@ var allGoods = new Vue({
     ];
     var sellColumn = buyColumn.filter(item => item.key !== 'payment');
     var validateLegalCurrency = (rule, value, callback) => {
-      if (value < this.legalCurrencyMin || value > this.legalCurrencyMax) {
+      var valueString = String(value);
+      var index = valueString.indexOf('.');
+      var length = index === -1 ? index : valueString.substr(index).length;
+      if (length > 3 || /(^0\d+)|(\.$)|(\.0{1,}$)/.test(value)) {
+        this.legalCurrencyFormat = true;
+        callback(new Error());
+      } else if (value < Number(this.legalCurrencyMin) || value > Number(this.legalCurrencyMax)) {
         this.legalCurrencyError = true;
-        callback(new Error('大小不对'));
-      } else if (!/(^\d+$)|(^0\.\d{2})|(^[1-9]\d+\.\d{2})/g.test(Number(value))) {
-        this.legalCurrencyError = true;
-        callback(new Error('格式不对'));
+        callback(new Error());
       } else {
+        this.legalCurrencyFormat = false;
         this.legalCurrencyError = false;
         callback();
       }
     };
     var validateDigitalCurrency = (rule, value, callback) => {
-      if (value < this.digitalCurrencyMin || value > this.digitalCurrencyMax) {
-        this.digitalCurrencyError = true;
-        callback(new Error('大小不对'));
-      } else if (!/(^\d+$)|(^0\.\d{4})|(^[1-9]\d+\.\d{4})/g.test(Number(value))) {
-        this.legalCurrencyError = true;
-        callback(new Error('格式不对'));
+      var valueString = String(value);
+      var index = valueString.indexOf('.');
+      var length = index === -1 ? index : valueString.substr(index).length;
+      if (length > 5 || /(^0\d+)|(\.$)|(\.0{1,}$)/.test(value)) {
+        this.digitalCurrencyFormat = true;
+        callback(new Error());
       } else {
-        this.digitalCurrencyError = false;
+        this.digitalCurrencyFormat = false;
         callback();
       }
     };
@@ -251,8 +256,10 @@ var allGoods = new Vue({
       },
       legalCurrencyAll: false,
       legalCurrencyError: false,
+      legalCurrencyFormat: false,
       digitalCurrencyAll: false,
       digitalCurrencyError: false,
+      digitalCurrencyFormat: false,
       modalGoogle: false,
       modalWhatsApp: false,
       selectCountry: '+996',
@@ -385,17 +392,11 @@ var allGoods = new Vue({
     },
     digitalCurrencyMin() {
       var amount = Number((this.selectedAdvert.minTrade / this.selectedAdvert.price).toFixed(4));
-      if (this.showListTag === 'BUY') {
-        return Math.max(amount, Number(this.marketPrice.trade_min_volume));
-      }
-      return Math.max(amount, this.digitalCurrencyAvailable, Number(this.marketPrice.trade_min_volume));
+      return amount;
     },
     digitalCurrencyMax() {
       var amount = (this.selectedAdvert.maxTrade / this.selectedAdvert.price).toFixed(4);
-      if (this.showListTag === 'BUY') {
-        return Math.min(amount, Number(this.marketPrice.trade_max_volume));
-      }
-      return Math.min(amount, this.digitalCurrencyAvailable, Number(this.marketPrice.trade_max_volume));
+      return amount;
     },
     digitalCurrencyTips() {
       return `
@@ -516,30 +517,12 @@ var allGoods = new Vue({
         }
       });
     },
-    blurLegalCurrency() {
-      this.digitalCurrencyAll = false;
-      var value = Number(this.formOrder.legalCurrency);
-      if (!/(^\d+$)|(^0\.\d{2})|(^[1-9]\d+\.\d{2})/g.test(value)) {
-        this.legalCurrency = value.toFixed(2);
-      }
-    },
     changeLegalCurrency() {
-      var digitalCurrencyCalc =
-        Number((this.formOrder.legalCurrency / this.selectedAdvert.price).toFixed(4));
-      this.formOrder.digitalCurrency = Math.min(digitalCurrencyCalc, this.digitalCurrencyMax);
-      if (digitalCurrencyCalc > this.digitalCurrencyMax) {
-        this.formOrder.legalCurrency =
-          Number((this.digitalCurrencyMax * this.selectedAdvert.price).toFixed(2));
-      }
-    },
-    blurDigitalCurrency() {
-      this.digitalCurrencyAll = false;
-      var value = Number(this.formOrder.digitalCurrency);
-      if (!/(^\d+$)|(^0\.\d{4})|(^[1-9]\d+\.\d{4})/g.test(value)) {
-        this.digitalCurrency = value.toFixed(4);
-      }
+      if (!this.formOrder.legalCurrency || /(^0\d+)|(\.$)|(\.0{1,}$)/.test(this.formOrder.legalCurrency)) return;
+      this.formOrder.digitalCurrency = Number((this.formOrder.legalCurrency / this.selectedAdvert.price).toFixed(4));
     },
     changeDigitalCurrency() {
+      if (!this.formOrder.digitalCurrency || /(^0\d+)|(\.$)|(\.0{1,}$)/.test(this.formOrder.digitalCurrency)) return;
       this.formOrder.legalCurrency = Number((this.formOrder.digitalCurrency * this.selectedAdvert.price).toFixed(2));
     },
     tradeAll(type) {
@@ -706,11 +689,38 @@ var allGoods = new Vue({
     },
     // 新添加的绑定银行卡代码
     handleSubmit(name) {
+      if (!localStorage.getItem('user')) {
+        this.$refs.header.showLogin();
+        return;
+      }
       var that = this;
-      this.$refs[name].validate(function(valid) {
+      that.$refs[name].validate(function(valid) {
         if (valid) {
           if (name === 'formOrder') {
-
+            if (that.showListTag === 'SELL' && that.balance < that.digitalCurrencyMin) {
+              Toast.show(that.$t('balanceNotEnough'), { icon: 'error' });
+              return;
+            }
+            that.modalOrderLoading = true;
+            var data = {
+              advertId: that.selectedAdvert.id,
+              volume: Number(that.formOrder.digitalCurrency),
+              totalPrice: that.formOrder.legalCurrency,
+            };
+            var api = 'api/buyOrder';
+            var payUrl = 'otc_pay.html?sequence=';
+            if (that.showListTag === 'SELL') {
+              api = 'api/sellOrder';
+              payUrl = 'otc_wait_pay.html?sequence=';
+            }
+            post(api, data).then(function(res) {
+              that.modalOrderLoading = false;
+              if (res) {
+                that.handleReset(name);
+                that.modalOrder = false;
+                window.location.href = payUrl + res.sequence;
+              }
+            });
           }
           if (name === 'formBankInfo') {
             that.modalBankInfo = false;
@@ -755,13 +765,19 @@ var allGoods = new Vue({
             });
           }
           if (name === 'formRelease') {
-            if (parseFloat(that.formRelease.price) > Math.max(that.marketPrice.exchange_rate, that.marketPrice.exchange_buy_max) * 1.5) {
+            var more = that.marketPrice.exchange_buy_max ?
+              Math.max(that.marketPrice.exchange_rate, that.marketPrice.exchange_buy_max) :
+              that.marketPrice.exchange_rate;
+            if (parseFloat(that.formRelease.price) > more * 1.5) {
               that.modalRelease = false;
               that.releaseWarning = that.$t('moreThan50Percent');
               that.modalReleaseWarning = true;
               return;
             }
-            if (parseFloat(that.formRelease.price) < Math.min(that.marketPrice.exchange_rate, that.marketPrice.exchange_sell_min) * 0.5) {
+            var less = that.marketPrice.exchange_sell_min ?
+              Math.min(that.marketPrice.exchange_rate, that.marketPrice.exchange_sell_min) :
+              that.marketPrice.exchange_rate;
+            if (parseFloat(that.formRelease.price) < less * 0.5) {
               that.modalRelease = false;
               that.releaseWarning = that.$t('lessThan50Percent');
               that.modalReleaseWarning = true;

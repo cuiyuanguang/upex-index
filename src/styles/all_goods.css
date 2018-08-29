@@ -111,10 +111,10 @@ html[lang='ar'] .banner {
   height: 24px;
   background-image: url('../images/close-circle.png');
 }
-
-.order-modal .ivu-input-group-append {
-  cursor: pointer;
+.order-modal .ivu-form-item {
+  margin-bottom: 0;
 }
+
 .order-modal .input-tips {
   display: block;
   padding-top: 5px;

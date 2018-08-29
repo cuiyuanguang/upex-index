@@ -57,9 +57,9 @@
     </div>
 
     <!-- 下单信息 -->
-    <Modal v-model="modalOrder" width="1200" :mask-closable="false" footer-hide class="order-modal" @on-cancel="handleReset('modalOrder')">
+    <Modal v-model="modalOrder" width="1200" :mask-closable="false" footer-hide class="order-modal" @on-cancel="handleReset('formOrder')">
       <span class="order-modal-close" slot="close"></span>
-      <i-form ref="formOrder" :model="formOrder" :rules="ruleOrder" :show-message="true" label-position="top">
+      <i-form ref="formOrder" :model="formOrder" :rules="ruleOrder" :show-message="false">
         <Row>
           <i-col span="6">
             <Row>
@@ -80,103 +80,36 @@
           <i-col span="14">
             <Row>
               <i-col span="11">
-                <form-item :label="legalCurrencyTips" prop="legalCurrency">
+                <form-item prop="legalCurrency">
                   <i-input
                     size="large"
                     type="number"
                     v-model="formOrder.legalCurrency"
-                    @on-focus="legalCurrencyAll = true"
-                    @on-blur="blurLegalCurrency"
                     @on-change="changeLegalCurrency">
-                    <div
-                      slot="append"
-                      @click="tradeAll('legalCurrency')"
-                      >
-                      {{ legalCurrencyAll ? $t('all') : selectedAdvert.paycoin }}
-                    </div>
+                    <div slot="append">{{ selectedAdvert.paycoin }}</div>
                   </i-input>
-                  <!-- <span class="input-tips" :class="legalCurrencyError ? 'error' : ''">
-                    {{ legalCurrencyTips }}
-                  </span> -->
+                  <span class="input-tips" :class="legalCurrencyError || legalCurrencyFormat ? 'error' : ''">
+                    {{ legalCurrencyFormat ? '格式错误' : legalCurrencyTips }}
+                  </span>
                 </form-item>
               </i-col>
               <i-col span="2" style="text-align: center;line-height: 32px;">
                 <Icon type="arrow-swap" size="24" color="#979797" style="margin-top: 10px;"></Icon>
               </i-col>
               <i-col span="11">
-                <form-item :label="digitalCurrencyTips" prop="digitalCurrency">
+                <form-item prop="digitalCurrency">
                   <i-input
                     size="large"
                     type="number"
                     v-model="formOrder.digitalCurrency"
-                    @on-focus="digitalCurrencyAll = true"
-                    @on-blur="blurDigitalCurrency"
                     @on-change="changeDigitalCurrency">
-                    <div
-                      slot="append"
-                      @click="tradeAll('digitalCurrency')"
-                      >
-                      {{ digitalCurrencyAll ? $t('all') : selectedAdvert.paycoin }}
-                    </div>
+                    <div slot="append">{{ selectedAdvert.coin }}</div>
                   </i-input>
-                  <!-- <span class="input-tips" :class="digitalCurrencyError ? 'error' : ''">
-                    {{ digitalCurrencyTips }}
-                  </span> -->
+                  <span class="input-tips" :class="digitalCurrencyError || digitalCurrencyFormat ? 'error' : ''">
+                    {{ digitalCurrencyFormat ? '格式错误' : digitalCurrencyTips }}
+                  </span>
                 </form-item>
               </i-col>
-              <!-- <i-col span="11">
-                <div class="o-input-number append" :class="legalCurrencyError ? 'error' : ''">
-                  <input-number
-                    size="large"
-                    handler-hide
-                    v-model="legalCurrency"
-                    :min="legalCurrencyMin"
-                    :max="legalCurrencyMax"
-                    :step="0.01"
-                    @on-focus="legalCurrencyAll = true"
-                    @on-blur="legalCurrencyAll = false"
-                    @on-change="changeLegalCurrency"
-                  >
-                  </input-number>
-                  <div
-                    class="o-input-number-append"
-                    @click="tradeAll('legalCurrency')"
-                  >
-                    {{ legalCurrencyAll ? $t('all') : selectedAdvert.paycoin }}
-                  </div>
-                </div>
-                <span class="input-tips" :class="legalCurrencyError ? 'error' : ''">
-                  {{ legalCurrencyTips }}
-                </span>
-              </i-col>
-              <i-col span="2" style="text-align: center;line-height: 32px;">
-                <Icon type="arrow-swap" size="24" color="#979797" style="margin-top: 10px;"></Icon>
-              </i-col>
-              <i-col span="11">
-                <div class="o-input-number append" :class="digitalCurrencyError ? 'error' : ''">
-                  <input-number
-                    size="large"
-                    handler-hide
-                    v-model="digitalCurrency"
-                    :min="digitalCurrencyMin"
-                    :max="digitalCurrencyMax"
-                    :step="0.0001"
-                    @on-focus="digitalCurrencyAll = true"
-                    @on-blur="digitalCurrencyAll = false"
-                    @on-change="changeDigitalCurrency"
-                  >
-                  </input-number>
-                  <div
-                    class="o-input-number-append"
-                    @click="tradeAll('digitalCurrency')"
-                  >
-                    {{ digitalCurrencyAll ? $t('all') : selectedAdvert.coin }}
-                  </div>
-                </div>
-                <span class="input-tips" :class="digitalCurrencyError ? 'error' : ''">
-                  {{ digitalCurrencyTips }}
-                </span>
-              </i-col> -->
             </Row>
           </i-col>
           <i-col span="4" class="text-right">
