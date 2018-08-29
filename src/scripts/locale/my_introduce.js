@@ -81,8 +81,8 @@ const messages = {
   },
   sixLTwo:{
     zh: '坐标：Arcapita-巴林',
-    en: 'Arcapita-Bahrain: coordinates',
-    ar: 'أركابيتا-البحرين: الإحداثيات'
+    en: 'coordinates: Arcapita-Bahrain',
+    ar: 'الإحداثيات: أركابيتا-البحرين'
   },
   sixLThree: {
     zh: '负责整体中东业务',
@@ -96,8 +96,8 @@ const messages = {
   },
   sixMTwo:{
     zh: '坐标：开罗-埃及',
-    en: 'Cairo - Egypt: coordinates',
-    ar: 'القاهرة - مصر: الإحداثيات'
+    en: 'coordinates: Cairo - Egypt',
+    ar: 'الإحداثيات: القاهرة - مصر'
   },
   sixMThree: {
     zh: '入驻30名运营、客服、翻译',
@@ -110,9 +110,9 @@ const messages = {
     ar: 'مركز البحث والتطوير'
   },
   sixRTwo:{
-    zh: '坐标：中关村-中国北京',
-    en: 'Zhongguancun - Beijing, China: Coordinates',
-    ar: 'تشونغ قوان تسون - بكين ، الصين: الإحداثيات'
+    zh: '坐标: 中关村-中国北京',
+    en: 'coordinates: Zhongguancun - Beijing, China',
+    ar: 'الإحداثيات: تشونغ قوان تسون - بكين ، الصين'
   },
   sixRThree: {
     zh: '80名顶级区块链研发工程师团队',
