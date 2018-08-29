@@ -121,11 +121,6 @@ body[dir='rtl'] .my-login .iview-input-countryPhone .ivu-input{
   display: block;
 }
 
-.my-login .ivu-btn-primary {
-  background-color: #5c95ea;
-  border-color: #5C95EA;
-}
-
 .my-login .login-footer-wrap {
   text-align: center;
   padding-top: 30px;
