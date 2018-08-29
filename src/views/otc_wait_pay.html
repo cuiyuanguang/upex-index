@@ -15,7 +15,7 @@
         <h3 v-if="orderInfo.status == 1">
           {{ $t('waitForBuyer') }}
         </h3>
-        <h3 v-if="orderInfo.status == 2">
+        <h3 v-if="orderInfo.status == 2 && leftTime !== 0">
           {{ $t('buyerPaid') }}
           <span class="text-warning">{{orderInfo.totalPrice}} SAR</span>
         </h3>
@@ -26,7 +26,7 @@
         <h3 v-if="orderInfo.status == 4">
           {{ $t('orderCanceled') }}
         </h3>
-        <h3 v-if="orderInfo.status == 7" class="text-error">
+        <h3 v-if="(orderInfo.status == 7 || leftTime === 0) && orderInfo.status !== 4" class="text-error">
           {{ $t('orderExpired') }}
         </h3>
       </div>
@@ -127,7 +127,7 @@
         <p class="pay-notice text-success">{{ $t('tradeDone') }}</p>
       </div>
       <div class="pay-status" v-if="orderInfo.status > 3">
-        <h3 v-if="leftTime === 0" class="text-error">
+        <h3 v-if="leftTime === 0 && orderInfo.status !== 4" class="text-error">
           {{ $t('orderExpired') }}
         </h3>
         <h3 v-if="leftTime === 0" style="margin-top:20px">
