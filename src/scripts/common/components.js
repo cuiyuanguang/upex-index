@@ -2450,7 +2450,7 @@ var o_find_password = {
 
 var pendingOrderItem = {
   template: `
-    <Row v-if="data.buyer.id == id">
+    <Row v-if="data.buyer.id == id" @click.native="location.href='otc_pay.html?sequence='+data.sequence">
       <i-col span="3">
         <Avatar style="background:#FF2E2E;">{{ data.status < 7 ? $t('buy') : $t('expired') }}</Avatar>
       </i-col>
@@ -2472,10 +2472,10 @@ var pendingOrderItem = {
         </template>
       </i-col>
       <i-col span="3" class="text-right">
-        <a class="order-dropdown-view" :href="'otc_pay.html?sequence='+data.sequence">{{ $t('viewOrder') }}</a>
+        <span class="order-dropdown-view">{{ $t('viewOrder') }}</span>
       </i-col>
     </Row>
-    <Row v-else>
+    <Row v-else @click.native="location.href='otc_wait_pay.html?sequence='+data.sequence">
       <i-col span="3">
         <Avatar style="background:#5C95EA;">{{ data.status < 7 ? $t('sell') : $t('expired') }}</Avatar>
       </i-col>
@@ -2497,7 +2497,7 @@ var pendingOrderItem = {
         </template>
       </i-col>
       <i-col span="3" class="text-right">
-        <a class="order-dropdown-view" :href="'otc_wait_pay.html?sequence='+data.sequence">{{ $t('viewOrder') }}</a>
+        <span class="order-dropdown-view">{{ $t('viewOrder') }}</span>
       </i-col>
     </Row>
   `,
