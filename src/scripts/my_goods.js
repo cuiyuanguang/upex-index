@@ -42,7 +42,13 @@ var myGoods = new Vue({
         {
           align: 'center',
           renderHeader: (h) => h('span', this.$t('amount')),
-          render: (h, params) => h('span', (params.row.volume - params.row.sell).toFixed(4) + '/' + params.row.volume + ' USDT'),
+          render: (h, params) => {
+            var balance = (params.row.volume - params.row.sell).toFixed(4);
+            return h('p', [
+              h('span', params.row.volume + ' USDT'),
+              h('span', { 'class': balance < 30 ? 'text-warning' : '' }, ' / ' + balance + ' USDT'),
+            ]);
+          },
         },
         {
           key: 'price',
