@@ -120,7 +120,7 @@
       </div>
       <div class="pay-status" v-if="orderInfo.status == 2">
         <p class="pay-notice" v-if="limitTime != 0">
-          {{ $t('sellerNotConfirmIn') }}<span class="text-success">{{ (confirmLimit / 60).toFixed(2) }}</span> {{ $t('hour') }}<br>
+          {{ $t('sellerNotConfirmIn') }}<span class="text-success">{{ (confirmLimit / 60).toFixed(0) }}</span> {{ $t('hour') }}<br>
           {{ $t('restTime') }}<span class="text-success">{{leftTime}}</span>
         </p>
         <p class="pay-notice" v-else>
