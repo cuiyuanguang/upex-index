@@ -138,7 +138,7 @@ var waitPay = new Vue({
           that.orderInfo.bankCardLastNum =
             res.description && JSON.parse(res.description).paymentBankCard;
           //to make sure the status of the order
-          var whatsAppStr = res.seller.userExtView.watchapp;
+          var whatsAppStr = res.buyer.userExtView.watchapp;
           // that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1).replace(/\s+/g, '');
           that.whatsAppLink = whatsAppStr.replace('+','').replace('-','');
           var expiredTime = res.countDownTime + Date.now();
