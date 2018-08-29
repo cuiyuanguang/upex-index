@@ -57,9 +57,9 @@
     </div>
 
     <!-- 下单信息 -->
-    <Modal v-model="modalOrder" width="1200" :mask-closable="false" footer-hide class="order-modal">
+    <Modal v-model="modalOrder" width="1200" :mask-closable="false" footer-hide class="order-modal" @on-cancel="handleReset('modalOrder')">
       <span class="order-modal-close" slot="close"></span>
-      <i-form ref="formOrder" :model="formOrder" :rules="ruleOrder" :show-message="true">
+      <i-form ref="formOrder" :model="formOrder" :rules="ruleOrder" :show-message="true" label-position="top">
         <Row>
           <i-col span="6">
             <Row>
@@ -80,7 +80,7 @@
           <i-col span="14">
             <Row>
               <i-col span="11">
-                <form-item prop="legalCurrency">
+                <form-item :label="legalCurrencyTips" prop="legalCurrency">
                   <i-input
                     size="large"
                     type="number"
@@ -95,16 +95,16 @@
                       {{ legalCurrencyAll ? $t('all') : selectedAdvert.paycoin }}
                     </div>
                   </i-input>
-                  <span class="input-tips" :class="legalCurrencyError ? 'error' : ''">
+                  <!-- <span class="input-tips" :class="legalCurrencyError ? 'error' : ''">
                     {{ legalCurrencyTips }}
-                  </span>
+                  </span> -->
                 </form-item>
               </i-col>
               <i-col span="2" style="text-align: center;line-height: 32px;">
                 <Icon type="arrow-swap" size="24" color="#979797" style="margin-top: 10px;"></Icon>
               </i-col>
               <i-col span="11">
-                <form-item prop="digitalCurrency">
+                <form-item :label="digitalCurrencyTips" prop="digitalCurrency">
                   <i-input
                     size="large"
                     type="number"
@@ -119,9 +119,9 @@
                       {{ digitalCurrencyAll ? $t('all') : selectedAdvert.paycoin }}
                     </div>
                   </i-input>
-                  <span class="input-tips" :class="digitalCurrencyError ? 'error' : ''">
+                  <!-- <span class="input-tips" :class="digitalCurrencyError ? 'error' : ''">
                     {{ digitalCurrencyTips }}
-                  </span>
+                  </span> -->
                 </form-item>
               </i-col>
               <!-- <i-col span="11">
