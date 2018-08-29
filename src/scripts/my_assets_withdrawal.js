@@ -537,7 +537,7 @@ var myAssetsWithdrawal = new Vue({
     },
     //提现确认框
     withdrawalCancelTrue(){
-      this.withdrawalModelTrue= false;
+      this.withdrawalModelTrue = false;
     },
     getDailyRate(){
       get('api/rate').then((res) => {

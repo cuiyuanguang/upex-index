@@ -201,7 +201,8 @@ var pay = new Vue({
             }
             that.orderInfo = res;
             var whatsAppStr = res.seller.userExtView.watchapp;
-            that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1).replace(/\s+/g, '');
+            // that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1).replace(/\s+/g, '');
+            that.whatsAppLink = whatsAppStr.replace('+','').replace('-','');
             var expiredTime = res.countDownTime + Date.now();
             that.timer = setInterval(function () {
               var now = Date.now();
