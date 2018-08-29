@@ -15,7 +15,7 @@ var messages = {
     ar: 'سحب العملة'
   },
   deposit: {
-    zh: '存款',
+    zh: '充币',
     en: 'Deposit',
     ar: 'إيداع'
   },

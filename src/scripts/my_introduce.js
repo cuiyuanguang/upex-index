@@ -17,6 +17,16 @@ const myIntroduce = new Vue({
   components: {
     oHeader: o_header,
   },
+  data(){
+    return{
+      showDetail: false
+    }
+  },
+  methods: {
+    indexJump(){
+      window.open('otc_adverts.html');
+    }
+  },
   mounted() {
     const locale = localStorage.getItem('locale');
     if (locale) {

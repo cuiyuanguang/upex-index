@@ -95,12 +95,12 @@ const messages = {
     ar: 'مركز التشغيل'
   },
   sixMTwo:{
-    zh: '',
+    zh: '开罗-埃及：坐标',
     en: 'Cairo - Egypt: coordinates',
     ar: 'القاهرة - مصر: الإحداثيات'
   },
   sixMThree: {
-    zh: '开罗-埃及：坐标',
+    zh: '入驻30名运营、客服、翻译',
     en: '30 operations, customer service and translation',
     ar: '30 مشغل ، خدمة العملاء والترجمة'
   },

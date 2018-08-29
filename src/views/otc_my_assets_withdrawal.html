@@ -82,7 +82,8 @@
       </div>
     </div>
   </div>
-  <modal
+  <Modal
+    :mask-closable="false"
     v-model="addressModel"
     :title="$t('addOneAddress')"
     @on-cancel="asyncCancel"
@@ -116,8 +117,9 @@
     <div slot="footer">
       <i-button type="primary" size="large" long :loading="modal_loading" @click="addressFun">{{ $t('submit') }}</i-button>
     </div>
-  </modal>
-  <modal
+  </Modal>
+  <Modal
+    :mask-closable="false"
     v-model="withdrawalModel"
     :title="$t('confirmModalTitle')"
     @on-cancel="withdrawalCancel"
@@ -127,7 +129,7 @@
   >
     <div class="withdrawal-wrap">
       <div class="gray-left">
-        <p>{{ $t('withdrawAmount') }}</p>
+        <p>{{ $t('withdrawAmount') }} :</p>
         <p>{{ $t('fee') }} :</p>
         <p>{{ $t('realAmount') }}:</p>
       </div>
@@ -194,8 +196,9 @@
     <div slot="footer">
       <i-button type="primary" size="large" long :loading="withdrawalLoading" @click="okWithdrawal">{{ $t('submit') }}</i-button>
     </div>
-  </modal>
-  <modal
+  </Modal>
+  <Modal
+    :mask-closable="false"
     v-model="withdrawalModelTrue"
     title=""
     @on-cancel="withdrawalCancelTrue"
@@ -225,7 +228,7 @@
     <div slot="footer">
       <i-button type="primary" size="large" long :loading="withdrawalLoading" @click="withdrawalCancelTrue">{{ $t('iKnow') }}</i-button>
     </div>
-  </modal>
+  </Modal>
 </div>
 @@include('footer.html')
 <script src="../scripts/locale/my_assets_withdrawal.js?rev=@@hash"></script>

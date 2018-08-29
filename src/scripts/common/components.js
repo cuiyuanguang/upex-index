@@ -82,6 +82,11 @@ var i18nComponentsMessages = {
     en: 'Home',
     ar: 'الرئيسية',
   },
+  platIntro: {
+    zh: '平台介绍',
+    en: 'Platform introduction',
+    ar: 'مقدمة عن المنصة'
+  },
   language: {
     zh: '语言',
     en: 'Language',
@@ -1302,7 +1307,7 @@ var o_my_loginNext = {
       this.showGoogleTab = a.googleStatus ? a.googleStatus === 1 :false;
       this.showEmailTab = a.emailStatus ? a.emailStatus === 1 : false;
       this.showMobileTab = a.mobileStatus ? a.mobileStatus === 1 : false;
-      this.nextTabName = this.showGoogleTab ? 'nextGoogle' : this.showEmailTab ? 'nexEmail' : 'nextPhone';
+      this.nextTabName = this.showGoogleTab ? 'nextGoogle' : this.showEmailTab ? 'nextEmail' : 'nextPhone';
     },
     isLoginNextCookie: function (a, b) {
       this.isLoginNextCookieNum = a;
@@ -2551,6 +2556,9 @@ var o_header = {
           <ul>
             <li>
               <a href="otc_adverts.html">{{ $t('homepage') }}</a>
+            </li>
+            <li>
+              <a href="otc_my_introduce.html" target="_blank">{{ $t('platIntro') }}</a>
             </li>
           </ul>
         </i-col>
