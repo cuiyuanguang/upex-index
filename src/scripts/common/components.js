@@ -1035,7 +1035,7 @@ var o_my_loginNext = {
       @on-cancel="asyncCancel" class="my-login my-loginNext"
     >
      <Tabs @on-click="nextTabChange" v-model="nextTabName">
-        <TabPane :label="$t('googleValidate')" v-if="showGoogleTab" name="nextGoogle">     
+        <TabPane label="Google" v-if="showGoogleTab" name="nextGoogle">     
          <div v-if="showGoogleTab">
           <Input
             v-model="loginNextGoogleCode"
@@ -1247,8 +1247,8 @@ var o_my_loginNext = {
           });
         } else if (type === 'email') {
           data = {
-            email: this.isLoginNextEmailNum,
-            operationType: '4',
+            // email: this.isLoginNextEmailNum,
+            operationType: '23',
             token: this.isLoginNextCookieNum,
           };
           post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
@@ -1399,7 +1399,7 @@ var o_my_register = {
               </Option>
             </Select>
             </Input>
-             <p class="my-loginNext-error">{{phoneValErrorText}}</p>
+             <p class="my-login-error">{{phoneValErrorText}}</p>
 
           <Input
           v-model="phoneSmsCode"
@@ -1417,7 +1417,7 @@ var o_my_register = {
             {{sendSmsPhone}}
           </span>
         </Input>
-        <p class="my-loginNext-error">{{phoneSmsCodeErrorText}}</p>
+        <p class="my-login-error">{{phoneSmsCodeErrorText}}</p>
           <Input
             :class="phonePasswordError?'is-red':'is-gray'"
             v-model="phonePassword"
@@ -1668,7 +1668,7 @@ var o_my_register = {
                 that.countPhone--;
                 that.sendSmsPhone = that.countPhone + ' s';
               } else {
-                that.sendSmsPhone = 'Reacquire';
+                that.sendSmsPhone = this.$t('Reacquire');
                 that.showPhone = true;
                 clearInterval(that.timerPhone);
                 that.timerPhone = null;
@@ -1706,7 +1706,7 @@ var o_my_register = {
                 that.countEmail--;
                 that.sendSmsEmail = that.countEmail + ' s';
               } else {
-                that.sendSmsEmail = 'Reacquire';
+                that.sendSmsEmail = this.$t('Reacquire');
                 that.showEmail = true;
                 clearInterval(that.timerEmail);
                 that.timerEmail = null;
