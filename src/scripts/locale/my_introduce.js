@@ -15,9 +15,9 @@ const messages = {
     ar: 'الأصول الخاصة بك محمية من قبل المنصة'
   },
   btcOne: {
-    zh: 'Upex交易保险金 ≈ 2600 ETH',
-    en: 'Upex Transaction insurance amount≈ 2600 ETH',
-    ar: 'upex مبلغ تأمين الصفقة ≈  ETH 2600'
+    zh: 'Upex交易保险金 ≈ 5000 ETH',
+    en: 'Upex Transaction insurance amount≈ 5000 ETH',
+    ar: 'upex مبلغ تأمين الصفقة ≈  ETH 5000'
   },
   btcTwo : {
     zh: '每笔交易，由平台为您购买一份交易保险',
