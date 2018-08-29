@@ -388,6 +388,16 @@ var myAssets = new Vue({
         that.data4 = res.financeList;
         that.tableLoading4 = false;
         that.data4Page = res.count;
+        for (let i = 0; i < res.financeList.length; i++) {
+          switch (res.financeList[i].type) {
+            case 'transfer_common':
+              that.$set(that.data4[i], 'type', that.$t('transferCommonType'));
+              break;
+            case 'present_coin':
+              that.$set(that.data4[i], 'type', that.$t('presentType'));
+              break;
+          }
+        }
       })
     },
     changeOtherTransfer(page) {

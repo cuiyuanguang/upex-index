@@ -198,6 +198,5 @@ var messages = {
     zh: '转账',
     en: 'Transfer',
     ar: 'تحويل'
-  }
-
+  },
 };
