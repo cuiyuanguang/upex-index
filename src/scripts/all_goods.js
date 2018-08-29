@@ -26,6 +26,7 @@ var allGoods = new Vue({
       {
         key: 'user',
         align: 'center',
+        minWidth: 80,
         renderHeader: (h) => h('span', this.showListTag === 'BUY' ? this.$t('seller') : this.$t('buyer')),
         render: (h, params) => h(
           'div',
@@ -49,6 +50,7 @@ var allGoods = new Vue({
       {
         key: 'limit',
         align: 'center',
+        minWidth: 80,
         renderHeader: (h) => h(
           'p',
           [
@@ -79,13 +81,13 @@ var allGoods = new Vue({
               {
                 props: {
                   trigger: 'hover',
-                  placement: 'bottom-end',
+                  placement: 'bottom',
                   title: '',
                 },
                 'class': 'ml-10',
               },
               [
-                h('p', { slot: 'content', 'class': 'text-left' }, params.row.paymentBanks.map(item => h('p', item.bankName))),
+                h('p', { slot: 'content', 'class': 'text-left', style: { 'overflow': 'hidden' } }, params.row.paymentBanks.map(item => h('p', item.bankName))),
                 h('img', { attrs: { src: '../images/bank_more.png' } })
               ],
             ) : ''
