@@ -89,7 +89,7 @@
                     <div slot="append">{{ selectedAdvert.paycoin }}</div>
                   </i-input>
                   <span class="input-tips" :class="legalCurrencyError || legalCurrencyFormat ? 'error' : ''">
-                    {{ legalCurrencyFormat ? '格式错误' : legalCurrencyTips }}
+                    {{ legalCurrencyFormat ? $t('atMost2Dot') : legalCurrencyTips }}
                   </span>
                 </form-item>
               </i-col>
@@ -106,7 +106,7 @@
                     <div slot="append">{{ selectedAdvert.coin }}</div>
                   </i-input>
                   <span class="input-tips" :class="digitalCurrencyError || digitalCurrencyFormat ? 'error' : ''">
-                    {{ digitalCurrencyFormat ? '格式错误' : digitalCurrencyTips }}
+                    {{ digitalCurrencyFormat ? $t('atMost4Dot') : digitalCurrencyTips }}
                   </span>
                 </form-item>
               </i-col>

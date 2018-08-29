@@ -957,7 +957,7 @@ var allGoods = new Vue({
   },
   filters: {
     card: function(no) {
-      return no.replace(/s/g, '').replace(/(.{4})/g, "$1 ");
+      return no.replace(/\s/g, '').replace(/(.{4})/g, "$1 ");
     },
   },
 });

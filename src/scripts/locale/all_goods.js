@@ -69,6 +69,16 @@ var messages = {
     en: 'All',
     ar: 'جميع',
   },
+  atMost2Dot: {
+    zh: '最多保留两位小数',
+    en: 'Reserve a maximum of 2 decimal places',
+    ar: 'الاحتفاظ بما يصل إلى 2 منازل عشريه',
+  },
+  atMost4Dot: {
+    zh: '最多保留4位小数',
+    en: 'Reserve a maximum of 4 decimal places',
+    ar: 'الاحتفاظ بما يصل إلى 4 منازل عشريه',
+  },
   seller: {
     zh: '卖家',
     en: 'Seller',
