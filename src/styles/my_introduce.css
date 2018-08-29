@@ -159,6 +159,10 @@ body[dir='rtl'] .intro-three-left{
   margin-right: 20px;
 }
 
+.intro-four-btn-1:hover{
+  background: #1D5FB0;
+}
+
 body[dir='rtl'] .intro-four-btn-1{
   margin-right: 0;
   margin-left: 20px;
@@ -270,12 +274,16 @@ body[dir='rtl'] .intro-four-right{
   color: #fff;
   width: 280px;
   height: 70px;
-  line-height: 70px;
   font-size: 16px;
   text-align: left;
   padding-left: 40px;
   position: relative;
   box-shadow: 0 2px 16px 0 #2881F0
+}
+
+.intro-last-btn:hover{
+  background: #1D5FB0;
+  border: 3px solid #2C7FE4;
 }
 
 .intro-last-btn .arrow{
