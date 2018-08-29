@@ -103,10 +103,10 @@ var account = new Vue({
       } else if (value.length < 8 || value.length > 64) {
         callback(new Error(this.$t('eight2SixtyFour')));
       } else {
-        if (this.formPassword.passwordNew !== '') {
-          // 对第二个密码框单独验证
-          this.$refs.formPassword.validateField('passwordReNew');
-        }
+        // if (this.formPassword.passwordNew !== '') {
+        //   // 对第二个密码框单独验证
+        //   this.$refs.formPassword.validateField('passwordReNew');
+        // }
         callback();
       }
     };
@@ -173,7 +173,7 @@ var account = new Vue({
         number: '',
       },
       ruleWhatsApp: {
-        number: [{ validator: validateNumeric, trigger: 'change' }],
+        number: [{ validator: validateNumeric, trigger: 'blur' }],
       },
       formWhatsAppLoading: false,
       // 修改密码
@@ -187,12 +187,12 @@ var account = new Vue({
         phone: '',
       },
       rulePassword: {
-        password: [{ validator: validateFormat, trigger: 'change' }],
-        passwordNew: [{ validator: validatePass, trigger: 'change' }],
-        passwordReNew: [{ validator: validatePassCheck, trigger: 'change' }],
-        email: [{ validator: validateNumeric, trigger: 'change' }],
-        google: [{ name: 'formPassword', validator: validateGoogleSecurity, trigger: 'change' }],
-        phone: [{ name: 'formPassword', validator: validatePhoneSecurity, trigger: 'change' }],
+        password: [{ validator: validateFormat, trigger: 'blur' }],
+        passwordNew: [{ validator: validatePass, trigger: 'blur' }],
+        passwordReNew: [{ validator: validatePassCheck, trigger: 'blur' }],
+        email: [{ validator: validateNumeric, trigger: 'blur' }],
+        google: [{ name: 'formPassword', validator: validateGoogleSecurity, trigger: 'blur' }],
+        phone: [{ name: 'formPassword', validator: validatePhoneSecurity, trigger: 'blur' }],
       },
       formPasswordLoading: false,
       // 绑定修改谷歌验证
@@ -203,9 +203,9 @@ var account = new Vue({
         password: '',
       },
       ruleGoogle: {
-        google: [{ validator: validateNumeric, trigger: 'change' }],
-        phone: [{ validator: validateNumeric, trigger: 'change' }],
-        password: [{ validator: validateEmpty, trigger: 'change' }],
+        google: [{ validator: validateNumeric, trigger: 'blur' }],
+        phone: [{ validator: validateNumeric, trigger: 'blur' }],
+        password: [{ validator: validateEmpty, trigger: 'blur' }],
       },
       formGoogleLoading: false,
       // 绑定/修改邮箱
@@ -218,11 +218,11 @@ var account = new Vue({
         phone: '',
       },
       ruleEmail: {
-        oldEmail: [{ validator: validateOldEmailVerify, trigger: 'change' }],
-        email: [{ validator: validateEmailFormat, trigger: 'change' }],
-        verify: [{ validator: validateNumeric, trigger: 'change' }],
-        google: [{ name: 'formEmail', validator: validateGoogleSecurity, trigger: 'change' }],
-        phone: [{ name: 'formEmail', validator: validatePhoneSecurity, trigger: 'change' }],
+        oldEmail: [{ validator: validateOldEmailVerify, trigger: 'blur' }],
+        email: [{ validator: validateEmailFormat, trigger: 'blur' }],
+        verify: [{ validator: validateNumeric, trigger: 'blur' }],
+        google: [{ name: 'formEmail', validator: validateGoogleSecurity, trigger: 'blur' }],
+        phone: [{ name: 'formEmail', validator: validatePhoneSecurity, trigger: 'blur' }],
       },
       formEmailLoading: false,
       // 绑定/修改手机号
@@ -235,11 +235,11 @@ var account = new Vue({
         google: '',
       },
       rulePhone: {
-        oldVerify: [{ validator: validatePhoneSecurity, trigger: 'change' }],
-        phone: [{ validator: validateNumeric, trigger: 'change' }],
-        verify: [{ validator: validateNumeric, trigger: 'change' }],
-        email: [{ validator: validateNumeric, trigger: 'change' }],
-        google: [{ validator: validateNumeric, trigger: 'change' }],
+        oldVerify: [{ validator: validatePhoneSecurity, trigger: 'blur' }],
+        phone: [{ validator: validateNumeric, trigger: 'blur' }],
+        verify: [{ validator: validateNumeric, trigger: 'blur' }],
+        email: [{ validator: validateNumeric, trigger: 'blur' }],
+        google: [{ validator: validateNumeric, trigger: 'blur' }],
       },
       formPhoneLoading: false,
       // 添加/修改银行卡
@@ -251,10 +251,10 @@ var account = new Vue({
         ibanNo: '',
       },
       ruleBankInfo: {
-        bankName: [{ validator: validateEmpty, trigger: 'change' }],
-        name: [{ validator: validateEmpty, trigger: 'change' }],
-        cardNo: [{ validator: validateEmpty, trigger: 'change' }],
-        ibanNo: [{ validator: validateEmpty, trigger: 'change' }],
+        bankName: [{ validator: validateEmpty, trigger: 'blur' }],
+        name: [{ validator: validateEmpty, trigger: 'blur' }],
+        cardNo: [{ validator: validateEmpty, trigger: 'blur' }],
+        ibanNo: [{ validator: validateEmpty, trigger: 'blur' }],
       },
       modalBankConfirmTitle: '',
       modalBankConfirmCancel: '',
@@ -265,8 +265,8 @@ var account = new Vue({
         google: '',
       },
       ruleBankConfirm: {
-        phone: [{ name: 'formBankConfirm', validator: validatePhoneBank, trigger: 'change' }],
-        google: [{ name: 'formBankConfirm', validator: validateGoogleBank, trigger: 'change' }],
+        phone: [{ name: 'formBankConfirm', validator: validatePhoneBank, trigger: 'blur' }],
+        google: [{ name: 'formBankConfirm', validator: validateGoogleBank, trigger: 'blur' }],
       },
       formBankConfirmLoading: false,
       // 银行表格
