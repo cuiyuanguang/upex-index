@@ -2573,7 +2573,7 @@ var o_header = {
                   <a href="otc_my_order.html">{{ $t('allOrder') }}</a>
                 </Badge>
                 <DropdownMenu slot="list" class="text-left" style="width:360px;">
-                  <DropdownItem name="header">
+                  <DropdownItem name="header" @click.native="location.href='otc_my_order.html'">
                     <Row>
                       <i-col span="12">{{ $t('ongoingOrders') }}</i-col>
                       <i-col span="12" class="text-right">
