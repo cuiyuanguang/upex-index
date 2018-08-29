@@ -44,7 +44,7 @@ var allGoods = new Vue({
         key: 'amount',
         align: 'center',
         renderHeader: (h) => h('span', this.$t('amount')),
-        render: (h, params) => h('span', (params.row.volume - params.row.sell).toFixed(4) + 'USDT'),
+        render: (h, params) => h('span', (params.row.volume - params.row.sell).toFixed(4) + ' USDT'),
       },
       {
         key: 'limit',
