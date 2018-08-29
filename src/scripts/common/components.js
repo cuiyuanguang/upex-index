@@ -1555,7 +1555,7 @@ var o_my_register = {
                 localStorage.setItem('token', res);
                 that.$parent.$emit('isregisterCookie', res);
                 that.$parent.$emit('isregister', false);
-                that.$parent.$emit('isregisterGoogle', true);
+                // that.$parent.$emit('isregisterGoogle', true);
                 post('api/common/user_info', '', false).then(function (res) {
                   if (res) {
                     that.isLogined = true;
@@ -1580,7 +1580,7 @@ var o_my_register = {
                 localStorage.setItem('token', res);
                 that.$parent.$emit('isregisterCookie', res);
                 that.$parent.$emit('isregister', false);
-                that.$parent.$emit('isregisterGoogle', true);
+                // that.$parent.$emit('isregisterGoogle', true);
                 post('api/common/user_info', '', false).then(function (res) {
                   if (res) {
                     that.isLogined = true;
