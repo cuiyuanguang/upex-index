@@ -204,7 +204,8 @@ var myAssets = new Vue({
       tableLoading2: true,
       tableLoading3: true,
       tableLoading4: true,
-      BTCToSAR: ''
+      BTCToSAR: '',
+      totalBalance: ''
     }
   },
   methods: {
@@ -223,36 +224,32 @@ var myAssets = new Vue({
     },
     //获取头部数据
     getUserBalance() {
-      var that = this;
       post('api/finance/account_balance', {}, false).then((res) => {
         if (res) {
+          this.totalBalance = res.totalBalance;
           for (const i in res.allCoinMap) {
             if (i === 'BTC') {
-              that.$set(that.balance.BTC, 'total_balance', res.allCoinMap[i].total_balance)
-              that.$set(that.balance.BTC, 'lock_balance', res.allCoinMap[i].lock_balance)
-              that.$set(that.balance.BTC, 'normal_balance', res.allCoinMap[i].normal_balance)
+              this.$set(this.balance.BTC, 'total_balance', res.allCoinMap[i].total_balance)
+              this.$set(this.balance.BTC, 'lock_balance', res.allCoinMap[i].lock_balance)
+              this.$set(this.balance.BTC, 'normal_balance', res.allCoinMap[i].normal_balance)
             } else if (i === 'ETH') {
-              that.$set(that.balance.ETH, 'total_balance', res.allCoinMap[i].total_balance)
-              that.$set(that.balance.ETH, 'lock_balance', res.allCoinMap[i].lock_balance)
-              that.$set(that.balance.ETH, 'normal_balance', res.allCoinMap[i].normal_balance)
+              this.$set(this.balance.ETH, 'total_balance', res.allCoinMap[i].total_balance)
+              this.$set(this.balance.ETH, 'lock_balance', res.allCoinMap[i].lock_balance)
+              this.$set(this.balance.ETH, 'normal_balance', res.allCoinMap[i].normal_balance)
             } else if (i === 'USDT') {
-              that.$set(that.balance.USDT, 'total_balance', res.allCoinMap[i].total_balance)
-              that.$set(that.balance.USDT, 'lock_balance', res.allCoinMap[i].lock_balance)
-              that.$set(that.balance.USDT, 'normal_balance', res.allCoinMap[i].normal_balance)
+              this.$set(this.balance.USDT, 'total_balance', res.allCoinMap[i].total_balance)
+              this.$set(this.balance.USDT, 'lock_balance', res.allCoinMap[i].lock_balance)
+              this.$set(this.balance.USDT, 'normal_balance', res.allCoinMap[i].normal_balance)
             }
           }
-          that.getBTCToSAR()
+          //获取btc--sar汇率
+          post('api/common/rate', {}, false).then((res) => {
+            this.getBTCToSARLoding = true;
+            this.BTCToSAR = res.rate.BTC2SAR;
+            this.AssetFoldingBTC = (this.totalBalance / res.rate.BTC2SAR).toFixed(2);
+            this.AssetFoldingBTCText = this.totalBalance + 'BTC ≈ ' + this.AssetFoldingBTC + 'SAR';
+          })
         }
-      })
-    },
-    //获取btc--sar汇率
-    getBTCToSAR() {
-      var that = this;
-      post('api/common/rate', {}, false).then((res) => {
-        that.getBTCToSARLoding = true;
-        that.BTCToSAR = res.rate.BTC2SAR;
-        that.AssetFoldingBTC = (that.balance.BTC.total_balance / res.rate.BTC2SAR).toFixed(2);
-        that.AssetFoldingBTCText = that.balance.BTC.total_balance + 'BTC ≈ ' + that.AssetFoldingBTC + 'SAR';
       })
     },
     //全部
@@ -391,6 +388,16 @@ var myAssets = new Vue({
         that.data4 = res.financeList;
         that.tableLoading4 = false;
         that.data4Page = res.count;
+        for (let i = 0; i < res.financeList.length; i++) {
+          switch (res.financeList[i].type) {
+            case 'transfer_common':
+              that.$set(that.data4[i], 'type', that.$t('transferCommonType'));
+              break;
+            case 'present_coin':
+              that.$set(that.data4[i], 'type', that.$t('presentType'));
+              break;
+          }
+        }
       })
     },
     changeOtherTransfer(page) {

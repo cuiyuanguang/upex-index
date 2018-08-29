@@ -68,7 +68,7 @@ var i18nComponentsMessages = {
     ar: 'تسجيل الدخول',
   },
   loginout: {
-    zh: '注销',
+    zh: '退出',
     en: 'Log Out',
     ar: 'تسجيل خروج',
   },
@@ -743,6 +743,7 @@ var o_my_login = {
             :placeholder="$t('enterEmail')"
             class="iview-input"
             @on-focus="loginEmailFocus"
+            @on-enter="mySubmit"
           ></Input>
           <p class="my-login-error">{{loginEmailErrorText}}</p>
           <Input
@@ -751,6 +752,7 @@ var o_my_login = {
             type="password"
             :placeholder="$t('enterPwd')"
             class="iview-input"
+            @on-enter="mySubmit"
             @on-focus="loginEmailPasswordFocus"
           >
             <span slot="append" class="my-slot-append" :class="highLightForget ? 'text-blue' : '' " @click="runForgetPassword">{{ $t('forgetPwd') }}</span>
@@ -764,6 +766,7 @@ var o_my_login = {
             :placeholder="$t('enterPhone')"
             class="iview-input iview-input-countryPhone"
             @on-focus="loginPhoneFocus"
+            @on-enter="mySubmit"
           >
             <Select v-model="selectCountry" @on-change="loginPhoneFocus" slot="prepend" filterable style="width:86px">
               <Option
@@ -2603,6 +2606,9 @@ var o_header = {
                   </DropdownItem>
                   <DropdownItem name="account">
                     <a href="otc_my_assets.html">{{ $t('myAssets') }}</a>
+                  </DropdownItem>
+                   <DropdownItem name="logout">
+                    <a @click="loginOut">{{ $t('loginout') }}</a>
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown>

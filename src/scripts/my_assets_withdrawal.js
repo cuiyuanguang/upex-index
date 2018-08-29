@@ -224,7 +224,6 @@ var myAssetsWithdrawal = new Vue({
           this.addressListID = this.addressList[i].id
         }
       }
-      console.log(this.addressListID);
     },
     //切换第一个select
     currencyChange(val) {
@@ -239,6 +238,8 @@ var myAssetsWithdrawal = new Vue({
         this.addressList = this.currencyListETH;
         this.dailyLimit = this.dailyRateStore.open_coins_withdraw_one_day_max_eth + ' ETH';
       }
+
+      this.modelAddress = this.addressList.length > 0 ? this.addressList[0].address : '';
       this.changeCoin = val;
       this.balanceExtractable = this.balance[val].normal_balance + ' ' + val;
       let balanceLimit = this.balance[val].withdraw_min + ' ' + val;
@@ -331,6 +332,7 @@ var myAssetsWithdrawal = new Vue({
       post('api/addr/add_withdraw_addr', JSON.stringify(data), false).then((res) => {
         if (res) {
           that.asyncCancel();
+          this.modelAddress = this.WithdrawalAddress;
           this.getAddress(that.modelCurrency);
         } else {
           this.modal_loading = false;
@@ -544,8 +546,10 @@ var myAssetsWithdrawal = new Vue({
         this.getAddress('ETH');
         this.getAddress('BTC');
       })
-    }
+    },
+
   },
+
   mounted() {
     var locale = localStorage.getItem('locale');
     if (locale) {

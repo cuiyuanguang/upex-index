@@ -140,15 +140,15 @@ body[dir='rtl'] .amount-p-margin{
   padding: 0
 }
 
-.address-select-wrap .ivu-select-item-selected.ivu-select-item-focus {
+.address-select-wrap .ivu-select-item-selected  {
   background: #fff;
 }
 
-.address-select-wrap .ivu-select-item-selected.ivu-select-item-focus .my-select-address {
+.address-select-wrap .ivu-select-item-selected .my-select-address {
   color: #5C95EA !important;
 }
 
-.address-select-wrap .ivu-select-item-selected.ivu-select-item-focus .my-select-label{
+.address-select-wrap .ivu-select-item-selected .my-select-label{
   color: #5C95EA !important;
 }
 

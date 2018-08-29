@@ -35,7 +35,7 @@
       <div class="intro-four-left">
         <p class="intro-four-left-text-1">{{ $t('btcOne') }}</p>
         <p class="intro-four-left-text-2">{{ $t('btcTwo') }}</p>
-        <i-button class="intro-btn intro-four-btn-1" type="primary">{{ $t('btcBtnOne') }}</i-button>
+        <i-button class="intro-btn intro-four-btn-1" type="primary" @click="safeJump">{{ $t('btcBtnOne') }}</i-button>
         <i-button class="intro-btn intro-four-btn-2" type="ghost" @click="showDetail = true;">{{ $t('btcBtnTwo') }}
         </i-button>
       </div>

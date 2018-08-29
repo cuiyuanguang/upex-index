@@ -415,6 +415,10 @@ body[dir='rtl'] .my-login .ivu-select-dropdown{
   cursor: auto;
 }
 
+.my-login .my-slot-append,.loginNext-input .my-slot-append{
+  display: block;
+}
+
 .my-loginNext-error {
   margin: 0 0 0 50px;
   height: 30px;

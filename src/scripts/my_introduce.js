@@ -25,6 +25,9 @@ const myIntroduce = new Vue({
   methods: {
     indexJump(){
       window.open('otc_adverts.html');
+    },
+    safeJump(){
+      window.open('https://etherscan.io/address/0x1E11294Fb95a135adC553A0B6f6c421a3C03705e');
     }
   },
   mounted() {
