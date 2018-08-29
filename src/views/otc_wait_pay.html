@@ -23,7 +23,7 @@
           {{ $t('transactionSuccessful') }} - {{ $t('received') }}
           <span class="text-success">{{orderInfo.totalPrice}} SAR</span>
         </h3>
-        <h3 v-if="orderInfo.status == 4" class="text-error">
+        <h3 v-if="orderInfo.status == 4">
           {{ $t('orderCanceled') }}
         </h3>
         <h3 v-if="orderInfo.status == 7" class="text-error">
