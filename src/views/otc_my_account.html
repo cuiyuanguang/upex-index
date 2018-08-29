@@ -370,7 +370,7 @@
       </div>
     </Modal>
     <!-- 修改手机 -->
-    <Modal :title="$t('changePhone')" :mask-closable="false" v-model="modalPhone" @on-cancel="handleReset('formPhone')">
+    <Modal :title="user.isOpenMobileCheck ? $t('changePhone') : $t('bindPhone')" :mask-closable="false" v-model="modalPhone" @on-cancel="handleReset('formPhone')">
       <i-form ref="formPhone" :model="formPhone" :rules="rulePhone" label-position="top">
         <form-item prop="oldVerify" v-show="user.isOpenMobileCheck">
           <div slot="label">

@@ -354,6 +354,11 @@ var messages = {
     en: 'Please enter the email verification code',
     ar: 'يرجى إدخال رمز تحقق البريد الإلكتروني',
   },
+  bindPhone: {
+    zh: '绑定手机',
+    en: 'Bind phone',
+    ar: 'ربط الهاتف',
+  },
   changePhone: {
     zh: '修改手机',
     en: 'Change phone',
