@@ -43,7 +43,7 @@
                 </i-col>
                 <i-col span="14" class="text-strong text-dir-ltr">{{ user.watchapp ? user.watchapp : $t('unBound') }}</i-col>
                 <i-col span="4" class="text-right">
-                  <i-button type="link" size="small" @click="modifyWhatsApp">{{ user.watchapp ? $t('change') : $t('bind') }}</i-button>
+                  <i-button type="link" size="small" @click="modalWhatsApp = true">{{ user.watchapp ? $t('change') : $t('bind') }}</i-button>
                 </i-col>
               </Row>
             </dd>
@@ -166,7 +166,6 @@
       <i-form ref="formWhatsApp" :model="formWhatsApp" :rules="ruleWhatsApp" label-position="top">
         <form-item :label="'WhatsApp: ' + user.watchapp" prop="number">
           <i-input
-           
             v-model="formWhatsApp.number"
             :maxlength="30"
             :placeholder="$t('whatsAppHolder')"
@@ -231,7 +230,7 @@
             :placeholder="$t('phoneVerificationHolder')"
             @on-enter="handleSubmit('formPassword')"
             >
-            <i-button slot="append" @click="sendMessageSecurity('Password', 5)" :disabled="sendDisabledPassword">
+            <i-button slot="append" @click="sendMessageSecurity('Password', 5)" :disabled="sendDisabledPassword" :loading="sendLoadingPassword">
               {{ sendPlaceholderPassword }}
             </i-button>
           </i-input>
@@ -243,7 +242,7 @@
             :placeholder="$t('emailVerificationHolder')"
             @on-enter="handleSubmit('formPassword')"
             >
-            <i-button slot="append" @click="sendMessageSecurity('Email', 15)" :disabled="sendDisabledEmail">
+            <i-button slot="append" @click="sendMessageSecurity('Email', 15)" :disabled="sendDisabledEmail" :loading="sendLoadingEmail">
               {{ sendPlaceholderEmail }}
             </i-button>
           </i-input>
@@ -273,7 +272,7 @@
             :maxlength="6"
             :placeholder="$t('phoneVerificationHolder')"
             @on-enter="handleSubmit('formGoogle')">
-            <i-button slot="append" @click="sendMessageSecurity('Google', 30)" :disabled="sendDisabledGoogle">
+            <i-button slot="append" @click="sendMessageSecurity('Google', 30)" :disabled="sendDisabledGoogle" :loading="sendLoadingGoogle">
               {{ sendPlaceholderGoogle }}
             </i-button>
           </i-input>
@@ -316,7 +315,7 @@
             :placeholder="$t('emailVerificationHolder')"
             @on-enter="handleSubmit('formEmail')"
             >
-            <i-button slot="append" @click="sendMessageSecurity('OldEmail', 15)" :disabled="sendDisabledOldEmail">
+            <i-button slot="append" @click="sendMessageSecurity('OldEmail', 15)" :disabled="sendDisabledOldEmail" :loading="sendLoadingOldEmail">
               {{ sendPlaceholderOldEmail }}
             </i-button>
           </i-input>
@@ -336,7 +335,7 @@
             :placeholder="$t('emailVerificationHolder')"
             @on-enter="handleSubmit('formEmail')"
             >
-            <i-button slot="append" @click="sendMessageSecurity('Email', 15)" :disabled="sendDisabledEmail">
+            <i-button slot="append" @click="sendMessageSecurity('Email', 15)" :disabled="sendDisabledEmail" :loading="sendLoadingEmail">
               {{ sendPlaceholderEmail }}
             </i-button>
           </i-input>
@@ -348,7 +347,7 @@
             :placeholder="$t('phoneVerificationHolder')"
             @on-enter="handleSubmit('formEmail')"
             >
-            <i-button slot="append" @click="sendMessageSecurity('OldPhone', 4)" :disabled="sendDisabledOldPhone">
+            <i-button slot="append" @click="sendMessageSecurity('OldPhone', 4)" :disabled="sendDisabledOldPhone" :loading="sendLoadingOldPhone">
               {{ sendPlaceholderOldPhone }}
             </i-button>
           </i-input>
@@ -382,7 +381,7 @@
             :placeholder="$t('phoneVerificationHolder')"
             @on-enter="handleSubmit('formPhone')"
             >
-            <i-button slot="append" @click="sendMessageSecurity('OldPhone', 3)" :disabled="sendDisabledOldPhone">
+            <i-button slot="append" @click="sendMessageSecurity('OldPhone', 3)" :disabled="sendDisabledOldPhone" :loading="sendLoadingOldPhone">
               {{ sendPlaceholderOldPhone }}
             </i-button>
           </i-input>
@@ -415,7 +414,7 @@
             :placeholder="$t('phoneVerificationHolder')"
             @on-enter="handleSubmit('formPhone')"
             >
-            <i-button slot="append" @click="sendMessageSecurity('NewPhone', 2)" :disabled="sendDisabledNewPhone">
+            <i-button slot="append" @click="sendMessageSecurity('NewPhone', 2)" :disabled="sendDisabledNewPhone" :loading="sendLoadingNewPhone">
               {{ sendPlaceholderNewPhone }}
             </i-button>
           </i-input>
@@ -427,7 +426,7 @@
             :placeholder="$t('emailVerificationHolder')"
             @on-enter="handleSubmit('formPhone')"
             >
-            <i-button slot="append" @click="sendMessageSecurity('OldEmail', 15)" :disabled="sendDisabledOldEmail">
+            <i-button slot="append" @click="sendMessageSecurity('OldEmail', 15)" :disabled="sendDisabledOldEmail" :loading="sendLoadingOldEmail">
               {{ sendPlaceholderOldEmail }}
             </i-button>
           </i-input>
@@ -542,7 +541,7 @@
                     :placeholder="$t('phoneVerificationHolder')"
                     @on-enter="handleSubmit('formBankConfirm')"
                     >
-                    <i-button slot="append" @click="sendMessage('Bank', 3)" :disabled="sendDisabledBank">
+                    <i-button slot="append" @click="sendMessage('Bank', 3)" :disabled="sendDisabledBank" :loading="sendLoadingBank">
                       {{ sendPlaceholderBank }}
                     </i-button>
                   </i-input>

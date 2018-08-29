@@ -146,18 +146,25 @@ var account = new Vue({
       googleStatus: '',
       sendPlaceholderPassword: '',
       sendDisabledPassword: false,
+      sendLoadingPassword: false,
       sendPlaceholderGoogle: '',
       sendDisabledGoogle: false,
+      sendLoadingGoogle: false,
       sendPlaceholderOldEmail: '',
       sendDisabledOldEmail: false,
+      sendLoadingOldEmail: false,
       sendPlaceholderEmail: '',
       sendDisabledEmail: false,
+      sendLoadingEmail: false,
       sendPlaceholderOldPhone: '',
       sendDisabledOldPhone: false,
+      sendLoadingOldPhone: false,
       sendPlaceholderNewPhone: '',
       sendDisabledNewPhone: false,
+      sendLoadingNewPhone: false,
       sendPlaceholderBank: '',
       sendDisabledBank: false,
+      sendLoadingBank: false,
       timers: {},
       // 修改WhatsApp
       modalWhatsApp: false,
@@ -284,7 +291,7 @@ var account = new Vue({
           renderHeader: (h) => h('span', this.$t('cardNo')),
           render: (h, params) => h(
             'span',
-            params.row.cardNo.replace(/s/g, '').replace(/(.{4})/g, "$1 "),
+            params.row.cardNo.replace(/\s/g, '').replace(/(.{4})/g, "$1 "),
           ),
         },
         {
@@ -446,11 +453,6 @@ var account = new Vue({
           });
         },
       });
-    },
-    modifyWhatsApp() {
-      var whatsAppStr = this.user.watchapp;
-      this.formWhatsApp.number = Number(whatsAppStr.substr(whatsAppStr.indexOf('-') + 1));
-      this.modalWhatsApp = true;
     },
     modifyGoogleStatus() {
       this.modalGoogle = true;
@@ -654,6 +656,10 @@ var account = new Vue({
         Toast.show(this.$t('atMostFiveCards'), { icon: 'error' });
         return;
       }
+      if (data && this.bankData.length <= 1) {
+        Toast.show(this.$t('atLeastOneCard'), { icon: 'error' });
+        return;
+      }
       this.modalBankConfirmTitle = data ? this.$t('delete') + this.$t('bankCard') : this.$t('confirm') + this.$t('bind');
       this.modalBankConfirmCancel = data ? this.$t('cancel') : this.$t('change');
       if (!this.user.googleStatus && this.user.isOpenMobileCheck) {
@@ -707,7 +713,9 @@ var account = new Vue({
     sendMessage: function(name, type) {
       var that = this;
       that['sendDisabled' + name] = true;
+      that['sendLoading' + name] = true;
       get('api/verifycode_sms', { type: type }).then(function(res) {
+        that['sendLoading' + name] = false;
         if (res) {
           that.countDown(name);
         } else {
@@ -720,22 +728,23 @@ var account = new Vue({
       if (name === 'NewPhone' && !this.formPhone.phone) return;
       var that = this;
       that['sendDisabled' + name] = true;
+      that['sendLoading' + name] = true;
       var api = 'api/common/smsValidCode';
       if (name.indexOf('Email') !== -1) {
         api = 'api/common/emailValidCode';
       }
-      post(
-        api,
-        {
-          email: that.formEmail.email || '',
-          countryCode: that.selectCountry || '',
-          mobile: that.formPhone.phone || '',
-          operationType: type,
-        },
-        false
-      ).then(function(res) {
+      var data = {
+        email: that.formEmail.email || '',
+        countryCode: that.selectCountry || '',
+        mobile: that.formPhone.phone || '',
+        operationType: type,
+      };
+      post(api, data, false).then(function(res) {
+        that['sendLoading' + name] = false;
         if (res) {
           that.countDown(name);
+        } else {
+          that['sendDisabled' + name] = false;
         }
       });
     },
@@ -799,7 +808,7 @@ var account = new Vue({
   },
   filters: {
     card: function(no) {
-      return no.replace(/s/g, '').replace(/(.{4})/g, "$1 ");
+      return no.replace(/\s/g, '').replace(/(.{4})/g, "$1 ");
     },
   },
 });

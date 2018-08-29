@@ -144,6 +144,11 @@ var messages = {
     en: 'Add bank card',
     ar: 'إضافة بطاقة بنك',
   },
+  atLeastOneCard: {
+    zh: '最少保留1张银行卡',
+    en: 'Keep at least 1 bank card',
+    ar: 'الحد الأدنى 1 بطاقات مصرفيه محتفظ بها',
+  },
   atMostFiveCards: {
     zh: '最多添加5张银行卡',
     en: 'Add up to 5 bank cards',
