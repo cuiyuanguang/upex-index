@@ -92,7 +92,7 @@ html[lang='ar'] .banner {
 }
 
 .order-modal {
-  height: 110px;
+  min-height: 110px;
 }
 .order-modal .ivu-modal-content {
   padding: 22px 56px;

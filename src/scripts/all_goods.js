@@ -68,8 +68,29 @@ var allGoods = new Vue({
       {
         key: 'payment',
         align: 'center',
+        minWidth: 80,
         renderHeader: (h) => h('span', this.$t('payment')),
-        render: (h, params) => h('span', params.row.paymentBanks && params.row.paymentBanks[0].bankName),
+        render: (h, params) => h('div',
+          [
+            h('span', params.row.paymentBanks && params.row.paymentBanks[0].bankName),
+            params.row.paymentBanks && params.row.paymentBanks.length > 1 ?
+            h(
+              'Poptip',
+              {
+                props: {
+                  trigger: 'hover',
+                  placement: 'bottom-end',
+                  title: '',
+                },
+                'class': 'ml-10',
+              },
+              [
+                h('p', { slot: 'content', 'class': 'text-left' }, params.row.paymentBanks.map(item => h('p', item.bankName))),
+                h('img', { attrs: { src: '../images/bank_more.png' } })
+              ],
+            ) : ''
+          ]
+        ),
       },
       {
         key: 'operation',
@@ -121,7 +142,7 @@ var allGoods = new Vue({
                   },
                 },
               },
-              this.$t(this.showListTag.toLowerCase()),
+              this.$t(this.showListTag.toLowerCase()) + ' USDT',
             ),
           ]
         ),
@@ -371,9 +392,9 @@ var allGoods = new Vue({
       var banks;
       if (this.selectedAdvert.paymentBanks) {
         banks = this.selectedAdvert.paymentBanks.map(function(item) {
-          return that.$t(item.bankName.replace(/\s+/g, '')) + '\r';
+          return that.$t(item.bankName.replace(/\s+/g, ''));
         });
-        return banks.join();
+        return banks.join('<br>');
       }
     },
     legalCurrencyMin() {
