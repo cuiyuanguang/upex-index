@@ -16,18 +16,18 @@
           {{ $t('payToSeller') }}
           <span class="text-warning">&nbsp;{{orderInfo.totalPrice}} SAR</span>
         </h3>
-        <h3 v-if="orderInfo.status == 2 && leftTime !== 0">
+        <h3 v-if="(orderInfo.status == 2 && leftTime !== 0) || orderInfo.status == 6">
           {{ $t('waitForSellerConfirm') }}
         </h3>
         <h3 v-if="orderInfo.status == 3">
           {{ $t('transactionSuccessful') }} - {{ $t('received') }}
           <span class="text-success"> {{ orderInfo.volume }} USDT</span>
         </h3>
-        <h3 v-if="orderInfo.status == 4">
+        <h3 v-if="orderInfo.status == 4 || (orderInfo.status == 1 && leftTime === 0)">
           {{ $t('orderCanceled') }}
         </h3>
-        <h3 v-if="(orderInfo.status == 7 || leftTime === 0) && orderInfo.status != 4" class="text-error">
-          {{ $t('orderExpired') }}
+        <h3 v-if="orderInfo.status == 5 || orderInfo.status == 7 || (leftTime === 0 && orderInfo.status == 2)">
+          {{ $t('orderAbnormal') }}
         </h3>
       </div>
       <div class="pay-steps">
@@ -105,7 +105,7 @@
           </i-col>
         </Row>
       </div>
-      <div class="pay-status" v-if="orderInfo.status < 2">
+      <div class="pay-status" v-if="orderInfo.status == 1">
         <p class="pay-notice">
           {{ $t('payInTime') }}
           <span class="text-error">{{leftTime}}</span>
@@ -118,8 +118,8 @@
         </div>
         <i-button type="link" size="large" @click="cancelPay">{{ $t('cancelOrder') }}</i-button>
       </div>
-      <div class="pay-status" v-if="orderInfo.status == 2">
-        <p class="pay-notice" v-if="leftTime != 0">
+      <div class="pay-status" v-if="(orderInfo.status == 2 && leftTime !== 0) || orderInfo.status == 6">
+        <p class="pay-notice">
           {{ $t('sellerNotConfirmIn') }}<span class="text-success">{{ (confirmLimit / 60).toFixed(0) }}</span> {{ $t('hour') }}<br>
           {{ $t('restTime') }}<span class="text-success">{{leftTime}}</span>
         </p>
@@ -127,24 +127,28 @@
       <div class="pay-status" v-if="orderInfo.status == 3">
         <p class="pay-notice text-success">{{ $t('tradeDone') }}</p>
       </div>
-      <div class="pay-status" v-if="orderInfo.status < 3">
-        <p class="pay-tips" v-if="leftTime != 0">
+      <div class="pay-status" v-if="(orderInfo.status < 3 && leftTime !== 0) || orderInfo.status == 6">
+        <p class="pay-tips">
           1. {{ $t('helpTipsFirst') }}<br>
           2. {{ $t('helpTipsSecond') }}<br>
           3. {{ $t('helpTipsThird') }}<br>
           4. {{ $t('helpTipsFourth') }}
         </p>
       </div>
-      <div class="pay-status" v-if="orderInfo.status > 3 || leftTime === 0">
-        <h3 v-if="leftTime === 0 && orderInfo.status !== 4" class="text-error">
-          {{ $t('orderExpired') }}
+      <div class="pay-status" v-if="orderInfo.status == 4 || (leftTime === 0 && orderInfo.status == 1)">
+        <h3 class="text-error">
+          {{ $t('orderCanceled') }}
         </h3>
-        <h3 v-if="leftTime === 0" style="margin-top:20px">
-          {{ $t('reasonForFailure') }} :
-          <span v-if="orderInfo.status == 4">{{ $t('orderCanceled') }}</span>
-          <span v-if="orderInfo.status == 7 || orderInfo.status == 2">
-            {{ orderInfo.paymentTime ? $t('outOfTimeToConfirm') : $t('outOfTimeToPay') }}
-          </span>
+        <h3>
+          {{ $t('reasonForFailure') }} : {{ $t('orderCanceled') }}
+        </h3>
+      </div>
+      <div class="pay-status" v-if="orderInfo.status == 5 || orderInfo.status == 7 || (leftTime === 0 && orderInfo.status == 2)">
+        <h3 class="text-error">
+          {{ $t('orderAbnormal') }}
+        </h3>
+        <h3>
+          {{ $t('reasonForFailure') }} : {{ orderInfo.paymentTime ? $t('outOfTimeToConfirm') : $t('outOfTimeToPay') }}
         </h3>
       </div>
       <div class="pay-status">

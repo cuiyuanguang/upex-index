@@ -180,6 +180,11 @@ var messages = {
     en: 'order expired',
     ar: 'انتهت صلاحية الطلب',
   },
+  orderAbnormal: {
+    zh: '订单异常',
+    en: 'Order abnormal',
+    ar: 'استثناء الأمر',
+  },
   copied: {
     zh: '已复制',
     en: 'has been copied',

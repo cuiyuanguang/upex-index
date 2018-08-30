@@ -214,6 +214,10 @@ body[dir='rtl'] .pay .input-copy{
   padding: 10px 30px;
 }
 
+.pay .pay-status h3 + h3{
+  margin-top: 20px;
+}
+
 .pay .pay-action-tips {
   position: relative;
   display: inline-block;

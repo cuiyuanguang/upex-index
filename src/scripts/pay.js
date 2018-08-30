@@ -79,10 +79,10 @@ var pay = new Vue({
     },
     payStatusText: function() {
       var statusText = '';
-      if (this.orderInfo.status == 4) {
+      if (this.orderInfo.status == 4 || (this.leftTime === 0 && this.orderInfo.status == 1)) {
         statusText = 'orderCanceled';
       }
-      if (this.orderInfo.status == 7 && !this.orderInfo.paymentTime) {
+      if ((this.orderInfo.status == 5 || this.orderInfo.status == 7) && !this.orderInfo.paymentTime) {
         statusText = 'outOfTimeToPay';
       }
       return statusText;
@@ -92,7 +92,7 @@ var pay = new Vue({
       if (this.orderInfo.status == 2 && this.leftTime === 0) {
         statusText = 'outOfTimeToConfirm';
       }
-      if (this.orderInfo.status == 7 && this.orderInfo.paymentTime) {
+      if ((this.orderInfo.status == 5 ||this.orderInfo.status == 7) && this.orderInfo.paymentTime) {
         statusText = 'outOfTimeToConfirm';
       }
       return statusText;
@@ -102,18 +102,21 @@ var pay = new Vue({
       if (this.payStatusText) {
         status = 'error';
       }
-      if (this.confirmStatusText || this.orderInfo.status == 2) {
+      if (this.confirmStatusText || this.orderInfo.status == 2 || this.orderInfo.status == 3) {
         status = 'finish';
       }
       return status;
     },
     confirmStatus: function() {
       var status = 'process';
-      if (this.payStatusText || this.orderInfo.status < 2) {
+      if (this.payStatusText || this.orderInfo.status == 1) {
         status = 'wait';
       }
       if (this.confirmStatusText) {
         status = 'error';
+      }
+      if (this.orderInfo.status == 3) {
+        status = 'finish';
       }
       return status;
     },
@@ -202,7 +205,7 @@ var pay = new Vue({
             that.orderInfo = res;
             var whatsAppStr = res.seller.userExtView.watchapp;
             // that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1).replace(/\s+/g, '');
-            that.whatsAppLink = whatsAppStr.replace('+','').replace('-','');
+            that.whatsAppLink = whatsAppStr && whatsAppStr.replace('+','').replace('-','');
             var expiredTime = res.countDownTime + Date.now();
             that.timer = setInterval(function () {
               var now = Date.now();
@@ -214,7 +217,7 @@ var pay = new Vue({
               }
             }, 1000);
           } else {
-            location.href = '404.html';
+            location.href = 'otc_adverts.html';
           }
         });
     },

@@ -204,6 +204,11 @@ var messages = {
     en: 'order expired',
     ar: 'انتهت صلاحية الطلب',
   },
+  orderAbnormal: {
+    zh: '订单异常',
+    en: 'Order abnormal',
+    ar: 'استثناء الأمر',
+  },
   orderExpiredTips: {
     zh: '订单已过期，无法查看支付信息',
     en: 'Order expired, unable to view payment information!',
