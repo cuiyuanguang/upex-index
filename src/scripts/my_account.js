@@ -414,6 +414,9 @@ var account = new Vue({
     isregisterCookie() {
       return localStorage.getItem('token');
     },
+    isUnsafe() {
+      return !this.user.googleStatus || !this.user.isOpenEmailCheck || !this.user.isOpenMobileCheck;
+    }
   },
   methods: {
     getUserInfo() {

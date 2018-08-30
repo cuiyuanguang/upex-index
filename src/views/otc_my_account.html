@@ -67,9 +67,9 @@
               <Row class="account-row">
                 <i-col span="24">
                   <span class="account-row-title">{{ $t('securitySet') }}</span>
-                    <Tag type="border" color="#ff4d4d" v-if="!user.googleStatus || !user.isOpenEmailCheck || !user.isOpenMobileCheck">
-                      {{ $t('unsafe') }}
-                    </Tag>
+                  <Tag type="border" color="#ff4d4d" v-if="isUnsafe">
+                    {{ $t('unsafe') }}
+                  </Tag>
                 </i-col>
               </Row>
             </dt>
