@@ -1809,7 +1809,7 @@ var o_my_register = {
             that.modal_loading = false;
             that.emailPasswordError = true;
             that.emailPasswordErrorText = this.$t('canNotBeEmpty');
-          } else if (that.phonePassword.length > 64 || that.phonePassword.length < 8) {
+          } else if (that.emailPassword.length > 64 || that.emailPassword.length < 8) {
             that.modal_loading = false;
             that.emailPasswordError = true;
             that.emailPasswordErrorText = this.$t('errorPwdNum');
