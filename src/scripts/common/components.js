@@ -2446,7 +2446,6 @@ var o_find_password = {
     },
   },
   mounted() {
-    this.i18n.locale = this.locale;
     this.sendPlaceholderEmail = this.$t('sendVerification');
     this.sendPlaceholderPhone = this.$t('sendVerification');
   },
