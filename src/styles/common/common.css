@@ -119,6 +119,7 @@ body[dir='rtl'] .mr-10 {
 body[dir='rtl'] .text-dir-ltr {
   text-align: right;
   direction: ltr !important;
+  unicode-bidi: embed;
 }
 
 body[dir='rtl'] .ivu-radio {
@@ -172,6 +173,14 @@ body[dir='rtl'] .ivu-radio-group-button .ivu-radio-wrapper:last-child {
 .ivu-tabs.spreaded {
   height: 300px;
   transition: ease 500ms;
+}
+
+.ivu-form-item .ivu-input-group-prepend .ivu-btn,
+.ivu-form-item .ivu-input-group-append .ivu-btn {
+  height: 38px;
+  box-shadow: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .authority {
