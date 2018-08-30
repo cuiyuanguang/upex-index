@@ -504,6 +504,11 @@ var messages = {
     en: 'Are you sure you want to log out?',
     ar: 'هل أنت متأكد أنك تريد تسجيل الخروج؟',
   },
+  bindPhoneFirst: {
+    zh: '请先绑定手机',
+    en: 'Please bind the phone first',
+    ar: 'الرجاء ربط الهاتف أولا',
+  },
   bindPhoneOrGoogleFirst: {
     zh: '请先绑定手机或谷歌',
     en: 'Bind phone or google first',
