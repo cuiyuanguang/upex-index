@@ -13,7 +13,7 @@
     <!--header-->
     <o-header ref="header"></o-header>
     <div class="banner">
-      <Carousel autoplay :autoplay-speed="4000" loop dots="none" arrow="none">
+      <Carousel autoplay :autoplay-speed="6000" loop dots="none" arrow="none">
         <carousel-item>
           <h2>{{ $t('bannerTitle_1') }}</h2>
           <p>{{ $t('bannerDesc_1') }}</p>
@@ -373,7 +373,7 @@
         </div>
       </Modal>
       <Modal
-        :title="$t('confirmBind')" 
+        :title="$t('confirmBind')"
         :mask-closable="false"
         class="modal-notice info"
         v-model="modalBankConfirm"
