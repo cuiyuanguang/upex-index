@@ -23,10 +23,10 @@ $http.interceptors.request.use(
 );
 
 // 添加响应拦截器
+const locale = localStorage.getItem('locale') || 'ar';
 $http.interceptors.response.use(
   function(response) {
     // 处理响应数据
-    const locale = localStorage.getItem('locale') || 'ar';
     const result = response.data;
     if (result) {
       var errorMessage = toastMsg[result.code] ? toastMsg[result.code][locale] : 'Error: ' + result.code;
