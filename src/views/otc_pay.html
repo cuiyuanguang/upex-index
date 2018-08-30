@@ -64,38 +64,38 @@
           <i-col span="14">
             <div class="info-header">{{ $t('sellerInfo') }}</div>
             <div class="info-body">
-              <template v-if="orderInfo.paymentBanks" v-for="(item, index) in orderInfo.paymentBanks">
+              <div style="margin-bottom:10px;" v-if="bankList.length" v-for="(item, index) in bankList">
                 <Row>
-                  <i-col span="6">{{ $t('bank') }}</i-col>
+                  <i-col span="1"><img src="../images/bank-icon.png" class="pay-image"></i-col>
+                  <i-col span="5">{{ $t('bank') }}</i-col>
                   <i-col span="18" class="text-strong">{{item.bankName}}</i-col>
                 </Row>
                 <Row>
-                  <i-col span="6">{{ $t('cardNo') }}</i-col>
+                  <i-col span="1">&nbsp;</i-col>
+                  <i-col span="5">{{ $t('cardNo') }}</i-col>
                   <i-col span="18" class="text-strong">{{item.cardNo}}</i-col>
                 </Row>
                 <Row>
-                  <i-col span="6">{{ $t('accountName') }}</i-col>
+                  <i-col span="1">&nbsp;</i-col>
+                  <i-col span="5">{{ $t('accountName') }}</i-col>
                   <i-col span="18" class="text-strong">{{item.name}}</i-col>
                 </Row>
                 <Row>
-                  <i-col span="6">Iban {{ $t('iBanNo') }}</i-col>
+                  <i-col span="1">&nbsp;</i-col>
+                  <i-col span="5">Iban {{ $t('iBanNo') }}</i-col>
                   <i-col span="18" class="text-strong">{{item.ibanNo}}</i-col>
                 </Row>
-              </template>
+              </div>
               <Row v-if="orderInfo.seller.hideMobileNumber">
-                <i-col span="6">
-                  <img src="../images/pay_phone.png" class="pay-image">
-                  {{ $t('phone') }}
-                </i-col>
+                <i-col span="1"><img src="../images/pay_phone.png" class="pay-image"></i-col>
+                <i-col span="5">{{ $t('phone') }}</i-col>
                 <i-col span="18" class="text-strong text-mobile">
                   {{orderInfo.seller.hideMobileNumber}}
                 </i-col>
               </Row>
               <Row>
-                <i-col span="6">
-                  <img src="../images/pay_whatsapp.png" class="pay-image">
-                  Whatsapp
-                </i-col>
+                <i-col span="1"><img src="../images/pay_whatsapp.png" class="pay-image"></i-col>
+                <i-col span="5">Whatsapp</i-col>
                 <i-col span="18" class="text-strong">
                   <a class="contact" :href="'https://api.whatsapp.com/send?phone='+whatsAppLink" target="_blank">
                   <img class="whatup" src="../images/whatup-white.png" />{{ $t('contactSeller') }}</a>
