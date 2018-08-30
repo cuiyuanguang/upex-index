@@ -1,13 +1,42 @@
-html[lang='zh'] .banner,
-html[lang='en'] .banner {
-  background-image: url('../images/topbanner-en.png');
+@font-face {
+  font-family: 'BankGothic';
+  src: url('../fonts/BankGothic-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
-html[lang='ar'] .banner {
-  background-image: url('../images/topbanner-ar.png');
+.banner {
+  background-image: url('../images/OTCbanner.png');
+  margin-top: -1px;
+  padding: 60px 0;
+  display: inline-block;
+  width: 100%;
+  line-height: 50px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.banner * {
+  direction: ltr !important;
+}
+
+.banner h2 {
+  font-size: 52px;
+  font-family: 'BankGothic';
+  letter-spacing: -4px;
+}
+
+html[lang='ar'] .banner h2 {
+  font-size: 44px;
+  letter-spacing: 4px;
+}
+
+.banner p {
+  font-size: 16px;
 }
 
 .btn-show-release {
+  font-size: 14px;
   color: #ff7100;
   background-color: #fff;
 }

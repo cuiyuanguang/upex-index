@@ -1,8 +1,23 @@
 var messages = {
-  welcome: {
-    zh: '欢迎光临',
-    en: 'Welcome',
-    ar: 'مرحباً بك',
+  bannerTitle_1: {
+    zh: 'THE GUARANTE',
+    en: 'THE GUARANTE',
+    ar: 'الضمانة',
+  },
+  bannerDesc_1: {
+    zh: 'Transactions are guaranteed, compensation is paid on the lost currencies!',
+    en: 'Transactions are guaranteed, compensation is paid on the lost currencies!',
+    ar: 'التداولات مضمونة ، يتم دفع تعويضات على العملات المفقودة',
+  },
+  bannerTitle_2: {
+    zh: 'FREE FOR A LIMITED TIME',
+    en: 'FREE FOR A LIMITED TIME',
+    ar: 'مجانا لفترة محدودة',
+  },
+  bannerDesc_2: {
+    zh: 'Buyer and seller are exempt from commission!',
+    en: 'Buyer and seller are exempt from commission!',
+    ar: 'يتم إعفاء المشتري والبائع من العمولة',
   },
   releaseAdvert: {
     zh: '发布挂单',

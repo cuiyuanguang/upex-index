@@ -26,7 +26,7 @@ var allGoods = new Vue({
       {
         key: 'user',
         align: 'center',
-        minWidth: 80,
+        minWidth: 100,
         renderHeader: (h) => h('span', this.showListTag === 'BUY' ? this.$t('seller') : this.$t('buyer')),
         render: (h, params) => h(
           'div',
@@ -44,13 +44,14 @@ var allGoods = new Vue({
       {
         key: 'amount',
         align: 'center',
+        minWidth: 60,
         renderHeader: (h) => h('span', this.$t('amount')),
         render: (h, params) => h('span', (params.row.volume - params.row.sell).toFixed(4) + ' USDT'),
       },
       {
         key: 'limit',
         align: 'center',
-        minWidth: 80,
+        minWidth: 60,
         renderHeader: (h) => h(
           'p',
           [
@@ -70,11 +71,11 @@ var allGoods = new Vue({
       {
         key: 'payment',
         align: 'center',
-        minWidth: 80,
+        minWidth: 90,
         renderHeader: (h) => h('span', this.$t('payment')),
         render: (h, params) => h('div',
           [
-            h('span', params.row.paymentBanks && params.row.paymentBanks[0].bankName),
+            h('span', params.row.paymentBanks && this.$t(params.row.paymentBanks[0].bankName)),
             params.row.paymentBanks && params.row.paymentBanks.length > 1 ?
             h(
               'Poptip',
@@ -87,7 +88,7 @@ var allGoods = new Vue({
                 'class': 'ml-10',
               },
               [
-                h('p', { slot: 'content', 'class': 'text-left', style: { 'overflow': 'hidden' } }, params.row.paymentBanks.map(item => h('p', item.bankName))),
+                h('p', { slot: 'content', 'class': 'text-left', style: { 'overflow': 'hidden' } }, params.row.paymentBanks.map(item => h('p', this.$t(item.bankName)))),
                 h('img', { attrs: { src: '../images/bank_more.png' } })
               ],
             ) : ''
@@ -97,6 +98,7 @@ var allGoods = new Vue({
       {
         key: 'operation',
         align: 'center',
+        minWidth: 80,
         renderHeader: (h) => h('span', this.$t('operation')),
         render: (h, params) => h(
           'div',
@@ -261,13 +263,14 @@ var allGoods = new Vue({
     };
     return {
       locale: '',
+      carouselActive: 0,
       showListTag: 'BUY',
       marketPrice: '',
       cardList: [],
       balance: 0,
       // 下单
       modalOrder: false,
-      modalOrderLoading: false,
+      formOrderLoading: false,
       selectedAdvert: {},
       formOrder: {
         legalCurrency: '',
@@ -451,10 +454,15 @@ var allGoods = new Vue({
       get('api/rate').then(function(res) {
         if (res) {
           that.marketPrice = res;
+          localStorage.setItem('market', JSON.stringify(res));
           that.formRelease.minTrade = Number(res.trade_min_price);
           that.formRelease.maxTrade = Number(res.trade_max_price);
         }
       });
+    },
+    changeCarousel(oldVal, newVal) {
+      this.carouselActive = newVal;
+      console.log(this.carouselActive);
     },
     getAdvertList: function(type, page) {
       var that = this;
@@ -563,6 +571,12 @@ var allGoods = new Vue({
         this.$refs.header.showLogin();
         return;
       }
+      if (type === 'BUY') {
+        if (!this.userInfo.watchapp) {
+          this.modalWhatsApp = true;
+          return;
+        }
+      }
       if (type === 'SELL') {
         if (!this.userInfo.googleStatus) {
           this.modalGoogle = true;
@@ -601,7 +615,7 @@ var allGoods = new Vue({
         Toast.show(this.$t('balanceNotEnough'), { icon: 'error' });
         return;
       }
-      this.modalOrderLoading = true;
+      this.formOrderLoading = true;
       var data = {
         advertId: this.selectedAdvert.id,
         volume: Number(this.digitalCurrency),
@@ -615,7 +629,7 @@ var allGoods = new Vue({
         payUrl = 'otc_wait_pay.html?sequence=';
       }
       post(api, data).then(function(res) {
-        that.modalOrderLoading = false;
+        that.formOrderLoading = false;
         if (res) {
           that.modalOrder = false;
           window.location.href = payUrl + res.sequence;
@@ -724,7 +738,7 @@ var allGoods = new Vue({
               Toast.show(that.$t('balanceNotEnough'), { icon: 'error' });
               return;
             }
-            that.modalOrderLoading = true;
+            that.formOrderLoading = true;
             var data = {
               advertId: that.selectedAdvert.id,
               volume: Number(that.formOrder.digitalCurrency),
@@ -737,11 +751,13 @@ var allGoods = new Vue({
               payUrl = 'otc_wait_pay.html?sequence=';
             }
             post(api, data).then(function(res) {
-              that.modalOrderLoading = false;
+              that.formOrderLoading = false;
               if (res) {
                 that.handleReset(name);
                 that.modalOrder = false;
                 window.location.href = payUrl + res.sequence;
+              } else {
+                that.formOrderLoading = false;
               }
             });
           }
@@ -891,6 +907,9 @@ var allGoods = new Vue({
           this.$refs.formRelease.resetFields();
         }
       }
+      if (this[name + 'Loading']) {
+        this[name + 'Loading'] = false;
+      }
       var sufix = name.substr(4);
       this['modal' + sufix] = false;
       this.sendPlaceholderBank = this.$t('sendVerify');
@@ -948,6 +967,8 @@ var allGoods = new Vue({
       this.getUserInfo();
       this.getAvailableCardList();
     }
+  },
+  created() {
     this.getAdvertList('SELL');
     this.getAdvertList('BUY');
     this.getMarketPrice();
