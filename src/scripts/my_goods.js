@@ -50,7 +50,7 @@ var myGoods = new Vue({
             }
             return h('p', [
               h('span', params.row.volume),
-              balance > 30 ?
+              balance > this.digitalCurrencyMin ?
                 h('span', { 'class': 'text-primary' }, ' / ' + balance + ' USDT') :
                 h('span', { 'class': 'text-warning' }, [
                   h('span', ' / ' + balance + ' USDT'),
@@ -64,7 +64,6 @@ var myGoods = new Vue({
                       {
                         slot: 'content',
                         'class': 'text-warning',
-                        style: { 'white-space': 'normal' }
                         },
                         this.$t('cancelToRelease'),
                       ),
@@ -139,6 +138,11 @@ var myGoods = new Vue({
       advertId: '',
       sequence: '',
     }
+  },
+  computed: {
+    digitalCurrencyMin() {
+      return JSON.parse(localStorage.getItem('market')).trade_min_volume;
+    },
   },
   methods: {
     //get user advert

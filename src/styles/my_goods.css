@@ -46,6 +46,7 @@
 }
 
 .ivu-tooltip-inner {
+  max-width: 450px;
   background-color: #F7E7A6;
 }
 .ivu-tooltip-popper[x-placement^=top] .ivu-tooltip-arrow {
