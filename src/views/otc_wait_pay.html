@@ -44,17 +44,17 @@
             <div class="info-header">{{ $t('orderInfo') }}</div>
             <div class="info-body">
               <Row>
-                <i-col span="6">{{ $t('orderNo') }} :</i-col>
+                <i-col span="6">{{ $t('orderNo') }}</i-col>
                 <i-col span="18" class="text-strong">{{orderInfo.sequence}}</i-col>
               </Row>
               <Row>
-                <i-col span="6">{{ orderInfo.status == 3 ? $t('sold') : $t('totalPurchase') }} :</i-col>
+                <i-col span="6">{{ orderInfo.status == 3 ? $t('sold') : $t('totalPurchase') }}</i-col>
                 <i-col span="18" class="text-strong" :class="orderInfo.status == 3 ? 'text-success' : ''">
                   {{orderInfo.volume}} USDT
                 </i-col>
               </Row>
               <Row>
-                <i-col span="6">{{ orderInfo.status == 3 ? $t('received') : $t('totalPrice') }} :</i-col>
+                <i-col span="6">{{ orderInfo.status == 3 ? $t('received') : $t('totalPrice') }}</i-col>
                 <i-col span="18" class="text-strong" class="text-strong" :class="orderInfo.status == 3 ? 'text-success' : ''">
                   {{orderInfo.totalPrice}} SAR
                 </i-col>
@@ -73,7 +73,7 @@
                   {{orderInfo.buyer.showNickName}}
                 </i-col>
               </Row>
-              <Row v-if="orderInfo.buyer.hideMobileNumber">
+              <Row v-if="orderInfo.buyer.hideMobileNumber.trim()">
                 <i-col span="6">
                   <img src="../images/pay_phone.png" class="pay-image">
                   {{ $t('phone') }}

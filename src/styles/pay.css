@@ -10,12 +10,16 @@
   font-size: 26px;
 }
 
-
 .pay .pay-steps {
   margin-top: 30px;
   padding: 10px 30px 10px 60px;
   height: 80px;
   border-bottom: 1px solid #f4f4f4;
+}
+
+body[dir='rtl'] .pay .pay-steps {
+  padding-left: 30px;
+  padding-right: 60px;
 }
 
 .pay .pay-steps .ivu-steps-item {
