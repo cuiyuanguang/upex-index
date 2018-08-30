@@ -6,14 +6,14 @@
 }
 
 .banner {
-  background-image: url('../images/OTCbanner.png');
-  margin-top: -1px;
+  background-image: url('../images/OTCbanner.jpg');
   padding: 60px 0;
   display: inline-block;
   width: 100%;
   line-height: 50px;
   text-align: center;
   color: #ffffff;
+  text-shadow: 0 2px 4px #105586;
 }
 
 .banner * {
@@ -33,6 +33,7 @@ html[lang='ar'] .banner h2 {
 
 .banner p {
   font-size: 16px;
+  font-weight: bold;
 }
 
 .btn-show-release {
