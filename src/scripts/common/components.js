@@ -318,9 +318,9 @@ var i18nComponentsMessages = {
     ar: 'كلمة السر غير مطابقة',
   },
   errorPwdNum: {
-    zh: '以字母开头，长度在8-64之间，只能包含字符、数字',
-    en: 'password length is between 8 and 64, starts with a letter and contains only letters and numbers.',
-    ar: ' طول كلمة السر ما بين 8 الى 64 ، تبدا بحرف و تحتوي  على حروف وأرقام فقط',
+    zh: '请输入长度在8到64位之间的字符',
+    en: 'Please enter 8 to 64 characters ',
+    ar: 'يرجى إدخال من 8 إلى 64 حرفًا',
   },
   findPassword: {
     zh: '找回密码',
@@ -580,11 +580,6 @@ var i18nLoginRegisterMsg = {
     zh: '密码不一致',
     en: 'password does not match',
     ar: 'كلمة السر غير مطابقة'
-  },
-  errorPwdNum: {
-    zh: '长度在8-64之间，只能包含字符、数字',
-    en: 'password length is between 8 to 64, and can only contains characters and numbers',
-    ar: 'طول كلمة السر ما بين 8 الى 64 ، و تحتوي فقط على أحرف وأرقام'
   },
   canNotBeEmpty: {
     zh: '此处不能为空',
@@ -1782,7 +1777,7 @@ var o_my_register = {
             that.modal_loading = false;
             that.phonePasswordError = true;
             that.phonePasswordErrorText = this.$t('canNotBeEmpty');
-          } else if (!that.passwordReg(that.phonePassword)) {
+          } else if (that.phonePassword.length > 64 || that.phonePassword.length < 8) {
             that.modal_loading = false;
             that.phonePasswordError = true;
             that.phonePasswordErrorText = this.$t('errorPwdNum');
@@ -1814,7 +1809,7 @@ var o_my_register = {
             that.modal_loading = false;
             that.emailPasswordError = true;
             that.emailPasswordErrorText = this.$t('canNotBeEmpty');
-          } else if (!that.passwordReg(that.emailPassword)) {
+          } else if (that.phonePassword.length > 64 || that.phonePassword.length < 8) {
             that.modal_loading = false;
             that.emailPasswordError = true;
             that.emailPasswordErrorText = this.$t('errorPwdNum');

@@ -6,6 +6,31 @@
   box-sizing: border-box;
 }
 
+#render{
+  height: 620px;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+#render .webgl-txt{
+  position: absolute;
+  top: 108px;
+  height: 277px;
+  width: 874px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-image: url("../images/intro/intro-webgltxt-en.png");
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+}
+
+body[dir='rtl'] #render .webgl-txt{
+  width: 748px;
+  background-image: url("../images/intro/intro-webgltxt-ar.png");
+}
+
 body[dir='rtl'] #intro .intro-box .intro-box-inner,#intro .intro-box .intro-box-inner button,#intro .intro-box img{
   direction: ltr;
 }

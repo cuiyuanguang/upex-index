@@ -9,7 +9,10 @@
 <body>
 <div id="intro" v-cloak>
   <o-header ref="header"></o-header>
-  <div class="intro-box intro-box-one"></div>
+  <div id="render">
+    <div class="webgl-txt"></div>
+  </div>
+  <!--<div class="intro-box intro-box-one"></div>-->
   <div class="intro-box bg-dark-blue" style="overflow: hidden">
     <div class="intro-box-inner intro-box-two">
       <img src="../images/intro-one-bg.png" class="intro-two-left">
@@ -174,7 +177,14 @@
   </Modal>
 </div>
 @@include('footer.html')
+<script src="../lib/three/three.js"></script>
+<script src="../lib/three/Projector.js"></script>
+<script src="../lib/three/CanvasRenderer.js"></script>
+
 <script src="../scripts/locale/my_introduce.js?rev=@@hash"></script>
 <script src="../scripts/my_introduce.js?rev=@@hash"></script>
+
+
+
 </body>
 </html>
