@@ -1,7 +1,7 @@
 ﻿var toastMsg = {
   '0': {
     zh: '成功',
-    en: 'succeeded',
+    en: 'Succeeded',
     ar: 'نجح',
   },
   '3': {
@@ -11,7 +11,7 @@
   },
   '4': {
     zh: '没有权限访问',
-    en: 'do not have permission to access',
+    en: 'Do not have permission to access',
     ar: 'ليس لديك إذن الزيارة',
   },
   '5': {
@@ -20,9 +20,9 @@
     ar: 'خطأ بالمعلمة',
   },
   '10001': {
-    zh: '系统异常，请联系管理',
-    en: 'System error, please contact the management',
-    ar: 'خطأ بالنظام ، يرجى الاتصال بالإدارة',
+    zh: '系统异常，请联系管理员',
+    en: 'System error, please contact the administrator',
+    ar: 'استثناء النظام ، الرجاء الاتصال بالمسؤول',
   },
   '10002': {
     zh: '用户未登录',
@@ -36,17 +36,17 @@
   },
   '10004': {
     zh: '短信发送失败',
-    en: 'message failed to send',
+    en: 'Message failed to send',
     ar: 'فشل إرسال الرسالة',
   },
   '10005': {
     zh: '发送过于频繁，稍后再试',
-    en: 'sent several times, try again later',
+    en: 'Sent several times, try again later',
     ar: 'أرسلت عدة مرات ، أعد المحاولة لاحقًا',
   },
   '10006': {
     zh: '邮箱格式错误',
-    en: 'incorrect email format',
+    en: 'Incorrect email format',
     ar: 'خطأ في تنسيق البريد ',
   },
   '10007': {
@@ -81,7 +81,7 @@
   },
   '100112': {
     zh: '提币数量小于最小提币限制',
-    en: 'the amount of withdrawal is less than the minimum withdrawal limit.',
+    en: 'The amount of withdrawal is less than the minimum withdrawal limit.',
     ar: 'كمية السحب أقل من الحد الأدنى للسحب',
   },
   '100114': {
@@ -106,7 +106,7 @@
   },
   '10015': {
     zh: '操作失败',
-    en: 'operation failed',
+    en: 'Operation failed',
     ar: 'فشلت العملية',
   },
   '10016': {
@@ -121,12 +121,12 @@
   },
   '10018': {
     zh: '账户冻结登录，请联系客服',
-    en: 'login account has been frozen, please contact customer service',
+    en: 'Login account has been frozen, please contact customer service',
     ar: 'تم تجميد حساب تسجيل الدخول ، يرجى الاتصال بخدمة العملاء',
   },
   '10019': {
     zh: '用户名或密码错误',
-    en: 'wrong user name or password',
+    en: 'Wrong user name or password',
     ar: 'اسم المستخدم أو كلمة السر غير صحيح',
   },
   '1002': {
@@ -166,22 +166,22 @@
   },
   '10031': {
     zh: '找回密码Token过期',
-    en: 'find my password Token has expired',
+    en: 'Find my password Token has expired',
     ar: 'استرجاع كلمة السر انتهت صلاحية Token',
   },
   '10032': {
     zh: '冻结提币，请联系客服',
-    en: 'currency withdraw has been frozen, please contact customer service',
+    en: 'Currency withdraw has been frozen, please contact customer service',
     ar: 'تم تجميد سحب العملة ، يرجى الاتصال بخدمة العملاء',
   },
   '10033': {
     zh: '请先进行实名认证',
-    en: 'please authenticate the real name first',
+    en: 'Please authenticate the real name first',
     ar: 'يرجى إجراء مصادقة الاسم الحقيقي أولاً',
   },
   '10034': {
     zh: '可用余额不足',
-    en: ' Insufficient available balance ',
+    en: 'Insufficient available balance ',
     ar: 'الرصيد المتاح غير كاف',
   },
   '10036': {
@@ -196,7 +196,7 @@
   },
   '10038': {
     zh: '冻结交易，请联系客服',
-    en: ' Transaction has been frozen, please contact customer service ',
+    en: 'Transaction has been frozen, please contact customer service ',
     ar: 'تم تجميد الصفقة ، يرجى الاتصال بخدمة العملاء',
   },
   '10039': {
@@ -227,7 +227,7 @@
   },
   '10050': {
     zh: '密码错误',
-    en: 'wrong password',
+    en: 'Wrong password',
     ar: 'كلمة السر خاطئة',
   },
   '10051': {
@@ -252,7 +252,7 @@
   },
   '2': {
     zh: '未登录',
-    en: 'not signed in',
+    en: 'Not signed in',
     ar: 'لم تسجل الدخول',
   },
   '2005': {
@@ -267,7 +267,7 @@
   },
   '2007': {
     zh: '挂单信息不存在',
-    en: 'pending order information does not exist',
+    en: 'Pending order information does not exist',
     ar: 'معلومات الطلب غير موجود',
   },
   '2008': {
@@ -307,12 +307,12 @@
   },
   '2015': {
     zh: '购买数量大于实际可出售数量',
-    en: 'buying quantity more than the actual selling quantity',
+    en: 'Buying quantity more than the actual selling quantity',
     ar: 'كمية الشراء أكبر من الكمية القابلة للبيع',
   },
   '2016': {
     zh: '出售数量大于挂单剩余数量',
-    en: 'selling quantity is much than the remaining quantity of the pending order',
+    en: 'Selling quantity is much than the remaining quantity of the pending order',
     ar: 'الكمية المباعة أكبر من الكمية المتبقية من الطلب',
   },
   '2017': {
@@ -322,7 +322,7 @@
   },
   '2018': {
     zh: '交易金额不在该挂单的单笔交易范围之内 ',
-    en: ' transaction amount is not within the range of the single transaction',
+    en: 'Transaction amount is not within the range of the single transaction',
     ar: 'مبلغ الصفقة ليس من ضمن نطاق الصفقة الواحدة للطلب',
   },
   '2019': {
@@ -342,7 +342,7 @@
   },
   '2022': {
     zh: '该挂单在交易中或已关闭，无法继续交易',
-    en: 'this pending order is in the transaction or closed,so you cannot continue the transaction',
+    en: 'This pending order is in the transaction or closed,so you cannot continue the transaction',
     ar: 'هذا الطلب جاري صفقته أو مغلق، لذا لا يمكنك  الاستمرار في الصفقة ',
   },
   '2028': {
@@ -377,7 +377,7 @@
   },
   '2034': {
     zh: '操作失败',
-    en: 'operation failed',
+    en: 'Operation failed',
     ar: 'فشلت العملية',
   },
   '2035': {
@@ -392,7 +392,7 @@
   },
   '2039': {
     zh: '自己的挂单不能交易',
-    en: 'cannot make a transaction with your own pending order ',
+    en: 'Cannot make a transaction with your own pending order ',
     ar: 'لا يمكنك إجراء صفقة مع الطلب الخاص بك',
   },
   '2043': {

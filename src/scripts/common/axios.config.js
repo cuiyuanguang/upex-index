@@ -53,13 +53,13 @@ $http.interceptors.response.use(
   function(error) {
     // http错误码判断
     if (error.code === 'ECONNABORTED') {
-      Toast.show('请求超时，请稍后再试', { icon: 'error' });
+      Toast.show(toastMsg['10052'][locale], { icon: 'error' });
     }
     if (error.response.status >= 500) {
-      location.href = '500.html';
+      Toast.show(toastMsg['10001'][locale], { icon: 'error' });
     }
     if (error.response.status >= 400) {
-      location.href = '404.html';
+      Toast.show(toastMsg['4'][locale], { icon: 'error' });
     }
     // 返回 response 里的错误信息
     return Promise.reject(error.response.statusText);
