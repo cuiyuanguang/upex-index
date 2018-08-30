@@ -598,44 +598,6 @@ var allGoods = new Vue({
       this.selectedAdvert = item;
       this.modalOrder = true;
     },
-    confirmOrder: function(type) {
-      if (!localStorage.getItem('user')) {
-        this.$refs.header.showLogin();
-        return;
-      }
-      if (!this.legalCurrency) {
-        this.legalCurrencyError = true;
-        return;
-      }
-      if (!this.digitalCurrency) {
-        this.digitalCurrencyError = true;
-        return;
-      }
-      if (type === 'SELL' && this.balance < this.digitalCurrencyMin) {
-        Toast.show(this.$t('balanceNotEnough'), { icon: 'error' });
-        return;
-      }
-      this.formOrderLoading = true;
-      var data = {
-        advertId: this.selectedAdvert.id,
-        volume: Number(this.digitalCurrency),
-        totalPrice: this.legalCurrency,
-      };
-      var that = this;
-      var api = 'api/buyOrder';
-      var payUrl = 'otc_pay.html?sequence=';
-      if (type === 'SELL') {
-        api = 'api/sellOrder';
-        payUrl = 'otc_wait_pay.html?sequence=';
-      }
-      post(api, data).then(function(res) {
-        that.formOrderLoading = false;
-        if (res) {
-          that.modalOrder = false;
-          window.location.href = payUrl + res.sequence;
-        }
-      });
-    },
     showModalRelease: function() {
       // check if login
       var that = this;
@@ -788,6 +750,9 @@ var allGoods = new Vue({
                 that.tabVerifyActive = 1;
                 that.modalBankConfirm = false;
                 that.getAvailableCardList();
+                if (!that.userInfo.watchapp) {
+                  that.modalWhatsApp = true;
+                }
               }
             });
           }
@@ -795,10 +760,11 @@ var allGoods = new Vue({
             that.formWhatsAppLoading = true;
             post('api/watchapp', that.selectCountry + '-' + that.formWhatsApp.number).then(function (res) {
               that.formWhatsAppLoading = false;
+              that.handleReset(name);
               if (res) {
                 post('api/common/user_info', '', false).then(function (result) {
+                  that.userInfo = result;
                   localStorage.setItem('user', JSON.stringify(result));
-                  that.handleReset(name);
                 });
               }
             });
@@ -962,6 +928,18 @@ var allGoods = new Vue({
       this.$i18n.locale = value;
       this.selectCountry = value === 'ar' ? '+966' : (value === 'en' ? '+1' : '+86');
       this.sendPlaceholderBank = this.$t('sendVerify');
+    });
+    this.$on('googleBound', function(i) {
+      if (i) {
+        this.getUserInfo();
+        if (!this.cardList.length) {
+          if (!this.userInfo.googleStatus && this.userInfo.isOpenMobileCheck) {
+            that.tabVerifyActive = 2;
+          }
+          this.modalBankInfo = true;
+          return;
+        }
+      }
     });
     if (localStorage.getItem('token')) {
       this.getUserInfo();
