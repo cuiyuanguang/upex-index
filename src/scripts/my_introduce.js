@@ -87,7 +87,7 @@ function init() {
   renderer = new THREE.CanvasRenderer();
   renderer.setPixelRatio( window.devicePixelRatio );
   renderer.setSize( window.innerWidth, 620 );
-  renderer.setClearColor('#0A1B31', 1.0);
+  renderer.setClearColor('#0c2546', 1);
   container.appendChild( renderer.domElement );
   document.addEventListener( 'mousemove', onDocumentMouseMove, false );
   document.addEventListener( 'touchstart', onDocumentTouchStart, false );
