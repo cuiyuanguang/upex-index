@@ -123,14 +123,15 @@ body[dir='rtl'] .intro-two-right .intro-two-right-img{
 .intro-three-left{
   width: 563px;
   height: 405px;
-  background-image: url('../images/intro-three-left-en.png');
+  background-image: url('../images/intro/intro-three-left-en.png');
   display: inline-block;
   margin-top: 110px;
   margin-left: 72px;
 }
 
 body[dir='rtl'] .intro-three-left{
-  background-image: url('../images/intro-three-left-ar.png');
+  width: 572px;
+  background-image: url('../images/intro/intro-three-left-ar.png');
 }
 
 .intro-three-right{

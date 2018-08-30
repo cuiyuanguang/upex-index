@@ -845,7 +845,8 @@ var o_my_login = {
   props: ['login','langStatus'],
   methods: {
     onExpired() {
-      this.$refs.invisibleRecaptchaLogin.reset()
+      this.$refs.invisibleRecaptchaLogin.reset();
+      this.modal_loading = false;
     },
     onVerify(res) {
       var that = this;
@@ -869,6 +870,7 @@ var o_my_login = {
           }
           post('api/user/login_in', JSON.stringify(data), false).then(function (res) {
             if (res) {
+              that.modal_loading = false;
               if(res.mobileAuthenticatorStatus === 1){
                 that.$parent.$emit(
                   'isLoginNextPhone',
