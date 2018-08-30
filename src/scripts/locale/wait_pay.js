@@ -15,7 +15,7 @@ var messages = {
     ar: 'تم الصفقة',
   },
   receivePayment: {
-    zh: '收到法币',
+    zh: '收到款项',
     en: ' currency received',
     ar: 'تم استلام العملة',
   },
@@ -128,7 +128,7 @@ var messages = {
     ar: 'إذا بلغ إلغاء الطلب ثلاث مرات في نفس اليوم ، فسيتم إغلاق وظيفة الدفع',
   },
   helpTipsThird: {
-    zh: '如您{hours}小时内未收到法币或法币金额不正确，请联系客服',
+    zh: '如您{hours}小时内未收到款项或款项金额不正确，请联系客服',
     en:
       'If you do not receive the currency or the amount of the currency is incorrect within {hours} hours, please contact customer service',
     ar:
@@ -161,7 +161,7 @@ var messages = {
     ar: 'تأكيد الاستلام',
   },
   receiveAll: {
-    zh: '是否收到全额法币？',
+    zh: '是否收到全额款项？',
     en: 'Have you received the full amount of the currency?',
     ar: 'هل استلمت المبلغ الكامل للعملة ؟',
   },

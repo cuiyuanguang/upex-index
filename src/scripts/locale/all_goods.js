@@ -502,11 +502,6 @@ var messages = {
     en: 'format error',
     ar: 'خطأ في التنسيق',
   },
-  six2eighteen: {
-    zh: '请输入长度在6到18位之间的字符',
-    en: 'Please enter 6 to 18 characters ',
-    ar: 'يرجى إدخال من 6 إلى 18 حرفًا',
-  },
   googleVerification: {
     zh: '谷歌验证',
     en: 'Google verification',
