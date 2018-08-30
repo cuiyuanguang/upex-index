@@ -1,8 +1,8 @@
 const messages = {
   certify: {
-    zh: '首个获得巴林央行（CBB）金融认证！',
-    en: 'The first who has obtained the Financial Certification from Central Bank of Bahrain',
-    ar: 'أول من حصل على الرخصة المالية من قبل مصرف البحرين المركزي'
+    zh: '已获得巴林央行（CBB）金融认证！',
+    en: 'Upex has got the financial certification from The Central Bank of Bahrain ',
+    ar: 'حاصلة على الرخصة المالية من قبل مصرف البحرين المركزي',
   },
   platOne: {
     zh: '平台担保，放心交易',
