@@ -2022,9 +2022,9 @@ var o_my_registerGoogle = {
         post('api/user/google_verify', JSON.stringify(data)).then(function (res) {
           if (res) {
             that.asyncCancel();
-            that.$parent.$emit('googleBound', true);
             post('api/common/user_info', '', false).then((result) => {
               localStorage.setItem('user', JSON.stringify(result));
+              that.$parent.$emit('googleBound', true);
             });
           }
           that.modal_loading = false;
