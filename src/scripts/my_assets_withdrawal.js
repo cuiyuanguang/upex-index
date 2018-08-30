@@ -50,7 +50,8 @@ var myAssetsWithdrawal = new Vue({
           title: '',
           key: 'type',
           align: 'center',
-          renderHeader: (h) => h('span', this.$t('type'))
+          renderHeader: (h) => h('span', this.$t('type')),
+          render: (h,params) => h('span', this.$t('withdrawal'))
         },
         {
           title: '',
@@ -62,7 +63,8 @@ var myAssetsWithdrawal = new Vue({
           title: '',
           key: 'status',
           align: 'center',
-          renderHeader: (h) => h('span', this.$t('status'))
+          renderHeader: (h) => h('span', this.$t('status')),
+          render: (h,params) => h('span', this.switchWithdrawalStatus(params.row.status))
         },
         {
           title: '',
@@ -148,6 +150,30 @@ var myAssetsWithdrawal = new Vue({
     }
   },
   methods: {
+    //提币表格_status
+    switchWithdrawalStatus(status) {
+      if (status === 0) {
+        return this.$t('unAuditStatus');
+      }
+      if (status === 1) {
+        return this.$t('auditSuccessStatus')
+      }
+      if (status === 2) {
+        return this.$t('auditFailStatus')
+      }
+      if (status === 3) {
+        return this.$t('inPayStatus')
+      }
+      if (status === 4) {
+        return this.$t('auditFailStatus')
+      }
+      if (status === 5) {
+        return this.$t('completeStatus')
+      }
+      if (status === 6) {
+        return this.$t('dismissStatus')
+      }
+    },
     checkNum(type) {
       switch (type){
         case 'email':
@@ -191,24 +217,6 @@ var myAssetsWithdrawal = new Vue({
         that.data3 = res.financeList;
         that.tableLoading3 = false;
         that.data3Page = res.count;
-        for (var i = 0; i < res.financeList.length; i++) {
-          if(res.financeList[i].status === 0){
-            that.$set(that.data3[i], 'status', that.$t('unAuditStatus'))
-          }else if(res.financeList[i].status === 1){
-            that.$set(that.data3[i], 'status', that.$t('auditSuccessStatus'))
-          }else if(res.financeList[i].status === 2){
-            that.$set(that.data3[i], 'status', that.$t('auditFailStatus'))
-          }else if(res.financeList[i].status === 3){
-            that.$set(that.data3[i], 'status', that.$t('inPayStatus'))
-          }else if(res.financeList[i].status === 4){
-            that.$set(that.data3[i], 'status', that.$t('auditFailStatus'))
-          }else if(res.financeList[i].status === 5){
-            that.$set(that.data3[i], 'status', that.$t('completeStatus'))
-          }else if(res.financeList[i].status === 6){
-            that.$set(that.data3[i], 'status', that.$t('dismissStatus'))
-          }
-          that.$set(that.data3[i], 'type', that.$t('withdrawal'))
-        }
       })
     },
     changeWithDraw(page) {

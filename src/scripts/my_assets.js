@@ -1,5 +1,3 @@
-
-
 var messagesTransformed = utils.transform(messages);
 var messagesAll = {
   zh: Object.assign(messagesTransformed.zh, iview.langs['zh']),
@@ -55,7 +53,8 @@ var myAssets = new Vue({
           title: '',
           key: 'type',
           align: 'center',
-          renderHeader: (h) => h('span', this.$t('type'))
+          renderHeader: (h) => h('span', this.$t('type')),
+          render: (h,params) => h('span', this.switchRecentType(params.row.type))
         },
         {
           title: '',
@@ -81,7 +80,8 @@ var myAssets = new Vue({
           title: '',
           key: 'type',
           align: 'center',
-          renderHeader: (h) => h('span', this.$t('type'))
+          renderHeader: (h) => h('span', this.$t('type')),
+          render: (h, params) => h('span', this.$t('deposit'))
         },
         {
           title: '',
@@ -93,7 +93,8 @@ var myAssets = new Vue({
           title: '',
           key: 'status',
           align: 'center',
-          renderHeader: (h) => h('span', this.$t('status'))
+          renderHeader: (h) => h('span', this.$t('status')),
+          render: (h, params) => h('span', this.switchDepositStatus(params.row.status))
         },
         {
           title: '',
@@ -126,7 +127,8 @@ var myAssets = new Vue({
           title: '',
           key: 'type',
           align: 'center',
-          renderHeader: (h) => h('span', this.$t('type'))
+          renderHeader: (h) => h('span', this.$t('type')),
+          render: (h, params) => h('span', this.$t('withdrawal')),
         },
         {
           title: '',
@@ -138,7 +140,8 @@ var myAssets = new Vue({
           title: '',
           key: 'status',
           align: 'center',
-          renderHeader: (h) => h('span', this.$t('status'))
+          renderHeader: (h) => h('span', this.$t('status')),
+          render: (h, params) => h('span', this.switchWithdrawalStatus(params.row.status))
         },
         {
           title: '',
@@ -172,7 +175,7 @@ var myAssets = new Vue({
           key: 'type',
           align: 'center',
           renderHeader: (h) => h('span', this.$t('type')),
-          render:(h,params) => {
+          render: (h, params) => {
             return h('span', this.$t(params.row.type))
           }
         },
@@ -200,6 +203,82 @@ var myAssets = new Vue({
     }
   },
   methods: {
+    //最近记录表格_type
+    switchRecentType(type) {
+      if (type === 'buy') {
+        return this.$t('buyType');
+      }
+      if (type === 'trade') {
+        return this.$t('tradeType');
+      }
+      if (type === 'sell') {
+        return this.$t('sellType');
+      }
+      if (type === 'present_coin') {
+        return this.$t('presentType')
+      }
+      if (type === 'deposit') {
+        return this.$t('deposit')
+      }
+      if (type === 'withdraw_success') {
+        return this.$t('withdrawal')
+      }
+
+      if (type === 'create_sell_ad') {
+        return this.$t('createSellType');
+      }
+      if (type === 'otc_transfer_sellad') {
+        return this.$t('transferSellType');
+      }
+      if (type === 'otc_transfer_buyad') {
+        return this.$t('transferBuyType');
+      }
+      if (type === 'otc_advert_close') {
+        return this.$t('closeType');
+      }
+      if (type === 'otc_sell_order') {
+        return this.$t('sellOrderType');
+      }
+      if (type === 'transfer_common') {
+        return this.$t('transferCommonType');
+      }
+    },
+    //充币表格_status
+    switchDepositStatus(status) {
+      if (status === 0) {
+        return this.$t('unConfirmStatus');
+      }
+      if (status === 1) {
+        return this.$t('completeStatus');
+      }
+      if (status === 2) {
+        return this.$t('errorStatus');
+      }
+    },
+    //提币表格_status
+    switchWithdrawalStatus(status) {
+      if (status === 0) {
+        return this.$t('unAuditStatus');
+      }
+      if (status === 1) {
+        return this.$t('auditSuccessStatus')
+      }
+      if (status === 2) {
+        return this.$t('auditFailStatus')
+      }
+      if (status === 3) {
+        return this.$t('inPayStatus')
+      }
+      if (status === 4) {
+        return this.$t('auditFailStatus')
+      }
+      if (status === 5) {
+        return this.$t('completeStatus')
+      }
+      if (status === 6) {
+        return this.$t('dismissStatus')
+      }
+    },
     //跳转With
     runWithdrawal(type) {
       if (this.userInfo.googleStatus !== 1) {
@@ -256,53 +335,12 @@ var myAssets = new Vue({
         that.tableLoading1 = false;
         that.data1 = res.financeList;
         that.data1Page = res.count;
-        for (let i = 0; i < res.financeList.length; i++) {
-          switch (res.financeList[i].type) {
-            case 'buy':
-              that.$set(that.data1[i], 'type', that.$t('buyType'));
-              break;
-            case 'trade':
-              that.$set(that.data1[i], 'type', that.$t('tradeType'));
-              break;
-            case 'sell':
-              that.$set(that.data1[i], 'type', that.$t('sellType'));
-              break;
-            case 'present_coin':
-              that.$set(that.data1[i], 'type', that.$t('presentType'));
-              break;
-            case 'deposit':
-              that.$set(that.data1[i], 'type', that.$t('deposit'));
-              break;
-            case 'withdraw_success':
-              that.$set(that.data1[i], 'type', that.$t('withdrawal'));
-              break;
-
-            case 'create_sell_ad':
-              that.$set(that.data1[i], 'type', that.$t('createSellType'));
-              break;
-            case 'otc_transfer_sellad':
-              that.$set(that.data1[i], 'type', that.$t('transferSellType'));
-              break;
-            case 'otc_transfer_buyad':
-              that.$set(that.data1[i], 'type', that.$t('transferBuyType'));
-              break;
-            case 'otc_advert_close':
-              that.$set(that.data1[i], 'type', that.$t('closeType'));
-              break;
-            case 'otc_sell_order':
-              that.$set(that.data1[i], 'type', that.$t('sellOrderType'));
-              break;
-            case 'transfer_common':
-              that.$set(that.data1[i], 'type', that.$t('transferCommonType'));
-              break;
-          }
-        }
       })
     },
     changePageAll(page) {
       this.getUserAllList(page)
     },
-    //充值
+    //充币
     getUserDepositList(page) {
       var that = this;
       that.tableLoading2 = true;
@@ -315,22 +353,12 @@ var myAssets = new Vue({
         that.tableLoading2 = false;
         that.data2 = res.financeList;
         that.data2Page = res.count;
-        for (var i = 0; i < res.financeList.length; i++) {
-          if (res.financeList[i].status === 0) {
-            that.$set(that.data2[i], 'status', that.$t('unConfirmStatus'))
-          } else if (res.financeList[i].status === 1) {
-            that.$set(that.data2[i], 'status', that.$t('completeStatus'))
-          } else if (res.financeList[i].status === 2) {
-            that.$set(that.data2[i], 'status', that.$t('errorStatus'))
-          }
-          that.$set(that.data2[i], 'type', that.$t('deposit'))
-        }
       })
     },
     changePageDeposit(page) {
       this.getUserDepositList(page)
     },
-    //提现
+    //提币
     getUserWithDrawList(page) {
       var that = this;
       that.tableLoading3 = true;
@@ -343,24 +371,6 @@ var myAssets = new Vue({
         that.data3 = res.financeList;
         that.tableLoading3 = false;
         that.data3Page = res.count;
-        for (var i = 0; i < res.financeList.length; i++) {
-          if (res.financeList[i].status === 0) {
-            that.$set(that.data3[i], 'status', that.$t('unAuditStatus'))
-          } else if (res.financeList[i].status === 1) {
-            that.$set(that.data3[i], 'status', that.$t('auditSuccessStatus'))
-          } else if (res.financeList[i].status === 2) {
-            that.$set(that.data3[i], 'status', that.$t('auditFailStatus'))
-          } else if (res.financeList[i].status === 3) {
-            that.$set(that.data3[i], 'status', that.$t('inPayStatus'))
-          } else if (res.financeList[i].status === 4) {
-            that.$set(that.data3[i], 'status', that.$t('auditFailStatus'))
-          } else if (res.financeList[i].status === 5) {
-            that.$set(that.data3[i], 'status', that.$t('completeStatus'))
-          } else if (res.financeList[i].status === 6) {
-            that.$set(that.data3[i], 'status', that.$t('dismissStatus'))
-          }
-          that.$set(that.data3[i], 'type', that.$t('withdrawal'))
-        }
       })
     },
     changeWithDraw(page) {
@@ -396,10 +406,10 @@ var myAssets = new Vue({
       this.$i18n.locale = i;
     });
 
-    this.$on('cancelGoogleModal', function(i){
+    this.$on('cancelGoogleModal', function (i) {
       this.showGoogleAuth = false;
     });
-    this.$on('toGoogleAuth', function(i){
+    this.$on('toGoogleAuth', function (i) {
       this.showGoogleAuth = false;
       this.$refs.header.$data.isRegisterGoogleShow = true;
     });
