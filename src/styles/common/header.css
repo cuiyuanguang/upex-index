@@ -104,7 +104,7 @@ body[dir='rtl'] .loginGoogle-ul li .li-title .tip-img2{
   background: #fafafa;
   border: none;
   top: 1px;
-  height: 37px;
+  height: 38px;
   line-height: 30px;
   width: auto;
   cursor: pointer;
@@ -379,6 +379,12 @@ body[dir='rtl'] .my-login .ivu-select-dropdown{
 
 .my-login .ivu-modal-body {
   position: static;
+}
+
+.my-login .register-verify .ivu-input-group-append{
+  padding-right: 0;
+  padding-left: 0;
+  overflow: hidden;
 }
 
 .my-loginNext .ivu-modal-footer{

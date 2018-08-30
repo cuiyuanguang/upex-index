@@ -1359,14 +1359,14 @@ var o_my_register = {
           maxlength="6"
           @on-change="checkNum"
           :placeholder="$t('emailValidate')"
-          class="loginNext-input loginNext-sms-input" @on-focus="emailSmsCodeFocus" :class="emailSmsCodeError?'loginNext-input-red':' '">
-          <span slot="append"
-            class="my-slot-append"
+          class="loginNext-input loginNext-sms-input register-verify" @on-focus="emailSmsCodeFocus" :class="emailSmsCodeError?'loginNext-input-red':' '">
+          <Button slot="append"
              @click="runSendSms('email')"
-            :class="timerEmail?'my-slot-append-gary':'my-slot-append'"
+             :disabled="disabledEmail"
+            :class="timerEmail?'my-slot-append-gary':''"
           >
             {{sendSmsEmail}}
-          </span>
+          </Button>
         </Input>
         <p class="my-loginNext-error">{{emailSmsCodeErrorText}}</p>
           <Input
@@ -1417,15 +1417,15 @@ var o_my_register = {
           maxlength="6"
           @on-change="checkNum"
           :placeholder="$t('phoneValidate')"
-          class="loginNext-input loginNext-sms-input" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
+          class="loginNext-input loginNext-sms-input register-verify" @on-focus="phoneSmsCodeFocus" :class="phoneSmsCodeError?'loginNext-input-red':' '">
 
-          <span slot="append"
-            class="my-slot-append"
+          <Button slot="append"
             @click="runSendSms('phone')"
-            :class="timerPhone?'my-slot-append-gary':'my-slot-append'"
+            :disabled="disabledPhone"
+            :class="timerPhone?'my-slot-append-gary':''"
           >
             {{sendSmsPhone}}
-          </span>
+          </Button>
         </Input>
         <p class="my-login-error">{{phoneSmsCodeErrorText}}</p>
           <Input
@@ -1500,7 +1500,9 @@ var o_my_register = {
       countPhone: '',
       timerEmail: null,
       timerPhone: null,
-      isLogined: false
+      isLogined: false,
+      disabledEmail: false,
+      disabledPhone: false
     };
   },
   computed: {
@@ -1663,6 +1665,7 @@ var o_my_register = {
             that.phoneValError = true;
             that.phoneValErrorText = this.$t('errorPhoneNum');
           } else {
+            that.disabledPhone = true;
             const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
             const isLoginNextPhoneNumPhone = that.phoneVal;
             data = {
@@ -1671,24 +1674,24 @@ var o_my_register = {
               operationType: '1',
             };
             that.countPhone = TIME_COUNT;
-            that.sendSmsPhone = that.countPhone + 's';
             that.showPhone = false;
-            that.timerPhone = setInterval(() => {
-              if (that.countPhone > 0 && that.countPhone <= TIME_COUNT) {
-                that.countPhone--;
-                that.sendSmsPhone = that.countPhone + ' s';
-              } else {
-                that.sendSmsPhone = this.$t('Reacquire');
-                that.showPhone = true;
-                clearInterval(that.timerPhone);
-                that.timerPhone = null;
-              }
-            }, 1000);
             post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
               if (res) {
-
+                that.sendSmsPhone = that.countPhone + 's';
+                that.timerPhone = setInterval(() => {
+                  if (that.countPhone > 0 && that.countPhone <= TIME_COUNT) {
+                    that.countPhone--;
+                    that.sendSmsPhone = that.countPhone + ' s';
+                  } else {
+                    that.disabledPhone = false;
+                    that.sendSmsPhone = that.$t('Reacquire');
+                    that.showPhone = true;
+                    clearInterval(that.timerPhone);
+                    that.timerPhone = null;
+                  }
+                }, 1000);
               } else {
-
+                that.disabledPhone = false;
               }
             });
           }
@@ -1704,29 +1707,30 @@ var o_my_register = {
             that.emailValError = true;
             that.emailValErrorText = this.$t('errorEmailNum');
           } else {
+            this.disabledEmail = true;
             data = {
               email: that.emailVal,
               operationType: '1',
             };
             that.countEmail = TIME_COUNT;
-            that.sendSmsEmail = that.countEmail + 's';
             that.showEmail = false;
-            that.timerEmail = setInterval(() => {
-              if (that.countEmail > 0 && that.countEmail <= TIME_COUNT) {
-                that.countEmail--;
-                that.sendSmsEmail = that.countEmail + ' s';
-              } else {
-                that.sendSmsEmail = this.$t('Reacquire');
-                that.showEmail = true;
-                clearInterval(that.timerEmail);
-                that.timerEmail = null;
-              }
-            }, 1000);
             post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
               if (res) {
-
+                that.sendSmsEmail = that.countEmail + 's';
+                that.timerEmail = setInterval(() => {
+                  if (that.countEmail > 0 && that.countEmail <= TIME_COUNT) {
+                    that.countEmail--;
+                    that.sendSmsEmail = that.countEmail + ' s';
+                  } else {
+                    that.disabledEmail = false;
+                    that.sendSmsEmail = that.$t('Reacquire');
+                    that.showEmail = true;
+                    clearInterval(that.timerEmail);
+                    that.timerEmail = null;
+                  }
+                }, 1000);
               } else {
-
+                that.disabledEmail = false;
               }
             });
           }
