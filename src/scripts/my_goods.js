@@ -141,7 +141,7 @@ var myGoods = new Vue({
   },
   computed: {
     digitalCurrencyMin() {
-      return JSON.parse(localStorage.getItem('market')).trade_min_volume;
+      return JSON.parse(localStorage.getItem('market')).trade_min_volume || 30;
     },
   },
   methods: {
