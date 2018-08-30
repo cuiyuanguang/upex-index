@@ -1234,7 +1234,6 @@ var o_my_loginNext = {
       }
     },
     runSendSms(type) {
-      const TIME_COUNT = 90;
       if (!this.timers[type]) {
         const isLoginNextPhoneNumArr = this.isLoginNextPhoneNum.split(' ');
         const isLoginNextPhoneNumCountry = isLoginNextPhoneNumArr[0].substring(1);
@@ -1247,10 +1246,9 @@ var o_my_loginNext = {
             operationType: '31',
             token: this.isLoginNextCookieNum,
           };
-          post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
+          post('api/common/smsValidCode', JSON.stringify(data), false).then((res) => {
             if (res) {
-              console.log(res);
-            } else {
+              this.runSmsCountDown(type);
             }
           });
         } else if (type === 'email') {
@@ -1259,28 +1257,30 @@ var o_my_loginNext = {
             operationType: '31',
             token: this.isLoginNextCookieNum,
           };
-          post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
+          post('api/common/emailValidCode', JSON.stringify(data)).then((res) => {
             if (res) {
-
-            } else {
-
+              this.runSmsCountDown(type);
             }
           });
         }
-        this.count = TIME_COUNT;
-        this.sendSms[type] = this.count + 's';
-        this.show = false;
-        this.timers[type] = setInterval(() => {
-          if (this.count > 0 && this.count <= TIME_COUNT) {
-            this.count--;
-            this.sendSms[type] = this.count + ' s';
-          } else {
-            this.sendSms[type] = this.$t('Reacquire');
-            clearInterval(this.timers[type]);
-            this.timers[type] = null;
-          }
-        }, 1000);
+
       }
+    },
+    runSmsCountDown(type){
+      const TIME_COUNT = 90;
+      this.count = TIME_COUNT;
+      this.sendSms[type] = this.count + 's';
+      this.show = false;
+      this.timers[type] = setInterval(() => {
+        if (this.count > 0 && this.count <= TIME_COUNT) {
+          this.count--;
+          this.sendSms[type] = this.count + ' s';
+        } else {
+          this.sendSms[type] = this.$t('Reacquire');
+          clearInterval(this.timers[type]);
+          this.timers[type] = null;
+        }
+      }, 1000);
     },
     asyncCancel() {
       this.$parent.$emit('isLoginNext', false);
