@@ -60,9 +60,9 @@ var messages = {
     ar: 'في انتظار الدفع',
   },
   toBeConfirm: {
-    zh: '待确认',
-    en: 'Waiting to confirm',
-    ar: 'في انتظار التاكيد',
+    zh: '待确认收款',
+    en: 'Waiting to confirm receipt',
+    ar: 'المستحقات المعلقة',
   },
   alreadyPaid: {
     zh: '已支付',
