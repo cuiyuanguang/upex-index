@@ -54,7 +54,7 @@ var myAssets = new Vue({
           key: 'type',
           align: 'center',
           renderHeader: (h) => h('span', this.$t('type')),
-          render: (h,params) => h('span', this.switchRecentType(params.row.type))
+          render: (h,params) => h('span', this.switchRecentType(params.row.type,params.row.amount))
         },
         {
           title: '',
@@ -204,7 +204,7 @@ var myAssets = new Vue({
   },
   methods: {
     //最近记录表格_type
-    switchRecentType(type) {
+    switchRecentType(type, amount) {
       if (type === 'buy') {
         return this.$t('buyType');
       }
@@ -230,9 +230,14 @@ var myAssets = new Vue({
       if (type === 'otc_transfer_sellad') {
         return this.$t('transferSellType');
       }
-      if (type === 'otc_transfer_buyad') {
+      if (type === 'otc_transfer_buyad' && amount > 0) {
         return this.$t('transferBuyType');
       }
+
+      if(type === 'otc_transfer_buyad' && amount < 0){
+        return this.$t('transferSellType');
+      }
+
       if (type === 'otc_advert_close') {
         return this.$t('closeType');
       }
