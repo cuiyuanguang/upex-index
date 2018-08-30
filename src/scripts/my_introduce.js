@@ -87,7 +87,7 @@ function init() {
   renderer = new THREE.CanvasRenderer();
   renderer.setPixelRatio( window.devicePixelRatio );
   renderer.setSize( window.innerWidth, 620 );
-  renderer.setClearColor('#0A1B31', 1.0);
+  renderer.setClearColor('#0c2546', 1);
   container.appendChild( renderer.domElement );
   document.addEventListener( 'mousemove', onDocumentMouseMove, false );
   document.addEventListener( 'touchstart', onDocumentTouchStart, false );
@@ -128,7 +128,7 @@ function animate() {
 }
 function render() {
   camera.position.x += ( mouseX - camera.position.x ) * .05;
-  camera.position.y += ( - mouseY - camera.position.y ) * .05;
+  camera.position.y += ( 292.5 - camera.position.y ) * .05;
   camera.lookAt( scene.position );
   var i = 0;
   for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
