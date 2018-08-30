@@ -220,7 +220,7 @@ var myAssets = new Vue({
       if (type === 'deposit') {
         return this.$t('deposit')
       }
-      if (type === 'withdraw_success') {
+      if (type === 'withdraw_success' || type === 'withdraw') {
         return this.$t('withdrawal')
       }
 

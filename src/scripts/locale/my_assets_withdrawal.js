@@ -258,5 +258,10 @@ var messages = {
     zh: '已撤销',
     en: 'cancelled',
     ar: 'تم الإلغاء '
-  }
+  },
+  completeStatus: {
+    zh: '已完成',
+    en: 'confirmed',
+    ar: 'تم التأكيد'
+  },
 };
