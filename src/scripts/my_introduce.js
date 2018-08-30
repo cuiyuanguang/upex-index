@@ -128,7 +128,7 @@ function animate() {
 }
 function render() {
   camera.position.x += ( mouseX - camera.position.x ) * .05;
-  camera.position.y += ( - mouseY - camera.position.y ) * .05;
+  camera.position.y += ( 292.5 - camera.position.y ) * .05;
   camera.lookAt( scene.position );
   var i = 0;
   for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
