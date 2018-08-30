@@ -20,9 +20,14 @@ var messages = {
     ar: 'شراء',
   },
   amount: {
-    zh: '数量',
-    en: 'Amount',
-    ar: 'المبلغ',
+    zh: '总量',
+    en: 'Total',
+    ar: 'الإجمالي',
+  },
+  balance: {
+    zh: '余额',
+    en: 'Balance',
+    ar: 'المتبقي',
   },
   cancelToRelease: {
     zh: '订单余额已低于最小限额，请取消后重新发布',

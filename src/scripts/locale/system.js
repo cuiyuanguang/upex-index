@@ -497,8 +497,8 @@
     ar: 'عدد الطلبات المعلقة محدود ، وعدد الطلبات الملغاة في نفس اليوم يتجاوز 3 مرات.',
   },
   '2066': {
-    zh: '操作被限制,当日进行中的订单数量超过3笔',
-    en: 'The operation is limited, and the number of orders in progress on the day exceeds 3',
-    ar: 'عدد الطلبات المعلقة محدود ، وعدد الطلبات قيد التقدم في اليوم يتجاوز 3',
+    zh: '操作被限制,当日进行中的订单数量超过6笔',
+    en: 'The operation is limited, and the number of orders in progress on the day exceeds 6',
+    ar: 'عدد الطلبات المعلقة محدود ، وعدد الطلبات قيد التقدم في اليوم يتجاوز6',
   },
 };

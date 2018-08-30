@@ -2280,22 +2280,40 @@ var o_find_password = {
       }
     };
     const validateVerifyEmail = (rule, value, callback) => {
-      if (this.findType === 'email' && value === '') {
-        callback(new Error(this.$t('emailVerificationHolder')));
+      if (this.findType === 'email') {
+         if (value === '') {
+          callback(new Error(this.$t('emailVerificationHolder')));
+        } else if (!/\d+$/g.test(value)) {
+          callback(new Error(this.$t('numericRequired')));
+        } else {
+          callback();
+        }
       } else {
         callback();
       }
     };
     const validateVerifyPhone = (rule, value, callback) => {
-      if (this.findType === 'phone' && value === '') {
-        callback(new Error(this.$t('phoneVerificationHolder')));
+      if (this.findType === 'phone') {
+         if (value === '') {
+          callback(new Error(this.$t('phoneVerificationHolder')));
+        } else if (!/\d+$/g.test(value)) {
+          callback(new Error(this.$t('numericRequired')));
+        } else {
+          callback();
+        }
       } else {
         callback();
       }
     };
     const validateVerifyGoogle = (rule, value, callback) => {
-      if (this.googleAuthored && value === '') {
-        callback(new Error(this.$t('googleVerificationHolder')));
+      if (this.googleAuthored) {
+        if (value === '') {
+          callback(new Error(this.$t('googleVerificationHolder')));
+        } else if (!/\d+$/g.test(value)) {
+          callback(new Error(this.$t('numericRequired')));
+        } else {
+          callback();
+        }
       } else {
         callback();
       }
@@ -2315,9 +2333,9 @@ var o_find_password = {
         email: [{ validator: validateEmail, trigger: 'change' }],
         phone: [{ validator: validatePhone, trigger: 'change' }],
       },
-      sendPlaceholderEmail: this.$t('sendVerification'),
+      sendPlaceholderEmail: '',
       sendDisabledEmail: false,
-      sendPlaceholderPhone: this.$t('sendVerification'),
+      sendPlaceholderPhone: '',
       sendDisabledPhone: false,
       formReset: {
         password: '',
@@ -2329,18 +2347,9 @@ var o_find_password = {
       ruleReset: {
         password: [{ validator: validatePassword, trigger: 'change' }],
         passwordAgain: [{ validator: validatePasswordAgain, trigger: 'change' }],
-        verifyEmail: [
-          { validator: validateVerifyEmail, trigger: 'change' },
-          { type: 'number', message: this.$t('numericRequired'), trigger: 'change' },
-        ],
-        verifyPhone: [
-          { validator: validateVerifyPhone, trigger: 'change' },
-          { type: 'number', message: this.$t('numericRequired'), trigger: 'change' },
-        ],
-        verifyGoogle: [
-          { validator: validateVerifyGoogle, trigger: 'change' },
-          { type: 'number', message: this.$t('numericRequired'), trigger: 'change' },
-        ],
+        verifyEmail: [{ validator: validateVerifyEmail, trigger: 'change' }],
+        verifyPhone: [{ validator: validateVerifyPhone, trigger: 'change' }],
+        verifyGoogle: [{ validator: validateVerifyGoogle, trigger: 'change' }],
       },
     };
   },
@@ -2438,6 +2447,10 @@ var o_find_password = {
       }, 1000);
     },
   },
+  mounted() {
+    this.sendPlaceholderEmail = this.$t('sendVerification');
+    this.sendPlaceholderPhone = this.$t('sendVerification');
+  },
   watch: {
     show(newVal) {
       if (!newVal) {
@@ -2449,6 +2462,8 @@ var o_find_password = {
     },
     locale(newVal) {
       this.$i18n.locale = newVal;
+      this.sendPlaceholderEmail = this.$t('sendVerification');
+      this.sendPlaceholderPhone = this.$t('sendVerification');
     }
   },
 };
@@ -2457,18 +2472,17 @@ var pendingOrderItem = {
   template: `
     <Row v-if="data.buyer.id == id" @click.native="location.href='otc_pay.html?sequence='+data.sequence">
       <i-col span="3">
-        <Avatar style="background:#FF2E2E;">{{ data.status < 7 ? $t('buy') : $t('expired') }}</Avatar>
+        <Avatar :style="{background:(data.status < 7 && timeStr !== 0) ? '#5C95EA' : '#FF2E2E'}">
+          {{ (data.status < 7 && timeStr !== 0) ? $t('buy') : $t('expired') }}
+        </Avatar>
       </i-col>
       <i-col span="18" v-show="timeStr !== ''">
         <template v-if="timeStr !== 0">
-          <h4>
-          {{ data.status == 1 ? $t('waitForBuyerPay') : '' }}
-          {{ data.status == 2 ? $t('waitForSellerReceive') : '' }}
-          {{data.totalPrice}}SAR
-          </h4>
+          <h4 class="text-warning" v-if="data.status == 1">{{ $t('waitForBuyerPay') }}</h4>
+          <h4 class="text-primary" v-if="data.status == 2">{{ $t('waitForSellerReceive') }}</h4>
           <p>
             {{ $t('payInTime') }}
-            <span class="text-error text-strong">{{ timeStr }}</span>
+            <span class="text-primary text-strong">{{ timeStr }}</span>
           </p>
         </template>
         <template v-if="timeStr === 0">
@@ -2482,15 +2496,14 @@ var pendingOrderItem = {
     </Row>
     <Row v-else @click.native="location.href='otc_wait_pay.html?sequence='+data.sequence">
       <i-col span="3">
-        <Avatar style="background:#5C95EA;">{{ data.status < 7 ? $t('sell') : $t('expired') }}</Avatar>
+        <Avatar :style="{background:(data.status < 7 && timeStr !== 0) ? '#5C95EA' : '#FF2E2E'}">
+          {{ (data.status < 7 && timeStr !== 0) ? $t('sell') : $t('expired') }}
+        </Avatar>
       </i-col>
       <i-col span="18" v-show="timeStr !== ''">
         <template v-if="timeStr !== 0">
-          <h4>
-            {{ data.status == 1 ? $t('waitForBuyerPay') : '' }}
-            {{ data.status == 2 ? $t('buyerHasPaid') : '' }}
-            {{data.totalPrice}}SAR
-          </h4>
+          <h4 class="text-primary" v-if="data.status == 1">{{ $t('waitForBuyerPay') }}</h4>
+          <h4 class="text-warning" v-if="data.status == 2">{{ $t('waitForSellerReceive') }}</h4>
           <p>
             {{ $t('waitForTime') }}
             <span class="text-primary text-strong">{{ timeStr }}</span>

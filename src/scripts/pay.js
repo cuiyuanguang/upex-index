@@ -69,13 +69,12 @@ var pay = new Vue({
         user: {},
       },
       whatsAppLink: '',
+      bankListStr: '',
     }
   },
   computed: {
-    limitTime: function() {
-      if (this.orderInfo) {
-        return Math.ceil(this.orderInfo.countDownTime / 1000 / 60 / 60);
-      }
+    bankList: function() {
+      return this.bankListStr ? JSON.parse(this.bankListStr) : [];
     },
     payStatusText: function() {
       var statusText = '';
@@ -203,6 +202,7 @@ var pay = new Vue({
               return;
             }
             that.orderInfo = res;
+            that.bankListStr = res.advert.bankname;
             var whatsAppStr = res.seller.userExtView.watchapp;
             // that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1).replace(/\s+/g, '');
             that.whatsAppLink = whatsAppStr && whatsAppStr.replace('+','').replace('-','');
