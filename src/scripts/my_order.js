@@ -71,13 +71,32 @@ var myOrder = new Vue({
         {
           align: 'center',
           renderHeader: (h) => h('span', this.$t('status')),
-          render: (h, params) => h(
-            'span',
-            {
-              'class': params.row.status == 3 ? 'text-primary' : 'text-error',
-            },
-            this.convertStatus(params.row.status),
-          ),
+          render: (h, params) => {
+            var status = params.row.status;
+            var statusText = '';
+            var statusStyle = '';
+            if (status == 1) {
+              statusText = 'toBePaid'
+              statusStyle = this.userInfo.id === params.row.buyerId ? 'text-warning' : 'text-primary';
+            }
+            if (status == 2 || status == 6) {
+              statusText = 'toBeConfirm';
+              statusStyle = this.userInfo.id === params.row.buyerId ? 'text-primary' : 'text-warning';
+            }
+            if (status == 3) {
+              statusText = 'orderDone';
+              statusStyle = 'text-success';
+            }
+            if (status == 4 || (status == 1 && params.row.limitTime < 0)) {
+              statusText = 'orderCanceled';
+              statusStyle = 'text-disabled';
+            }
+            if (status == 5 || status == 7 || (status == 2 && params.row.limitTime < 0)) {
+              statusText = 'orderAbnormal';
+              statusStyle = 'text-error';
+            }
+            return h('span', { 'class': statusStyle }, this.$t(statusText));
+          }
         },
         {
           align: 'center',

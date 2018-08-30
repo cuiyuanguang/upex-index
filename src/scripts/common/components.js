@@ -147,6 +147,11 @@ var i18nComponentsMessages = {
     en: 'Order Expired',
     ar: 'انتهت صلاحية الطلب',
   },
+  orderAbnormal: {
+    zh: '订单异常',
+    en: 'Order abnormal',
+    ar: 'استثناء الأمر',
+  },
   seekForCustomService: {
     zh: '客服介入，协助双方交易',
     en: 'Customer service has been involved to assist both parties in trading',
@@ -2470,7 +2475,7 @@ var pendingOrderItem = {
           </p>
         </template>
         <template v-if="timeStr === 0">
-          <h4 class="text-error">{{ $t('orderExpired') }}</h4>
+          <h4 class="text-error">{{ $t('orderAbnormal') }}</h4>
           <p>{{ $t('seekForCustomService') }}</p>
         </template>
       </i-col>
@@ -2495,7 +2500,7 @@ var pendingOrderItem = {
           </p>
         </template>
         <template v-if="timeStr === 0">
-          <h4 class="text-error">{{ $t('orderExpired') }}</h4>
+          <h4 class="text-error">{{ $t('orderAbnormal') }}</h4>
           <p>{{ $t('seekForCustomService') }}</p>
         </template>
       </i-col>

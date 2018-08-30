@@ -49,17 +49,20 @@ var messages = {
     en: 'Status',
     ar: 'الحالة',
   },
-
   tradingObject: {
     zh: '交易对象',
-    en: 'transaction partner',
+    en: 'Transaction partner',
     ar: 'شريك الصفقة',
   },
-
   toBePaid: {
     zh: '待支付',
-    en: 'waiting to pay',
+    en: 'Waiting to pay',
     ar: 'في انتظار الدفع',
+  },
+  toBeConfirm: {
+    zh: '待确认',
+    en: 'Waiting to confirm',
+    ar: 'في انتظار التاكيد',
   },
   alreadyPaid: {
     zh: '已支付',
@@ -73,8 +76,13 @@ var messages = {
   },
   orderCanceled: {
     zh: '交易取消',
-    en: 'transaction canceled',
+    en: 'Transaction canceled',
     ar: 'ألغيت الصفقة',
+  },
+  orderAbnormal: {
+    zh: '订单异常',
+    en: 'Order abnormal',
+    ar: 'استثناء الأمر',
   },
   appeal: {
     zh: '申诉',
