@@ -2734,6 +2734,18 @@ var o_header = {
         }
       });
     },
+    getPendingOrders() {
+      var that = this;
+      get('api/personOrders/processing').then(function (result) {
+        if (result) {
+          if (result.rsts.length > 5) {
+            that.orders = result.rsts.slice(0, 5);
+            return;
+          }
+          that.orders = result.rsts;
+        }
+      });
+    },
   },
   mounted() {
     if (!localStorage.getItem('country')) {
@@ -2750,16 +2762,7 @@ var o_header = {
 
     if (localStorage.getItem('token')) {
       this.logined = true;
-      var that = this;
-      get('api/personOrders/processing').then(function (result) {
-        if (result) {
-          if (result.rsts.length > 5) {
-            that.orders = result.rsts.slice(0, 5);
-            return;
-          }
-          that.orders = result.rsts;
-        }
-      });
+      this.getPendingOrders();
     } else {
       this.logined = false;
     }

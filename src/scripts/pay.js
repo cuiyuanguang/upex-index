@@ -175,6 +175,7 @@ var pay = new Vue({
             if (res) {
               clearInterval(that.timer);
               that.modalTransferInfo = false;
+              that.$refs.header.getPendingOrders();
               that.getOrderInfo(that.sequence);
             }
           });

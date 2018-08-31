@@ -86,7 +86,7 @@
                   <i-col span="18" class="text-strong">{{item.ibanNo}}</i-col>
                 </Row>
               </div>
-              <Row v-if="orderInfo.seller && orderInfo.seller.hideMobileNumber.trim()">
+              <Row v-if="orderInfo.seller.hideMobileNumber && orderInfo.seller.hideMobileNumber.trim()">
                 <i-col span="1"><img src="../images/pay_phone.png" class="pay-image"></i-col>
                 <i-col span="5">{{ $t('phone') }}</i-col>
                 <i-col span="18" class="text-strong text-mobile">
