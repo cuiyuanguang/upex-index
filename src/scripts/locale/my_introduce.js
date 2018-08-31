@@ -1,4 +1,4 @@
-const messages = {
+﻿const messages = {
   certify: {
     zh: '已获得巴林央行（CBB）金融认证！',
     en: 'Upex has got the financial certification from The Central Bank of Bahrain ',
@@ -85,7 +85,7 @@ const messages = {
     ar: 'الإحداثيات: أركابيتا-البحرين'
   },
   sixLThree: {
-    zh: '负责整体中东业务',
+    zh: '负责整个中东业务',
     en: 'Responsible for overall Middle East business',
     ar: 'مسؤولة عن كل  الأعمال التجارية في الشرق الأوسط '
   },
@@ -100,7 +100,7 @@ const messages = {
     ar: 'الإحداثيات: القاهرة - مصر'
   },
   sixMThree: {
-    zh: '入驻30名运营、客服、翻译',
+    zh: '30名运营、客服、翻译团队',
     en: '30 operations, customer service and translation',
     ar: '30 مشغل ، خدمة العملاء والترجمة'
   },
