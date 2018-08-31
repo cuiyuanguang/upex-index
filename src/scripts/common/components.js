@@ -715,7 +715,6 @@ var i18nComponents = new VueI18n({
 });
 iview.i18n((key, value) => i18nComponents.t(key, value));
 
-
 var o_my_login = {
   template: `
     <Modal
@@ -1034,6 +1033,7 @@ var o_my_login = {
     }
   },
 };
+
 var o_my_loginNext = {
   template: `
     <Modal
@@ -1068,14 +1068,14 @@ var o_my_loginNext = {
               :maxlength="6"
               :placeholder="$t('phoneVerificationHolder')"
               @on-enter="loginNextSubmit"
-              class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextEmailErrorText?'loginNext-input-red':' '">
-              <span slot="append"
-                class="my-slot-append"
+              class="loginNext-input loginNext-sms-input register-verify" @on-focus="loginNextFocus" :class="loginNextEmailErrorText?'loginNext-input-red':' '">
+              <Button slot="append"           
                 @click="runSendSms('email')"
-                :class="timers['email']?'my-slot-append-gary':'my-slot-append'"
+                :disabled="disabledEmail"
+                :class="timers['email']?'my-slot-append-gary':''"
               >
                 {{sendSms['email']}}
-              </span>
+              </Button>
             </Input>
             <p class="my-loginNext-error">{{loginNextEmailErrorText}}</p>
           </div>
@@ -1089,14 +1089,14 @@ var o_my_loginNext = {
               :maxlength="6"
               :placeholder="$t('phoneVerificationHolder')"
               @on-enter="loginNextSubmit"
-              class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextPhoneErrorText?'loginNext-input-red':' '">
-              <span slot="append"
-                class="my-slot-append"
+              class="loginNext-input loginNext-sms-input register-verify" @on-focus="loginNextFocus" :class="loginNextPhoneErrorText?'loginNext-input-red':' '">
+              <Button slot="append"          
+                :disabled="disabledPhone"
                 @click="runSendSms('phone')"
-                :class="timers['phone']?'my-slot-append-gary':'my-slot-append'"
+                :class="timers['phone']?'my-slot-append-gary':''"
               >
                 {{sendSms['phone']}}
-              </span>
+              </Button>
             </Input>
             <p class="my-loginNext-error">{{loginNextPhoneErrorText}}</p>
           </div>
@@ -1139,7 +1139,8 @@ var o_my_loginNext = {
       showGoogleTab: false,
       showEmailTab: false,
       showMobileTab: false,
-
+      disabledEmail: false,
+      disabledPhone: false
     };
   },
   methods: {
@@ -1241,7 +1242,9 @@ var o_my_loginNext = {
         const isLoginNextPhoneNumCountry = isLoginNextPhoneNumArr[0].substring(1);
         const isLoginNextPhoneNumPhone = isLoginNextPhoneNumArr[1];
         var data;
+
         if (type === 'phone') {
+          this.disabledPhone = true;
           data = {
             countryCode: isLoginNextPhoneNumCountry,
             mobile: isLoginNextPhoneNumPhone,
@@ -1251,9 +1254,12 @@ var o_my_loginNext = {
           post('api/common/smsValidCode', JSON.stringify(data), false).then((res) => {
             if (res) {
               this.runSmsCountDown(type);
+            }else{
+              this.disabledPhone = false;
             }
           });
         } else if (type === 'email') {
+          this.disabledEmail = true;
           data = {
             email: this.isLoginNextEmailNum,
             operationType: '31',
@@ -1262,6 +1268,8 @@ var o_my_loginNext = {
           post('api/common/emailValidCode', JSON.stringify(data)).then((res) => {
             if (res) {
               this.runSmsCountDown(type);
+            } else {
+              this.disabledEmail = false;
             }
           });
         }
@@ -1278,6 +1286,11 @@ var o_my_loginNext = {
           this.count--;
           this.sendSms[type] = this.count + ' s';
         } else {
+          if(type === 'phone') {
+            this.disabledPhone = false;
+          } else if(type === 'email'){
+            this.disabledEmail = false;
+          }
           this.sendSms[type] = this.$t('Reacquire');
           clearInterval(this.timers[type]);
           this.timers[type] = null;
