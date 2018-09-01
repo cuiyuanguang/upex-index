@@ -378,9 +378,9 @@ var i18nComponentsMessages = {
     ar: 'لا يمكن أن تكون كلمة السر فارغة'
   },
   passwordErrorFormat: {
-    zh: '密码为6-64位字符',
-    en: 'The password is from 6 to 64 characters',
-    ar: 'كلمة السر هي من 6-64 حرفاً'
+    zh: '密码为8-64位字符',
+    en: 'The password is from 8 to 64 characters',
+    ar: 'كلمة السر هي من 8-64 حرفاً'
   },
   repeatPassword: {
     zh: '确认密码',
@@ -1754,11 +1754,6 @@ var o_my_register = {
     tabChange(name) {
       this.registerWrap = name;
     },
-    //密码正则
-    passwordReg(passwordVal) {
-      var pwdRegx = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,64}$/;
-      return pwdRegx.test(passwordVal);
-    },
     //phone正则
     phoneReg(phoneval) {
       var mobileRegx = /^\d{1,}$/;
@@ -2044,9 +2039,9 @@ var o_my_registerGoogle = {
         post('api/user/google_verify', JSON.stringify(data)).then(function (res) {
           if (res) {
             that.asyncCancel();
-            that.$parent.$emit('googleBound', true);
             post('api/common/user_info', '', false).then((result) => {
               localStorage.setItem('user', JSON.stringify(result));
+              that.$parent.$emit('googleBound', true);
             });
           }
           that.modal_loading = false;
@@ -2129,7 +2124,7 @@ var o_find_password = {
                 <Input
                   type="text"
                   size="large"
-                  :maxlength="30"
+                  :maxlength="64"
                   v-model="formFind.email"
                   :placeholder="$t('emailHolder')"
                 >
@@ -2177,6 +2172,8 @@ var o_find_password = {
             <Input
               type="password"
               size="large"
+              :minlength="8"
+              :maxlength="64"
               v-model="formReset.password"
               :placeholder="$t('newPasswordHolder')"
             >
@@ -2186,6 +2183,8 @@ var o_find_password = {
             <Input
               type="password"
               size="large"
+              :minlength="8"
+              :maxlength="64"
               v-model="formReset.passwordAgain"
               :placeholder="$t('repeatPasswordHolder')"
             >
@@ -2277,7 +2276,7 @@ var o_find_password = {
     const validatePassword = (rule, value, callback) => {
       if (value === '') {
         callback(new Error(this.$t('passwordErrorEmpty')));
-      } else if (value.length > 18 || value.length < 6) {
+      } else if (value.length > 64 || value.length < 8) {
         callback(new Error(this.$t('passwordErrorFormat')));
       } else {
         if (this.formReset.password !== '') {

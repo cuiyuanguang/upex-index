@@ -303,7 +303,7 @@
                   :placeholder="$t('phoneVerificationHolder')"
                   @on-enter="handleSubmit('formReleaseConfirm')"
                   >
-                  <i-button slot="append" @click="sendMessage('Bank', 3)" :disabled="sendDisabledBank">
+                  <i-button slot="append" @click="sendMessage('Bank', 22)" :disabled="sendDisabledBank">
                     {{ sendPlaceholderBank }}
                   </i-button>
                 </i-input>
@@ -400,7 +400,7 @@
         <div class="modal-notice-footer">
           <i-form ref="formBankConfirm" :model="formBankConfirm" :rules="ruleBankConfirm" label-position="top">
             <Tabs v-model="tabVerifyActive">
-              <tab-pane :label="$t('googleVerification')" :name="1">
+              <tab-pane :label="$t('googleVerification')" :name="1" v-if="userInfo.googleStatus">
                 <form-item label="" prop="google">
                   <i-input
                     v-model="formBankConfirm.google"
@@ -411,7 +411,7 @@
                     ></i-input>
                 </form-item>
               </tab-pane>
-              <tab-pane :label="$t('phoneVerification')" :name="2">
+              <tab-pane :label="$t('phoneVerification')" :name="2" v-if="userInfo.isOpenMobileCheck">
                 <form-item label="" prop="phone">
                   <i-input
                     v-model="formBankConfirm.phone"

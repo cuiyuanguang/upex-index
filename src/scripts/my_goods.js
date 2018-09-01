@@ -50,7 +50,7 @@ var myGoods = new Vue({
             }
             return h('p', [
               h('span', params.row.volume),
-              balance > params.row.minTrade ?
+              (balance * params.row.price).toFixed(2) >= params.row.minTrade ?
                 h('span', { 'class': 'text-primary' }, ' / ' + balance + ' USDT') :
                 h('span', { 'class': 'text-warning' }, [
                   h('span', ' / ' + balance + ' USDT'),

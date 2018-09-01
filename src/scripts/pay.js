@@ -74,7 +74,7 @@ var pay = new Vue({
   },
   computed: {
     bankList: function() {
-      return this.bankListStr ? JSON.parse(this.bankListStr) : [];
+      return this.bankListStr ? JSON.parse(this.bankListStr) : this.orderInfo.paymentBanks;
     },
     payStatusText: function() {
       var statusText = '';

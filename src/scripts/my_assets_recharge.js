@@ -30,13 +30,13 @@ var recharge = new Vue({
         {
           title: 'time',
           renderHeader: (h) => h('span', this.$t('time')),
-          key: 'time',
+          key: 'createdAt',
           align: 'center',
         },
         {
           title: 'currency',
           renderHeader: (h) => h('span', this.$t('currency')),
-          key: 'currency',
+          key: 'symbol',
           align: 'center',
         },
         {
@@ -44,8 +44,7 @@ var recharge = new Vue({
           renderHeader: (h) => h('span', this.$t('type')),
           key: 'type',
           align: 'center',
-          render: (h, params) =>
-           h('span', params.row.type === 1 ? this.$t('recharge') : this.$t('deposit')),
+          render: (h) => h('span', this.$t('recharge')),
         },
         {
           title: 'amount',
@@ -58,8 +57,7 @@ var recharge = new Vue({
           renderHeader: (h) => h('span', this.$t('status')),
           key: 'status',
           align: 'center',
-          render: (h, params) =>
-            h('span', params.row.status === 1 ? this.$t('success') : this.$t('fail')),
+          render: (h, params) => h('span', this.switchDepositStatus(params.row.status))
         },
         {
           title: 'operation',
@@ -68,46 +66,13 @@ var recharge = new Vue({
           render: (h, params) => {
             return h('p', [
               h('strong', { style: { paddingRight: '10px' } }, 'TXid:'),
-              h('span', params.row.TXid),
+              h('span', params.row.txid),
             ]);
           },
           align: 'center',
         },
       ],
-      rechargeData: [
-        {
-          time: '2018-08-05 12:32:43',
-          currency: 'USDT',
-          type: 2,
-          amount: '213.2344',
-          status: 1,
-          TXid: '12312312312312312312312313123',
-        },
-        {
-          time: '2018-08-04 11:32:43',
-          currency: 'USDT',
-          type: 1,
-          amount: '23.2344',
-          status: 1,
-          TXid: '12312312312312312312312313123',
-        },
-        {
-          time: '2018-08-03 12:32:43',
-          currency: 'USDT',
-          type: 1,
-          amount: '2123.4433',
-          status: 2,
-          TXid: '12312312312312312312312313123',
-        },
-        {
-          time: '2018-08-02 12:32:43',
-          currency: 'USDT',
-          type: 2,
-          amount: '213.2344',
-          status: 1,
-          TXid: '12312312312312312312312313123',
-        },
-      ],
+      rechargeData: [],
       rechargeDataLoading: false,
       rechargeTotalCount: '',
     };
@@ -143,6 +108,19 @@ var recharge = new Vue({
           that.rechargeTotalCount = res.count;
         }
       });
+    },
+    switchDepositStatus(status) {
+      var statusText;
+      if (status === 0) {
+        statusText = this.$t('unConfirmStatus');
+      }
+      if (status === 1) {
+        statusText = this.$t('completeStatus');
+      }
+      if (status === 2) {
+        statusText = this.$t('errorStatus');
+      }
+      return statusText;
     },
     rechargePageChange(page) {
       this.getRechargeData(page);

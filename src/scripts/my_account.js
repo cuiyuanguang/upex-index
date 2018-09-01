@@ -460,6 +460,19 @@ var account = new Vue({
       });
     },
     modifyGoogleStatus() {
+      if (!this.user.isOpenMobileCheck) {
+        var that = this;
+        this.$Modal.confirm({
+          title: that.$t('bindPhone'),
+          render(h) {
+            return h('span', that.$t('bindPhoneFirst'));
+          },
+          onOk() {
+            that.modalPhone = true;
+          },
+        });
+        return;
+      }
       this.modalGoogle = true;
     },
     bindGoogle() {
@@ -470,6 +483,10 @@ var account = new Vue({
         Toast.show(this.$t('bindPhoneOrGoogleFirst'), { icon: 'error' });
         return;
       }
+      this.sendPlaceholderOldEmail = this.$t('sendVerify');
+      this.sendLoadingOldEmail = false;
+      this.sendPlaceholderOldPhone = this.$t('sendVerify');
+      this.sendLoadingOldPhone = false;
       this.modalEmail = true;
     },
     modifyPhone() {
@@ -477,6 +494,10 @@ var account = new Vue({
         Toast.show(this.$t('bindPhoneOrGoogleFirst'), { icon: 'error' });
         return;
       }
+      this.sendPlaceholderOldEmail = this.$t('sendVerify');
+      this.sendLoadingOldEmail = false;
+      this.sendPlaceholderOldPhone = this.$t('sendVerify');
+      this.sendLoadingOldPhone = false;
       this.modalPhone = true;
     },
     handleSubmit(name) {
@@ -621,18 +642,25 @@ var account = new Vue({
       }
       this.sendPlaceholderPassword = this.$t('sendVerify');
       this.sendDisabledPassword = false;
+      this.sendLoadingPassword = false;
       this.sendPlaceholderGoogle = this.$t('sendVerify');
       this.sendDisabledGoogle = false;
+      this.sendLoadingGoogle = false;
       this.sendPlaceholderOldEmail = this.$t('sendVerify');
       this.sendDisabledOldEmail = false;
+      this.sendLoadingOldEmail = false;
       this.sendPlaceholderEmail = this.$t('sendVerify');
       this.sendDisabledEmail = false;
+      this.sendLoadingEmail = false;
       this.sendPlaceholderOldPhone = this.$t('sendVerify');
       this.sendDisabledOldPhone = false;
+      this.sendLoadingOldPhone = false;
       this.sendPlaceholderNewPhone = this.$t('sendVerify');
       this.sendDisabledNewPhone = false;
+      this.sendLoadingNewPhone = false;
       this.sendPlaceholderBank = this.$t('sendVerify');
       this.sendDisabledBank = false;
+      this.sendLoadingBank = false;
       this.clearTimers();
       this.$refs[name].resetFields();
     },

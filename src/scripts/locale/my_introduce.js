@@ -40,7 +40,7 @@ const messages = {
     ar: 'خصائص المنصة'
   },
   fiveLOne: {
-    zh: '客服极速相应',
+    zh: '客服极速响应',
     en: 'Customer service extreme response',
     ar: 'الاستجابة السريعة من جانب خدمة العملاء'
   },

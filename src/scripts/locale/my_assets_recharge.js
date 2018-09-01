@@ -96,6 +96,21 @@ var messages = {
     en: 'withdraw',
     ar: 'سحب العملة',
   },
+  unConfirmStatus: {
+    zh: '未确认',
+    en: 'unconfirmed',
+    ar: 'لم يتم التأكيد'
+  },
+  completeStatus: {
+    zh: '已完成',
+    en: 'confirmed',
+    ar: 'تم التأكيد'
+  },
+  errorStatus: {
+    zh: '异常',
+    en: 'Error',
+    ar: 'خطأ'
+  },
   success: {
     zh: '成功',
     en: 'succeeded',
