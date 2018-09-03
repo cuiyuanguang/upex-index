@@ -1071,7 +1071,7 @@ var o_my_loginNext = {
               class="loginNext-input loginNext-sms-input register-verify" @on-focus="loginNextFocus" :class="loginNextEmailErrorText?'loginNext-input-red':' '">
               <Button slot="append"           
                 @click="runSendSms('email')"
-                :disabled="disabledEmail"
+                :loading="loadingEmail"
                 :class="timers['email']?'my-slot-append-gary':''"
               >
                 {{sendSms['email']}}
@@ -1091,7 +1091,7 @@ var o_my_loginNext = {
               @on-enter="loginNextSubmit"
               class="loginNext-input loginNext-sms-input register-verify" @on-focus="loginNextFocus" :class="loginNextPhoneErrorText?'loginNext-input-red':' '">
               <Button slot="append"          
-                :disabled="disabledPhone"
+                :loading="loadingPhone"
                 @click="runSendSms('phone')"
                 :class="timers['phone']?'my-slot-append-gary':''"
               >
@@ -1139,8 +1139,8 @@ var o_my_loginNext = {
       showGoogleTab: false,
       showEmailTab: false,
       showMobileTab: false,
-      disabledEmail: false,
-      disabledPhone: false
+      loadingEmail: false,
+      loadingPhone: false
     };
   },
   methods: {
@@ -1244,7 +1244,7 @@ var o_my_loginNext = {
         var data;
 
         if (type === 'phone') {
-          this.disabledPhone = true;
+          this.loadingPhone = true;
           data = {
             countryCode: isLoginNextPhoneNumCountry,
             mobile: isLoginNextPhoneNumPhone,
@@ -1252,24 +1252,22 @@ var o_my_loginNext = {
             token: this.isLoginNextCookieNum,
           };
           post('api/common/smsValidCode', JSON.stringify(data), false).then((res) => {
+            this.loadingPhone = false;
             if (res) {
               this.runSmsCountDown(type);
-            }else{
-              this.disabledPhone = false;
             }
           });
         } else if (type === 'email') {
-          this.disabledEmail = true;
+          this.loadingEmail = true;
           data = {
             email: this.isLoginNextEmailNum,
             operationType: '31',
             token: this.isLoginNextCookieNum,
           };
           post('api/common/emailValidCode', JSON.stringify(data)).then((res) => {
+            this.loadingEmail = false;
             if (res) {
               this.runSmsCountDown(type);
-            } else {
-              this.disabledEmail = false;
             }
           });
         }
@@ -1286,11 +1284,6 @@ var o_my_loginNext = {
           this.count--;
           this.sendSms[type] = this.count + ' s';
         } else {
-          if(type === 'phone') {
-            this.disabledPhone = false;
-          } else if(type === 'email'){
-            this.disabledEmail = false;
-          }
           this.sendSms[type] = this.$t('Reacquire');
           clearInterval(this.timers[type]);
           this.timers[type] = null;
@@ -1375,7 +1368,7 @@ var o_my_register = {
           class="loginNext-input loginNext-sms-input register-verify" @on-focus="emailSmsCodeFocus" :class="emailSmsCodeError?'loginNext-input-red':' '">
           <Button slot="append"
              @click="runSendSms('email')"
-             :disabled="disabledEmail"
+             :loading="loadingEmail"
             :class="timerEmail?'my-slot-append-gary':''"
           >
             {{sendSmsEmail}}
@@ -1434,7 +1427,7 @@ var o_my_register = {
 
           <Button slot="append"
             @click="runSendSms('phone')"
-            :disabled="disabledPhone"
+            :loading="loadingPhone"
             :class="timerPhone?'my-slot-append-gary':''"
           >
             {{sendSmsPhone}}
@@ -1514,8 +1507,8 @@ var o_my_register = {
       timerEmail: null,
       timerPhone: null,
       isLogined: false,
-      disabledEmail: false,
-      disabledPhone: false
+      loadingEmail: false,
+      loadingPhone: false
     };
   },
   computed: {
@@ -1678,7 +1671,7 @@ var o_my_register = {
             that.phoneValError = true;
             that.phoneValErrorText = this.$t('errorPhoneNum');
           } else {
-            that.disabledPhone = true;
+            that.loadingPhone = true;
             const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
             const isLoginNextPhoneNumPhone = that.phoneVal;
             data = {
@@ -1689,6 +1682,7 @@ var o_my_register = {
             that.countPhone = TIME_COUNT;
             that.showPhone = false;
             post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
+              that.loadingPhone = false;
               if (res) {
                 that.sendSmsPhone = that.countPhone + 's';
                 that.timerPhone = setInterval(() => {
@@ -1696,15 +1690,12 @@ var o_my_register = {
                     that.countPhone--;
                     that.sendSmsPhone = that.countPhone + ' s';
                   } else {
-                    that.disabledPhone = false;
                     that.sendSmsPhone = that.$t('Reacquire');
                     that.showPhone = true;
                     clearInterval(that.timerPhone);
                     that.timerPhone = null;
                   }
                 }, 1000);
-              } else {
-                that.disabledPhone = false;
               }
             });
           }
@@ -1720,7 +1711,7 @@ var o_my_register = {
             that.emailValError = true;
             that.emailValErrorText = this.$t('errorEmailNum');
           } else {
-            this.disabledEmail = true;
+            this.loadingEmail = true;
             data = {
               email: that.emailVal,
               operationType: '1',
@@ -1728,6 +1719,7 @@ var o_my_register = {
             that.countEmail = TIME_COUNT;
             that.showEmail = false;
             post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
+              that.loadingEmail = false;
               if (res) {
                 that.sendSmsEmail = that.countEmail + 's';
                 that.timerEmail = setInterval(() => {
@@ -1735,15 +1727,12 @@ var o_my_register = {
                     that.countEmail--;
                     that.sendSmsEmail = that.countEmail + ' s';
                   } else {
-                    that.disabledEmail = false;
                     that.sendSmsEmail = that.$t('Reacquire');
                     that.showEmail = true;
                     clearInterval(that.timerEmail);
                     that.timerEmail = null;
                   }
                 }, 1000);
-              } else {
-                that.disabledEmail = false;
               }
             });
           }
