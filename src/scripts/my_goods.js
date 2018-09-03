@@ -93,8 +93,8 @@ var myGoods = new Vue({
         {
           align: 'center',
           renderHeader: (h) => h('span', this.$t('operation')),
-          render: (h, params) => h('div', [
-            h('Button',
+          render: (h, params) => {
+            var startOrPause = h('Button',
               {
                 props: {
                   type: 'link',
@@ -106,8 +106,8 @@ var myGoods = new Vue({
                 },
               },
               params.row.status === 6 ? this.$t('start') : this.$t('pause'),
-            ),
-            h('Button',
+            );
+            var cancel = h('Button',
               {
                 props: {
                   type: 'link',
@@ -119,8 +119,13 @@ var myGoods = new Vue({
                 },
               },
               this.$t('cancel'),
-            ),
-          ])
+            );
+            var balance = (params.row.volume - params.row.sell).toFixed(4);
+            return h('div', (balance * params.row.price).toFixed(2) >= params.row.minTrade ?
+              [startOrPause, cancel] :
+              [cancel]
+            );
+          }
         }
       ],
       pendingOrdersData: [],
