@@ -189,10 +189,10 @@ var pay = new Vue({
       this.modalTransferInfoLoading = false;
       this.modalTransferInfo = false;
     },
-    copy: function (e) {
-      e.target.select();
-      document.execCommand('copy');
-      Toast.show(e.target.name + this.$t('copied'), { icon: 'ok', duration: 1500 });
+    doCopy: function (text) {
+      this.$copyText(text).then(() => {
+        Toast.show(this.$t('copySuccess'), { icon: 'ok' });
+      });
     },
     getOrderInfo: function (sequence) {
       var that = this;

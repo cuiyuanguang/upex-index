@@ -220,6 +220,11 @@ var messages = {
     en: 'Seller has not confirmed for overtime',
     ar: 'البائع انتهت مهلة غير مؤكدة',
   },
+  copySuccess: {
+    zh: '复制成功',
+    en: 'Copied',
+    ar: 'تم النسخ',
+  },
   contactService: {
     zh: '联系客服',
     en: '',

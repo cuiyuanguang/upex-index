@@ -160,20 +160,6 @@ body[dir='rtl'] .pay .pay-info .ivu-row .contact .whatup{
   margin-right: 6px;
   vertical-align: -2px;
 }
-.pay .pay-info .ivu-row .copy {
-  border: none;
-  background: #0cbf48;
-  color: white;
-  padding: 2px 5px;
-  height: 25px;
-  box-sizing: border-box;
-  border-radius: 12px;
-  outline: none;
-}
-
-.pay .pay-info .ivu-row .copy:hover {
-  background-color: #0bb042;
-}
 
 .pay-notice {
   margin-bottom: 14px;
@@ -209,30 +195,6 @@ body[dir='rtl'] .pay .pay-info .ivu-row .contact .whatup{
 
 .pay .pay-info .ivu-row .contact:hover {
   background: rgb(8, 147, 54);
-}
-
-.pay .input-copy {
-  font-weight: 600;
-  margin-right: 10px;
-  position: relative;
-	outline: none;
-	border: none;
-	color: #495060;
-	cursor: pointer;
-	min-width: 120px;
-}
-
-body[dir='rtl'] .pay .input-copy{
-  margin-right: 0;
-  margin-left: 10px;
-}
-
-.pay .input-copy::selection {
-	background-color: transparent;
-}
-
-.pay .input-copy:hover {
-	border-bottom: 1px solid #495060;
 }
 
 .pay .pay-status {
@@ -299,3 +261,10 @@ body[dir='rtl'] .contact-button{
   margin-right: 0;
   margin-left: 20px;
 }
+
+.pay .copy{
+  color:#3461A7;
+  cursor:pointer;
+  text-decoration: underline;
+}
+
