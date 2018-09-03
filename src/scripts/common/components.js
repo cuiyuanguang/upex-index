@@ -715,7 +715,6 @@ var i18nComponents = new VueI18n({
 });
 iview.i18n((key, value) => i18nComponents.t(key, value));
 
-
 var o_my_login = {
   template: `
     <Modal
@@ -1034,6 +1033,7 @@ var o_my_login = {
     }
   },
 };
+
 var o_my_loginNext = {
   template: `
     <Modal
@@ -1068,14 +1068,14 @@ var o_my_loginNext = {
               :maxlength="6"
               :placeholder="$t('phoneVerificationHolder')"
               @on-enter="loginNextSubmit"
-              class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextEmailErrorText?'loginNext-input-red':' '">
-              <span slot="append"
-                class="my-slot-append"
+              class="loginNext-input loginNext-sms-input register-verify" @on-focus="loginNextFocus" :class="loginNextEmailErrorText?'loginNext-input-red':' '">
+              <Button slot="append"           
                 @click="runSendSms('email')"
-                :class="timers['email']?'my-slot-append-gary':'my-slot-append'"
+                :loading="loadingEmail"
+                :class="timers['email']?'my-slot-append-gary':''"
               >
                 {{sendSms['email']}}
-              </span>
+              </Button>
             </Input>
             <p class="my-loginNext-error">{{loginNextEmailErrorText}}</p>
           </div>
@@ -1089,14 +1089,14 @@ var o_my_loginNext = {
               :maxlength="6"
               :placeholder="$t('phoneVerificationHolder')"
               @on-enter="loginNextSubmit"
-              class="loginNext-input loginNext-sms-input" @on-focus="loginNextFocus" :class="loginNextPhoneErrorText?'loginNext-input-red':' '">
-              <span slot="append"
-                class="my-slot-append"
+              class="loginNext-input loginNext-sms-input register-verify" @on-focus="loginNextFocus" :class="loginNextPhoneErrorText?'loginNext-input-red':' '">
+              <Button slot="append"          
+                :loading="loadingPhone"
                 @click="runSendSms('phone')"
-                :class="timers['phone']?'my-slot-append-gary':'my-slot-append'"
+                :class="timers['phone']?'my-slot-append-gary':''"
               >
                 {{sendSms['phone']}}
-              </span>
+              </Button>
             </Input>
             <p class="my-loginNext-error">{{loginNextPhoneErrorText}}</p>
           </div>
@@ -1139,7 +1139,8 @@ var o_my_loginNext = {
       showGoogleTab: false,
       showEmailTab: false,
       showMobileTab: false,
-
+      loadingEmail: false,
+      loadingPhone: false
     };
   },
   methods: {
@@ -1241,7 +1242,9 @@ var o_my_loginNext = {
         const isLoginNextPhoneNumCountry = isLoginNextPhoneNumArr[0].substring(1);
         const isLoginNextPhoneNumPhone = isLoginNextPhoneNumArr[1];
         var data;
+
         if (type === 'phone') {
+          this.loadingPhone = true;
           data = {
             countryCode: isLoginNextPhoneNumCountry,
             mobile: isLoginNextPhoneNumPhone,
@@ -1249,17 +1252,20 @@ var o_my_loginNext = {
             token: this.isLoginNextCookieNum,
           };
           post('api/common/smsValidCode', JSON.stringify(data), false).then((res) => {
+            this.loadingPhone = false;
             if (res) {
               this.runSmsCountDown(type);
             }
           });
         } else if (type === 'email') {
+          this.loadingEmail = true;
           data = {
             email: this.isLoginNextEmailNum,
             operationType: '31',
             token: this.isLoginNextCookieNum,
           };
           post('api/common/emailValidCode', JSON.stringify(data)).then((res) => {
+            this.loadingEmail = false;
             if (res) {
               this.runSmsCountDown(type);
             }
@@ -1362,7 +1368,7 @@ var o_my_register = {
           class="loginNext-input loginNext-sms-input register-verify" @on-focus="emailSmsCodeFocus" :class="emailSmsCodeError?'loginNext-input-red':' '">
           <Button slot="append"
              @click="runSendSms('email')"
-             :disabled="disabledEmail"
+             :loading="loadingEmail"
             :class="timerEmail?'my-slot-append-gary':''"
           >
             {{sendSmsEmail}}
@@ -1421,7 +1427,7 @@ var o_my_register = {
 
           <Button slot="append"
             @click="runSendSms('phone')"
-            :disabled="disabledPhone"
+            :loading="loadingPhone"
             :class="timerPhone?'my-slot-append-gary':''"
           >
             {{sendSmsPhone}}
@@ -1501,8 +1507,8 @@ var o_my_register = {
       timerEmail: null,
       timerPhone: null,
       isLogined: false,
-      disabledEmail: false,
-      disabledPhone: false
+      loadingEmail: false,
+      loadingPhone: false
     };
   },
   computed: {
@@ -1665,7 +1671,7 @@ var o_my_register = {
             that.phoneValError = true;
             that.phoneValErrorText = this.$t('errorPhoneNum');
           } else {
-            that.disabledPhone = true;
+            that.loadingPhone = true;
             const isLoginNextPhoneNumCountry = that.selectCountry.substring(1);
             const isLoginNextPhoneNumPhone = that.phoneVal;
             data = {
@@ -1676,6 +1682,7 @@ var o_my_register = {
             that.countPhone = TIME_COUNT;
             that.showPhone = false;
             post('api/common/smsValidCode', JSON.stringify(data), false).then(function (res) {
+              that.loadingPhone = false;
               if (res) {
                 that.sendSmsPhone = that.countPhone + 's';
                 that.timerPhone = setInterval(() => {
@@ -1683,15 +1690,12 @@ var o_my_register = {
                     that.countPhone--;
                     that.sendSmsPhone = that.countPhone + ' s';
                   } else {
-                    that.disabledPhone = false;
                     that.sendSmsPhone = that.$t('Reacquire');
                     that.showPhone = true;
                     clearInterval(that.timerPhone);
                     that.timerPhone = null;
                   }
                 }, 1000);
-              } else {
-                that.disabledPhone = false;
               }
             });
           }
@@ -1707,7 +1711,7 @@ var o_my_register = {
             that.emailValError = true;
             that.emailValErrorText = this.$t('errorEmailNum');
           } else {
-            this.disabledEmail = true;
+            this.loadingEmail = true;
             data = {
               email: that.emailVal,
               operationType: '1',
@@ -1715,6 +1719,7 @@ var o_my_register = {
             that.countEmail = TIME_COUNT;
             that.showEmail = false;
             post('api/common/emailValidCode', JSON.stringify(data)).then(function (res) {
+              that.loadingEmail = false;
               if (res) {
                 that.sendSmsEmail = that.countEmail + 's';
                 that.timerEmail = setInterval(() => {
@@ -1722,15 +1727,12 @@ var o_my_register = {
                     that.countEmail--;
                     that.sendSmsEmail = that.countEmail + ' s';
                   } else {
-                    that.disabledEmail = false;
                     that.sendSmsEmail = that.$t('Reacquire');
                     that.showEmail = true;
                     clearInterval(that.timerEmail);
                     that.timerEmail = null;
                   }
                 }, 1000);
-              } else {
-                that.disabledEmail = false;
               }
             });
           }

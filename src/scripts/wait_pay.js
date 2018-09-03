@@ -98,6 +98,9 @@ var waitPay = new Vue({
     }
   },
   methods: {
+    contactJump() {
+      window.open('https://tawk.to/chat/5b126b098859f57bdc7bc6e7/default');
+    },
     confirmOrder: function() {
       var that = this;
       this.$Modal.confirm({

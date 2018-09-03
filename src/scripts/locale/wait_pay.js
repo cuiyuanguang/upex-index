@@ -220,4 +220,9 @@ var messages = {
     en: 'Seller has not confirmed for overtime',
     ar: 'البائع انتهت مهلة غير مؤكدة',
   },
+  contactService: {
+    zh: '联系客服',
+    en: '',
+    ar: ''
+  }
 };

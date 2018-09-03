@@ -39,7 +39,7 @@
         </Steps>
       </div>
       <div class="pay-info">
-        <Row>
+        <Row class="pay-info-wrapper">
           <i-col span="10">
             <div class="info-header">{{ $t('orderInfo') }}</div>
             <div class="info-body">
@@ -62,8 +62,8 @@
             </div>
           </i-col>
           <i-col span="14">
-            <div class="info-header">{{ $t('sellerInfo') }}</div>
-            <div class="info-body">
+            <div class="info-header info-header-right">{{ $t('sellerInfo') }}</div>
+            <div class="info-body info-body-right">
               <div style="margin-bottom:10px;" v-if="bankList.length" v-for="(item, index) in bankList">
                 <Row>
                   <i-col span="1"><img src="../images/bank-icon.png" class="pay-image"></i-col>
@@ -140,13 +140,14 @@
           {{ $t('reasonForFailure') }} : {{ $t('orderCanceled') }}
         </h3>
       </div>
-      <div class="pay-status" v-if="orderInfo.status == 5 || orderInfo.status == 7 || (leftTime === 0 && orderInfo.status == 2)">
+      <div class="pay-status pay-status-title" v-if="orderInfo.status == 5 || orderInfo.status == 7 || (leftTime === 0 && orderInfo.status == 2)">
         <h3>
           {{ $t('reasonForFailure') }} : {{ orderInfo.paymentTime ? $t('outOfTimeToConfirm') : $t('outOfTimeToPay') }}
         </h3>
       </div>
       <div class="pay-status">
         <p class="pay-tips">
+          <i-button type="warning" class="contact-button" @click="contactJump">{{$t('contactService')}}</i-button>
           <a href="otc_adverts.html">{{ $t('backToHome') }}</a>
         </p>
       </div>

@@ -56,9 +56,10 @@ body[dir='rtl'] .my-loginNext .ivu-modal-header-inner{
 body[dir='rtl'] .my-login .ivu-input-group-append{
   right: initial;
   left: 1px;
-}body[dir='rtl'] .my-login .loginNext-input .ivu-input-group-append{
+}
+body[dir='rtl'] .my-login .loginNext-input .ivu-input-group-append{
   left: 51px;
- }
+}
 
 body[dir='rtl'] .my-register .ivu-input-group-append{
   right: initial;
@@ -385,6 +386,10 @@ body[dir='rtl'] .my-login .ivu-select-dropdown{
   padding-right: 0;
   padding-left: 0;
   overflow: hidden;
+}
+
+body[dir='ltr'] .my-login .register-verify .ivu-input-group-append button{
+  margin-top: -14px;
 }
 
 .my-loginNext .ivu-modal-footer{
