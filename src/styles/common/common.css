@@ -348,16 +348,37 @@ input::-webkit-inner-spin-button {
 
 .om-header .om-market > ul > li,
 .om-header .management > ul > li {
-  margin-left: 20px;
+  padding: 0 15px;
   display: inline-block;
+  height: 50px;
+  line-height: 50px;
   vertical-align: top;
 }
 
+.om-header .om-market > ul > li.active,
+.om-header .management > ul > li.active {
+  background-color: #515668;
+}
+
+.om-header .om-market > ul > li.active > a,
+.om-header .om-market > ul > li.active > a,
+.om-header .management > ul > li.active .ivu-dropdown-rel a {
+  color: #ffffff;
+}
 
 .om-header .om-market > ul > li > a,
-.om-header .management > ul > li > a {
+.om-header .management > ul > li > a,
+.om-header .ivu-dropdown-rel > a {
+  display: block;
+  height: 100%;
   line-height: 50px;
   color: #adadad;
+}
+
+.om-header .om-market > ul > li:hover > a,
+.om-header .management > ul > li:hover > a,
+.om-header .management > ul > li:hover .ivu-dropdown-rel > a {
+  color: #ffffff;
 }
 
 .om-header > .ivu-row > .ivu-col-span-10:last-child {
@@ -442,10 +463,6 @@ input::-webkit-inner-spin-button {
   line-height: 50px;
 }
 
-.om-header .items .ivu-badge a {
-  color: #adadad;
-}
-
 .om-header .items .ivu-select-dropdown {
   margin-top: -1px;
 }
@@ -458,10 +475,6 @@ input::-webkit-inner-spin-button {
 .om-header .ivu-dropdown.text-center .ivu-dropdown-item:hover,
 .om-header .ivu-dropdown.text-left .ivu-dropdown-item:hover {
   color: #5C95EA;
-}
-
-.om-header .ivu-dropdown-rel > a {
-  color: #adadad;
 }
 
 .om-header .ivu-dropdown-menu > a {

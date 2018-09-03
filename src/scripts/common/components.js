@@ -2577,17 +2577,17 @@ var o_header = {
         </i-col>
         <i-col span="12" class="om-market">
           <ul>
-            <li>
+            <li :class="activedMenu == 'index' ? 'active' : ''">
               <a href="otc_adverts.html">{{ $t('homepage') }}</a>
             </li>
-            <li>
+            <li :class="activedMenu == 'intro' ? 'active' : ''">
               <a href="otc_my_introduce.html" target="_blank">{{ $t('platIntro') }}</a>
             </li>
           </ul>
         </i-col>
         <i-col span="9" class="management">
           <ul class="text-right">
-            <li class="items" v-if="logined">
+            <li class="items" :class="activedMenu == 'order' ? 'active' : ''" v-if="logined">
               <Dropdown placement="bottom-end" class="order-dropdown">
                 <Badge :count="orders.length">
                   <a href="otc_my_order.html">{{ $t('allOrder') }}</a>
@@ -2611,15 +2611,15 @@ var o_header = {
                 </DropdownMenu>
               </Dropdown>
             </li>
-            <li class="items" v-if="logined">
+            <li class="items" :class="activedMenu == 'pending' ? 'active' : ''" v-if="logined">
               <a href="otc_my_advert.html">{{ $t('pendingOrder') }}</a>
             </li>
             <li class="items" v-if="logined">
               <Dropdown class="text-center">
-                <span>
+                <a href="javascript:void(0)">
                   <span class="text-dir-ltr">{{ userInfo.nickName }}</span>
                   <Icon type="arrow-down-b"></Icon>
-                </span>
+                </a>
                 <DropdownMenu slot="list">
                   <DropdownItem name="account" @click.native="location.href='otc_my_account.html'">
                     {{ $t('myAccount') }}
@@ -2634,17 +2634,17 @@ var o_header = {
               </Dropdown>
             </li>
             <li class="items" v-if="!logined" @click="showLogin()">
-              {{ $t('login') }}
+              <a href="javascript:void(0)">{{ $t('login') }}</a>
             </li>
             <li class="items" v-if="!logined" @click="showRegister()">
-              {{ $t('register') }}
+              <a href="javascript:void(0)">{{ $t('register') }}</a>
             </li>
             <li class="items">
               <Dropdown class="text-left" @on-click="toggleLanguage">
-                <span>
+                <a href="javascript:void(0)">
                   {{ $t('language') }}
                   <Icon type="arrow-down-b"></Icon>
-                </span>
+                </a>
                 <DropdownMenu slot="list">
                   <DropdownItem name="ar">العربية</DropdownItem>
                   <DropdownItem name="en">English</DropdownItem>
@@ -2698,7 +2698,24 @@ var o_header = {
   computed: {
     userInfo: function() {
       return JSON.parse(localStorage.getItem('user')) || {};
-    }
+    },
+    activedMenu: function() {
+      var path = location.pathname;
+      var index = path.lastIndexOf('/');
+      var pathTail = path.substr(index + 1);
+      switch (pathTail) {
+        case 'otc_adverts.html':
+          return 'index';
+        case 'otc_my_introduce.html':
+          return 'intro';
+        case 'otc_my_order.html':
+          return 'order';
+        case 'otc_my_advert.html':
+          return 'pending';
+        default:
+          break;
+      }
+    },
   },
   methods: {
     //login
