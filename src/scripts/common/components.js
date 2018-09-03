@@ -2572,7 +2572,7 @@ var o_header = {
       <Row class="om-header-row">
         <i-col class="logo-wrapper" span="3">
           <a href="otc_adverts.html">
-            <img src="../images/Header-Logo-en.png" width="138px" height="21px" alt="">
+            <img src="../images/Header-Logo-en.png" width="116px" height="22px" alt="upex.io">
           </a>
         </i-col>
         <i-col span="12" class="om-market">
