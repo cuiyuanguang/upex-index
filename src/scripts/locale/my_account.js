@@ -1,8 +1,8 @@
-var messages = {
+﻿var messages = {
   myAccount: {
-    zh: '个人账户',
-    en: 'Personal Account',
-    ar: 'الحساب الشخصي',
+    zh: '我的账户',
+    en: 'My account',
+    ar: 'حسابي',
   },
   accountInfo: {
     zh: '账户信息',
@@ -60,9 +60,9 @@ var messages = {
     ar: 'مستوي أمان الحساب الخاص بك هو',
   },
   dangerous: {
-    zh: '危险。',
-    en: 'dangerous. ',
-    ar: 'الخطره',
+    zh: '危险',
+    en: 'danger',
+    ar: 'خطر',
   },
   upgradeLevel: {
     zh: '请及时提升账户安全等级',
@@ -475,9 +475,9 @@ var messages = {
     ar: 'يرجى إدخال رقم بطاقة البنك',
   },
   ibanNoHolder: {
-    zh: '请输入iban号码',
-    en: 'Please enter the IBAN number',
-    ar: 'يرجى إدخال رقم الإيبان',
+    zh: '请输入Iban Number',
+    en: 'Please enter the Iban Number',
+    ar: '',
   },
   formatError: {
     zh: '格式错误',

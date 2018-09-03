@@ -1,4 +1,4 @@
-var messages = {
+﻿var messages = {
   bannerTitle_1: {
     zh: 'THE GUARANTE',
     en: 'THE GUARANTE',
@@ -85,7 +85,7 @@ var messages = {
     ar: 'جميع',
   },
   atMost2Dot: {
-    zh: '最多保留两位小数',
+    zh: '最多保留2位小数',
     en: 'Reserve a maximum of 2 decimal places',
     ar: 'الاحتفاظ بما يصل إلى 2 منازل عشريه',
   },
@@ -105,9 +105,9 @@ var messages = {
     ar: 'المشتري',
   },
   mine: {
-    zh: '我的',
-    en: 'Mine',
-    ar: 'الخاص بي',
+    zh: '我',
+    en: 'mine',
+    ar: 'أنا',
   },
   saUser: {
     zh: '沙特用户',
@@ -302,14 +302,14 @@ var messages = {
     ar: 'نوع الأمر المعلق',
   },
   min: {
-    zh: 'Min',
+    zh: '最小',
     en: 'Min',
-    ar: 'الحد الادني',
+    ar: 'الأدنى',
   },
   max: {
-    zh: 'Max',
+    zh: '最大',
     en: 'Max',
-    ar: 'الحد الاقصي',
+    ar: 'الأقصي',
   },
   minNoLessThanSysMin: {
     zh: '最小限额不能小于系统限制',
@@ -493,9 +493,9 @@ var messages = {
     ar: 'يرجى إدخال رقم بطاقة البنك',
   },
   ibanNoHolder: {
-    zh: '请输入iban号码',
-    en: 'Please enter the IBAN number',
-    ar: 'يرجى إدخال رقم الإيبان',
+    zh: '请输入Iban Number',
+    en: 'Please enter the Iban Number',
+    ar: '',
   },
   formatError: {
     zh: '格式错误',

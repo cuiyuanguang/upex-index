@@ -116,6 +116,7 @@ var waitPay = new Vue({
           post('api/confirmOrder', data).then(function(res) {
             that.$Modal.remove();
             if (res) {
+              that.$refs.header.getPendingOrders();
               that.getOrderInfo(that.sequence);
             }
           });

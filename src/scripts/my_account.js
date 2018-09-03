@@ -1,5 +1,4 @@
 
-
 var messagesTransformed = utils.transform(messages);
 var messagesAll = {
   zh: Object.assign(messagesTransformed.zh, iview.langs['zh']),
@@ -439,24 +438,6 @@ var account = new Vue({
             }
           })
         }
-      });
-    },
-    loginOut() {
-      var that = this;
-      this.$Modal.confirm({
-        title: this.$t('loginOut'),
-        render(h) {
-          return h('span', that.$t('confirmLogOut'));
-        },
-        loading: true,
-        onOk() {
-          post('api/user/login_out', '', false).then(function(res) {
-            that.$Modal.remove();
-            localStorage.removeItem('user');
-            localStorage.removeItem('token');
-            location.href = 'otc_adverts.html';
-          });
-        },
       });
     },
     modifyGoogleStatus() {

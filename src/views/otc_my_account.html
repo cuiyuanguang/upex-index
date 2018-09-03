@@ -18,7 +18,7 @@
           <dl class="account-card">
             <dt>
               <Row class="account-row">
-                <i-col span="18">
+                <i-col span="24">
                   <span class="account-row-title">{{ $t('accountInfo') }}</span>
                   <Tooltip transfer v-if="user.accountStatus == 1" :content="$t('accountFrozenAllTips')" placement="top">
                     <Tag color="#ff4d4d">{{ $t('accountFrozenAll') }}</Tag>
@@ -29,9 +29,6 @@
                   <Tooltip transfer v-if="user.accountStatus == 3" content="$t('accountFrozenDepositTips')" placement="top">
                     <Tag color="#ff4d4d">{{ $t('accountFrozenDeposit') }}</Tag>
                   </Tooltip>
-                </i-col>
-                <i-col span="6" class="text-right">
-                  <i-button type="link" size="small" @click="loginOut">{{ $t('loginOut') }}</i-button>
                 </i-col>
               </Row>
             </dt>
