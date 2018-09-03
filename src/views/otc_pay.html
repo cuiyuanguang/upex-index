@@ -68,22 +68,30 @@
                 <Row>
                   <i-col span="1"><img src="../images/bank-icon.png" class="pay-image"></i-col>
                   <i-col span="5">{{ $t('bank') }}</i-col>
-                  <i-col span="18" class="text-strong">{{item.bankName}}</i-col>
+                  <i-col span="18" class="text-strong">
+                    <span @click="doCopy(item.bankName)" class="copy">
+                      {{item.bankName}}
+                    </span>
+                  </i-col>
                 </Row>
                 <Row>
                   <i-col span="1">&nbsp;</i-col>
                   <i-col span="5">{{ $t('cardNo') }}</i-col>
-                  <i-col span="18" class="text-strong">{{item.cardNo}}</i-col>
+                  <i-col span="18" class="text-strong" >
+                    <span @click="doCopy(item.cardNo)" class="copy">{{item.cardNo}}</span></i-col>
                 </Row>
                 <Row>
                   <i-col span="1">&nbsp;</i-col>
                   <i-col span="5">{{ $t('accountName') }}</i-col>
-                  <i-col span="18" class="text-strong">{{item.name}}</i-col>
+                  <i-col span="18" class="text-strong">
+                    <span @click="doCopy(item.name)" class="copy">{{item.name}}</span>
+                  </i-col>
                 </Row>
                 <Row>
                   <i-col span="1">&nbsp;</i-col>
                   <i-col span="5">Iban {{ $t('iBanNo') }}</i-col>
-                  <i-col span="18" class="text-strong">{{item.ibanNo}}</i-col>
+                  <i-col span="18" class="text-strong">
+                    <span @click="doCopy(item.ibanNo)" class="copy">{{item.ibanNo}}</span></i-col>
                 </Row>
               </div>
               <Row v-if="orderInfo.seller.hideMobileNumber && orderInfo.seller.hideMobileNumber.trim()">
