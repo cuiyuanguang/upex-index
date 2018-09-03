@@ -446,9 +446,18 @@ input::-webkit-inner-spin-button {
   color: #adadad;
 }
 
+.om-header .items .ivu-select-dropdown {
+  margin-top: -1px;
+}
+
 .om-header .ivu-dropdown {
   height: 50px;
   line-height: 50px;
+}
+
+.om-header .ivu-dropdown.text-center .ivu-dropdown-item:hover,
+.om-header .ivu-dropdown.text-left .ivu-dropdown-item:hover {
+  color: #5C95EA;
 }
 
 .om-header .ivu-dropdown-rel > a {

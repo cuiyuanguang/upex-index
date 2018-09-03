@@ -2614,35 +2614,35 @@ var o_header = {
             </li>
             <li class="items" v-if="logined">
               <Dropdown class="text-center">
-                <a href="javascript:void(0)">
+                <span>
                   <span class="text-dir-ltr">{{ userInfo.nickName }}</span>
                   <Icon type="arrow-down-b"></Icon>
-                </a>
+                </span>
                 <DropdownMenu slot="list">
                   <DropdownItem name="account" @click.native="location.href='otc_my_account.html'">
-                    <a href="javascript:void(0)">{{ $t('myAccount') }}</a>
+                    {{ $t('myAccount') }}
                   </DropdownItem>
                   <DropdownItem name="account" @click.native="location.href='otc_my_assets.html'">
-                    <a href="javascript:void(0)">{{ $t('myAssets') }}</a>
+                    {{ $t('myAssets') }}
                   </DropdownItem>
                    <DropdownItem name="logout" @click.native="loginOut">
-                    <a href="javascript:void(0)">{{ $t('loginout') }}</a>
+                    {{ $t('loginout') }}
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </li>
-            <li class="items" v-if="!logined">
-              <a @click="showLogin()">{{ $t('login') }}</a>
+            <li class="items" v-if="!logined" @click="showLogin()">
+              {{ $t('login') }}
             </li>
-            <li class="items" v-if="!logined">
-              <a @click="showRegister()">{{ $t('register') }}</a>
+            <li class="items" v-if="!logined" @click="showRegister()">
+              {{ $t('register') }}
             </li>
             <li class="items">
               <Dropdown class="text-left" @on-click="toggleLanguage">
-                <a href="javascript:void(0)">
+                <span>
                   {{ $t('language') }}
                   <Icon type="arrow-down-b"></Icon>
-                </a>
+                </span>
                 <DropdownMenu slot="list">
                   <DropdownItem name="ar">العربية</DropdownItem>
                   <DropdownItem name="en">English</DropdownItem>
