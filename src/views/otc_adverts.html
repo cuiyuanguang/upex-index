@@ -156,7 +156,7 @@
         </Row>
         <form-item label="" prop="price">
           <i-input
-            number
+            type="number"
             v-model="formRelease.price"
             :placeholder="$t('pricePlaceholder')"
             @on-enter="handleSubmit('formRelease')"
@@ -170,7 +170,7 @@
         </Row>
         <form-item label="" prop="volume">
           <i-input
-            number
+            type="number"
             v-model="formRelease.volume"
             :placeholder="$t('amountPlaceholder')"
             @on-enter="handleSubmit('formRelease')"

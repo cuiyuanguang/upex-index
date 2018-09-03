@@ -218,17 +218,25 @@ var allGoods = new Vue({
       }
     };
     var validatePrice = (rule, value, callback) => {
-      value = Number(value);
+      var valueString = String(value);
+      var index = valueString.indexOf('.');
+      var length = index === -1 ? index : valueString.substr(index).length;
       if (!value) {
         callback(new Error(this.$t('noZeroNumericRequired')));
+      } else if (length > 3 || /(^0\d+)|(\.$)|(\.0{1,}$)/.test(value)) {
+        callback(new Error(this.$t('atMost2Dot')));
       } else {
         callback();
       }
     };
     var validateVolume = (rule, value, callback) => {
-      value = Number(value);
+      var valueString = String(value);
+      var index = valueString.indexOf('.');
+      var length = index === -1 ? index : valueString.substr(index).length;
       if (!value) {
         callback(new Error(this.$t('noZeroNumericRequired')));
+      } else if (length > 5 || /(^0\d+)|(\.$)|(\.0{1,}$)/.test(value)) {
+        callback(new Error(this.$t('atMost4Dot')));
       } else if (value < Number(this.marketPrice.trade_min_volume) || value > Number(this.marketPrice.trade_max_volume)) {
         callback(new Error(this.$t('sysLimitIs') + this.marketPrice.trade_min_volume + '--' + this.marketPrice.trade_max_volume));
       } else if (this.formRelease.side === 'SELL' && value > this.balance) {
