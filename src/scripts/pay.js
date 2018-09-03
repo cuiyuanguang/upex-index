@@ -131,6 +131,9 @@ var pay = new Vue({
     }
   },
   methods: {
+    contactJump() {
+      window.open('https://tawk.to/chat/5b126b098859f57bdc7bc6e7/default');
+    },
     cancelPay() {
       var that = this;
       that.$Modal.confirm({
