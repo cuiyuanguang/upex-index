@@ -11,10 +11,6 @@
   visibility: hidden;
 }
 
-.my-login .ivu-modal-body {
-  padding: 0;
-}
-
 .my-login .ivu-modal-header-inner {
   text-align: center;
 }
@@ -141,12 +137,6 @@ body[dir='rtl'] .loginGoogle-ul li .li-title .tip-img2{
   color: #333;
 }
 
-.my-login .ivu-tabs-bar {
-  border: none;
-  padding: 0 50px;
-  margin-bottom: 30px;
-}
-
 .my-loginNext .ivu-tabs-bar{
   margin: 16px 0;
 }
@@ -160,17 +150,12 @@ body[dir='rtl'] .loginGoogle-ul li .li-title .tip-img2{
 }
 
 .my-login .ivu-tabs {
-  overflow: inherit;
   color: #879FC2;
 }
 
 .my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item-active, .my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item:hover, .my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu-active, .my-login .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu:hover {
   color: #5C95EA;
   border-bottom-color: #5C95EA;
-}
-
-.my-login .ivu-input-group-with-append .ivu-input, .my-login .ivu-input-group-with-append.ivu-input-group-small .ivu-input, .my-login .ivu-input-group-append, .my-login .ivu-input-group > .ivu-input:last-child {
-  border-radius: 4px !important;
 }
 
 .my-login .vertical-center-modal {
@@ -190,20 +175,6 @@ body[dir='rtl'] .loginGoogle-ul li .li-title .tip-img2{
   margin: 0 auto;
   height: 30px;
   line-height: 30px;
-}
-
-.my-login .ivu-input-group-prepend {
-  position: absolute;
-  left: 1px;
-  z-index: 3;
-  background: #fff;
-  border: none;
-  top: 1px;
-  width: 87px;
-  cursor: pointer;
-  color: #bbbec4;
-  height: 38px;
-  border-right: 1px solid #DBDBDB;
 }
 
 body[dir='rtl'] .my-login .ivu-input-group-prepend{
@@ -230,11 +201,6 @@ body[dir='rtl'] .my-login .iview-input-countryPhone .ivu-input:hover, body[dir='
 
 .my-login .ivu-select-single .ivu-select-input {
   text-align: center;
-  height: 48px;
-}
-
-.my-login .ivu-select-arrow{
-  margin-top: -2px;
 }
 
 .my-login .iview-input-countryPhone .ivu-input {
@@ -378,19 +344,6 @@ body[dir='rtl'] .my-login .ivu-select-dropdown{
   margin: 20px 50px 0;
 }
 
-.my-login .ivu-modal-body {
-  position: static;
-}
-
-.my-login .register-verify .ivu-input-group-append{
-  padding-right: 0;
-  padding-left: 0;
-  overflow: hidden;
-}
-
-body[dir='ltr'] .my-login .register-verify .ivu-input-group-append button{
-  margin-top: -14px;
-}
 
 .my-loginNext .ivu-modal-footer{
   padding-bottom: 50px;
@@ -411,10 +364,8 @@ body[dir='ltr'] .my-login .register-verify .ivu-input-group-append button{
 }
 
 .loginNext-input .ivu-input-group-append {
-  position: absolute;
-  right: 51px;
   color: #3461A7;
-  text-align: right;
+  overflow: hidden;
 }
 
 .loginNext-input-red .ivu-input {
