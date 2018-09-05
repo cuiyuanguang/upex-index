@@ -368,7 +368,7 @@ input::-webkit-inner-spin-button {
 
 .om-header .om-market > ul > li > a,
 .om-header .management > ul > li > a,
-.om-header .ivu-dropdown-rel > a {
+.om-header .ivu-dropdown-rel a {
   display: block;
   height: 100%;
   line-height: 50px;
@@ -379,6 +379,7 @@ input::-webkit-inner-spin-button {
 .om-header .management > ul > li:hover > a,
 .om-header .management > ul > li:hover .ivu-dropdown-rel > a {
   color: #ffffff;
+  font-weight: bold;
 }
 
 .om-header > .ivu-row > .ivu-col-span-10:last-child {
