@@ -37,8 +37,23 @@ var allGoods = new Vue({
               },
               this.userInfo.id == params.row.userId ? this.$t('mine') : (this.showListTag === 'BUY' ? this.$t('seller') : this.$t('buyer')),
             ),
-            h('span', this.$t('saUser')),
-          ]
+            h('div',
+              { 'class': 'user-brief' },
+              [
+                h('p', this.$t('saUser')),
+                h('p',
+                  {
+                    'class': 'user-brief-guarante',
+                    on: { 'click': () => { this.modalGuarante = true } },
+                  },
+                  [
+                    h('img', { 'class': 'mr-4', attrs: { src: '../images/guarante.png' } }),
+                    h('span', this.$t('platGuarante')),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       },
       {
@@ -106,6 +121,7 @@ var allGoods = new Vue({
           [
             h('Button',
               {
+                'class': 'mr-10',
                 props: {
                   type: 'link',
                   size: 'small',
@@ -276,6 +292,7 @@ var allGoods = new Vue({
       marketPrice: '',
       cardList: [],
       balance: 0,
+      modalGuarante: false,
       // 下单
       modalOrder: false,
       formOrderLoading: false,
@@ -319,7 +336,8 @@ var allGoods = new Vue({
       selllist: [],
       selllistLoading: false,
       // 暂停/取消接单
-      modalOperationOrder: false,
+      modalAction: false,
+      modalActionLoading: false,
       cancelable: false,
       pauseable: false,
       modalMsg: {
@@ -505,7 +523,7 @@ var allGoods = new Vue({
         desc: this.$t('confirm') + ' ' + this.$t(this.action),
         confirmText: this.$t('confirm'),
       };
-      this.modalOperationOrder = true;
+      this.modalAction = true;
     },
     cancel: function(item) {
       if (item.status === 5 || item.status === 6) {
@@ -514,6 +532,7 @@ var allGoods = new Vue({
           desc: this.$t('unremovableTips'),
           confirmText: this.$t('unremovableOperation'),
         };
+        this.cancelable = false;
       } else {
         this.modalMsg = {
           title: this.$t('removable'),
@@ -521,10 +540,11 @@ var allGoods = new Vue({
           confirmText: this.$t('confirm'),
         };
         this.cancelable = true;
-        this.advertId = item.id;
-        this.sequence = item.sequence;
       }
-      this.modalOperationOrder = true;
+      this.advertId = item.id;
+      this.sequence = item.sequence;
+      this.side = item.side;
+      this.modalAction = true;
       this.action = 'cancel';
     },
     manualAction: function() {
@@ -543,8 +563,18 @@ var allGoods = new Vue({
           if (res) {
             that.showListTag === 'BUY' ? that.getAdvertList('SELL') : that.getAdvertList('BUY');
           }
-          that.modalOperationOrder = false;
+          that.modalAction = false;
         });
+      } else {
+        get('api/otc/bot/adverts/orders/online?advertId=' + this.advertId)
+          .then(function(res) {
+            that.modalActionLoading = false;
+            if (res) {
+              that.modalAction = false;
+              var path = that.side === 'BUY' ? 'otc_pay' : 'otc_wait_pay';
+              location.href = path + '.html?sequence=' + res[0].sequence;
+            }
+          });
       }
     },
     getAvailableCardList: function() {

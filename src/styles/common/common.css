@@ -77,6 +77,14 @@ body[dir='ltr'] * {
   direction: rtl;
 }
 
+.ml-4 {
+  margin-left: 4px;
+}
+
+.mr-4 {
+  margin-right: 4px;
+}
+
 .ml-8 {
   margin-left: 8px;
 }
@@ -84,6 +92,7 @@ body[dir='ltr'] * {
 .mr-8 {
   margin-right: 8px;
 }
+
 .ml-10 {
   margin-left: 10px;
 }
@@ -94,6 +103,16 @@ body[dir='ltr'] * {
 
 .text-white {
   color: #fff;
+}
+
+body[dir='rtl'] .ml-4 {
+  margin-left: 0;
+  margin-right: 4px;
+}
+
+body[dir='rtl'] .mr-4 {
+  margin-right: 0;
+  margin-left: 4px;
 }
 
 body[dir='rtl'] .ml-8 {

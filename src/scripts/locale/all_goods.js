@@ -114,6 +114,11 @@
     en: 'Saudi user',
     ar: 'المستخدمون السعوديون',
   },
+  platGuarante: {
+    zh: '平台担保',
+    en: 'Platform guarantees',
+    ar: 'ضمان المنصة',
+  },
   amount: {
     zh: '数量',
     en: 'Amount',
