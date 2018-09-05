@@ -732,10 +732,8 @@ var o_my_login = {
         @verify="onVerify"
         sitekey="6LeA22cUAAAAAAaJhwcX8hLgff2pa4vVERYPjwyi"
       >
-      </vue-recaptcha>
-      
-      <Tabs v-model="loginWrap" @on-click="loginEmailChange" :class="spread ? 'spreaded' : ''">
-     
+      </vue-recaptcha>      
+      <Tabs v-model="loginWrap" @on-click="loginEmailChange" :class="spread ? 'spreaded' : ''">     
         <TabPane :label="this.$t('email')" name="loginEmail">
          <Form ref="formLoginEmail" :model="formLoginEmail" :rules="ruleLoginEmail">         
           <FormItem prop="emailVal">
@@ -756,8 +754,7 @@ var o_my_login = {
              </Input>
           </FormItem>          
          </Form>
-        </TabPane>
-      
+        </TabPane>      
          <TabPane :label="this.$t('phone')" name="loginPhone">
           <Form ref="formLoginPhone" :model="formLoginPhone" :rules="ruleLoginPhone">           
             <FormItem prop="phoneVal">
@@ -794,8 +791,7 @@ var o_my_login = {
               </Input>
             </FormItem>         
           </Form>
-        </TabPane>
-        
+        </TabPane>       
       </Tabs>
         
       <div slot="footer">
