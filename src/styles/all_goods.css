@@ -55,16 +55,23 @@ html[lang='ar'] .banner h2 {
 }
 
 .container .list-tabs-title {
-  width: 186px;
+  margin-right: 4px;
+  width: 170px;
   height: 48px;
   line-height: 48px;
   text-align: center;
-  font-size: 16px;
-  color: #ffffff;
-  background-image: url(../images/tab-gray.png);
-  background-position: 0 0;
-  background-size: contain;
-  background-repeat: no-repeat;
+  font-size: 14px;
+  font-weight: bold;
+  color: #999999;
+  background-color: #F7F7F7;
+  border-radius: 4px 4px 0 0;
+  transform: translateY(6px);
+  transition: all 0.2s ease;
+}
+
+body[dir="rtl"] .container .list-tabs-title {
+  margin-right: 0;
+  margin-left: 4px;
 }
 
 .container .list-tabs-title span {
@@ -74,9 +81,14 @@ html[lang='ar'] .banner h2 {
   height: 100%;
 }
 
+.container .list-tabs-title:hover {
+  color: #666666;
+  transform: translateY(0);
+}
 .container .list-tabs-title.active {
-  background-image: url(../images/tab-white.png);
   color: #5C95EA;
+  background-color: #ffffff;
+  transform: translateY(0);
 }
 
 .container .list-tabs-extra {
