@@ -131,7 +131,9 @@ var myGoods = new Vue({
       pendingOrdersData: [],
       pendingOrdersDataLoading: false,
       pendingOrdersCount: 0,
-      showModal: false,
+      modalAction: false,
+      modalActionLoading: false,
+      side: '',
       cancelable: false,
       pauseable: false,
       modalMsg: {
@@ -167,7 +169,7 @@ var myGoods = new Vue({
         desc: this.$t('confirm') + this.$t(this.action) + this.$t('thisOrder'),
         confirmText: this.$t('confirm'),
       };
-      this.showModal = true;
+      this.modalAction = true;
     },
     cancel: function(item) {
       if (item.status === 5 || item.status === 6) {
@@ -176,6 +178,7 @@ var myGoods = new Vue({
           desc: this.$t('unremovableTips'),
           confirmText: this.$t('unremovableOperation'),
         };
+        this.cancelable = false;
       } else {
         this.modalMsg = {
           title: this.$t('removable'),
@@ -183,13 +186,15 @@ var myGoods = new Vue({
           confirmText: this.$t('confirm'),
         };
         this.cancelable = true;
-        this.advertId = item.id;
-        this.sequence = item.sequence;
       }
-      this.showModal = true;
+      this.advertId = item.id;
+      this.sequence = item.sequence;
+      this.side = item.side;
+      this.modalAction = true;
       this.action = 'cancel';
     },
     manualAction: function() {
+      this.modalActionLoading = true;
       var that = this;
       var api = {
         pause: 'api/suspendAdvert',
@@ -202,13 +207,23 @@ var myGoods = new Vue({
         that.action === 'start'
       ) {
         post(api[that.action], that.advertId).then(function(res) {
+          that.modalActionLoading = false;
           if (res) {
             that.getAdvert();
           }
-          that.showModal = false;
+          that.modalAction = false;
         });
       } else {
-        location.href = 'otc_my_order.html';
+        // get('api/otc/bot/adverts/orders/online', { advertId: this.advertId })
+        get('api/otc/bot/adverts/orders/online?advertId=' + this.advertId)
+          .then(function(res) {
+            that.modalActionLoading = false;
+            if (res) {
+              that.modalAction = false;
+              var path = that.side === 'BUY' ? 'otc_pay' : 'otc_wait_pay';
+              location.href = path + '.html?sequence=' + res[0].sequence;
+            }
+          });
       }
     },
   },

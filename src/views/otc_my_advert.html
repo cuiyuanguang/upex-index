@@ -18,11 +18,11 @@
         <div class="pager">
           <Page :total="pendingOrdersCount" @on-change="getAdvert" :current="current" :page-size="pageSize" size="small"></Page>
         </div>
-        <Modal :title="modalMsg.title" v-model="showModal" :mask-closable="false">
+        <Modal :title="modalMsg.title" v-model="modalAction" :mask-closable="false">
           <div>{{ modalMsg.desc }}</div>
           <div slot="footer">
-            <i-button type="link" @click="showModal = false">{{ $t('cancel') }}</i-button>
-            <i-button type="primary" @click="manualAction">{{ modalMsg.confirmText }}</i-button>
+            <i-button type="link" @click="modalAction = false">{{ $t('cancel') }}</i-button>
+            <i-button type="primary" :loading="modalActionLoading" @click="manualAction">{{ modalMsg.confirmText }}</i-button>
           </div>
         </Modal>
       </div>
