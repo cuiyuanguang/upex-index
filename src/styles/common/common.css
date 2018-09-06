@@ -396,7 +396,7 @@ input::-webkit-inner-spin-button {
 
 .om-header .om-market > ul > li:hover > a,
 .om-header .management > ul > li:hover > a,
-.om-header .management > ul > li:hover .ivu-dropdown-rel > a {
+.om-header .management > ul > li:hover .ivu-dropdown-rel a {
   color: #ffffff;
   font-weight: bold;
 }
