@@ -635,8 +635,8 @@ var i18nGoogleAuthMsg = {
   },
   newTeach: {
     zh: '新手使用教程',
-    en: '',
-    ar: ''
+    en: "Beginner's tutorial",
+    ar: 'البرنامج التعليمي للمبتدئين'
   },
   downloadGoogle: {
     zh: '下载谷歌身份验证器',

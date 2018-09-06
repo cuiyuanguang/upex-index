@@ -106,19 +106,46 @@
         </p>
       </div>
       <div class="pay-status" v-if="(orderInfo.status == 2 && leftTime !== 0) || orderInfo.status == 6">
-        <p class="pay-notice">
-          {{ $t('lastFourNumber') }} <span class="text-warning text-strong">{{ orderInfo.bankCardLastNum }}</span>, {{ $t('payYou') }}
-          <span class="text-warning text-strong"> {{orderInfo.totalPrice}}</span> SAR , {{ $t('receiveAll') }}<br>
-          {{ $t('notReceiveAndWait') }}<br>
-          {{ $t('restTime') }}: <span class="text-error"> {{ leftTime }}</span>
-        </p>
+        <div class="pay-info" style="padding: 0">
+          <div class="info-header info-sure-pay-header">
+            {{$t('confirmReceive')}}
+            <span class="info-header-tip">{{$t('notReceiveAndWait')}}</span>
+          </div>
+          <div class="info-body">
+            <Row>
+              <i-col span="4">
+                {{ $t('payer') }}:
+              </i-col>
+              <i-col span="18" class="text-warning text-strong">
+                {{ orderInfo.name }}
+              </i-col>
+            </Row>
+            <Row >
+              <i-col span="4">
+                {{ $t('lastFourNumber') }}:
+              </i-col>
+              <i-col span="18" class="text-warning text-strong">
+                {{ orderInfo.bankCardLastNum }}
+              </i-col>
+            </Row>
+            <Row>
+              <i-col span="4">
+                {{ $t('payYou') }}:
+              </i-col>
+              <i-col span="18" class="text-warning text-strong">
+                {{ orderInfo.totalPrice }} SAR
+              </i-col>
+            </Row>
+          </div>
+        </div>
         <div class="pay-action">
-          <i-button type="primary" @click="confirmOrder">{{ $t('confirm') }}</i-button>
+          <i-button type="primary" @click="confirmOrder">{{ $t('confirmReceive') }}</i-button>
         </div>
         <p class="pay-tips">
           1. {{ $t('helpTipsThird', { hours: confirmLimit }) }}<br>
           2. {{ $t('helpTipsFourth') }}
         </p>
+        <p style="margin-bottom: 20px;">  {{ $t('restTime') }}: <span class="text-error leftTime"> {{ leftTime }}</span></p>
       </div>
       <div class="pay-status" v-if="orderInfo.status == 3">
         <p class="pay-notice text-success">{{ $t('tradeDone') }}</p>
@@ -133,7 +160,7 @@
           {{ $t('reasonForFailure') }} : {{ orderInfo.paymentTime ? $t('outOfTimeToConfirm') : $t('outOfTimeToPay') }}
         </h3>
       </div>
-      <div class="pay-status">
+      <div class="pay-status" v-if="orderInfo.status == 5 || orderInfo.status == 7 || (leftTime === 0 && orderInfo.status == 2)">
         <p class="pay-tips">
           <i-button type="warning" class="contact-button" @click="contactJump">{{$t('contactService')}}</i-button>
           <a href="otc_adverts.html">{{ $t('backToHome') }}</a>

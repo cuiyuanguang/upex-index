@@ -152,7 +152,7 @@
           {{ $t('reasonForFailure') }} : {{ orderInfo.paymentTime ? $t('outOfTimeToConfirm') : $t('outOfTimeToPay') }}
         </h3>
       </div>
-      <div class="pay-status">
+      <div class="pay-status" v-if="orderInfo.status == 5 || orderInfo.status == 7 || (leftTime === 0 && orderInfo.status == 2)">
         <p class="pay-tips">
           <i-button type="warning" class="contact-button" @click="contactJump">{{$t('contactService')}}</i-button>
           <a href="otc_adverts.html">{{ $t('backToHome') }}</a>
