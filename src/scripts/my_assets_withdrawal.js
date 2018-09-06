@@ -144,7 +144,9 @@ var myAssetsWithdrawal = new Vue({
       disabledEmail: this.userInfo.isOpenEmailCheck === 0,
       disabledPhone: this.userInfo.isOpenMobileCheck === 0,
       dailyLimit: '',
-      pricePlaceholder: ''
+      pricePlaceholder: '',
+      deleteAddressVal:'',
+      deleteAddressModal: false
     }
   },
   methods: {
@@ -279,6 +281,10 @@ var myAssetsWithdrawal = new Vue({
       })
     },
     //删除地址
+    deleteModalShow(val) {
+      this.deleteAddressVal = val;
+      this.deleteAddressModal = true;
+    },
     delAddress(val) {
       var that = this;
       var data;
@@ -291,8 +297,10 @@ var myAssetsWithdrawal = new Vue({
             };
             post('api/addr/delete_withdraw_addr', JSON.stringify(data), false).then((res) => {
               if (res) {
+                Toast.show(that.$t('deleteComplete'), { icon: 'ok' });
                 that.getAddress(that.modelCurrency);
-                that.modelAddress = ''
+                that.modelAddress = '';
+                that.deleteAddressModal = false;
               }else{
                 that.delStatus = true;
               }

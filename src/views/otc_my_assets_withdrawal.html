@@ -14,8 +14,8 @@
     <div class="bg-white">
       <h1 class="h1-text">{{ $t('withdrawal') }}</h1>
       <breadcrumb separator=">">
-        <breadcrumb-item to="otc_my_assets.html">{{ $t('myAsset') }}</breadcrumb-item>
-        <breadcrumb-item>{{ $t('withdrawal') }}</breadcrumb-item>
+        <breadcrumb-item to="otc_my_assets.html" class="first-bread">{{ $t('myAsset') }}</breadcrumb-item>
+        <breadcrumb-item class="second-bread">{{ $t('withdrawal') }}</breadcrumb-item>
       </breadcrumb>
       <div class="wrap-gray">
         <div class="row-wrap">
@@ -39,7 +39,7 @@
                 <div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 350px;margin: 0;">
                   <span class="my-select-label">{{address.label}}:</span>
                   <span class="my-select-address">{{address.address}}</span></div>
-                <span @click.stop="delAddress(address.address)" class="my-select-address-del font_family" :class="!delStatus?'delColor':''">
+                <span @click="deleteModalShow(address.address)" class="my-select-address-del font_family" :class="!delStatus?'delColor':''">
                     &#xe62a;</span>
               </i-option>
               <i-option style="font-size: 14px" :value="'Add address'">
@@ -226,6 +226,17 @@
     </div>
     <div slot="footer">
       <i-button type="primary" size="large" long :loading="withdrawalLoading" @click="withdrawalCancelTrue">{{ $t('iKnow') }}</i-button>
+    </div>
+  </Modal>
+  <Modal
+    :mask-closable="false"
+     v-model="deleteAddressModal"
+     :title="$t('sureDelete')"
+     class-name="vertical-center-modal withdrawal-container">
+    <p class="withdraw-delete-body">{{$t('sureDeleteAddress')}}</p>
+    <div slot="footer">
+      <i-button type="link" @click="deleteAddressModal = false">{{ $t('cancel') }}</i-button>
+      <i-button type="primary" @click="delAddress(deleteAddressVal)">{{ $t('sureDelete') }}</i-button>
     </div>
   </Modal>
 </div>
