@@ -166,32 +166,36 @@ var myGoods = new Vue({
       this.advertId = item.id;
       this.modalMsg = {
         title: item.status === 6 ? this.$t('start') : this.$t('pause'),
-        desc: this.$t('confirm') + this.$t(this.action) + this.$t('thisOrder'),
+        desc: this.$t('confirm') + this.$t(this.action),
         confirmText: this.$t('confirm'),
       };
       this.modalAction = true;
     },
     cancel: function(item) {
-      if (item.status === 5 || item.status === 6) {
-        this.modalMsg = {
-          title: this.$t('unremovable'),
-          desc: this.$t('unremovableTips'),
-          confirmText: this.$t('unremovableOperation'),
-        };
-        this.cancelable = false;
-      } else {
-        this.modalMsg = {
-          title: this.$t('removable'),
-          desc: this.$t('removableTips'),
-          confirmText: this.$t('confirm'),
-        };
-        this.cancelable = true;
-      }
-      this.advertId = item.id;
-      this.sequence = item.sequence;
-      this.side = item.side;
-      this.modalAction = true;
-      this.action = 'cancel';
+      var that = this;
+      that.advertId = item.id;
+      that.sequence = item.sequence;
+      that.side = item.side;
+      get('api/otc/bot/adv/orders/online?advertId=' + item.id)
+        .then(function(res) {
+          if (res.length) {
+            that.modalMsg = {
+              title: that.$t('unremovable'),
+              desc: that.$t('unremovableTips'),
+              confirmText: that.$t('unremovableOperation'),
+            };
+            that.cancelable = false;
+          } else {
+            that.modalMsg = {
+              title: that.$t('removable'),
+              desc: that.$t('removableTips'),
+              confirmText: that.$t('confirm'),
+            };
+            that.cancelable = true;
+          }
+          that.modalAction = true;
+          that.action = 'cancel';
+        });
     },
     manualAction: function() {
       this.modalActionLoading = true;
@@ -214,16 +218,9 @@ var myGoods = new Vue({
           that.modalAction = false;
         });
       } else {
-        // get('api/otc/bot/adverts/orders/online', { advertId: this.advertId })
-        get('api/otc/bot/adverts/orders/online?advertId=' + this.advertId)
-          .then(function(res) {
-            that.modalActionLoading = false;
-            if (res) {
-              that.modalAction = false;
-              var path = that.side === 'BUY' ? 'otc_pay' : 'otc_wait_pay';
-              location.href = path + '.html?sequence=' + res[0].sequence;
-            }
-          });
+        that.modalAction = false;
+        var path = that.side === 'BUY' ? 'otc_pay' : 'otc_wait_pay';
+        location.href = path + '.html?sequence=' + res[0].sequence;
       }
     },
   },
