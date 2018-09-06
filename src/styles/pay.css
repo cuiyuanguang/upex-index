@@ -113,6 +113,12 @@ body[dir='rtl'] .pay .pay-info .info-body-right{
   color: rgba(51, 51, 51, 1);
 }
 
+.info-header .info-header-tip{
+  font-size: 14px;
+  margin: 12px;
+  color: #999;
+}
+
 body[dir='rtl'] .pay .pay-info .info-header{
   padding-left: 0;
   padding-right: 20px;
@@ -193,6 +199,12 @@ body[dir='rtl'] .pay .pay-info .ivu-row .contact .whatup{
   line-height: 30px;
 }
 
+.leftTime{
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: 10px;
+}
+
 .pay .pay-info .ivu-row .contact:hover {
   background: rgb(8, 147, 54);
 }
@@ -268,3 +280,6 @@ body[dir='rtl'] .contact-button{
   text-decoration: underline;
 }
 
+.info-sure-pay-header{
+  border-bottom: 1px solid #ddd;
+}

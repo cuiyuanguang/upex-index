@@ -633,6 +633,11 @@ var i18nGoogleAuthMsg = {
     en: 'Step 3 bind google authentication',
     ar: 'الخطوة 3 ربط مصادقة جوجل'
   },
+  newTeach: {
+    zh: '新手使用教程',
+    en: "Beginner's tutorial",
+    ar: 'البرنامج التعليمي للمبتدئين'
+  },
   downloadGoogle: {
     zh: '下载谷歌身份验证器',
     en: 'Download google authenticator',
@@ -654,9 +659,9 @@ var i18nGoogleAuthMsg = {
     ar: 'نسخ'
   },
   completeBind: {
-    zh: '完成绑定',
-    en: 'Complete the binding',
-    ar: 'استكمال الربط'
+    zh: '确认绑定',
+    en: 'Confirm binding',
+    ar: 'تأكيد الربط'
   },
   enterPwd: {
     zh: '请输入登录密码',
@@ -1738,7 +1743,7 @@ var o_my_registerGoogle = {
         <i class="loginGoogle-title-icon"></i>
         <div class="loginGoogle-title-right-wrap">
             <h1>{{ $t('StrengthenTitle') }}</h1>
-            <h2>{{ $t('bindGoogle') }}</h2>
+            <h2>{{ $t('bindGoogle') }} <a class="loginGoogle-title-href" href="https://m.youtube.com/watch?v=jgsEbVZsIsk" target="_blank">{{$t('newTeach')}}</a></h2>
         </div>
       </div>
       <ul class="loginGoogle-ul">
@@ -1777,29 +1782,30 @@ var o_my_registerGoogle = {
             <div class="tip-img tip-img2"></div>
             <p>{{ $t('completeBind') }}</p>
             <div class="input-wrap">
-              <Input
-                v-model="bindGooglePassword"
-                type="password"
-                :placeholder="$t('enterPwd')"
-                class="bindGoogle-input"               
-                :class="bindGooglePasswordErrorText !== ''?'is-red':'is-gray'"
-                @on-focus="bindGooglePasswordFocus"
-              >
-              </Input>
-              <div class="my-login-error" style="margin-left: 50px;">{{bindGooglePasswordErrorText}}</div>
-              <Input
-                v-model="bindGoogleCode"
-                type="text"
-                :placeholder="$t('enterGoogleRecieved')"
-                class="bindGoogle-input" style="margin-top: 0"
-                :maxlength="6"
-                @on-change="checkNum"
-                @on-enter="setGoogleInfo"
-                :class="bindGoogleCodeErrorText !== ''?'is-red':'is-gray'"
-                @on-focus="bindGoogleCodeFocus"
-              >
-              </Input>
-              <div class="my-login-error" style="margin-left: 50px;">{{bindGoogleCodeErrorText}}</div>
+            <Form ref="bindGoogleForm" :model="bindGoogleForm" :rules="bindGoogleRule" style="margin-top: 20px;">
+              <FormItem prop="password">
+                <Input
+                  v-model="bindGoogleForm.password"
+                  type="password"
+                  :placeholder="$t('enterPwd')"
+                  class="bindGoogle-input"     
+                  @on-enter="setGoogleInfo"          
+                >
+                </Input>
+               </FormItem>
+              <FormItem prop="validateCode">
+                <Input
+                  v-model="bindGoogleForm.validateCode"
+                  type="text"
+                  :placeholder="$t('enterGoogleRecieved')"
+                  class="bindGoogle-input"
+                  :maxlength="6"
+                  @on-change="autoSubmit($event)"
+                  @on-enter="setGoogleInfo"                 
+                >
+                </Input>
+              </FormItem>
+            </Form>                    
             </div>
           </div>
         </li>
@@ -1810,15 +1816,39 @@ var o_my_registerGoogle = {
     </Modal>
   `,
   data() {
+    const validatePassword = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('passwordErrorEmpty')));
+      } else if (value.length > 64 || value.length < 8) {
+        callback(new Error(this.$t('passwordErrorFormat')));
+      } else {
+        callback();
+      }
+
+    };
+    const validateCode = (rule, value ,callback) => {
+      if(value === ''){
+        callback(new Error(this.$t('canNotBeEmpty')));
+      }else if(!/\d{6}$/.test(value)){
+        callback(new Error(this.$t('sixInform')))
+      }else{
+        callback();
+      }
+    };
     return {
       isregisterToken: '',
-      bindGooglePassword: '',
-      bindGoogleCode: '',
       modal_loading: false,
       googleKey: '',
       googleImg: '',
-      bindGooglePasswordErrorText: '',
-      bindGoogleCodeErrorText: '',
+      bindGoogleForm: {
+        password: '',
+        validateCode: ''
+      },
+      bindGoogleRule: {
+        password: [{validator: validatePassword, trigger: 'change' }],
+        validateCode: [{validator: validateCode, trigger: 'change' }]
+
+      }
     };
   },
   i18n: i18nComponents,
@@ -1829,13 +1859,6 @@ var o_my_registerGoogle = {
       this.$copyText(this.googleKey).then(function (e) {
         Toast.show(that.$t('copySuccess'), { icon: 'ok' });
       });
-    },
-    checkNum(type) {
-      if(isNaN(this.bindGoogleCode)){
-        this.bindGoogleCodeErrorText = this.$t('onlyNum');
-      }else{
-        this.bindGoogleCodeErrorText = '';
-      }
     },
     getToken() {
       this.isregisterToken = localStorage.getItem('token') ? localStorage.getItem('token') : '';
@@ -1852,41 +1875,34 @@ var o_my_registerGoogle = {
         }
       });
     },
-    bindGooglePasswordFocus() {
-      this.bindGooglePasswordErrorText = '';
-    },
-    bindGoogleCodeFocus() {
-      this.bindGoogleCodeErrorText = '';
-    },
     setGoogleInfo() {
-      if (this.bindGooglePassword === '') {
-        this.bindGooglePasswordErrorText = this.$t('canNotBeEmpty');
-        return;
-      }
-      if(isNaN(this.bindGoogleCode) || this.bindGoogleCode.length !== 6){
-        this.bindGoogleCodeErrorText = this.$t('sixInform');
-        return;
-      }
       var that = this;
-      var data;
-      if (!that.modal_loading) {
-        that.modal_loading = true;
-        data = {
-          'googleKey': that.googleKey,
-          'googleCode': that.bindGoogleCode,
-          'loginPwd': that.bindGooglePassword,
-        };
-        post('api/user/google_verify', JSON.stringify(data)).then(function (res) {
-          if (res) {
-            that.asyncCancel();
-            post('api/common/user_info', '', false).then((result) => {
-              localStorage.setItem('user', JSON.stringify(result));
-              that.$parent.$emit('googleBound', true);
+      this.$refs['bindGoogleForm'].validate((validate) => {
+        if(validate){
+          var data;
+          if (!that.modal_loading) {
+            that.modal_loading = true;
+            data = {
+              'googleKey': that.googleKey,
+              'googleCode': that.bindGoogleForm.validateCode,
+              'loginPwd': that.bindGoogleForm.password,
+            };
+            post('api/user/google_verify', JSON.stringify(data)).then(function (res) {
+              if (res) {
+                that.asyncCancel();
+                post('api/common/user_info', '', false).then((result) => {
+                  localStorage.setItem('user', JSON.stringify(result));
+                  that.$parent.$emit('googleBound', true);
+                });
+              }
+              that.modal_loading = false;
             });
           }
-          that.modal_loading = false;
-        });
-      }
+        }
+      });
+    },
+    autoSubmit(e) {
+      if(e.target.value.length === 6) this.setGoogleInfo();
     },
     asyncCancel() {
       this.$parent.$emit('isregisterGoogle', false);

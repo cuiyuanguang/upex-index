@@ -429,3 +429,25 @@ body[dir='rtl'] .withdrawalTrue-text-right{
   margin-top: 20px;
   text-align: center;
 }
+
+.first-bread .ivu-breadcrumb-item-link{
+  color: #5C95EA;
+  font-size: 14px;
+}
+
+.first-bread .ivu-breadcrumb-item-separator{
+  margin: 0 4px;
+}
+
+.second-bread .ivu-breadcrumb-item-link{
+  color: #999;
+  font-size: 14px;
+}
+
+.withdraw-delete-body{
+  padding: 20px 50px 20px;
+}
+
+.address-select-wrap .ivu-select-item-focus{
+  background: transparent;
+}

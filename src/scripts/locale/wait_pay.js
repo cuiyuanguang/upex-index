@@ -146,14 +146,19 @@ var messages = {
     ar: 'إلغاء',
   },
   lastFourNumber: {
-    zh: '支付卡号后四位为',
-    en: 'The last four numbers of the payment card are',
-    ar: 'اَخر اربعة أرقام من بطاقة الدفع هي',
+    zh: '卡号后4位',
+    en: 'Last 4 digits of card number',
+    ar: 'اَخر 4 أرقام من رقم البطاقة',
   },
   payYou: {
-    zh: '向您支付',
-    en: 'pay to you',
-    ar: 'تدفع لك',
+    zh: '金额',
+    en: 'the amount',
+    ar: 'المبلغ',
+  },
+  payer: {
+    zh: '付款人',
+    en: 'the payer',
+    ar: 'الدافع'
   },
   confirmReceive: {
     zh: '确认收款',
@@ -229,5 +234,15 @@ var messages = {
     zh: '联系客服',
     en: 'Contact Customer Service',
     ar: 'اتصل بخدمة العملاء'
+  },
+  sureText: {
+    zh: '确认收款后，您的资产会转入对方账户',
+    en: '',
+    ar: ''
+  },
+  sureNum: {
+    zh: '确认收到',
+    en: '',
+    ar: ''
   }
 };

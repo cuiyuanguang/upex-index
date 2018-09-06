@@ -63,8 +63,12 @@ body[dir='rtl'] .loginGoogle-ul li .li-title .qr{
   right: 174px;
 }
 body[dir='rtl'] .bindGoogle-input{
-  margin: 20px 0 0;
+  margin: 0;
 }
+body[dir='rtl'] .loginGoogle-ul .ivu-form-item-error-tip{
+  margin: 0;
+}
+
 body[dir='rtl'] .loginGoogle-title-icon{
   float: right;
 }
@@ -216,6 +220,10 @@ body[dir='rtl'] .my-login .ivu-select-dropdown{
   padding: 0 50px;
 }
 
+.my-loginGoogle .ivu-modal-close{
+  z-index: 9;
+}
+
 .loginGoogle-title {
   overflow: hidden;
   padding-top: 40px;
@@ -233,6 +241,12 @@ body[dir='rtl'] .my-login .ivu-select-dropdown{
 .loginGoogle-title-right-wrap {
   float: left;
   padding: 10px 0 0 20px;
+}
+
+.loginGoogle-title-right-wrap .loginGoogle-title-href{
+  text-decoration: underline;
+  font-size: 12px;
+  margin: 20px;
 }
 
 .loginGoogle-title-right-wrap h1 {
@@ -326,7 +340,11 @@ body[dir='rtl'] .my-login .ivu-select-dropdown{
 
 .bindGoogle-input {
   width: 288px;
-  margin: 20px 50px 0;
+  margin: 0 50px 0;
+}
+
+.loginGoogle-ul .ivu-form-item-error-tip{
+  margin: 0 50px 0;
 }
 
 

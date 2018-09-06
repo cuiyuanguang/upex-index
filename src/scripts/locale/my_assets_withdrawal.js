@@ -50,7 +50,7 @@ var messages = {
     ar: 'إضافة عنوان'
   },
   addOneAddress: {
-    zh: '添加一个提币地址',
+    zh: '添加提币地址',
     en: 'Add the withdraw address',
     ar: 'إضافة عنوان السحب'
   },
@@ -264,4 +264,24 @@ var messages = {
     en: 'confirmed',
     ar: 'تم التأكيد'
   },
+  cancel: {
+    zh: '取消',
+    en: 'cancel',
+    ar: 'إلغاء',
+  },
+  sureDelete: {
+    zh: '确认删除',
+    en: 'confirm delete',
+    ar: 'تأكيد الحذف'
+  },
+  sureDeleteAddress: {
+    zh: '确认删除此提币地址',
+    en: 'Confirm delete this withdraw address',
+    ar: 'تأكيد حذف عنوان السحب '
+  },
+  deleteComplete: {
+    zh: '删除成功',
+    en: 'successfully deleted',
+    ar: 'تم الحذف بنجاح'
+  }
 };

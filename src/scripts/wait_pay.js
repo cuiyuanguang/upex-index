@@ -106,7 +106,13 @@ var waitPay = new Vue({
       this.$Modal.confirm({
         title: that.$t('confirmReceive'),
         render: function(h) {
-          return h('span', that.$t('receiveAll'));
+          return h('div', [
+            h('p',{style: {'margin-bottom': '8px'}}, [
+              h('span', that.$t('sureNum')+ ' '),
+              h('span', {'class': 'text-error text-strong'}, that.orderInfo.totalPrice + ' SAR')
+            ]),
+            h('p', that.$t('sureText'))
+          ]);
         },
         loading: true,
         onOk: function() {
@@ -144,6 +150,8 @@ var waitPay = new Vue({
           that.orderInfo = res;
           that.orderInfo.bankCardLastNum =
             res.description && JSON.parse(res.description).paymentBankCard;
+          that.orderInfo.name =
+            res.description && JSON.parse(res.description).name;
           //to make sure the status of the order
           var whatsAppStr = res.buyer.userExtView.watchapp;
           // that.whatsAppLink = whatsAppStr.substr(whatsAppStr.indexOf('-') + 1).replace(/\s+/g, '');
