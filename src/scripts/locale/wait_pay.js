@@ -227,7 +227,7 @@ var messages = {
   },
   contactService: {
     zh: '联系客服',
-    en: '',
-    ar: ''
+    en: 'Contact Customer Service',
+    ar: 'اتصل بخدمة العملاء'
   }
 };
