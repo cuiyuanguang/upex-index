@@ -2577,12 +2577,14 @@ var o_header = {
       this.isregister = true;
     },
     toggleLanguage(name) {
+      if (this.locale == name) return;
       this.$i18n.locale = name;
       document.documentElement.lang = name;
       document.body.dir = name === 'ar' ? 'rtl' : 'ltr';
       document.body.style.fontSize = name === 'ar' ? '12px' : '14px';
       localStorage.setItem('locale', name);
       this.$parent.$emit('locale', name);
+      location.reload();
     },
     loginOut() {
       var that = this;
