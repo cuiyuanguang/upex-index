@@ -271,17 +271,17 @@ var messages = {
   },
   sureDelete: {
     zh: '确认删除',
-    en: '',
-    ar: ''
+    en: 'confirm delete',
+    ar: 'تأكيد الحذف'
   },
   sureDeleteAddress: {
-    zh: '确认删除此提币地址?',
-    en: '',
-    ar: ''
+    zh: '确认删除此提币地址',
+    en: 'Confirm delete this withdraw address',
+    ar: 'تأكيد حذف عنوان السحب '
   },
   deleteComplete: {
     zh: '删除成功',
-    en: '',
-    ar: ''
+    en: 'successfully deleted',
+    ar: 'تم الحذف بنجاح'
   }
 };
