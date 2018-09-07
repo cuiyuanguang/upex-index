@@ -87,11 +87,11 @@ var myOrder = new Vue({
               statusText = 'orderDone';
               statusStyle = 'text-success';
             }
-            if (status == 4 || (status == 1 && params.row.limitTime < 0)) {
+            if (status == 4 || (status == 1 && params.row.limitTime <= 0)) {
               statusText = 'orderCanceled';
               statusStyle = 'text-disabled';
             }
-            if (status == 5 || status == 7 || (status == 2 && params.row.limitTime < 0)) {
+            if (status == 5 || status == 7 || (status == 2 && params.row.limitTime <= 0)) {
               statusText = 'orderAbnormal';
               statusStyle = 'text-error';
             }
