@@ -236,13 +236,13 @@ var messages = {
     ar: 'اتصل بخدمة العملاء'
   },
   sureText: {
-    zh: '确认收款后，您的资产会转入对方账户',
-    en: '',
-    ar: ''
+    zh: '确认收款后，您的数字资产会转入对方账户，此操作不可撤回',
+    en: " After confirming the payment, your digital assets will be transferred to the other party's account. This operation is irreversible. ",
+    ar: ' بعد تأكيد الدفع ، سيتم تحويل أصولك الرقمية إلى حساب الطرف الآخر ، وهذه العملية غير قابلة للإلغاء. '
   },
   sureNum: {
     zh: '确认收到',
-    en: '',
-    ar: ''
+    en: ' Receipt Confirmation ',
+    ar: ' تأكيد الاستلام '
   }
 };
