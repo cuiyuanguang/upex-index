@@ -255,7 +255,7 @@ var allGoods = new Vue({
         callback(new Error(this.$t('atMost4Dot')));
       } else if (value < Number(this.marketPrice.trade_min_volume) || value > Number(this.marketPrice.trade_max_volume)) {
         callback(new Error(this.$t('sysLimitIs') + this.marketPrice.trade_min_volume + '--' + this.marketPrice.trade_max_volume));
-      } else if (this.formRelease.side === 'SELL' && value > this.balance) {
+      } else if (this.formRelease.side === 'SELL' && value > Number(this.balance)) {
         callback(new Error(this.$t('balanceNotEnough')));
       } else {
         callback();

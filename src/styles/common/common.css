@@ -374,17 +374,6 @@ input::-webkit-inner-spin-button {
   vertical-align: top;
 }
 
-.om-header .om-market > ul > li.active,
-.om-header .management > ul > li.active {
-  background-color: #515668;
-}
-
-.om-header .om-market > ul > li.active > a,
-.om-header .om-market > ul > li.active > a,
-.om-header .management > ul > li.active .ivu-dropdown-rel a {
-  color: #ffffff;
-}
-
 .om-header .om-market > ul > li > a,
 .om-header .management > ul > li > a,
 .om-header .ivu-dropdown-rel a {
@@ -392,6 +381,17 @@ input::-webkit-inner-spin-button {
   height: 100%;
   line-height: 50px;
   color: #adadad;
+}
+
+.om-header .om-market > ul > li.active,
+.om-header .management > ul > li.active {
+  background-color: #515668;
+}
+
+.om-header .om-market > ul > li.active > a,
+.om-header .management > ul > li.active > a,
+.om-header .management > ul > li.active .ivu-dropdown-rel a {
+  color: #ffffff;
 }
 
 .om-header .om-market > ul > li:hover > a,
@@ -473,7 +473,6 @@ input::-webkit-inner-spin-button {
 }
 
 .om-header .order-card .card-footer {
-  text-align: center;
   margin-top: 6px;
   text-align: center;
 }

@@ -135,6 +135,7 @@ var myGoods = new Vue({
       modalActionLoading: false,
       side: '',
       cancelable: false,
+      actionNo: '',
       pauseable: false,
       modalMsg: {
         title: '',
@@ -185,6 +186,7 @@ var myGoods = new Vue({
               confirmText: that.$t('unremovableOperation'),
             };
             that.cancelable = false;
+            that.actionNo = res[0].sequence;
           } else {
             that.modalMsg = {
               title: that.$t('removable'),
@@ -220,7 +222,7 @@ var myGoods = new Vue({
       } else {
         that.modalAction = false;
         var path = that.side === 'BUY' ? 'otc_pay' : 'otc_wait_pay';
-        location.href = path + '.html?sequence=' + res[0].sequence;
+        location.href = path + '.html?sequence=' + that.actionNo;
       }
     },
   },
