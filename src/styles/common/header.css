@@ -385,7 +385,6 @@ body[dir='rtl'] .my-login .ivu-select-dropdown{
 }
 
 .my-loginNext-error {
-  margin: 0 0 0 50px;
   height: 30px;
   line-height: 30px;
   color: #ff2e2e;
