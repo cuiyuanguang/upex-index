@@ -1656,7 +1656,7 @@ var o_my_register = {
             if(!valid){
               this.loadingEmail = true;
               data = {
-                email: that.emailVal,
+                email: that.formRegisterEmail.emailVal,
                 operationType: '1',
               };
               that.countEmail = TIME_COUNT;
