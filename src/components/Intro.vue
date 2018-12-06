@@ -254,7 +254,7 @@
 </template>
 
 <script>
-  import THREE from '../libs/three/three';
+  // import THREE from '../libs/three/three';
   import Lottie from 'vue-lottie';
 
   import * as collaborate from '../assets/images/intro_collaborate.json';
@@ -388,13 +388,13 @@
         localStorage.setItem('lang', name);
       },
       jumpEX() {
-        this.showCoinCoinModal = true;
-        // window.open(this.EX_URL, '_blank')
+        // this.showCoinCoinModal = true;
+        window.open(this.EX_URL, '_blank')
       }
     },
     mounted() {
       const { protocol } = window.location;
-      this.renderGL();
+      // this.renderGL();
       if(window.location.search) {
         const route = window.location.search.split('=')[1];
         localStorage.setItem('lang', route);
