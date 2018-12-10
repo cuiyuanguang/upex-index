@@ -34,6 +34,7 @@ const webpackConfig = merge(baseWebpackConfig, {
             OTC_URL: JSON.stringify('//otc.upex.io'),
             EX_URL: JSON.stringify('//ex.upex.io/trade'),
             EX_API: JSON.stringify('https://webapiv3.upex.io/exchange-web-api'),
+            OTC_API: JSON.stringify('https://otc-api.upex.io/otc-web'),
             WS_URL: JSON.stringify('wss://wsv3.upex.io/kline-api/ws'),
         }),
         new UglifyJsPlugin({

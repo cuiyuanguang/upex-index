@@ -50,6 +50,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             OTC_URL: JSON.stringify('//test-otc.upex.io'),
             EX_URL: JSON.stringify('//test-ex.upex.io/trade'),
             EX_API: JSON.stringify('/api'),
+            OTC_API: JSON.stringify('http://test.upex.io/otc-web'),
             WS_URL: JSON.stringify('ws://49.51.168.68/kline-api/ws'),
         }),
         new webpack.HotModuleReplacementPlugin(),

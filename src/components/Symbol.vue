@@ -1,20 +1,27 @@
 <template>
-    <div class="trade-message">
-        <div class="trade-message-inner">
-            <div>
-
-            </div>
-            <div class="trade-item" v-for="(item, index) in symbolTop" :key="index">
-                <p class="trade-item-coin">{{item.nameOne}}/ <span class="primary">{{item.nameTwo}}</span></p>
-                <p class="trade-item-price">{{item.close.data}}
-                    <span class="trade-item-rate">≈{{item.rate}}</span>
-                </p>
-                <p class="trade-item-volume">
-                    <span class="dark-blue">24h vol</span>
-                    <span>{{item.vol}}</span>
-                </p>
-                <span class="trade-item-change" :class="item.rose.class">{{item.rose.data}}</span>
-                <div :id="item.id" style="width: 100px;height:40px;" class="trade-item-chart" :ref="item.id"></div>
+    <div>
+        <div class="notice-line">
+            <ul class="notice-line-inner">
+                <li v-for="(item, index) in noticeList" :key="index">
+                    <a :href="item.fileName" target="_blank"><span class="notice-title">{{item.title}}</span></a>
+                    <span class="notice-time">({{item.ctime | day}})</span>
+                </li>
+            </ul>
+        </div>
+        <div class="trade-message">
+            <div class="trade-message-inner">
+                <div class="trade-item" v-for="(item, index) in symbolTop" :key="index">
+                    <p class="trade-item-coin">{{item.nameOne}}/ <span class="primary">{{item.nameTwo}}</span></p>
+                    <p class="trade-item-price">{{item.close.data}}
+                        <span class="trade-item-rate">≈{{item.rate}}</span>
+                    </p>
+                    <p class="trade-item-volume">
+                        <span class="dark-blue">24h vol</span>
+                        <span>{{item.vol}}</span>
+                    </p>
+                    <span class="trade-item-change" :class="item.rose.class">{{item.rose.data}}</span>
+                    <div :id="item.id" style="width: 100px;height:40px;" class="trade-item-chart" :ref="item.id"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -23,6 +30,7 @@
 <script>
     import {mapState} from 'vuex';
     import pako from 'pako';
+    import fecha from '@/utils/date';
     import axios from 'axios';
 
     const echarts = require('echarts/lib/echarts');
@@ -45,6 +53,7 @@
                 lastSymbol: [],
                 rate: '',
                 chartData: {},
+                noticeList: [],
             };
         },
         methods: {
@@ -252,9 +261,37 @@
                 // 使用刚指定的配置项和数据显示图表。
                 myChart.setOption(option);
             },
+            getNoticeList(lang) {
+                axios.get(`${OTC_API}/api/cms/list`, {
+                    headers: {
+                        'exchange-language': lang
+                    }
+                }).then((res) => {
+                    const { data } = res.data;
+                    if (data.length && data.length > 3) {
+                        this.noticeList = data.slice(0, 3);
+                    } else {
+                        this.noticeList = data;
+                    }
+                });
+            },
         },
         mounted() {
+            const lang = localStorage.getItem('lang');
+            this.getNoticeList(lang);
             this.createWs();
+        },
+        filters: {
+            day: (time) => {
+                return fecha.format(time, 'MM-dd');
+            }
+        },
+        watch: {
+            '$i18n.locale'(newVal, oldVal) {
+                if(newVal !== oldVal) {
+                    this.getNoticeList(newVal);
+                }
+            }
         },
     }
 </script>
@@ -269,10 +306,48 @@
     .c-rise {
         color: #01BD8B;
     }
+    .notice-line {
+        height: 46px;
+        background: #05172F;
+        &-inner {
+            width: 1200px;
+            margin: 0 auto;
+            li {
+                float: left;
+                line-height: 46px;
+                font-size: 12px;
+                color: #99B1D7;
+                margin-right: 200px;
+                &:last-child {
+                    margin-right: 0;
+                }
+                span {
+                    float: left;
+                }
+                &:hover {
+                    span {
+                        color: #B5D3FF;
+                        text-decoration: underline;
+                    }
+
+                }
+                .notice-title {
+                    max-width: 320px;
+                    text-overflow:ellipsis;
+                    cursor: pointer;
+                    white-space: nowrap;
+                    color: #99B1D7;
+                    overflow: hidden;
+                    margin-right: 4px;
+                }
+            }
+        }
+    }
     .trade-message {
         height: 180px;
         background: #05172F;
         &-inner {
+            border-top: 1px solid #092449;
             width: 1200px;
             margin: 0 auto;
             height: 100%;
@@ -317,6 +392,9 @@
                     position: absolute;
                     bottom: 0;
                     right: 12px;
+                }
+                &:first-child {
+                    padding-left: 0;
                 }
                 &:last-child {
                     border-right: 0;
